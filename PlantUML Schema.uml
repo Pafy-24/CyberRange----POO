@@ -1,0 +1,1098 @@
+﻿[08.04, 17:54] Nume: ```@startuml
+
+
+' ====== Client ======
+package "Client" {
+    class ClientMng {
+        - Connection serverConn
+        - Loader loader
+        - vector<Controller> controllers
+        - bool connected
+        - string serverAddress
+        - int serverPort
+        + ClientMng(string address, int port)
+        + bool connect()
+        + void disconnect()
+        + void sendRequest(Request req)
+        + Response receiveResponse()
+        + void registerController(Controller ctrl)
+        + Controller getController(string name)
+    }
+
+
+    class Loader {
+        - map<string, Controller> controllerMap
+        + Loader()
+        + void loadControllers()
+        + Controller getController(string name)
+    }
+
+
+    interface Controller {
+        + void handleServerResponse(Response resp)
+        + string getControllerName()
+        + bool validateResponse(Response resp)
+    }
+
+
+    class CController {
+        - string controllerName
+        + CController(string name)
+        + void handleServerResponse(Response resp)
+        + string getControllerName()
+        + bool validateResponse(Response resp)
+    }
+
+
+    class AuthController {
+        - string token
+        + AuthController()
+        + bool login(string username, string password)
+        + bool validateToken()
+        + void logout()
+        + string getToken()
+    }
+
+
+    class ChallClientController {
+        + ChallClientController()
+        + void requestChallengeList()
+        + void requestChallengeDetails(string challId)
+        + void submitFlag(string challId, string flag)
+    }
+
+
+    class TeamClientController {
+        + TeamClientController()
+        + void createTeam(string teamData)
+        + void joinTeam(string teamId)
+        + void leaveTeam()
+    }
+
+
+    class ContestClientController {
+        + ContestClientController()
+        + void listContests()
+        + void registerForContest(string contestId)
+        + void getScoreboard(string contestId)
+    }
+
+
+    class LogClientController {
+        + LogClientController()
+        + void fetchLogs()
+    }
+
+
+    Controller <|-- CController
+    CController <|-- AuthController
+    CController <|-- ChallClientController
+    CController <|-- TeamClientController
+    CController <|-- ContestClientController
+    CController <|-- LogClientController
+
+
+
+
+}
+@enduml
+```
+[08.04, 18:07] Nume: ```@startuml
+
+
+' ====== Server ======
+package "Server" {
+    class ServerMng {
+        - vector<Connection> connections
+        - vector<Controller> controllers
+        - vector<ChallMng> challMngs
+        - Loader loader
+        - bool isRunning
+        - int port
+        - string serverAddress
+        + ServerMng(int port, string address)
+        + void start()
+        + void stop()
+        + void addConnection(Connection conn)
+        + void removeConnection(Connection conn)
+        + void registerController(Controller ctrl)
+        + void processRequests()
+        + Connection getConnection(int id)
+        + ChallMng getChallMng(string contestId)
+    }
+
+
+    class Loader {
+        - map<string, Controller> controllerMap
+        - map<Connection, string> objLoaded
+        - string basePath
+        - JSONEnc encoder
+        - JSONDec decoder
+        + Loader(string path)
+        + void load()
+        + void save()
+        + void loadAll()
+        + void saveUnload()
+        + Controller getController(string name)
+        + void registerObject(Connection conn, string objId)
+        + bool isLoaded(string objId)
+    }
+
+
+    interface Controller {
+        + void handleRequest(Request req, Response& resp)
+        + string getControllerName()
+        + bool validateRequest(Request req)
+    }
+
+
+    class CController {
+        - Request request
+        - Response response
+        - Logger logger
+        # string controllerName
+        + CController(string name)
+        + void setRequest(Request req)
+        + Response getResponse()
+        + void process()
+        + string getControllerName()
+    }
+
+
+    class ChallController {
+        - ChallMng challMng
+        + ChallController(ChallMng& mng)
+        + void createChallenge(string params)
+        + void updateChallenge(string id, string params)
+        + void deleteChallenge(string id)
+        + void listChallenges(string contestId)
+        + Chall getChallenge(string id)
+    }
+
+
+    class UserController {
+        - map<string, User> users
+        - JWTEnc encoder
+        - JWTDec decoder
+        + UserController()
+        + bool authenticate(string username, string password)
+        + string generateToken(User user)
+        + bool validateToken(string token)
+        + User getUser(string userId)
+        + void createUser(string userData)
+        + void updateUser(string userId, string userData)
+        + void deleteUser(string userId)
+    }
+
+
+    class LogsController {
+        - CLogger logger
+        - int maxEntries
+        + LogsController(CLogger& logger)
+        + vector<LogEntry> getLogs(string type, int count)
+        + void clearLogs(string type)
+        + void exportLogs(string format, string destination)
+        + bool rotateLogs()
+    }
+
+
+    class TeamController {
+        - map<string, Team> teams
+        - UserController& userCtrl
+        + TeamController(UserController& userController)
+        + void createTeam(string teamData)
+        + void updateTeam(string teamId, string teamData)
+        + void deleteTeam(string teamId)
+        + Team getTeam(string teamId)
+        + bool addUserToTeam(string userId, string teamId)
+        + bool removeUserFromTeam(string userId, string teamId)
+        + vector<Team> listTeams()
+    }
+
+
+    class ContestController {
+        - map<string, Contest> contests
+        - ChallMng& challMng
+        - TeamController& teamCtrl
+        + ContestController(ChallMng& challMng, TeamController& teamCtrl)
+        + void createContest(string contestData)
+        + void updateContest(string contestId, string contestData)
+        + void deleteContest(string contestId)
+        + Contest getContest(string contestId)
+        + bool addTeamToContest(string teamId, string contestId)
+        + bool removeTeamFromContest(string teamId, string contestId)
+        + vector<Contest> listContests()
+        + Scoreboard getScoreboard(string contestId)
+    }
+
+
+    class ServerController {
+        - ServerMng& serverMng
+        - map<string, string> configs
+        + ServerController(ServerMng& serverMng)
+        + void restart()
+        + void shutdown()
+        + void updateConfig(string key, string value)
+        + string getConfig(string key)
+        + map<string, string> getStatus()
+        + bool backup(string destination)
+    }
+
+
+    class DBController {
+        - DBConn dbConnection
+        - string connectionString
+        + DBController(string connString)
+        + bool connect()
+        + bool disconnect()
+        + vector<map<string, string>> executeQuery(string query)
+        + bool executeUpdate(string query)
+        + bool beginTransaction()
+        + bool commitTransaction()
+        + bool rollbackTransaction()
+        + bool testConnection()
+    }
+
+
+    Controller <|-- CController
+    CController <|-- ChallController
+    CController <|-- UserController
+    CController <|-- LogsController
+    CController <|-- TeamController
+    CController <|-- ContestController
+    CController <|-- ServerController
+    CController <|-- DBController
+
+
+    ' Threads
+    interface Threads {
+        + void start()
+        + void stop()
+        + void run()
+        + bool isActive()
+    }
+
+
+    class CThreads {
+        - int id
+        - bool isRunning
+        - string threadName
+        - int priority
+        # void* threadFunction
+        + CThreads(int id, string name)
+        + void start()
+        + void stop()
+        + void run()
+        + bool isActive()
+        + int getId()
+        + string getName()
+        + void setPriority(int prio)
+    }
+
+
+    Threads <|-- CThreads
+}
+
+
+' ====== Utils.dll ======
+package "Utils.dll" {
+    interface Connection {
+        + bool connect()
+        + bool disconnect()
+        + bool isConnected()
+        + int send(string data)
+        + string receive()
+        + string getAddress()
+    }
+
+
+    class Socketer implements Connection {
+        - string address
+        - int port
+        - bool connected
+        - int socketType
+        - int timeout
+        + Socketer(string addr, int port)
+        + bool connect()
+        + bool disconnect()
+        + bool isConnected()
+        + int send(string data)
+        + string receive()
+        + void setTimeout(int ms)
+        + string getAddress()
+    }
+    
+    class DBConn implements Connection {
+        - string connectionString
+        - bool connected
+        - string dbType
+        - int timeout
+        + DBConn(string connStr)
+        + bool connect()
+        + bool disconnect()
+        + bool isConnected()
+        + int send(string query)
+        + string receive()
+        + void setTimeout(int ms)
+        + string getAddress()
+    }
+
+
+    class TCPSock {
+        - int socketFD
+        - bool blocking
+        + TCPSock(string addr, int port)
+        + void setBlocking(bool block)
+        + int setTimeout(int ms)
+        + bool isBlocking()
+    }
+    
+    class UDPSock {
+        - int socketFD
+        - int maxPacketSize
+        + UDPSock(string addr, int port)
+        + void setMaxPacketSize(int size)
+        + bool broadcast(string data)
+        + string receiveFrom(string& sender)
+    }
+    
+    class download_sock {
+        - int downloadProgress
+        - string filePath
+        - long fileSize
+        + download_sock(string addr, int port)
+        + bool downloadFile(string url, string destination)
+        + int getProgress()
+        + void cancelDownload()
+        + void setPriority(int prio)
+    }
+    
+    class AdminConn {
+        - string adminKey
+        - int privilege
+        - bool secure
+        + AdminConn(string connStr)
+        + void setAdminKey(string key)
+        + bool verifyPrivilege(int level)
+        + void enableSecureMode()
+        + void disableSecureMode()
+    }
+
+
+    Socketer --> TCPSock
+    Socketer --> UDPSock
+    TCPSock --> download_sock
+    DBConn --> AdminConn
+
+
+    interface Logger {
+        + void log(string message, int level)
+        + void setLogLevel(int level)
+        + void setOutputFile(string path)
+        + string getLastLog()
+    }
+    
+    class CLogger {
+        - int logLevel
+        - string logFile
+        - bool console
+        - string dateFormat
+        + CLogger(string file, int level)
+        + void log(string message, int level)
+        + void setLogLevel(int level)
+        + void setOutputFile(string path)
+        + string getLastLog()
+        + void enableConsole(bool enable)
+        + void setDateFormat(string format)
+    }
+    
+    class DBLogs {
+        - DBConn& dbConn
+        - string tableName
+        + DBLogs(DBConn& conn, string table)
+        + void storeLog(string message, int level)
+        + vector<string> retrieveLogs(int count)
+        + void clearLogs()
+        + int getLogCount()
+    }
+    
+    class ServerLogs {
+        - string serverName
+        - bool appendTimestamp
+        + ServerLogs(string file, string server)
+        + void logServerEvent(string event, int severity)
+        + vector<string> getServerEvents(string filter)
+        + void archiveLogs(string destination)
+    }
+    
+    class UserLogs {
+        - map<string, vector<string>> userActions
+        + UserLogs(string file)
+        + void logUserAction(string userId, string action)
+        + vector<string> getUserHistory(string userId)
+        + void clearUserHistory(string userId)
+        + map<string, int> getActivitySummary()
+    }
+    
+    Logger <|-- CLogger
+    CLogger --> DBLogs
+    CLogger --> ServerLogs
+    CLogger --> UserLogs
+
+
+    class JWTEnc {
+        - string secretKey
+        - int expiryTime
+        - string algorithm
+        + JWTEnc(string key, string algo)
+        + string encode(map<string, string> payload)
+        + void setExpiryTime(int seconds)
+        + void setSecretKey(string key)
+        + void setAlgorithm(string algo)
+    }
+    
+    class JWTDec {
+        - string secretKey
+        - string algorithm
+        + JWTDec(string key, string algo)
+        + map<string, string> decode(string token)
+        + bool validate(string token)
+        + int getExpiryTime(string token)
+        + string getIssuer(string token)
+        + void setSecretKey(string key)
+    }
+
+
+    class CustomSerial {
+        - string format
+        - bool compress
+        + string serialize(map<string, string> data)
+        + map<string, string> deserialize(string data)
+        + void setFormat(string fmt)
+        + void enableCompression(bool enable)
+        + string getFormatVersion()
+    }
+    
+    class JSONEnc {
+        - bool prettyPrint
+        - bool escapeUnicode
+        + JSONEnc(bool pretty)
+        + string encode(map<string, string> data)
+        + void setPrettyPrint(bool pretty)
+        + void setEscapeUnicode(bool escape)
+    }
+    
+    class JSONDec {
+        - bool strictMode
+        - bool allowComments
+        + JSONDec(bool strict)
+        + map<string, string> decode(string json)
+        + void setStrictMode(bool strict)
+        + void setAllowComments(bool allow)
+        + bool validate(string json)
+    }
+
+
+    JWTEnc --> CustomSerial
+    JWTDec --> CustomSerial
+    JSONEnc --> JWTEnc
+    JSONDec --> JWTDec
+
+
+    interface User {
+        + string getId()
+        + string getUsername()
+        + bool authenticate(string password)
+        + int getAccessLevel()
+        + void setAccessLevel(int level)
+    }
+    
+    class CUser {
+        - string id
+        - string username
+        - string passwordHash
+        - int accessLevel
+        - string email
+        - bool active
+        + CUser(string username, string email)
+        + string getId()
+        + string getUsername()
+        + bool authenticate(string password)
+        + int getAccessLevel()
+        + void setAccessLevel(int level)
+        + void setPassword(string password)
+        + string getEmail()
+        + void setActive(bool active)
+    }
+    
+    class Admin {
+        - vector<string> permissions
+        - string adminKey
+        + Admin(string username, string email)
+        + void addPermission(string perm)
+        + void removePermission(string perm)
+        + bool hasPermission(string perm)
+        + void setAdminKey(string key)
+        + bool validateAdminKey(string key)
+    }
+    
+    class Writer {
+        - vector<string> articles
+        - string signature
+        + Writer(string username, string email)
+        + void addArticle(string articleId)
+        + vector<string> getArticles()
+        + void setSignature(string sig)
+        + string getSignature()
+    }
+    
+    class Common {
+        - int score
+        - vector<string> solvedChallenges
+        - string teamId
+        + Common(string username, string email)
+        + void addSolvedChallenge(string challId)
+        + vector<string> getSolvedChallenges()
+        + void setTeam(string teamId)
+        + string getTeam()
+        + void addScore(int points)
+        + int getScore()
+    }
+
+
+    User <|-- CUser
+    CUser <|-- Admin
+    CUser <|-- Writer
+    CUser <|-- Common
+
+
+    interface Team {
+        + string getId()
+        + string getName()
+        + vector<User> getMembers()
+        + void addMember(User user)
+        + void removeMember(string userId)
+        + int getScore()
+    }
+    
+    class CTeam {
+        - string id
+        - string name
+        - vector<CUser> users
+        - map<string, int> stats
+        - string logo
+        - bool active
+        + CTeam(string name)
+        + string getId()
+        + string getName()
+        + vector<User> getMembers()
+        + void addMember(User user)
+        + void removeMember(string userId)
+        + int getScore()
+        + void addStats(string key, int value)
+        + map<string, int> getStats()
+        + void setLogo(string logoPath)
+        + string getLogo()
+        + void setActive(bool active)
+    }
+    
+    Team <|-- CTeam
+
+
+    class Scoreboard {
+        - string contestId
+        - vector<pair<string, int>> teamScores
+        - int updateInterval
+        - time_t lastUpdate
+        + Scoreboard(string contestId)
+        + void update()
+        + vector<pair<string, int>> getScores()
+        + pair<string, int> getTopTeam()
+        + void setUpdateInterval(int seconds)
+        + time_t getLastUpdateTime()
+        + string exportJSON()
+    }
+}
+
+
+' ====== Orchestrator.dll ======
+package "Orchestrator.dll" {
+    interface Orchestrator {
+        + void start()
+        + void stop()
+        + bool deploy(string resource)
+        + bool undeploy(string resource)
+        + string getStatus()
+    }
+    
+    class COrchestrator {
+        - string addr
+        - vector<Socketer> sockets
+        - map<string, string> usersData
+        - bool running
+        - int timeout
+        + COrchestrator(string address)
+        + void start()
+        + void stop()
+        + bool deploy(string resource)
+        + bool undeploy(string resource)
+        + string getStatus()
+        + void setTimeout(int seconds)
+        + void addSocket(Socketer socket)
+        + void removeSocket(string socketId)
+        + map<string, string> getUsersData()
+    }
+
+
+    interface Chall {
+        + string getId()
+        + string getName()
+        + int getDifficulty()
+        + ChallTypes getType()
+        + string getText()
+        + int getPoints()
+    }
+    
+    class CChall {
+        - string id
+        - string name
+        - int difficulty
+        - ChallTypes type
+        - string text
+        - int points
+        - string flag
+        - vector<string> hints
+        - string authorId
+        + CChall(string name, ChallTypes type)
+        + string getId()
+        + string getName()
+        + int getDifficulty()
+        + ChallTypes getType()
+        + string getText()
+        + int getPoints()
+        + bool validateFlag(string attemptFlag)
+        + void addHint(string hint)
+        + vector<string> getHints()
+        + void setAuthor(string authorId)
+        + string getAuthor()
+    }
+
+
+    enum ChallTypes {
+        Crypto
+        Pwn
+        Web
+        Forensics
+        Misc
+    }
+
+
+    interface ChallMng {
+        + void addChall(Chall chall)
+        + void removeChall(string challId)
+        + Chall getChall(string challId)
+        + vector<Chall> getAllChalls()
+        + vector<Chall> getChallsByType(ChallTypes type)
+    }
+    
+    class CChallMng {
+        - map<string, Contest> contests
+        - vector<Chall> challs
+        - string currentContestId
+        + CChallMng()
+        + void addChall(Chall chall)
+        + void removeChall(string challId)
+        + Chall getChall(string challId)
+        + vector<Chall> getAllChalls()
+        + vector<Chall> getChallsByType(ChallTypes type)
+        + void addContest(Contest contest)
+        + Contest getContest(string contestId)
+        + void setCurrentContest(string contestId)
+        + string getCurrentContestId()
+    }
+
+
+    class Contest {
+        - string id
+        - string name
+        - time_t startTime
+        - time_t endTime
+        - vector<string> challIds
+        - vector<string> teamIds
+        - bool active
+        + Contest(string name)
+        + string getId()
+        + string getName()
+        + time_t getStartTime()
+        + time_t getEndTime()
+        + void setStartTime(time_t start)
+        + void setEndTime(time_t end)
+        + void addChallenge(string challId)
+        + void removeChallenge(string challId)
+        + vector<string> getChallenges()
+        + void addTeam(string teamId)
+        + void removeTeam(string teamId)
+        + vector<string> getTeams()
+        + void setActive(bool active)
+        + bool isActive()
+    }
+    
+    class Tab {
+        - string id
+        - string name
+        - vector<string> challIds
+        - bool visible
+        + Tab(string name)
+        + string getId()
+        + string getName()
+        + void addChallenge(string challId)
+        + void removeChallenge(string challId)
+        + vector<string> getChallenges()
+        + void setVisible(bool visible)
+        + bool isVisible()
+    }
+
+
+    class ChallMngBuilder {
+        - CChallMng challMng
+        + ChallMngBuilder()
+        + ChallMngBuilder& withContest(Contest contest)
+        + ChallMngBuilder& withChall(Chall chall)
+        + ChallMngBuilder& withTab(Tab tab)
+        + CChallMng build()
+    }
+    
+    class ChallFactory {
+        + Chall createCryptoChall(string name, int difficulty)
+        + Chall createPwnChall(string name, int difficulty)
+        + Chall createWebChall(string name, int difficulty)
+        + Chall createForensicsChall(string name, int difficulty)
+        + Chall createMiscChall(string name, int difficulty)
+    }
+    
+    class Docker {
+        - string imageName
+        - string containerId
+        - map<string, string> env
+        - int port
+        + Docker(string image)
+        + bool start()
+        + bool stop()
+        + bool restart()
+        + string getContainerId()
+        + void setEnv(string key, string value)
+        + void setPort(int port)
+        + string getLogs()
+    }
+    
+    class File {
+        - string path
+        - string content
+        - bool exists
+        + File(string path)
+        + bool read()
+        + bool write(string content)
+        + bool append(string content)
+        + bool remove()
+        + string getContent()
+        + bool exists()
+        + long getSize()
+    }
+    
+    class VM {
+        - string name
+        - string image
+        - int memory
+        - int cpu
+        - bool running
+        + VM(string name, string image)
+        + bool start()
+        + bool stop()
+        + bool restart()
+        + void setMemory(int mb)
+        + void setCPU(int cores)
+        + bool isRunning()
+        + string getStatus()
+    }
+
+
+    Chall <|-- CChall
+
+
+    ChallMng <|-- CChallMng
+    CChallMng --> Contest
+    CChallMng --> Tab
+
+
+    Orchestrator <|-- COrchestrator
+
+
+    COrchestrator --> Docker
+    COrchestrator --> VM
+    COrchestrator --> File
+}
+
+
+' ====== Observer.dll ======
+package "Observer.dll" {
+    interface Observer {
+        + void update(map<string, string> data)
+        + string getObserverType()
+    }
+
+
+    class CObs implements Observer {
+        - Logger logger
+        - string observerType
+        - bool active
+        + CObs(Logger& logger)
+        + void update(map<string, string> data)
+        + void audit()
+        + void logEvent(string event, int level)
+        + string getObserverType()
+        + void setActive(bool active)
+        + bool isActive()
+    }
+
+
+    class UserObs {
+        - map<string, int> userActions
+        + UserObs(Logger& logger)
+        + void trackLogin(string userId)
+        + void trackLogout(string userId)
+        + void trackPasswordChange(string userId)
+        + map<string, int> getUserStats()
+    }
+    
+    class SocketObs {
+        - map<string, time_t> connectionTimes
+        + SocketObs(Logger& logger)
+        + void trackConnection(string connId)
+        + void trackDisconnection(string connId)
+        + void trackDataTransfer(string connId, int bytes)
+        + map<string, time_t> getActiveConnections()
+    }
+    
+    class ContestObs {
+        - string contestId
+        - time_t startTime
+        + ContestObs(Logger& logger, string contestId)
+        + void trackStart()
+        + void trackEnd()
+        + void trackTeamRegistration(string teamId)
+        + double getElapsedTime()
+    }
+    
+    class ChallObs {
+        - map<string, int> solveAttempts
+        - map<string, vector<string>> solvedBy
+        + ChallObs(Logger& logger)
+        + void trackAttempt(string challId, string userId)
+        + void trackSolve(string challId, string userId)
+        + map<string, int> getChallStats()
+        + vector<string> getSolvedUsers(string challId)
+    }
+    
+    class TeamObs {
+        - map<string, int> teamScores
+        - map<string, vector<string>> teamSolves
+        + TeamObs(Logger& logger)
+        + void trackScore(string teamId, int points)
+        + void trackSolve(string teamId, string challId)
+        + map<string, int> getTeamScores()
+        + vector<string> getTeamSolves(string teamId)
+    }
+    
+    class LogObs {
+        - int criticalCount
+        - int warningCount
+        - int errorCount
+        + LogObs(Logger& logger)
+        + void trackLog(string logType, int level)
+        + int getCriticalCount()
+        + int getWarningCount()
+        + int getErrorCount()
+        + map<string, int> getLogSummary()
+    }
+
+
+    CObs <|-- UserObs
+    CObs <|-- SocketObs
+    CObs <|-- ContestObs
+    CObs <|-- ChallObs
+    CObs <|-- TeamObs
+    CObs <|-- LogObs
+
+
+    class Subject<T> {
+        - vector<Observer> observers
+        - string subjectName
+        + Subject(string name)
+        + void attach(Observer observer)
+        + void detach(Observer observer)
+        + void notifyObservers(map<string, string> data)
+        + vector<Observer> getObservers()
+        + string getSubjectName()
+    }
+
+
+    class ObsFactory {
+        + Observer createObs(string type, Logger& logger)
+        + UserObs createUserObs(Logger& logger)
+        + SocketObs createSocketObs(Logger& logger)
+        + ContestObs createContestObs(Logger& logger, string contestId)
+        + ChallObs createChallObs(Logger& logger)
+        + TeamObs createTeamObs(Logger& logger)
+        + LogObs createLogObs(Logger& logger)
+    }
+}
+
+
+' ====== Exception.dll ======
+package "Exception.dll" {
+    class Exception {
+        - string message
+        - int code
+        - string stack
+        + Exception(string msg, int code)
+        + string what()
+        + int getCode()
+        + string getStack()
+        + void setMessage(string msg)
+    }
+
+
+    class DBException {
+        - string query
+        - string dbType
+        + DBException(string msg, int code)
+        + string getQuery()
+        + void setQuery(string query)
+        + string getDBType()
+        + void setDBType(string type)
+    }
+    
+    class NetworkException {
+        - string address
+        - int port
+        - string protocol
+        + NetworkException(string msg, int code)
+        + string getAddress()
+        + int getPort()
+        + string getProtocol()
+        + void setAddress(string addr)
+        + void setPort(int port)
+        + void setProtocol(string proto)
+    }
+    
+    class AuthException {
+        - string userId
+        - string resource
+        + AuthException(string msg, int code)
+        + string getUserId()
+        + string getResource()
+        + void setUserId(string id)
+        + void setResource(string res)
+    }
+    
+    class ValidationException {
+        - string field
+        - string value
+        - string constraint
+        + ValidationException(string msg, int code)
+        + string getField()
+        + string getValue()
+        + string getConstraint()
+        + void setField(string f)
+        + void setValue(string v)
+        + void setConstraint(string c)
+    }
+    
+    class NotFoundException {
+        - string resource
+        - string identifier
+        + NotFoundException(string msg, int code)
+        + string getResource()
+        + string getIdentifier()
+        + void setResource(string res)
+        + void setIdentifier(string id)
+    }
+    
+    class PermissionException {
+        - string userId
+        - string permission
+        - string resource
+        + PermissionException(string msg, int code)
+        + string getUserId()
+        + string getPermission()
+        + string getResource()
+        + void setUserId(string id)
+        + void setPermission(string perm)
+        + void setResource(string res)
+    }
+    
+    class FileIOException {
+        - string filePath
+        - string operation
+        + FileIOException(string msg, int code)
+        + string getFilePath()
+        + string getOperation()
+        + void setFilePath(string path)
+        + void setOperation(string op)
+    }
+    
+    class ThreadException {
+        - int threadId
+        - string threadName
+        + ThreadException(string msg, int code)
+        + int getThreadId()
+        + string getThreadName()
+        + void setThreadId(int id)
+        + void setThreadName(string name)
+    }
+    
+    class TimeoutException {
+        - int timeout
+        - string operation
+        + TimeoutException(string msg, int code)
+        + int getTimeout()
+        + string getOperation()
+        + void setTimeout(int t)
+        + void setOperation(string op)
+    }
+    
+    class LogicException {
+        - string component
+        - string expectedState
+        - string actualState
+        + LogicException(string msg, int code)
+        + string getComponent()
+        + string getExpectedState()
+        + string getActualState()
+        + void setComponent(string comp)
+        + void setExpectedState(string expected)
+        + void setActualState(string actual)
+    }
+    
+    class UnknownException {
+        - time_t timestamp
+        + UnknownException(string msg)
+        + time_t getTimestamp()
+    }
+
+
+    Exception <|-- DBException
+    Exception <|-- NetworkException
+    Exception <|-- AuthException
+    Exception <|-- ValidationException
+    Exception <|-- NotFoundException
+    Exception <|-- PermissionException
+    Exception <|-- FileIOException
+    Exception <|-- ThreadException
+    Exception <|-- TimeoutException
+    Exception <|-- LogicException
+    Exception <|-- UnknownException
+}
+
+
+@enduml```
