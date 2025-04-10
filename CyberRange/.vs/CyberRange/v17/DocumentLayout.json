@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{2C4A7F5C-D370-4830-A310-F9F3163BA014}|ExceptionsDLL\\ExceptionsDLL.vcxproj|E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\ExceptionsDLL\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{2C4A7F5C-D370-4830-A310-F9F3163BA014}|ExceptionsDLL\\ExceptionsDLL.vcxproj|solutionrelative:ExceptionsDLL\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "dllmain.cpp",
+              "DocumentMoniker": "E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\ExceptionsDLL\\dllmain.cpp",
+              "RelativeDocumentMoniker": "ExceptionsDLL\\dllmain.cpp",
+              "ToolTip": "E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\ExceptionsDLL\\dllmain.cpp",
+              "RelativeToolTip": "ExceptionsDLL\\dllmain.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2025-04-10T07:03:50.047Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
