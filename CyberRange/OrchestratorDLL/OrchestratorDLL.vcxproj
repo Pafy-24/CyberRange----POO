@@ -139,9 +139,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CChall.h" />
+    <ClInclude Include="CChallMng.h" />
+    <ClInclude Include="Chall.h" />
+    <ClInclude Include="ChallFactory.h" />
+    <ClInclude Include="ChallMng.h" />
+    <ClInclude Include="ChallMngBuilder.h" />
+    <ClInclude Include="Contest.h" />
+    <ClInclude Include="COrchestrator.h" />
     <ClInclude Include="DLL.h" />
+    <ClInclude Include="Docker.h" />
+    <ClInclude Include="File.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Orchestrator.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Tab.h" />
+    <ClInclude Include="VM.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -151,6 +164,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="chall-types-h.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

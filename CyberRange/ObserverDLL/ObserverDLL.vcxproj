@@ -139,9 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ChallObs.h" />
+    <ClInclude Include="CObs.h" />
+    <ClInclude Include="ContestObs.h" />
     <ClInclude Include="DLL.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="LogObs.h" />
+    <ClInclude Include="Observer.h" />
+    <ClInclude Include="ObsFactory.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="SocketObs.h" />
+    <ClInclude Include="Subject.h" />
+    <ClInclude Include="TeamObs.h" />
+    <ClInclude Include="UserObs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />

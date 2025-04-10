@@ -129,6 +129,17 @@
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AuthController.h" />
+    <ClInclude Include="CController.h" />
+    <ClInclude Include="ChallClientController.h" />
+    <ClInclude Include="ClientMng.h" />
+    <ClInclude Include="ContestClientController.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="LogClientController.h" />
+    <ClInclude Include="TeamClientController.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

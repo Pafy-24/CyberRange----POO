@@ -139,11 +139,34 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Admin.h" />
+    <ClInclude Include="AdminConn.h" />
+    <ClInclude Include="CLogger.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Connection.h" />
+    <ClInclude Include="CTeam.h" />
     <ClInclude Include="CUser.h" />
+    <ClInclude Include="CustomSerial.h" />
+    <ClInclude Include="DBConn.h" />
+    <ClInclude Include="DBLogs.h" />
     <ClInclude Include="DLL.h" />
+    <ClInclude Include="download_sock.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="JSONDec.h" />
+    <ClInclude Include="JSONEnc.h" />
+    <ClInclude Include="JWTDec.h" />
+    <ClInclude Include="JWTEnc.h" />
+    <ClInclude Include="Logger.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Scoreboard.h" />
+    <ClInclude Include="ServerLogs.h" />
+    <ClInclude Include="Socketer.h" />
+    <ClInclude Include="TCPSock.h" />
+    <ClInclude Include="Team.h" />
+    <ClInclude Include="UDPSock.h" />
     <ClInclude Include="User.h" />
+    <ClInclude Include="UserLogs.h" />
+    <ClInclude Include="Writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CUser.cpp" />

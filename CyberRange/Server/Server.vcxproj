@@ -130,6 +130,21 @@
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CController.h" />
+    <ClInclude Include="ChallController.h" />
+    <ClInclude Include="ContestController.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="CThreads.h" />
+    <ClInclude Include="DBController.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="LogsController.h" />
+    <ClInclude Include="ServerController.h" />
+    <ClInclude Include="ServerMng.h" />
+    <ClInclude Include="TeamController.h" />
+    <ClInclude Include="Threads.h" />
+    <ClInclude Include="UserController.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
