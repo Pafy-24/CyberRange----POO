@@ -1,1 +1,6 @@
 /CyberRange/Server/x64
+/CyberRange/Client/x64
+/CyberRange/x64/
+.gitignore
+/CyberRange/.vs/
+.giattributes
