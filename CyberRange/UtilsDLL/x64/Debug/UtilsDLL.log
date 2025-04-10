@@ -1,6 +1,9 @@
 ﻿  pch.cpp
   CUser.cpp
   dllmain.cpp
+  JSONEnc.cpp
   tobedel.cpp
   Generating Code...
+  LINK : E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll not found or not built by the last incremental link; performing full link
+     Creating library E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.lib and object E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.exp
   UtilsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll

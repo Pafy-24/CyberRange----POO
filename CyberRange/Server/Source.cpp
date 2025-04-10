@@ -1,10 +1,25 @@
 #include <iostream>
 #include <memory>
-#include "User.h"
+#include "..\UtilsDLL\JSONEnc.h"
 using namespace std;
 
 
 void main() {
-	shared_ptr<User> user = make_shared<User>();
-	cout << "Hello World!" << endl;
+
+	JSONEnc jsonEncoder(true); 
+/*	map<string, string> data;
+	data["name"] = "John Doe";
+	data["age"] = "30";
+	data["city"] = "New York";
+
+	string jsonString = jsonEncoder.encode(data);
+
+	cout << jsonString << endl;
+
+	jsonEncoder.setEscapeUnicode(true);
+	data["unicode"] = "Hello \u2603"; 
+
+	jsonString = jsonEncoder.encode(data);
+	cout << jsonString << endl;
+*/
 }

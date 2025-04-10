@@ -1,3 +1,2 @@
-﻿  Source.cpp
-E:\Programe\Github\CyberRange----POO\CyberRange\Client\Source.cpp(2,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+﻿  LINK : E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\Client.exe not found or not built by the last incremental link; performing full link
   Client.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\Client.exe
