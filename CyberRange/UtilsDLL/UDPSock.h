@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
+#include "Socketer.h"
 
-class UDPSock {
+class UDPSock: public Socketer{
 private:
     int socketFD;
     int maxPacketSize;

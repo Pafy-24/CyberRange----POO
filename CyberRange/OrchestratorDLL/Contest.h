@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include "CChallMng.h"
 
-class Contest {
+class Contest: public CChallMng {
 private:
     std::string id;
     std::string name;

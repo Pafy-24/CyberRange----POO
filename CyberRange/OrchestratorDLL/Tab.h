@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
+#include "CChallMng.h"
 
-class Tab {
+class Tab: public CChallMng {
 private:
     std::string id;
     std::string name;

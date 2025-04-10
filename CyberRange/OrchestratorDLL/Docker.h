@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <map>
+#include "COrchestrator.h"
 
-class Docker {
+class Docker : public COrchestrator {
 private:
     std::string imageName;
     std::string containerId;

@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
+#include "COrchestrator.h"
 
-class File {
+class File: public COrchestrator{
 private:
     std::string path;
     std::string content;

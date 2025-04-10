@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
+#include "COrchestrator.h"
 
-class VM {
+class VM : public COrchestrator {
 private:
     std::string name;
     std::string image;

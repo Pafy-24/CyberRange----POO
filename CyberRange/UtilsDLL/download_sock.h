@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
+#include "TCPSock.h"
 
-class download_sock {
+class download_sock: public TCPSock {
 private:
     int downloadProgress;
     std::string filePath;

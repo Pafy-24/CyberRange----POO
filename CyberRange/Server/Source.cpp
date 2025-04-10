@@ -1,9 +1,10 @@
 #include <iostream>
-#include "../UtilsDLL/User.h"
+#include <memory>
+#include "User.h"
 using namespace std;
 
-void main() {
 
-	User user;
+void main() {
+	shared_ptr<User> user = make_shared<User>();
 	cout << "Hello World!" << endl;
 }

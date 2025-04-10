@@ -1,8 +1,11 @@
 #pragma once
 #include <string>
 #include <map>
+#include "JWTEnc.h"
+#include "JWTDec.h"
 
-class CustomSerial {
+
+class CustomSerial: public JWTDec,public JWTEnc {
 private:
     std::string format;
     bool compress;

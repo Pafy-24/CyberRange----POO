@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "CLogger.h"
 
-class UserLogs {
+class UserLogs: public CLogger {
 private:
     std::map<std::string, std::vector<std::string>> userActions;
 

@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-
-class AdminConn {
+#include "DBConn.h"
+class AdminConn : public DBConn {
 private:
     std::string adminKey;
     int privilege;

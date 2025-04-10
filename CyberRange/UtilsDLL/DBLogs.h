@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 #include "DBConn.h"
+#include "CLogger.h"
 
-class DBLogs {
+class DBLogs: public CLogger {
 private:
     DBConn& dbConn;
     std::string tableName;

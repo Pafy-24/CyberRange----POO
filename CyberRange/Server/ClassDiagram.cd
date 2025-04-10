@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CController" Collapsed="true">
+    <Position X="13" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEQAAAgAAAACAAAAAAKAABAAAAAABAAAAAAAAAE=</HashCode>
+      <FileName>CController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChallController" Collapsed="true">
+    <Position X="10.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAQAAAAAAAAQEEAAAAAAAAAAAAAQAAEAAAAAAA=</HashCode>
+      <FileName>ChallController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ContestController" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AUAgQAAIAAAAAAAAAQAAAAAAAAAIAIIAAAAAIgAgAAA=</HashCode>
+      <FileName>ContestController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Controller" Collapsed="true">
+    <Position X="13" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAEAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Controller.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CThreads" Collapsed="true">
+    <Position X="5.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAgAAAAQAAABgAAAIABEgAAAgAAAEAAAEAAAAAgA=</HashCode>
+      <FileName>CThreads.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DBController" Collapsed="true">
+    <Position X="13" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAEAAAAIAAAAAAgAwAAIAAAAIAAAAAAEAAAAgAAEAAA=</HashCode>
+      <FileName>DBController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Loader" Collapsed="true">
+    <Position X="22.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAIGAAAAgAAAACAAAAgABAAAAgAAAAQQAAQA=</HashCode>
+      <FileName>Loader.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LogsController" Collapsed="true">
+    <Position X="19.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEQAAAAACAAAACAABAAAEIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LogsController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServerController" Collapsed="true">
+    <Position X="6.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABIACAgAAABBAAAAAAAAAAAQBgAAAAAAAAAAAAA=</HashCode>
+      <FileName>ServerController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ServerMng" Collapsed="true">
+    <Position X="24" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAQAAAACAAEABhAFAAABCBAAAgAAgAIAAAAAAAAAA=</HashCode>
+      <FileName>ServerMng.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TeamController" Collapsed="true">
+    <Position X="17.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABBgAAAAAACCACAAAEAABAAAAAAAAABAAAAA=</HashCode>
+      <FileName>TeamController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Threads" Collapsed="true">
+    <Position X="5.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAEgAAAAABAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Threads.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UserController" Collapsed="true">
+    <Position X="8.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAQAAAAQAAAAAAAAAAAAIAIAACAAAAAAABARAAAQQ=</HashCode>
+      <FileName>UserController.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

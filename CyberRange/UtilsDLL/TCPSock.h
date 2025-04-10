@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include "Socketer.h"
 
-class TCPSock {
+
+class TCPSock : public Socketer {
 private:
     int socketFD;
     bool blocking;

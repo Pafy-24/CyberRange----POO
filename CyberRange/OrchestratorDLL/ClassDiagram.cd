@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CChall" Collapsed="true">
+    <Position X="5.5" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AhAAAACBAAAAAQAAAYAACIAAAQAFIAAIAgBEAAAQAiA=</HashCode>
+      <FileName>CChall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CChallMng" Collapsed="true">
+    <Position X="1.75" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEIAAAAgAAAQgAAgAgAAAAQAAAAEAAAAgAASAAAgAAA=</HashCode>
+      <FileName>CChallMng.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chall" Collapsed="true">
+    <Position X="5.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAQAAAAAACAAAAQAAAAAAAAAEAAAAECA=</HashCode>
+      <FileName>Chall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChallFactory" Collapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIQMAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ChallFactory.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChallMng" Collapsed="true">
+    <Position X="1.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAQAAAAAgAAAAAAAAAAACAAAAASAAAAAAA=</HashCode>
+      <FileName>ChallMng.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ChallMngBuilder" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAgAAAAAAEBAAAAAEAAIAAAAAAAAA=</HashCode>
+      <FileName>ChallMngBuilder.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Contest" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ggAACAEAIgAAgAAAAAAgELAAAgAGAQAAAAIEIAYAAgA=</HashCode>
+      <FileName>Contest.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="COrchestrator" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEBAAgAAoAIEAAAAACAkgBAACAAACAAAAAAA=</HashCode>
+      <FileName>COrchestrator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Docker" Collapsed="true">
+    <Position X="0.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABACIAAAAAAgCAAAAoAFAAAgAAgAAAAAAAAAACA=</HashCode>
+      <FileName>Docker.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="File" Collapsed="true">
+    <Position X="5.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAIAAAAAEACACAAAAAAAEAAAAAQEAAAAgAAA=</HashCode>
+      <FileName>File.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Orchestrator" Collapsed="true">
+    <Position X="3" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAgAAEAAAAAAAAgBAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Orchestrator.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tab" Collapsed="true">
+    <Position X="2.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAgAAAAggAAAABAAAAAAAAAEAQAAAAAECAYAAgA=</HashCode>
+      <FileName>Tab.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VM" Collapsed="true">
+    <Position X="3" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAABoAAAACAAAEAgkBAAAAIAAAAIAAAI=</HashCode>
+      <FileName>VM.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

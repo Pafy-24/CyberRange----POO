@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
-
-class ServerLogs {
+#include "CLogger.h"
+class ServerLogs: public CLogger {
 private:
     std::string serverName;
     bool appendTimestamp;

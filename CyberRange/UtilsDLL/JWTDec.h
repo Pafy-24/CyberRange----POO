@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <map>
-
-class JWTDec {
+#include "JSONDec.h"
+class JWTDec : public JSONDec{
 private:
     std::string secretKey;
     std::string algorithm;

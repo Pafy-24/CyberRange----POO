@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <map>
-
-class JWTEnc {
+#include "JSONEnc.h"
+class JWTEnc: public JSONEnc {
 private:
     std::string secretKey;
     int expiryTime;
