@@ -1,0 +1,37 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Server\\Server.vcxproj",
+        "Action": "Start",
+        "DebugTarget": "Local Windows Debugger"
+      },
+      {
+        "Path": "Client\\Client.vcxproj",
+        "Action": "Start",
+        "DebugTarget": "Local Windows Debugger"
+      },
+      {
+        "Path": "UtilsDLL\\UtilsDLL.vcxproj",
+        "Action": "StartWithoutDebugging",
+        "DebugTarget": "Local Windows Debugger"
+      },
+      {
+        "Path": "OrchestratorDLL\\OrchestratorDLL.vcxproj",
+        "Action": "StartWithoutDebugging",
+        "DebugTarget": "Local Windows Debugger"
+      },
+      {
+        "Path": "ObserverDLL\\ObserverDLL.vcxproj",
+        "Action": "StartWithoutDebugging",
+        "DebugTarget": "Local Windows Debugger"
+      },
+      {
+        "Path": "ExceptionsDLL\\ExceptionsDLL.vcxproj",
+        "Action": "StartWithoutDebugging",
+        "DebugTarget": "Local Windows Debugger"
+      }
+    ]
+  }
+]
