@@ -1,10 +1,18 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\",
+  "WorkspaceRootPath": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{2C4A7F5C-D370-4830-A310-F9F3163BA014}|ExceptionsDLL\\ExceptionsDLL.vcxproj|E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\ExceptionsDLL\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{2C4A7F5C-D370-4830-A310-F9F3163BA014}|ExceptionsDLL\\ExceptionsDLL.vcxproj|solutionrelative:ExceptionsDLL\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{4C5D430F-BFD3-421C-88BC-554B8C37D811}|Server\\Server.vcxproj|E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\Server\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{4C5D430F-BFD3-421C-88BC-554B8C37D811}|Server\\Server.vcxproj|solutionrelative:Server\\Source.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{399E6A2A-2D62-4A06-8EB9-457E6FCB94EC}|UtilsDLL\\UtilsDLL.vcxproj|E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\UtilsDLL\\CUser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{399E6A2A-2D62-4A06-8EB9-457E6FCB94EC}|UtilsDLL\\UtilsDLL.vcxproj|solutionrelative:UtilsDLL\\CUser.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{399E6A2A-2D62-4A06-8EB9-457E6FCB94EC}|UtilsDLL\\UtilsDLL.vcxproj|E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\UtilsDLL\\User.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{399E6A2A-2D62-4A06-8EB9-457E6FCB94EC}|UtilsDLL\\UtilsDLL.vcxproj|solutionrelative:UtilsDLL\\User.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "dllmain.cpp",
-              "DocumentMoniker": "E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\ExceptionsDLL\\dllmain.cpp",
-              "RelativeDocumentMoniker": "ExceptionsDLL\\dllmain.cpp",
-              "ToolTip": "E:\\Users\\xxsho\\OneDrive\\Desktop\\Anul 2 -- Sem2\\POO proiect\\CyberRange\\ExceptionsDLL\\dllmain.cpp",
-              "RelativeToolTip": "ExceptionsDLL\\dllmain.cpp",
+              "DocumentIndex": 1,
+              "Title": "CUser.h",
+              "DocumentMoniker": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\UtilsDLL\\CUser.h",
+              "RelativeDocumentMoniker": "UtilsDLL\\CUser.h",
+              "ToolTip": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\UtilsDLL\\CUser.h",
+              "RelativeToolTip": "UtilsDLL\\CUser.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-10T08:43:22.378Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "User.h",
+              "DocumentMoniker": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\UtilsDLL\\User.h",
+              "RelativeDocumentMoniker": "UtilsDLL\\User.h",
+              "ToolTip": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\UtilsDLL\\User.h",
+              "RelativeToolTip": "UtilsDLL\\User.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2025-04-10T08:43:20.297Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Source.cpp",
+              "DocumentMoniker": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\Server\\Source.cpp",
+              "RelativeDocumentMoniker": "Server\\Source.cpp",
+              "ToolTip": "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\Server\\Source.cpp",
+              "RelativeToolTip": "Server\\Source.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2025-04-10T07:03:50.047Z",
+              "WhenOpened": "2025-04-10T08:41:53.552Z",
               "EditorCaption": ""
             }
           ]

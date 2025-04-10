@@ -1,0 +1,4 @@
+﻿  Source.cpp
+E:\Programe\Github\CyberRange----POO\CyberRange\Server\Source.cpp(6,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+E:\Programe\Github\CyberRange----POO\CyberRange\Server\Source.cpp(8,7): warning C4101: 'user': unreferenced local variable
+  Server.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\Server.exe
