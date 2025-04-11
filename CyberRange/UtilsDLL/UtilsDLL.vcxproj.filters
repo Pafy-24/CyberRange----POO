@@ -119,6 +119,9 @@
     <ClCompile Include="JSONEnc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JWTEnc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

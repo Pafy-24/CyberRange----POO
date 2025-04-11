@@ -12,6 +12,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExceptionsDLL", "ExceptionsDLL\ExceptionsDLL.vcxproj", "{2C4A7F5C-D370-4830-A310-F9F3163BA014}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{66B2180D-F392-4614-BEC4-8C34857701A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{399E6A2A-2D62-4A06-8EB9-457E6FCB94EC} = {399E6A2A-2D62-4A06-8EB9-457E6FCB94EC}
+		{48DF54F2-60AB-4155-8A87-B9718194F762} = {48DF54F2-60AB-4155-8A87-B9718194F762}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{4C5D430F-BFD3-421C-88BC-554B8C37D811}"
 	ProjectSection(ProjectDependencies) = postProject

@@ -4,8 +4,7 @@
     "Projects": [
       {
         "Path": "Server\\Server.vcxproj",
-        "Action": "Start",
-        "DebugTarget": "Local Windows Debugger"
+        "Action": "Start"
       }
     ]
   }

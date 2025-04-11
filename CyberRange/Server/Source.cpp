@@ -1,13 +1,13 @@
 #include <iostream>
 #include <memory>
-#include "..\UtilsDLL\JSONEnc.h"
+#include "JWTEnc.h"
 using namespace std;
 
 
 void main() {
 
-	JSONEnc jsonEncoder(true); 
-/*	map<string, string> data;
+	JSONEnc jsonEncoder(true);
+	map<string, string> data;
 	data["name"] = "John Doe";
 	data["age"] = "30";
 	data["city"] = "New York";
@@ -17,9 +17,9 @@ void main() {
 	cout << jsonString << endl;
 
 	jsonEncoder.setEscapeUnicode(true);
-	data["unicode"] = "Hello \u2603"; 
+	data["unicode"] = "Hello \u2603";
 
 	jsonString = jsonEncoder.encode(data);
 	cout << jsonString << endl;
-*/
+	cout << JWTEnc("my-secret-key", "HS256").encode(jsonString) << endl;
 }
