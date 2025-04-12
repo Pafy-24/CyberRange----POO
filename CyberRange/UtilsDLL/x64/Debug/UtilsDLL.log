@@ -1,2 +1,20 @@
-﻿     Creating library E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.lib and object E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.exp
-  UtilsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+﻿  pch.cpp
+  CUser.cpp
+  dllmain.cpp
+  JSONEnc.cpp
+  JWTEnc.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(10,17): warning C4251: 'JWTEnc::secretKey': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'JWTEnc'
+  (compiling source file '/JWTEnc.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(12,17): warning C4251: 'JWTEnc::algorithm': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'JWTEnc'
+  (compiling source file '/JWTEnc.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.cpp(6,10): error C1083: Cannot open include file: 'openssl/hmac.h': No such file or directory
+  (compiling source file '/JWTEnc.cpp')
+  
+  tobedel.cpp
+  Generating Code...
