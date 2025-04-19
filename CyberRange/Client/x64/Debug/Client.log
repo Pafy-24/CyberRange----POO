@@ -1,2 +1,4 @@
-﻿  LINK : E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\Client.exe not found or not built by the last incremental link; performing full link
-  Client.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\Client.exe
+﻿  Source.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\Client\Source.cpp(3,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+  LINK : C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\Client.exe not found or not built by the last incremental link; performing full link
+  Client.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\Client.exe
