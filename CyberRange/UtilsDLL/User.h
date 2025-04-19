@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
+#include "DLL.h"
+#include <iostream>
 
-class User {
+class UTILS_API User {
 public:
     virtual std::string getId() = 0;
     virtual std::string getUsername() = 0;

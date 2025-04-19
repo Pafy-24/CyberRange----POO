@@ -173,6 +173,7 @@ $(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDepen
     <ClInclude Include="Writer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Admin.cpp" />
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="JSONEnc.cpp" />
