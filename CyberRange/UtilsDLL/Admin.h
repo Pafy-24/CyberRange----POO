@@ -13,12 +13,12 @@ private:
 public:
     Admin(std::string username, std::string email);
 
-    void addPermission(const std::string& perm);
-    void removePermission(const std::string& perm);
-    bool hasPermission(const std::string& perm) const;
+    void AddPermission(const std::string& perm);
+    void RemovePermission(const std::string& perm);
+    bool HasPermission(const std::string& perm) const;
 
-    void setAdminKey(const std::string& key);
-    bool validateAdminKey(const std::string& key) const;
+    void SetAdminKey(const std::string& key);
+    bool ValidateAdminKey(const std::string& key) const;
 
-    const std::vector<std::string>& getPermissions() const;
+    const std::vector<std::string>& GetPermissions() const;
 };
