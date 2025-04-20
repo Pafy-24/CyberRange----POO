@@ -1,15 +1,15 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "User.h"
+#include "CUser.h"
 
-class Team {
+class UTILS_API Team {
 public:
-    virtual std::string getId() = 0;
-    virtual std::string getName() = 0;
-    virtual std::vector<User*> getMembers() = 0;
-    virtual void addMember(User* user) = 0;
-    virtual void removeMember(std::string userId) = 0;
-    virtual int getScore() = 0;
+    virtual std::string GetId() = 0;
+    virtual std::string GetName() = 0;
+    virtual std::vector<CUser*> GetMembers() = 0;
+    virtual void AddMember(CUser* user) = 0;
+    virtual void RemoveMember(std::string userId) = 0;
+    virtual int GetScore() = 0;
     virtual ~Team() = default;
 };

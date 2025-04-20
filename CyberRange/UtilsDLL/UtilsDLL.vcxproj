@@ -175,6 +175,7 @@ $(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDepen
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="CTeam.cpp" />
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="JSONEnc.cpp" />
