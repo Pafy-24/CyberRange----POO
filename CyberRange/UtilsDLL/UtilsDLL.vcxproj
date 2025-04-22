@@ -174,11 +174,14 @@ $(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDepen
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
+    <ClCompile Include="AdminConn.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="CTeam.cpp" />
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="CustomSerial.cpp" />
+    <ClCompile Include="DBConn.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="download_sock.cpp" />
     <ClCompile Include="JSONDec.cpp" />
     <ClCompile Include="JSONEnc.cpp" />
     <ClCompile Include="JWTDec.cpp" />
@@ -189,7 +192,10 @@ $(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDepen
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Socketer.cpp" />
+    <ClCompile Include="TCPSock.cpp" />
     <ClCompile Include="tobedel.cpp" />
+    <ClCompile Include="UDPSock.cpp" />
     <ClCompile Include="Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
