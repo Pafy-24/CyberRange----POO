@@ -1,2 +1,4 @@
-﻿  LINK : E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\ExceptionsDLL.dll not found or not built by the last incremental link; performing full link
-  ExceptionsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\ExceptionsDLL.dll
+﻿  pch.cpp
+  dllmain.cpp
+  LINK : C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\ExceptionsDLL.dll not found or not built by the last incremental link; performing full link
+  ExceptionsDLL.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\ExceptionsDLL.dll

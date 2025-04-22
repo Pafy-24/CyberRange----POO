@@ -1,6 +1,8 @@
 #include <iostream>
 #include <memory>
 #include "JWTEnc.h"
+#include <map>
+#include <string>
 using namespace std;
 
 

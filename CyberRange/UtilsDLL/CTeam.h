@@ -5,7 +5,7 @@
 #include "Team.h"
 #include "CUser.h"
 
-class CTeam : public Team {
+class UTILS_API CTeam : public Team {
 private:
     std::string id;
     std::string name;
@@ -16,15 +16,15 @@ private:
 
 public:
     CTeam(std::string name);
-    std::string getId() override;
-    std::string getName() override;
-    std::vector<User*> getMembers() override;
-    void addMember(User* user) override;
-    void removeMember(std::string userId) override;
-    int getScore() override;
-    void addStats(std::string key, int value);
-    std::map<std::string, int> getStats();
-    void setLogo(std::string logoPath);
-    std::string getLogo();
-    void setActive(bool active);
+    std::string GetId() override;
+    std::string GetName() override;
+    std::vector<CUser*> GetMembers() override;
+    void AddMember(CUser* user) override;
+    void RemoveMember(std::string userId) override;
+    int GetScore() override;
+    void AddStats(std::string key, int value);
+    std::map<std::string, int> GetStats();
+    void SetLogo(std::string logoPath);
+    std::string GetLogo();
+    void SetActive(bool active);
 };

@@ -1,12 +1,15 @@
 #pragma once
 #include <string>
+#include "DLL.h"
+#include <iostream>
 
-class User {
+class UTILS_API User {
 public:
-    virtual std::string getId() = 0;
-    virtual std::string getUsername() = 0;
-    virtual bool authenticate(std::string password) = 0;
-    virtual int getAccessLevel() = 0;
-    virtual void setAccessLevel(int level) = 0;
+    virtual std::string GetId() = 0;
+    virtual std::string GetUsername() = 0;
+    virtual std::string GetEmail() = 0;
+    virtual bool Authenticate(std::string password) = 0;
+    virtual int GetAccessLevel() = 0;
+    virtual void SetAccessLevel(int level) = 0;
     virtual ~User() = default;
 };

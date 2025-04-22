@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\Programe\Github\CyberRange----POO\CyberRange\OrchestratorDLL;E:\Programe\Github\CyberRange----POO\CyberRange\UtilsDLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\OrchestratorDLL;C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +148,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\UtilsDLL\UtilsDLL.vcxproj">
+      <Project>{399e6a2a-2d62-4a06-8eb9-457e6fcb94ec}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

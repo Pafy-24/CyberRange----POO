@@ -3,16 +3,22 @@
 #include <vector>
 #include "CUser.h"
 
-class Admin : public CUser {
+class UTILS_API Admin : public CUser {
 private:
     std::vector<std::string> permissions;
-    std::string adminKey;
+    std::string adminKeyHash;
+
+    std::string hashKey(const std::string& key) const;
 
 public:
     Admin(std::string username, std::string email);
-    void addPermission(std::string perm);
-    void removePermission(std::string perm);
-    bool hasPermission(std::string perm);
-    void setAdminKey(std::string key);
-    bool validateAdminKey(std::string key);
+
+    void AddPermission(const std::string& perm);
+    void RemovePermission(const std::string& perm);
+    bool HasPermission(const std::string& perm) const;
+
+    void SetAdminKey(const std::string& key);
+    bool ValidateAdminKey(const std::string& key) const;
+
+    const std::vector<std::string>& GetPermissions() const;
 };
