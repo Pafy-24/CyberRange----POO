@@ -9,6 +9,6 @@ E:\Programe\Github\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(12,17): warnin
       D:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
       see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
   
-E:\Programe\Github\CyberRange----POO\CyberRange\Server\Source.cpp(7,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
-E:\Programe\Github\CyberRange----POO\CyberRange\Server\Source.cpp(20,20): warning C4566: character represented by universal-character-name '\u2603' cannot be represented in the current code page (1252)
+E:\Programe\Github\CyberRange----POO\CyberRange\Server\Source.cpp(9,6): warning C4326: return type of 'main' should be 'int' instead of 'void'
+E:\Programe\Github\CyberRange----POO\CyberRange\Server\Source.cpp(22,20): warning C4566: character represented by universal-character-name '\u2603' cannot be represented in the current code page (1252)
   Server.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\Server.exe
