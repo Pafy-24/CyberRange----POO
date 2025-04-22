@@ -1,14 +1,16 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include "TCPSock.h"
 
-class download_sock : public TCPSock {
+class UTILS_API download_sock : public TCPSock {
 private:
     int downloadProgress;
     std::string filePath;
     long fileSize;
     bool aborted;
     int priority;
+
+    // Eliminăm HANDLE downloadThread deoarece folosim std::thread
 
 public:
     download_sock(std::string addr, int port);

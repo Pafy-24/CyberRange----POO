@@ -3,6 +3,10 @@
     "Name": "New Profile",
     "Projects": [
       {
+        "Path": "Client\\Client.vcxproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
         "Path": "Server\\Server.vcxproj",
         "Action": "Start"
       }

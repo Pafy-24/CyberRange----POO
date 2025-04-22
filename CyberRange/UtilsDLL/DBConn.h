@@ -2,7 +2,7 @@
 #include <string>
 #include "Connection.h"
 
-class DBConn : public Connection {
+class UTILS_API DBConn : public Connection {
 private:
     std::string connectionString;
     bool connected;
@@ -21,13 +21,23 @@ public:
 
     bool connect() override;
     bool disconnect() override;
-    bool isConnected() override;
+    bool isConnected() const override;
     int send(std::string query) override;
     std::string receive() override;
-    void setTimeout(int ms);
-    std::string getAddress() override;
+    std::string getAddress() const override;
     bool enableTLS() override;
-    bool isTLSEnabled() override;
+    bool isTLSEnabled() const override;
 
+
+    int getPort() const override;
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
+    Connection* accept() override;
+    int getTimeout() const override;
+
+
+    // Metode specifice pentru DBConn
+    void setTimeout(int ms);
     void setDbType(std::string type);
+    std::string getDbType() const { return dbType; }
 };

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "AdminConn.h"
 #include <iostream>
 #include <openssl/evp.h>
@@ -17,12 +18,23 @@ AdminConn::~AdminConn() {
 }
 
 void AdminConn::setAdminKey(std::string key) {
-    // Hash the key for security
+    // Hash the key for security using EVP API
     unsigned char hash[SHA256_DIGEST_LENGTH];
-    SHA256_CTX sha256;
-    SHA256_Init(&sha256);
-    SHA256_Update(&sha256, key.c_str(), key.size());
-    SHA256_Final(hash, &sha256);
+    EVP_MD_CTX* ctx = EVP_MD_CTX_new();
+    if (!ctx) {
+        std::cerr << "Failed to create EVP_MD_CTX" << std::endl;
+        return;
+    }
+
+    if (EVP_DigestInit_ex(ctx, EVP_sha256(), nullptr) != 1 ||
+        EVP_DigestUpdate(ctx, key.c_str(), key.size()) != 1 ||
+        EVP_DigestFinal_ex(ctx, hash, nullptr) != 1) {
+        std::cerr << "Failed to compute SHA256 hash using EVP API" << std::endl;
+        EVP_MD_CTX_free(ctx);
+        return;
+    }
+
+    EVP_MD_CTX_free(ctx);
 
     std::stringstream ss;
     for (int i = 0; i < SHA256_DIGEST_LENGTH; i++) {
@@ -32,7 +44,6 @@ void AdminConn::setAdminKey(std::string key) {
     adminKey = ss.str();
 
     // Set privilege level based on key length (just a simple example)
-    // In a real system, this would validate against a database of authorized users
     if (key.length() >= 16) {
         privilege = 2; // Full admin
     }
@@ -46,7 +57,8 @@ void AdminConn::setAdminKey(std::string key) {
     std::cout << "Admin key set with privilege level " << privilege << std::endl;
 }
 
-bool AdminConn::verifyPrivilege(int level) {
+
+bool AdminConn::verifyPrivilege(int level) const {
     if (privilege >= level) {
         return true;
     }

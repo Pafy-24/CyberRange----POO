@@ -2,7 +2,7 @@
 #include <string>
 #include "DBConn.h"
 
-class AdminConn : public DBConn {
+class UTILS_API AdminConn : public DBConn {
 private:
     std::string adminKey;
     int privilege;
@@ -16,7 +16,11 @@ public:
     virtual ~AdminConn();
 
     void setAdminKey(std::string key);
-    bool verifyPrivilege(int level);
+    bool verifyPrivilege(int level) const;
     void enableSecureMode();
     void disableSecureMode();
+
+    // Metode suplimentare pentru administrare
+    bool isSecureModeEnabled() const { return secure; }
+    int getPrivilegeLevel() const { return privilege; }
 };

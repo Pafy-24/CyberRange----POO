@@ -1,10 +1,12 @@
 #pragma once
 #include <string>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
 #include "Socketer.h"
 
-class UDPSock : public Socketer {
+class UTILS_API UDPSock : public Socketer {
 private:
-    int socketFD;
+    SOCKET socketFD;
     int maxPacketSize;
     void* dtlsContext;  // For DTLS (UDP equivalent of TLS)
 

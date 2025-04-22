@@ -1,59 +1,67 @@
+#include "pch.h"
 #include "UDPSock.h"
 #include <iostream>
-#include <cstring>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <netdb.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
+// Link with OpenSSL libraries
+#pragma comment(lib, "libssl.lib")
+#pragma comment(lib, "libcrypto.lib")
+
 UDPSock::UDPSock(std::string addr, int port)
-    : Socketer(addr, port), socketFD(-1), maxPacketSize(8192), dtlsContext(nullptr) {
+    : Socketer(addr, port), socketFD(INVALID_SOCKET), maxPacketSize(8192), dtlsContext(nullptr) {
 }
 
 UDPSock::~UDPSock() {
-    if (socketFD >= 0) {
+    if (socketFD != INVALID_SOCKET) {
         disconnect();
     }
 }
 
 bool UDPSock::connect() {
-    struct sockaddr_in serverAddr;
-    struct hostent* server;
+    struct addrinfo hints, * result = NULL;
 
     // Create socket
-    socketFD = socket(AF_INET, SOCK_DGRAM, 0);
-    if (socketFD < 0) {
-        std::cerr << "Error creating socket: " << strerror(errno) << std::endl;
+    socketFD = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (socketFD == INVALID_SOCKET) {
+        std::cerr << "Error creating socket: " << WSAGetLastError() << std::endl;
         return false;
     }
 
     // Resolve hostname
-    server = gethostbyname(getAddress().c_str());
-    if (server == nullptr) {
-        std::cerr << "Error resolving hostname" << std::endl;
-        close(socketFD);
-        socketFD = -1;
-        return false;
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_INET;
+    hints.ai_socktype = SOCK_DGRAM;
+    hints.ai_protocol = IPPROTO_UDP;
+
+    // Extract hostname from address (which may include port)
+    std::string hostname = address;
+    size_t colonPos = hostname.find(':');
+    if (colonPos != std::string::npos) {
+        hostname = hostname.substr(0, colonPos);
     }
 
-    // Setup server address structure
-    memset(&serverAddr, 0, sizeof(serverAddr));
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons(port);
-    memcpy(&serverAddr.sin_addr.s_addr, server->h_addr, server->h_length);
+    // Convert port to string for getaddrinfo
+    std::string portStr = std::to_string(port);
+
+    if (getaddrinfo(hostname.c_str(), portStr.c_str(), &hints, &result) != 0) {
+        std::cerr << "Error resolving hostname: " << WSAGetLastError() << std::endl;
+        closesocket(socketFD);
+        socketFD = INVALID_SOCKET;
+        return false;
+    }
 
     // For UDP, we don't actually connect in the traditional sense
     // But we can use connect() to set the default destination for send()
-    if (::connect(socketFD, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) < 0) {
-        std::cerr << "Error connecting UDP socket: " << strerror(errno) << std::endl;
-        close(socketFD);
-        socketFD = -1;
+    if (::connect(socketFD, result->ai_addr, (int)result->ai_addrlen) == SOCKET_ERROR) {
+        std::cerr << "Error connecting UDP socket: " << WSAGetLastError() << std::endl;
+        freeaddrinfo(result);
+        closesocket(socketFD);
+        socketFD = INVALID_SOCKET;
         return false;
     }
+
+    freeaddrinfo(result);
 
     // If DTLS (TLS for UDP) is enabled, set it up
     if (isTLSEnabled() && dtlsContext != nullptr) {
@@ -68,7 +76,7 @@ bool UDPSock::connect() {
 }
 
 bool UDPSock::disconnect() {
-    if (socketFD < 0) {
+    if (socketFD == INVALID_SOCKET) {
         return true;
     }
 
@@ -79,14 +87,14 @@ bool UDPSock::disconnect() {
         dtlsContext = nullptr;
     }
 
-    close(socketFD);
-    socketFD = -1;
+    closesocket(socketFD);
+    socketFD = INVALID_SOCKET;
 
     return Socketer::disconnect(); // Call parent's method to reset the connected flag
 }
 
 int UDPSock::send(std::string data) {
-    if (!isConnected() || socketFD < 0) {
+    if (!isConnected() || socketFD == INVALID_SOCKET) {
         return -1;
     }
 
@@ -96,22 +104,22 @@ int UDPSock::send(std::string data) {
         // In a real implementation, you would use DTLS_write or equivalent
         std::cout << "Sending data via DTLS" << std::endl;
         // Placeholder for DTLS send
-        bytesSent = data.length(); // Pretend we sent it all
+        bytesSent = (int)data.length(); // Pretend we sent it all
     }
     else {
         // Regular UDP send
-        bytesSent = ::send(socketFD, data.c_str(), data.length(), 0);
+        bytesSent = ::send(socketFD, data.c_str(), (int)data.length(), 0);
     }
 
-    if (bytesSent < 0) {
-        std::cerr << "Error sending data: " << strerror(errno) << std::endl;
+    if (bytesSent == SOCKET_ERROR) {
+        std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
     }
 
     return bytesSent;
 }
 
 std::string UDPSock::receive() {
-    if (!isConnected() || socketFD < 0) {
+    if (!isConnected() || socketFD == INVALID_SOCKET) {
         return "";
     }
 
@@ -126,44 +134,43 @@ std::string UDPSock::receive() {
     }
     else {
         // Regular UDP receive
-        bytesRead = recv(socketFD, buffer, std::min(maxPacketSize, 65536), 0);
+        bytesRead = recv(socketFD, buffer, min(maxPacketSize, 65536), 0);
     }
 
-    if (bytesRead < 0) {
-        std::cerr << "Error receiving data: " << strerror(errno) << std::endl;
+    if (bytesRead == SOCKET_ERROR) {
+        std::cerr << "Error receiving data: " << WSAGetLastError() << std::endl;
         return "";
     }
 
-    buffer[bytesRead] = '\0';
     return std::string(buffer, bytesRead);
 }
 
 bool UDPSock::broadcast(std::string data) {
-    if (!isConnected() || socketFD < 0) {
+    if (!isConnected() || socketFD == INVALID_SOCKET) {
         return false;
     }
 
     // Enable broadcast option
-    int broadcastEnable = 1;
+    BOOL broadcastEnable = TRUE;
     if (setsockopt(socketFD, SOL_SOCKET, SO_BROADCAST,
-        &broadcastEnable, sizeof(broadcastEnable)) < 0) {
-        std::cerr << "Error enabling broadcast: " << strerror(errno) << std::endl;
+        (const char*)&broadcastEnable, sizeof(broadcastEnable)) == SOCKET_ERROR) {
+        std::cerr << "Error enabling broadcast: " << WSAGetLastError() << std::endl;
         return false;
     }
 
     // Create broadcast address
     struct sockaddr_in broadcastAddr;
-    memset(&broadcastAddr, 0, sizeof(broadcastAddr));
+    ZeroMemory(&broadcastAddr, sizeof(broadcastAddr));
     broadcastAddr.sin_family = AF_INET;
-    broadcastAddr.sin_port = htons(port);
+    broadcastAddr.sin_port = htons((u_short)port);
     broadcastAddr.sin_addr.s_addr = INADDR_BROADCAST;
 
     // Send the broadcast
-    int bytesSent = sendto(socketFD, data.c_str(), data.length(), 0,
+    int bytesSent = sendto(socketFD, data.c_str(), (int)data.length(), 0,
         (struct sockaddr*)&broadcastAddr, sizeof(broadcastAddr));
 
-    if (bytesSent < 0) {
-        std::cerr << "Error broadcasting data: " << strerror(errno) << std::endl;
+    if (bytesSent == SOCKET_ERROR) {
+        std::cerr << "Error broadcasting data: " << WSAGetLastError() << std::endl;
         return false;
     }
 
@@ -171,19 +178,19 @@ bool UDPSock::broadcast(std::string data) {
 }
 
 std::string UDPSock::receiveFrom(std::string& sender) {
-    if (!isConnected() || socketFD < 0) {
+    if (!isConnected() || socketFD == INVALID_SOCKET) {
         return "";
     }
 
     char buffer[65536]; // Maximum UDP packet size
     struct sockaddr_in senderAddr;
-    socklen_t senderLen = sizeof(senderAddr);
+    int senderLen = sizeof(senderAddr);
 
-    int bytesRead = recvfrom(socketFD, buffer, std::min(maxPacketSize, 65536), 0,
+    int bytesRead = recvfrom(socketFD, buffer, min(maxPacketSize, 65536), 0,
         (struct sockaddr*)&senderAddr, &senderLen);
 
-    if (bytesRead < 0) {
-        std::cerr << "Error receiving data: " << strerror(errno) << std::endl;
+    if (bytesRead == SOCKET_ERROR) {
+        std::cerr << "Error receiving data: " << WSAGetLastError() << std::endl;
         return "";
     }
 
@@ -192,7 +199,6 @@ std::string UDPSock::receiveFrom(std::string& sender) {
     inet_ntop(AF_INET, &(senderAddr.sin_addr), senderIP, INET_ADDRSTRLEN);
     sender = std::string(senderIP) + ":" + std::to_string(ntohs(senderAddr.sin_port));
 
-    buffer[bytesRead] = '\0';
     return std::string(buffer, bytesRead);
 }
 

@@ -1,3 +1,4 @@
+﻿#include "pch.h"
 #include "download_sock.h"
 #include <iostream>
 #include <fstream>
@@ -109,8 +110,14 @@ bool download_sock::downloadFile(std::string url, std::string destination) {
                         size_t valueStart = headers.find_first_not_of(" ", contentLengthPos + 15);
                         size_t valueEnd = headers.find_first_of("\r\n", valueStart);
                         std::string lengthStr = headers.substr(valueStart, valueEnd - valueStart);
-                        contentLength = std::stol(lengthStr);
-                        fileSize = contentLength;
+                        try {
+                            contentLength = std::stol(lengthStr);
+                            fileSize = contentLength;
+                        }
+                        catch (const std::exception& e) {
+                            std::cerr << "Error parsing Content-Length: " << e.what() << std::endl;
+                            contentLength = -1;
+                        }
                     }
                 }
             }
@@ -167,8 +174,8 @@ void download_sock::cancelDownload() {
 
 void download_sock::setPriority(int prio) {
     priority = prio;
-    // In a real implementation, this might adjust thread priority
-    // or network QoS settings
+    // În implementarea reală, aici ar putea fi ajustat prioritatea thread-ului
+    // sau setări QoS pentru rețea
 }
 
 long download_sock::getFileSize() {

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "DBConn.h"
 #include <iostream>
 #include <sstream>
@@ -144,7 +145,7 @@ bool DBConn::disconnect() {
     return true;
 }
 
-bool DBConn::isConnected() {
+bool DBConn::isConnected() const {
     return connected;
 }
 
@@ -192,7 +193,7 @@ void DBConn::setTimeout(int ms) {
     std::cout << "Database timeout set to " << ms << " ms" << std::endl;
 }
 
-std::string DBConn::getAddress() {
+std::string DBConn::getAddress() const{
     // Extract host:port from connection string
     size_t protocolEnd = connectionString.find("://");
     if (protocolEnd != std::string::npos) {
@@ -224,8 +225,33 @@ bool DBConn::enableTLS() {
     return true;
 }
 
-bool DBConn::isTLSEnabled() {
+bool DBConn::isTLSEnabled() const {
     return tlsEnabled;
+}
+
+int DBConn::getPort() const
+{
+    return 0;
+}
+
+bool DBConn::bind(int port)
+{
+    return false;
+}
+
+bool DBConn::listen(int backlog)
+{
+    return false;
+}
+
+Connection* DBConn::accept()
+{
+    return nullptr;
+}
+
+int DBConn::getTimeout() const
+{
+    return 0;
 }
 
 void DBConn::setDbType(std::string type) {
