@@ -1,9 +1,0 @@
-﻿   Qt/MSBuild: 3.3.1.1
-  Reading Qt configuration (C:/Qt/6.9.0/msvc2022_64/bin/qmake)
-   Qt: 6.9.0
-  Client.cpp
-  DialogButtonBottom.cpp
-  main.cpp
-  qrc_Client.cpp
-  moc_Client.cpp
-  Client.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\Client.exe
