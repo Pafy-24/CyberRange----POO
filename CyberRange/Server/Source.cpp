@@ -1,6 +1,6 @@
 #include <iostream>
 #include <memory>
-#include "JWTEnc.h"
+#include "CustomSerial.h"
 #include <map>
 #include <string>
 using namespace std;
@@ -8,20 +8,23 @@ using namespace std;
 
 void main() {
 
-	JSONEnc jsonEncoder(true);
+
 	map<string, string> data;
 	data["name"] = "John Doe";
 	data["age"] = "30";
 	data["city"] = "New York";
 
-	string jsonString = jsonEncoder.encode(data);
+	string jsonString = CustomSerial::encodeJSON(data);
+	string jwtString = CustomSerial::encodeJWT(data, "secret-Key");
 
 	cout << jsonString << endl;
+	cout << jwtString << endl;
 
-	jsonEncoder.setEscapeUnicode(true);
-	data["unicode"] = "Hello \u2603";
 
-	jsonString = jsonEncoder.encode(data);
-	cout << jsonString << endl;
-	cout << JWTEnc("my-secret-key", "HS256").encode(jsonString) << endl;
+	cout << CustomSerial::isValid(jwtString, "secret-Key") << endl;
+	cout << CustomSerial::isValid(jsonString) << endl;
+	data.clear();
+	data=CustomSerial::decode(jwtString, "secret-Key");
+	data.clear();
+	data= CustomSerial::decode(jsonString);
 }

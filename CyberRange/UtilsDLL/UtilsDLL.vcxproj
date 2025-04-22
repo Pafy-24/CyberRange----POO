@@ -177,8 +177,11 @@ $(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDepen
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="CTeam.cpp" />
     <ClCompile Include="CUser.cpp" />
+    <ClCompile Include="CustomSerial.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="JSONDec.cpp" />
     <ClCompile Include="JSONEnc.cpp" />
+    <ClCompile Include="JWTDec.cpp" />
     <ClCompile Include="JWTEnc.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
