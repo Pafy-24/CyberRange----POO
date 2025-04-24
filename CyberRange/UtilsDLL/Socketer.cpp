@@ -1,125 +1,82 @@
 #include "pch.h"
-#include "Socketer.h"
+/*#include "Socketer.h"
 #include <iostream>
-#include <cstring>
-#include <openssl/ssl.h>
-#include <openssl/err.h>
-
-// Static initialization
-bool Socketer::winsockInitialized = false;
 
 // Client constructor
 Socketer::Socketer(const std::string& addr, int port)
-    : socketFD(INVALID_SOCKET), address(addr), port(port), connected(false),
-    isServer(false), socketType(SOCK_STREAM), timeout(30000),
-    tlsEnabled(false), tlsContext(nullptr) {
-    // Initialize Winsock
-    initializeWinsock();
+    : socket(nullptr), address(addr), port(port), connected(false),
+    isServer(false), socketType(sf::Socket::Type::Stream),
+    timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr) {
 }
 
 // Server constructor
 Socketer::Socketer(int port)
-    : socketFD(INVALID_SOCKET), address("0.0.0.0"), port(port), connected(false),
-    isServer(true), socketType(SOCK_STREAM), timeout(30000),
-    tlsEnabled(false), tlsContext(nullptr) {
-    // Initialize Winsock
-    initializeWinsock();
-	bind(port);
+    : socket(nullptr), address("0.0.0.0"), port(port), connected(false),
+    isServer(true), socketType(sf::Socket::Type::Stream),
+    timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr) {
 }
 
 // Accept constructor
-Socketer::Socketer(SOCKET sock, const std::string& clientAddr, int clientPort)
-    : socketFD(sock), address(clientAddr), port(clientPort), connected(true),
-    isServer(false), socketType(SOCK_STREAM), timeout(30000),
-    tlsEnabled(false), tlsContext(nullptr) {
-    // Socket is already connected
+Socketer::Socketer(sf::Socket* sock, const std::string& clientAddr, int clientPort)
+    : socket(sock), address(clientAddr), port(clientPort), connected(true),
+    isServer(false), socketType(sf::Socket::Type::Stream),
+    timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr) {
 }
 
 Socketer::~Socketer() {
     if (connected) {
         disconnect();
     }
+
+    if (socket) {
+        delete socket;
+        socket = nullptr;
+    }
+
     cleanupTLS();
 }
 
-bool Socketer::initializeWinsock() {
-    if (!winsockInitialized) {
-        WSADATA wsaData;
-        int result = WSAStartup(MAKEWORD(2, 2), &wsaData);
-        if (result != 0) {
-            std::cerr << "WSAStartup failed: " << result << std::endl;
-            return false;
-        }
-        winsockInitialized = true;
-    }
-    return true;
-}
-
-void Socketer::cleanupWinsock() {
-    if (winsockInitialized) {
-        WSACleanup();
-        winsockInitialized = false;
-    }
-}
-
 bool Socketer::connect() {
-    if (isServer || connected || socketFD != INVALID_SOCKET) {
+    if (isServer || connected || socket != nullptr) {
         std::cerr << "Cannot connect: socket already in use or is a server" << std::endl;
         return false;
     }
 
-    struct addrinfo hints, * result = NULL;
-
-    // Create socket
-    socketFD = socket(AF_INET, socketType, socketType == SOCK_STREAM ? IPPROTO_TCP : IPPROTO_UDP);
-    if (socketFD == INVALID_SOCKET) {
-        std::cerr << "Error creating socket: " << WSAGetLastError() << std::endl;
-        return false;
+    // Create the appropriate socket type
+    if (socketType == sf::Socket::Type::Stream) {
+        socket = new sf::TcpSocket();
+    }
+    else {
+        socket = new sf::UdpSocket();
     }
 
-    // Resolve hostname
-    ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = socketType;
-    hints.ai_protocol = socketType == SOCK_STREAM ? IPPROTO_TCP : IPPROTO_UDP;
-
-    // Extract hostname from address (which may include port)
-    std::string hostname = address;
-    size_t colonPos = hostname.find(':');
-    if (colonPos != std::string::npos) {
-        hostname = hostname.substr(0, colonPos);
-    }
-
-    // Convert port to string for getaddrinfo
-    std::string portStr = std::to_string(port);
-
-    if (getaddrinfo(hostname.c_str(), portStr.c_str(), &hints, &result) != 0) {
-        std::cerr << "Error resolving hostname: " << WSAGetLastError() << std::endl;
-        closesocket(socketFD);
-        socketFD = INVALID_SOCKET;
-        return false;
-    }
+    // Set the timeout
+    socket->setBlocking(true);
 
     // Connect to server
-    if (::connect(socketFD, result->ai_addr, (int)result->ai_addrlen) == SOCKET_ERROR) {
-        int err = WSAGetLastError();
-        if (err != WSAEWOULDBLOCK) {
-            std::cerr << "Error connecting to server: " << err << std::endl;
-            freeaddrinfo(result);
-            closesocket(socketFD);
-            socketFD = INVALID_SOCKET;
-            return false;
-        }
+    sf::Socket::Status status;
+    if (socketType == sf::Socket::Type::Stream) {
+        status = static_cast<sf::TcpSocket*>(socket)->connect(address, static_cast<unsigned short>(port), timeout);
+    }
+    else {
+        // UdpSocket doesn't have direct connect method in SFML
+        // We'll just bind it to any port
+        status = static_cast<sf::UdpSocket*>(socket)->bind(sf::Socket::AnyPort);
     }
 
-    freeaddrinfo(result);
+    if (status != sf::Socket::Status::Done) {
+        std::cerr << "Error connecting to server: " << status << std::endl;
+        delete socket;
+        socket = nullptr;
+        return false;
+    }
 
-    // If TLS is enabled, set up the SSL connection
+    // If TLS is enabled, set up the secure connection
     if (tlsEnabled) {
         if (!initializeTLS()) {
             std::cerr << "Failed to initialize TLS" << std::endl;
-            closesocket(socketFD);
-            socketFD = INVALID_SOCKET;
+            delete socket;
+            socket = nullptr;
             return false;
         }
     }
@@ -138,9 +95,12 @@ bool Socketer::disconnect() {
         cleanupTLS();
     }
 
-    if (socketFD != INVALID_SOCKET) {
-        closesocket(socketFD);
-        socketFD = INVALID_SOCKET;
+    if (socket != nullptr) {
+        if (socketType == sf::Socket::Type::Stream) {
+            static_cast<sf::TcpSocket*>(socket)->disconnect();
+        }
+        delete socket;
+        socket = nullptr;
     }
 
     connected = false;
@@ -151,42 +111,57 @@ bool Socketer::isConnected() const {
     return connected;
 }
 
-
-int Socketer::send(std::string data) {
-    if (!connected || socketFD == INVALID_SOCKET) {
+int Socketer::send(const std::string& data) {
+    if (!connected || socket == nullptr) {
         std::cerr << "Cannot send: not connected" << std::endl;
         return -1;
     }
 
-    // This base implementation should be overridden by derived classes
-    // to handle TLS/DTLS correctly
-    int bytesSent = ::send(socketFD, data.c_str(), (int)data.length(), 0);
+    std::size_t bytesSent = 0;
+    sf::Socket::Status status;
 
-    if (bytesSent == SOCKET_ERROR) {
-        std::cerr << "Error sending data: " << WSAGetLastError() << std::endl;
+    if (socketType == sf::Socket::Type::Stream) {
+        status = static_cast<sf::TcpSocket*>(socket)->send(data.c_str(), data.length(), bytesSent);
+    }
+    else {
+        // For UDP, we need a recipient
+        sf::IpAddress recipient(address);
+        status = static_cast<sf::UdpSocket*>(socket)->send(data.c_str(), data.length(), recipient, static_cast<unsigned short>(port), bytesSent);
+    }
+
+    if (status != sf::Socket::Status::Done) {
+        std::cerr << "Error sending data: " << status << std::endl;
         return -1;
     }
 
-    return bytesSent;
+    return static_cast<int>(bytesSent);
 }
 
 std::string Socketer::receive() {
-    if (!connected || socketFD == INVALID_SOCKET) {
+    if (!connected || socket == nullptr) {
         std::cerr << "Cannot receive: not connected" << std::endl;
         return "";
     }
 
-    // This base implementation should be overridden by derived classes
-    // to handle TLS/DTLS correctly
     char buffer[4096];
-    int bytesRead = recv(socketFD, buffer, sizeof(buffer) - 1, 0);
+    std::size_t bytesRead = 0;
+    sf::Socket::Status status;
 
-    if (bytesRead == SOCKET_ERROR) {
-        std::cerr << "Error receiving data: " << WSAGetLastError() << std::endl;
+    if (socketType == sf::Socket::Type::Stream) {
+        status = static_cast<sf::TcpSocket*>(socket)->receive(buffer, sizeof(buffer) - 1, bytesRead);
+    }
+    else {
+        sf::IpAddress sender;
+        unsigned short senderPort;
+        status = static_cast<sf::UdpSocket*>(socket)->receive(buffer, sizeof(buffer) - 1, bytesRead, sender, senderPort);
+    }
+
+    if (status == sf::Socket::Status::Disconnected) {
+        connected = false;
         return "";
     }
-    else if (bytesRead == 0) {
-        // Connection closed
+    else if (status != sf::Socket::Status::Done) {
+        std::cerr << "Error receiving data: " << status << std::endl;
         return "";
     }
 
@@ -195,7 +170,7 @@ std::string Socketer::receive() {
 }
 
 bool Socketer::bind(int bindPort) {
-    if (connected || socketFD != INVALID_SOCKET) {
+    if (connected || socket != nullptr) {
         std::cerr << "Cannot bind: socket already in use" << std::endl;
         return false;
     }
@@ -205,34 +180,28 @@ bool Socketer::bind(int bindPort) {
         port = bindPort;
     }
 
-    // Create socket
-    socketFD = socket(AF_INET, socketType, socketType == SOCK_STREAM ? IPPROTO_TCP : IPPROTO_UDP);
-    if (socketFD == INVALID_SOCKET) {
-        std::cerr << "Error creating socket: " << WSAGetLastError() << std::endl;
-        return false;
+    // Create the appropriate socket
+    if (socketType == sf::Socket::Type::Stream) {
+        socket = new sf::TcpListener();
+        sf::Socket::Status status = static_cast<sf::TcpListener*>(socket)->listen(static_cast<unsigned short>(port));
+
+        if (status != sf::Socket::Status::Done) {
+            std::cerr << "Error binding socket: " << status << std::endl;
+            delete socket;
+            socket = nullptr;
+            return false;
+        }
     }
+    else {
+        socket = new sf::UdpSocket();
+        sf::Socket::Status status = static_cast<sf::UdpSocket*>(socket)->bind(static_cast<unsigned short>(port));
 
-    // Set SO_REUSEADDR option
-    BOOL reuse = TRUE;
-    if (setsockopt(socketFD, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse)) == SOCKET_ERROR) {
-        std::cerr << "Error setting SO_REUSEADDR: " << WSAGetLastError() << std::endl;
-        closesocket(socketFD);
-        socketFD = INVALID_SOCKET;
-        return false;
-    }
-
-    // Bind to address
-    struct sockaddr_in serverAddr;
-    ZeroMemory(&serverAddr, sizeof(serverAddr));
-    serverAddr.sin_family = AF_INET;
-    serverAddr.sin_port = htons((u_short)port);
-    serverAddr.sin_addr.s_addr = INADDR_ANY;  // Bind to all interfaces
-
-    if (::bind(socketFD, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR) {
-        std::cerr << "Error binding socket: " << WSAGetLastError() << std::endl;
-        closesocket(socketFD);
-        socketFD = INVALID_SOCKET;
-        return false;
+        if (status != sf::Socket::Status::Done) {
+            std::cerr << "Error binding socket: " << status << std::endl;
+            delete socket;
+            socket = nullptr;
+            return false;
+        }
     }
 
     isServer = true;
@@ -240,49 +209,49 @@ bool Socketer::bind(int bindPort) {
 }
 
 bool Socketer::listen(int backlog) {
-    if (!isServer || socketFD == INVALID_SOCKET) {
+    if (!isServer || socket == nullptr) {
         std::cerr << "Cannot listen: not a server socket or socket not created" << std::endl;
         return false;
     }
 
-    if (socketType != SOCK_STREAM) {
+    if (socketType != sf::Socket::Type::Stream) {
         std::cerr << "Cannot listen: only TCP sockets can listen" << std::endl;
         return false;
     }
 
-    if (::listen(socketFD, backlog) == SOCKET_ERROR) {
-        std::cerr << "Error listening on socket: " << WSAGetLastError() << std::endl;
-        closesocket(socketFD);
-        socketFD = INVALID_SOCKET;
-        return false;
-    }
+    // In SFML, listen is combined with bind in the TcpListener::listen method
+    // So we don't need to do anything here if the socket is already bound
 
     connected = true;  // For a server, "connected" means ready to accept connections
     return true;
 }
 
 Connection* Socketer::accept() {
-    if (!isServer || !connected || socketFD == INVALID_SOCKET) {
+    if (!isServer || !connected || socket == nullptr) {
         std::cerr << "Cannot accept: not a listening server socket" << std::endl;
         return nullptr;
     }
 
-    struct sockaddr_in clientAddr;
-    int clientAddrLen = sizeof(clientAddr);
-    SOCKET clientSocket = ::accept(socketFD, (struct sockaddr*)&clientAddr, &clientAddrLen);
+    if (socketType != sf::Socket::Type::Stream) {
+        std::cerr << "Cannot accept: only TCP sockets can accept connections" << std::endl;
+        return nullptr;
+    }
 
-    if (clientSocket == INVALID_SOCKET) {
-        std::cerr << "Error accepting connection: " << WSAGetLastError() << std::endl;
+    sf::TcpSocket* clientSocket = new sf::TcpSocket();
+    sf::Socket::Status status = static_cast<sf::TcpListener*>(socket)->accept(*clientSocket);
+
+    if (status != sf::Socket::Status::Done) {
+        std::cerr << "Error accepting connection: " << status << std::endl;
+        delete clientSocket;
         return nullptr;
     }
 
     // Get client address as string
-    char clientIP[INET_ADDRSTRLEN];
-    inet_ntop(AF_INET, &(clientAddr.sin_addr), clientIP, INET_ADDRSTRLEN);
-    int clientPort = ntohs(clientAddr.sin_port);
+    sf::IpAddress clientAddr = clientSocket->getRemoteAddress();
+    unsigned short clientPort = clientSocket->getRemotePort();
 
     // Create new socket object for client
-    Socketer* clientSock = new Socketer(clientSocket, clientIP, clientPort);
+    Socketer* clientSock = new Socketer(clientSocket, clientAddr.toString(), clientPort);
 
     // If server has TLS enabled, the client should too
     if (tlsEnabled) {
@@ -306,6 +275,10 @@ bool Socketer::enableTLS() {
         return false;
     }
 
+    // SFML doesn't have built-in TLS support
+    // We're providing a stub here that would need to be implemented with OpenSSL or another library
+    std::cerr << "TLS support requires OpenSSL integration with SFML" << std::endl;
+
     tlsEnabled = true;
     return true;
 }
@@ -315,85 +288,64 @@ bool Socketer::isTLSEnabled() const {
 }
 
 void Socketer::setTimeout(int ms) {
-    timeout = ms;
+    timeout = sf::milliseconds(ms);
 
-    if (socketFD != INVALID_SOCKET) {
-        // Set receive timeout
-        DWORD recvTimeout = ms;
-        if (setsockopt(socketFD, SOL_SOCKET, SO_RCVTIMEO, (const char*)&recvTimeout, sizeof(recvTimeout)) == SOCKET_ERROR) {
-            std::cerr << "Error setting receive timeout: " << WSAGetLastError() << std::endl;
+    if (socket != nullptr) {
+        if (socketType == sf::Socket::Type::Stream) {
+            static_cast<sf::TcpSocket*>(socket)->setBlocking(true);
         }
-
-        // Set send timeout
-        DWORD sendTimeout = ms;
-        if (setsockopt(socketFD, SOL_SOCKET, SO_SNDTIMEO, (const char*)&sendTimeout, sizeof(sendTimeout)) == SOCKET_ERROR) {
-            std::cerr << "Error setting send timeout: " << WSAGetLastError() << std::endl;
+        else {
+            static_cast<sf::UdpSocket*>(socket)->setBlocking(true);
         }
     }
 }
 
 int Socketer::getTimeout() const {
-    return timeout;
+    return static_cast<int>(timeout.asMilliseconds());
 }
 
 bool Socketer::initializeTLS() {
-    // Initialize OpenSSL
-    SSL_load_error_strings();
-    OpenSSL_add_ssl_algorithms();
-
-    // Create a new SSL context
-    const SSL_METHOD* method = TLS_client_method();
-    SSL_CTX* ctx = SSL_CTX_new(method);
-
-    if (!ctx) {
-        std::cerr << "Failed to create SSL context" << std::endl;
-        ERR_print_errors_fp(stderr);
-        return false;
-    }
-
-    tlsContext = ctx;
+    // This would need to be implemented with OpenSSL or another library
+    // SFML doesn't have built-in TLS support
+    std::cerr << "TLS initialization requires OpenSSL integration with SFML" << std::endl;
     return true;
 }
 
 bool Socketer::cleanupTLS() {
     if (tlsContext) {
-        SSL_CTX_free(static_cast<SSL_CTX*>(tlsContext));
+        // Clean up TLS resources
         tlsContext = nullptr;
     }
-
-    // Clean up OpenSSL
-    EVP_cleanup();
-    ERR_free_strings();
 
     tlsEnabled = false;
     return true;
 }
 
-bool Socketer::setSocketOption(int level, int optname, const char* optval, int optlen) {
-    if (socketFD == INVALID_SOCKET) {
-        std::cerr << "Cannot set socket option: socket not created" << std::endl;
+bool Socketer::setSocketOption(int option, int value) {
+    // SFML doesn't expose low-level socket options directly
+    // This would need to be extended with platform-specific code
+    std::cerr << "setSocketOption not implemented in SFML wrapper" << std::endl;
+    return false;
+}
+
+bool Socketer::setBlocking(bool blocking) {
+    if (socket == nullptr) {
+        std::cerr << "Cannot set blocking mode: socket not created" << std::endl;
         return false;
     }
 
-    if (setsockopt(socketFD, level, optname, optval, optlen) == SOCKET_ERROR) {
-        std::cerr << "Error setting socket option: " << WSAGetLastError() << std::endl;
-        return false;
+    if (socketType == sf::Socket::Type::Stream) {
+        if (isServer) {
+            static_cast<sf::TcpListener*>(socket)->setBlocking(blocking);
+        }
+        else {
+            static_cast<sf::TcpSocket*>(socket)->setBlocking(blocking);
+        }
+    }
+    else {
+        static_cast<sf::UdpSocket*>(socket)->setBlocking(blocking);
     }
 
     return true;
 }
-
-bool Socketer::setNonBlocking(bool nonBlocking) {
-    if (socketFD == INVALID_SOCKET) {
-        std::cerr << "Cannot set non-blocking mode: socket not created" << std::endl;
-        return false;
-    }
-
-    u_long mode = nonBlocking ? 1 : 0;  // 1 = non-blocking, 0 = blocking
-    if (ioctlsocket(socketFD, FIONBIO, &mode) != 0) {
-        std::cerr << "Failed to set non-blocking mode: " << WSAGetLastError() << std::endl;
-        return false;
-    }
-
-    return true;
-}
+*/

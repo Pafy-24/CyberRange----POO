@@ -1,32 +1,23 @@
 #pragma once
-#include <string>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
+/*
 #include "Connection.h"
+#include <string>
+#include <SFML/Network.hpp>
 
-// Link with Winsock library
-#pragma comment(lib, "ws2_32.lib")
-
-/**
- * Base class for socket-based connections
- */
 class UTILS_API Socketer : public Connection {
 protected:
     // Socket properties
-    SOCKET socketFD;
+    sf::Socket* socket;
     std::string address;
     int port;
     bool connected;
     bool isServer;
-    int socketType;
-    int timeout;
+    sf::Socket::Type socketType;
+    sf::Time timeout;
 
     // TLS/Security properties
     bool tlsEnabled;
     void* tlsContext;  // Opaque pointer for TLS context
-
-    // Static Winsock initialization
-    static bool winsockInitialized;
 
 public:
     // Client constructor
@@ -36,7 +27,7 @@ public:
     explicit Socketer(int port);
 
     // Socket created from accept()
-    Socketer(SOCKET sock, const std::string& clientAddr, int clientPort);
+    Socketer(sf::Socket* sock, const std::string& clientAddr, int clientPort);
 
     virtual ~Socketer();
 
@@ -45,9 +36,8 @@ public:
     bool disconnect() override;
     bool isConnected() const override;
 
-    int send(std::string data) override;
+    int send(const std::string& data) override;
     std::string receive() override;
-
 
     bool bind(int port) override;
     bool listen(int backlog = 5) override;
@@ -63,13 +53,12 @@ public:
     int getTimeout() const override;
 
 protected:
-    // Helper methods
-    bool initializeTLS();
-    bool cleanupTLS();
-    static bool initializeWinsock();
-    static void cleanupWinsock();
+    // Helper methods for TLS
+    virtual bool initializeTLS();
+    virtual bool cleanupTLS();
 
     // Utility methods for derived classes
-    bool setSocketOption(int level, int optname, const char* optval, int optlen);
-    bool setNonBlocking(bool nonBlocking);
+    bool setSocketOption(int option, int value);
+    bool setBlocking(bool blocking);
 };
+*/

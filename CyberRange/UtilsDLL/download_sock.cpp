@@ -12,18 +12,16 @@ static std::mutex downloadMutex;
 static std::condition_variable downloadCV;
 static bool downloadRunning = false;
 
-download_sock::download_sock(std::string addr, int port)
+download_sock::download_sock(const std::string& addr, int port)
     : TCPSock(addr, port), downloadProgress(0), filePath(""), fileSize(0),
     aborted(false), priority(0) {
-    // Enable TLS by default for download sockets
-    enableTLS();
 }
 
 download_sock::~download_sock() {
     cancelDownload();
 }
 
-bool download_sock::downloadFile(std::string url, std::string destination) {
+bool download_sock::downloadFile(std::string url, const std::string& destination) {
     if (!isConnected()) {
         if (!connect()) {
             std::cerr << "Failed to connect for download" << std::endl;
@@ -35,11 +33,10 @@ bool download_sock::downloadFile(std::string url, std::string destination) {
     aborted = false;
     downloadProgress = 0;
 
-    // Parse URL to extract host, path, etc.
+    // Parse URL to extract host, path
     std::string host;
     std::string path = "/";
 
-    // Simple URL parsing (would be more robust in a real implementation)
     size_t protocolEnd = url.find("://");
     if (protocolEnd != std::string::npos) {
         url = url.substr(protocolEnd + 3);
@@ -89,7 +86,7 @@ bool download_sock::downloadFile(std::string url, std::string destination) {
         std::string buffer;
 
         while (!aborted) {
-            std::string chunk = TCPSock::receive();
+            std::string chunk = receive();
             if (chunk.empty()) {
                 break;  // End of data
             }
@@ -155,7 +152,7 @@ bool download_sock::downloadFile(std::string url, std::string destination) {
     return true;
 }
 
-int download_sock::getProgress() {
+int download_sock::getProgress() const {
     return downloadProgress;
 }
 
@@ -164,8 +161,6 @@ void download_sock::cancelDownload() {
 
     if (downloadRunning) {
         aborted = true;
-
-        // Wait for download thread to finish
         downloadCV.wait(lock, [] { return !downloadRunning; });
     }
 
@@ -174,10 +169,8 @@ void download_sock::cancelDownload() {
 
 void download_sock::setPriority(int prio) {
     priority = prio;
-    // În implementarea reală, aici ar putea fi ajustat prioritatea thread-ului
-    // sau setări QoS pentru rețea
 }
 
-long download_sock::getFileSize() {
+long download_sock::getFileSize() const {
     return fileSize;
 }

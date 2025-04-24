@@ -1,25 +1,15 @@
 #include "pch.h"
 #include "DBConn.h"
 #include <iostream>
-#include <sstream>
 #include <regex>
-#include <cstring>
-#include <openssl/ssl.h>
-#include <openssl/err.h>
+#include <sstream>
 
-DBConn::DBConn(std::string connStr)
-    : connectionString(connStr), connected(false), dbType("mysql"),
-    timeout(30000), dbHandle(nullptr), sslContext(nullptr), tlsEnabled(false) {
-    // Parse connection string to determine database type
-    if (connStr.find("postgresql://") == 0) {
-        dbType = "postgresql";
-    }
-    else if (connStr.find("oracle://") == 0) {
-        dbType = "oracle";
-    }
-    else if (connStr.find("sqlserver://") == 0) {
-        dbType = "sqlserver";
-    }
+DBConn::DBConn(const std::string& connStr)
+    : dbSocket(nullptr), connectionString(connStr), port(3306),
+    dbType("mysql"), connected(false), timeout(30000), tlsEnabled(false) {
+
+    // Parse the connection string to extract host, port, etc.
+    parseConnectionString();
 
     // Enable TLS by default for database connections
     enableTLS();
@@ -30,10 +20,80 @@ DBConn::~DBConn() {
         disconnect();
     }
 
-    if (sslContext) {
-        SSL_CTX_free(static_cast<SSL_CTX*>(sslContext));
-        sslContext = nullptr;
+    if (dbSocket) {
+        delete dbSocket;
+        dbSocket = nullptr;
     }
+}
+
+bool DBConn::parseConnectionString() {
+    // Parse connection string to determine database type and extract components
+    if (connectionString.find("postgresql://") == 0) {
+        dbType = "postgresql";
+        port = 5432;
+    }
+    else if (connectionString.find("oracle://") == 0) {
+        dbType = "oracle";
+        port = 1521;
+    }
+    else if (connectionString.find("sqlserver://") == 0) {
+        dbType = "sqlserver";
+        port = 1433;
+    }
+    else if (connectionString.find("mysql://") == 0 || connectionString.find("mariadb://") == 0) {
+        dbType = "mysql";
+        port = 3306;
+    }
+
+    // This is a simplified parser - a real implementation would be more robust
+    size_t protocolEnd = connectionString.find("://");
+    if (protocolEnd == std::string::npos) {
+        std::cerr << "Invalid connection string format" << std::endl;
+        return false;
+    }
+
+    size_t userPassEnd = connectionString.find('@', protocolEnd + 3);
+    if (userPassEnd != std::string::npos) {
+        std::string userPass = connectionString.substr(protocolEnd + 3, userPassEnd - (protocolEnd + 3));
+        size_t colonPos = userPass.find(':');
+
+        if (colonPos != std::string::npos) {
+            username = userPass.substr(0, colonPos);
+            password = userPass.substr(colonPos + 1);
+        }
+        else {
+            username = userPass;
+        }
+
+        std::string hostPortDb = connectionString.substr(userPassEnd + 1);
+        size_t portStart = hostPortDb.find(':');
+
+        if (portStart != std::string::npos) {
+            host = hostPortDb.substr(0, portStart);
+            size_t dbStart = hostPortDb.find('/', portStart);
+
+            if (dbStart != std::string::npos) {
+                port = std::stoi(hostPortDb.substr(portStart + 1, dbStart - (portStart + 1)));
+                database = hostPortDb.substr(dbStart + 1);
+            }
+            else {
+                port = std::stoi(hostPortDb.substr(portStart + 1));
+            }
+        }
+        else {
+            size_t dbStart = hostPortDb.find('/');
+
+            if (dbStart != std::string::npos) {
+                host = hostPortDb.substr(0, dbStart);
+                database = hostPortDb.substr(dbStart + 1);
+            }
+            else {
+                host = hostPortDb;
+            }
+        }
+    }
+
+    return !host.empty();
 }
 
 bool DBConn::connect() {
@@ -41,95 +101,58 @@ bool DBConn::connect() {
         return true;
     }
 
-    std::cout << "Connecting to database using " << connectionString << std::endl;
-
-    // Parse connection string to extract components
-    std::string host, port, database, user, password;
-
-    // This is a simplified parser - a real implementation would be more robust
-    size_t protocolEnd = connectionString.find("://");
-    if (protocolEnd != std::string::npos) {
-        size_t userPassEnd = connectionString.find('@', protocolEnd + 3);
-
-        if (userPassEnd != std::string::npos) {
-            std::string userPass = connectionString.substr(protocolEnd + 3, userPassEnd - (protocolEnd + 3));
-            size_t colonPos = userPass.find(':');
-
-            if (colonPos != std::string::npos) {
-                user = userPass.substr(0, colonPos);
-                password = userPass.substr(colonPos + 1);
-            }
-            else {
-                user = userPass;
-            }
-
-            std::string hostPortDb = connectionString.substr(userPassEnd + 1);
-            size_t portStart = hostPortDb.find(':');
-
-            if (portStart != std::string::npos) {
-                host = hostPortDb.substr(0, portStart);
-                size_t dbStart = hostPortDb.find('/', portStart);
-
-                if (dbStart != std::string::npos) {
-                    port = hostPortDb.substr(portStart + 1, dbStart - (portStart + 1));
-                    database = hostPortDb.substr(dbStart + 1);
-                }
-                else {
-                    port = hostPortDb.substr(portStart + 1);
-                }
-            }
-            else {
-                size_t dbStart = hostPortDb.find('/');
-
-                if (dbStart != std::string::npos) {
-                    host = hostPortDb.substr(0, dbStart);
-                    database = hostPortDb.substr(dbStart + 1);
-                }
-                else {
-                    host = hostPortDb;
-                }
-            }
-        }
-    }
-
-    // In a real implementation, we would connect to the actual database here
-    // using the appropriate library (libpq for PostgreSQL, MySQL C API, etc.)
-
-    // For now, we'll just simulate a connection
     if (host.empty()) {
-        std::cerr << "Invalid connection string format" << std::endl;
+        std::cerr << "Invalid connection string, host is empty" << std::endl;
         return false;
     }
 
-    // Initialize TLS if enabled
+    std::cout << "Connecting to " << dbType << " database at " << host << ":" << port << std::endl;
+
+    // Create a TCP socket connection to the database server
+    dbSocket = new TCPSock(host, port);
+
+    // Set timeout
+    dbSocket->setTimeout(timeout);
+
+    // Enable TLS if required
     if (tlsEnabled) {
-        // Initialize OpenSSL
-        SSL_load_error_strings();
-        OpenSSL_add_ssl_algorithms();
-
-        // Create SSL context
-        const SSL_METHOD* method = TLS_client_method();
-        SSL_CTX* ctx = SSL_CTX_new(method);
-
-        if (!ctx) {
-            std::cerr << "Failed to create SSL context for database connection" << std::endl;
-            ERR_print_errors_fp(stderr);
-            return false;
-        }
-
-        sslContext = ctx;
-
-        std::cout << "TLS enabled for database connection" << std::endl;
+        dbSocket->enableTLS();
     }
 
-    // Simulating connection to database
-    std::cout << "Connected to " << dbType << " database at " << host;
-    if (!port.empty()) {
-        std::cout << ":" << port;
+    // Connect to the database server
+    if (!dbSocket->connect()) {
+        std::cerr << "Failed to connect to database server at " << host << ":" << port << std::endl;
+        delete dbSocket;
+        dbSocket = nullptr;
+        return false;
     }
-    std::cout << " as user " << user << std::endl;
+
+    // Send authentication data (simplified)
+    std::string authData = "AUTH " + username + " " + password + " " + database;
+    int bytesSent = dbSocket->send(authData);
+
+    if (bytesSent <= 0) {
+        std::cerr << "Failed to send authentication data" << std::endl;
+        dbSocket->disconnect();
+        delete dbSocket;
+        dbSocket = nullptr;
+        return false;
+    }
+
+    // Wait for authentication response
+    std::string response = dbSocket->receive();
+    if (response.empty() || response.find("OK") == std::string::npos) {
+        std::cerr << "Authentication failed: " << response << std::endl;
+        dbSocket->disconnect();
+        delete dbSocket;
+        dbSocket = nullptr;
+        return false;
+    }
 
     connected = true;
+    std::cout << "Connected to " << dbType << " database at " << host << ":" << port
+        << " as user " << username << std::endl;
+
     return true;
 }
 
@@ -138,7 +161,11 @@ bool DBConn::disconnect() {
         return true;
     }
 
-    // In a real implementation, we would close the database connection here
+    if (dbSocket) {
+        dbSocket->disconnect();
+        delete dbSocket;
+        dbSocket = nullptr;
+    }
 
     std::cout << "Disconnected from database" << std::endl;
     connected = false;
@@ -146,82 +173,67 @@ bool DBConn::disconnect() {
 }
 
 bool DBConn::isConnected() const {
-    return connected;
+    return connected && dbSocket && dbSocket->isConnected();
 }
 
-int DBConn::send(std::string query) {
-    if (!connected) {
+int DBConn::send(const std::string& query) {
+    if (!connected || !dbSocket) {
         std::cerr << "Not connected to database" << std::endl;
         return -1;
     }
 
+    std::string sanitizedQuery = query;
     // Sanitize query to prevent SQL injection
-    if (!sanitizeQuery(query)) {
+    if (!sanitizeQuery(sanitizedQuery)) {
         std::cerr << "Query failed sanitization checks" << std::endl;
         return -1;
     }
 
-    // In a real implementation, we would execute the query here
+    std::cout << "Executing query: " << sanitizedQuery << std::endl;
 
-    std::cout << "Executing query: " << query << std::endl;
-
-    // Simulate query execution
-    // Return number of affected rows (just a placeholder)
-    return 1;
+    // Send the query to the database server
+    return dbSocket->send(sanitizedQuery);
 }
 
 std::string DBConn::receive() {
-    if (!connected) {
+    if (!connected || !dbSocket) {
         std::cerr << "Not connected to database" << std::endl;
         return "";
     }
 
-    // In a real implementation, we would fetch results here
-
-    // Simulate fetching results
-    std::stringstream result;
-    result << "{ \"result\": \"success\", \"rows\": [] }";
-
-    return result.str();
+    // Receive response from the database server
+    return dbSocket->receive();
 }
 
 void DBConn::setTimeout(int ms) {
     timeout = ms;
 
-    // In a real implementation, we would set the database client timeout here
+    if (dbSocket) {
+        dbSocket->setTimeout(ms);
+    }
 
     std::cout << "Database timeout set to " << ms << " ms" << std::endl;
 }
 
-std::string DBConn::getAddress() const{
-    // Extract host:port from connection string
-    size_t protocolEnd = connectionString.find("://");
-    if (protocolEnd != std::string::npos) {
-        size_t userPassEnd = connectionString.find('@', protocolEnd + 3);
+int DBConn::getTimeout() const {
+    return timeout;
+}
 
-        if (userPassEnd != std::string::npos) {
-            std::string hostPortDb = connectionString.substr(userPassEnd + 1);
-            size_t dbStart = hostPortDb.find('/');
+std::string DBConn::getAddress() const {
+    return host;
+}
 
-            if (dbStart != std::string::npos) {
-                return hostPortDb.substr(0, dbStart);
-            }
-            else {
-                return hostPortDb;
-            }
-        }
-    }
-
-    return "";
+int DBConn::getPort() const {
+    return port;
 }
 
 bool DBConn::enableTLS() {
-    if (connected) {
-        std::cerr << "Cannot enable TLS on already connected database" << std::endl;
-        return false;
+    tlsEnabled = true;
+
+    if (dbSocket) {
+        return dbSocket->enableTLS();
     }
 
-    tlsEnabled = true;
     return true;
 }
 
@@ -229,32 +241,7 @@ bool DBConn::isTLSEnabled() const {
     return tlsEnabled;
 }
 
-int DBConn::getPort() const
-{
-    return 0;
-}
-
-bool DBConn::bind(int port)
-{
-    return false;
-}
-
-bool DBConn::listen(int backlog)
-{
-    return false;
-}
-
-Connection* DBConn::accept()
-{
-    return nullptr;
-}
-
-int DBConn::getTimeout() const
-{
-    return 0;
-}
-
-void DBConn::setDbType(std::string type) {
+void DBConn::setDbType(const std::string& type) {
     if (!connected) {
         dbType = type;
     }

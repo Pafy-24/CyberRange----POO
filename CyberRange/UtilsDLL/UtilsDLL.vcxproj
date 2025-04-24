@@ -112,15 +112,14 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Includes\OpenSSL-Win64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Includes\SFML-2.6.2\include;$(SolutionDir)Includes\OpenSSL-Win64\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)Includes\OpenSSL-Win64\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib;
-$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Includes\SFML-2.6.2\lib;$(SolutionDir)Includes\OpenSSL-Win64\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib;$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;$(SolutionDir)\Includes\SFML-2.6.2\lib\sfml-network-d.lib;$(SolutionDir)\Includes\SFML-2.6.2\lib\sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -194,12 +193,12 @@ $(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;%(AdditionalDepen
     </ClCompile>
     <ClCompile Include="Socketer.cpp" />
     <ClCompile Include="TCPSock.cpp" />
-    <ClCompile Include="tobedel.cpp" />
     <ClCompile Include="UDPSock.cpp" />
     <ClCompile Include="Writer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

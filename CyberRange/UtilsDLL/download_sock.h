@@ -10,15 +10,14 @@ private:
     bool aborted;
     int priority;
 
-    // Eliminăm HANDLE downloadThread deoarece folosim std::thread
-
 public:
-    download_sock(std::string addr, int port);
+    download_sock(const std::string& addr, int port);
     virtual ~download_sock();
 
-    bool downloadFile(std::string url, std::string destination);
-    int getProgress();
+    bool downloadFile(std::string url, const std::string& destination);
+
+    int getProgress() const;
     void cancelDownload();
     void setPriority(int prio);
-    long getFileSize();
+    long getFileSize() const;
 };
