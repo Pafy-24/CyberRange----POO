@@ -1,6 +1,5 @@
 ﻿#include "pch.h"
 #include "Client.h"
-
 #include <iostream>
 #include <string>
 #include <thread>

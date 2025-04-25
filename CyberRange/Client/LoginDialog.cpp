@@ -2,9 +2,7 @@
 #include "ui_LoginDialog.h"
 #include <QMessageBox>
 
-LoginDialog::LoginDialog(QWidget* parent) :
-    QDialog(parent),
-    ui(new Ui::LoginDialog)
+LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDialog)
 {
     ui->setupUi(this);
 }
@@ -14,7 +12,7 @@ LoginDialog::~LoginDialog()
     delete ui;
 }
 
-void LoginDialog::on_pushButtonLogin_clicked()
+void LoginDialog::on_pushloginButton_clicked()
 {
     QString user = ui->lineEditUsername->text();
     QString pass = ui->lineEditPassword->text();
@@ -28,7 +26,7 @@ void LoginDialog::on_pushButtonLogin_clicked()
     }
 }
 
-void LoginDialog::on_pushButtonCancel_clicked()
+void LoginDialog::on_pushregisterButton_clicked()
 {
     reject(); // închide cu eșec
 }

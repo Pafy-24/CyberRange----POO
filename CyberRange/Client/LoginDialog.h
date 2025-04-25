@@ -2,6 +2,7 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
+#include "ui_LoginDialog.h"
 
 namespace Ui {
     class LoginDialog;
@@ -19,8 +20,8 @@ signals:
     void loginSuccess();
 
 private slots:
-    void on_pushButtonLogin_clicked();
-    void on_pushButtonCancel_clicked();
+    void on_pushloginButton_clicked();
+    void on_pushregisterButton_clicked();
 
 private:
     Ui::LoginDialog* ui;
