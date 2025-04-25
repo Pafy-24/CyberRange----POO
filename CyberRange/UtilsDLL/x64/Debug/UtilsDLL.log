@@ -1,1 +1,7 @@
+<<<<<<< HEAD
 ﻿  UtilsDLL.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+=======
+﻿  transfer_sock.cpp
+     Creating library E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.lib and object E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.exp
+  UtilsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+>>>>>>> 9a72e92535fc6ac21c723f8f32460346aed4dbb3

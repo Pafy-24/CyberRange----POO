@@ -1,16 +1,20 @@
 #pragma once
+#include "Connection.h"
 #include <string>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include "Socketer.h"
+#include <SFML/Network.hpp>
 
-/**
- * TCP Socket implementation
- */
-class UTILS_API TCPSock : public Socketer {
-private:
-    bool blocking;
-    void* sslHandle;  // SSL connection handle
+class UTILS_API TCPSock : public Connection {
+protected:
+    // Socket properties
+    sf::TcpSocket* tcpSocket;
+    sf::TcpListener* tcpListener;
+    std::string address;
+    int port;
+    bool connected;
+    bool isServer;
+    sf::Time timeout;
+    bool tlsEnabled;
+    void* tlsContext; // Pentru implementarea TLS
 
 public:
     // Client constructor
@@ -19,24 +23,36 @@ public:
     // Server constructor
     explicit TCPSock(int port);
 
-    // Accept constructor (used internally)
-    TCPSock(SOCKET sock, const std::string& clientAddr, int clientPort);
+    // Socket created from accept()
+    TCPSock(sf::TcpSocket* sock, const std::string& clientAddr, int clientPort);
 
     virtual ~TCPSock();
 
-    // Override specific connection methods to handle TLS
     bool connect() override;
     bool disconnect() override;
-    int send(std::string data) override;
+    bool isConnected() const override;
+
+    int send(const std::string& data) override;
     std::string receive() override;
+
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
     Connection* accept() override;
 
-    // TCP-specific methods
-    void setBlocking(bool block);
-    bool isBlocking() const;
+    std::string getAddress() const override;
+    int getPort() const override;
+
     bool enableTLS() override;
+    bool isTLSEnabled() const override;
+
+    void setTimeout(int ms) override;
+    int getTimeout() const override;
+
+    void setBlocking(bool blocking);
+    bool isBlocking() const;
 
 protected:
-    bool setupTLS();
-    bool teardownTLS();
+    // Helper pentru TLS
+    virtual bool setupTLS();
+    virtual bool cleanupTLS();
 };

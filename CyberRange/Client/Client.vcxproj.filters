@@ -42,7 +42,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="RomasTest.ui">
+    <QtUic Include="MainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

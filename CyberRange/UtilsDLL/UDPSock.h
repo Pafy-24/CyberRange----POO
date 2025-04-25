@@ -1,26 +1,51 @@
 #pragma once
+#include "Connection.h"
 #include <string>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include "Socketer.h"
+#include <SFML/Network.hpp>
 
-class UTILS_API UDPSock : public Socketer {
-private:
-    SOCKET socketFD;
+class UTILS_API UDPSock : public Connection {
+protected:
+    sf::UdpSocket* udpSocket;
+    std::string address;
+    int port;
+    bool connected;
+    bool isServer;
+    sf::Time timeout;
     int maxPacketSize;
-    void* dtlsContext;  // For DTLS (UDP equivalent of TLS)
+
+    // Pentru DTLS (echivalentul UDP al TLS)
+    bool tlsEnabled;
+    void* dtlsContext;
 
 public:
-    UDPSock(std::string addr, int port);
+    UDPSock(const std::string& addr, int port);
     virtual ~UDPSock();
 
     bool connect() override;
     bool disconnect() override;
-    int send(std::string data) override;
+    bool isConnected() const override;
+
+    int send(const std::string& data) override;
     std::string receive() override;
-    bool enableTLS() override;  // Will use DTLS instead of TLS
+
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
+    Connection* accept() override;
+
+    std::string getAddress() const override;
+    int getPort() const override;
+
+    bool enableTLS() override;
+    bool isTLSEnabled() const override;
+
+    void setTimeout(int ms) override;
+    int getTimeout() const override;
 
     void setMaxPacketSize(int size);
-    bool broadcast(std::string data);
+    bool broadcast(const std::string& data);
     std::string receiveFrom(std::string& sender);
+
+protected:
+    bool setupDTLS();
+    bool cleanupDTLS();
 };

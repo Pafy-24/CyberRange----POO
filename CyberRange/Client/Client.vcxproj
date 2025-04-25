@@ -65,10 +65,10 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)\UtilsDLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Includes\SFML-2.6.2\include;$(SolutionDir)\UtilsDLL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Includes\SFML-2.6.2\lib;$(SolutionDir)$(IntDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>UtilsDLL.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -106,9 +106,7 @@
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
-    <QtUic Include="RomasTest.ui">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </QtUic>
+    <QtUic Include="MainWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UtilsDLL\UtilsDLL.vcxproj">
