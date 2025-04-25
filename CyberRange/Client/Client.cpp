@@ -1,5 +1,4 @@
 ﻿#include "Client.h"
-
 #include "pch.h"
 #include <iostream>
 #include <string>
@@ -11,7 +10,6 @@
 #include "DBConn.h"
 #include "AdminConn.h"
 #include "download_sock.h"
-
 
 // Function to print thread-safe messages
 void Client::printMessage(const std::string& message) {

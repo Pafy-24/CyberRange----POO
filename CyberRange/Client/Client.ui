@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>600</width>
-    <height>400</height>
+    <width>623</width>
+    <height>476</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -37,7 +37,7 @@
    <widget class="QPlainTextEdit" name="plainTextEdit">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>90</x>
       <y>40</y>
       <width>381</width>
       <height>121</height>
@@ -50,8 +50,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
-     <height>21</height>
+     <width>623</width>
+     <height>33</height>
     </rect>
    </property>
    <widget class="QMenu" name="menumenu">

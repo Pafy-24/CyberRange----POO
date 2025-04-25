@@ -106,7 +106,9 @@
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
-    <QtUic Include="RomasTest.ui" />
+    <QtUic Include="RomasTest.ui">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UtilsDLL\UtilsDLL.vcxproj">

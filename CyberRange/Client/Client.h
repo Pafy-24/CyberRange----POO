@@ -1,5 +1,4 @@
 #pragma once
-
 #include <QtWidgets/QMainWindow>
 #include "ui_Client.h"
 
@@ -16,10 +15,10 @@ public:
     Client(QWidget *parent = nullptr);
     ~Client();
 
-
 private:
     Ui::ClientClass ui;
 private slots:
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked() {};
 
 };
