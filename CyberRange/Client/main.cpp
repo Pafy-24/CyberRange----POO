@@ -1,11 +1,10 @@
-#include "Client.h"
-#include <QtWidgets/QApplication>
+#include <QApplication>
+#include "LoginDialog.h"
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-
     QApplication a(argc, argv);
-    Client w;
-    w.show();
+    LoginDialog login;
+    login.show(); // sau login.exec() 
     return a.exec();
 }

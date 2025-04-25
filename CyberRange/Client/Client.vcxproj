@@ -105,13 +105,17 @@
     <QtUic Include="Client.ui" />
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="LoginDialog.cpp" />
     <ClCompile Include="main.cpp" />
-    <QtUic Include="MainWindow.ui" />
+    <QtUic Include="LoginDialog.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\UtilsDLL\UtilsDLL.vcxproj">
       <Project>{399e6a2a-2d62-4a06-8eb9-457e6fcb94ec}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="LoginDialog.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
