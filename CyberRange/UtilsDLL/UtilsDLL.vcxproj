@@ -113,6 +113,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)Includes\SFML-2.6.2\include;$(SolutionDir)Includes\OpenSSL-Win64\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,7 +154,7 @@
     <ClInclude Include="DBConn.h" />
     <ClInclude Include="DBLogs.h" />
     <ClInclude Include="DLL.h" />
-    <ClInclude Include="download_sock.h" />
+    <ClInclude Include="transfer_sock.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="JSONDec.h" />
     <ClInclude Include="JSONEnc.h" />
@@ -180,7 +181,7 @@
     <ClCompile Include="CustomSerial.cpp" />
     <ClCompile Include="DBConn.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="download_sock.cpp" />
+    <ClCompile Include="transfer_sock.cpp" />
     <ClCompile Include="JSONDec.cpp" />
     <ClCompile Include="JSONEnc.cpp" />
     <ClCompile Include="JWTDec.cpp" />

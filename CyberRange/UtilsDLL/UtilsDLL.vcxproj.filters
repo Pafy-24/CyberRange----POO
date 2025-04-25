@@ -78,7 +78,7 @@
     <ClInclude Include="DBLogs.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="download_sock.h">
+    <ClInclude Include="transfer_sock.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="JSONDec.h">
@@ -149,7 +149,7 @@
     <ClCompile Include="UDPSock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="download_sock.cpp">
+    <ClCompile Include="transfer_sock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DBConn.cpp">

@@ -1,6 +1,6 @@
-﻿#include "Client.h"
+﻿#include "pch.h"
+#include "Client.h"
 
-#include "pch.h"
 #include <iostream>
 #include <string>
 #include <thread>
@@ -8,7 +8,7 @@
 #include <fstream>
 #include "TCPSock.h"
 #include "UDPSock.h"
-#include "download_sock.h"
+#include "transfer_sock.h"
 
 // Function to print thread-safe messages  
 void Client::printMessage(const std::string& message) {  
@@ -186,7 +186,7 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     printMessage("Setting up download from " + serverAddress + ":" + std::to_string(port));
 
     // Create download socket
-    download_sock downloader(serverAddress, port);
+    transfer_sock conn(serverAddress, port);
 
     // Test first download - small file
     std::string smallFile = "test_small.dat";
@@ -194,34 +194,26 @@ void Client::testDownload(const std::string& serverAddress, int port) {
 
     printMessage("Starting small file download test");
 
-    // Create custom URL for our protocol
-    std::string smallFileUrl = serverAddress + ":" + std::to_string(port) + "/" + smallFile;
 
     // Connect the downloader first
-    if (!downloader.connect()) {
+    if (!conn.connect()) {
         printMessage("Failed to connect download socket");
         return;
     }
 
-    // Send GET request directly before starting the download
-    std::string getRequest = "GET " + smallFile;
-    if (downloader.send(getRequest) < 0) {
-        printMessage("Failed to send download request");
-        return;
-    }
 
     printMessage("Starting download for: " + smallFile);
     printMessage("Saving to: " + smallFileDest);
 
-    if (!downloader.downloadFile(smallFileUrl, smallFileDest)) {
+    if (!conn.downloadFile(smallFile, smallFileDest)) {
         printMessage("Failed to start download");
         return;
     }
 
     // Monitor download progress
     int lastProgress = -1;
-    while (downloader.getProgress() < 100) {
-        int currentProgress = downloader.getProgress();
+    while (conn.getProgress() < 100) {
+        int currentProgress = conn.getProgress();
         if (currentProgress != lastProgress) {
             printMessage("Download progress: " + std::to_string(currentProgress) + "%");
             lastProgress = currentProgress;
@@ -232,7 +224,7 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     }
 
     printMessage("Small file download complete!");
-    printMessage("File size: " + std::to_string(downloader.getFileSize()) + " bytes");
+    printMessage("File size: " + std::to_string(conn.getFileSize()) + " bytes");
 
     // Verify the downloaded file exists
     std::ifstream smallFileCheck(smallFileDest, std::ios::binary);
@@ -254,32 +246,21 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     printMessage("\nStarting large file download test with cancellation");
 
     // Set priority for this download
-    downloader.setPriority(2);  // Higher priority
+    conn.setPriority(2);  // Higher priority
     printMessage("Set download priority to 2");
-
-    // Create custom URL for our protocol
-    std::string largeFileUrl = serverAddress + ":" + std::to_string(port) + "/" + largeFile;
-
-    // Disconnect and reconnect to ensure clean state
-    downloader.disconnect();
-    downloader.connect();
-
-    // Send GET request
-    getRequest = "GET " + largeFile;
-    downloader.send(getRequest);
 
     printMessage("Starting download for: " + largeFile);
     printMessage("Saving to: " + largeFileDest);
 
-    if (!downloader.downloadFile(largeFileUrl, largeFileDest)) {
+    if (!conn.downloadFile(largeFile, largeFileDest)) {
         printMessage("Failed to start download");
         return;
     }
 
     // Monitor download progress and cancel at 50%
     lastProgress = -1;
-    while (downloader.getProgress() < 100) {
-        int currentProgress = downloader.getProgress();
+    while (conn.getProgress() < 100) {
+        int currentProgress = conn.getProgress();
         if (currentProgress != lastProgress) {
             printMessage("Download progress: " + std::to_string(currentProgress) + "%");
             lastProgress = currentProgress;
@@ -287,7 +268,7 @@ void Client::testDownload(const std::string& serverAddress, int port) {
             // Cancel at approximately 50%
             if (currentProgress >= 50 && currentProgress < 55) {
                 printMessage("Cancelling download at " + std::to_string(currentProgress) + "%");
-                downloader.cancelDownload();
+                conn.cancelTransfer();
                 break;
             }
         }
@@ -302,48 +283,8 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     printMessage("\nRestarting the large file download");
 
     // Reconnect
-    downloader.disconnect();
-    downloader.connect();
-
-    // Send GET request again
-    downloader.send(getRequest);
-
-    if (!downloader.downloadFile(largeFileUrl, largeFileDest)) {
-        printMessage("Failed to restart download");
-        return;
-    }
-
-    // Monitor the restarted download progress to completion
-    lastProgress = -1;
-    while (downloader.getProgress() < 100) {
-        int currentProgress = downloader.getProgress();
-        if (currentProgress != lastProgress && currentProgress % 10 == 0) { // Show every 10%
-            printMessage("Restarted download progress: " + std::to_string(currentProgress) + "%");
-            lastProgress = currentProgress;
-        }
-
-        // Small delay
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-
-    printMessage("Download complete!");
-    printMessage("File size: " + std::to_string(downloader.getFileSize()) + " bytes");
-
-    // Verify the downloaded file exists
-    std::ifstream largeFileCheck(largeFileDest, std::ios::binary);
-    if (largeFileCheck.good()) {
-        // Get file size
-        largeFileCheck.seekg(0, std::ios::end);
-        std::streamsize fileSize = largeFileCheck.tellg();
-        largeFileCheck.close();
-        printMessage("Large file successfully saved with size: " + std::to_string(fileSize) + " bytes");
-    }
-    else {
-        printMessage("Error: Downloaded large file not found or cannot be opened");
-    }
-
-    downloader.disconnect();
-    printMessage("Download client tests completed");
+    conn.disconnect();
+    
 }
 
 Client::Client(QWidget* parent)
@@ -369,28 +310,21 @@ void Client::on_pushButton_clicked()
     int downloadPort = 8082;   // Download server
 
     // Run tests in separate threads
-    std::thread tcpThread([this, serverAddress, tcpPort]() {
-        testTCPClient(serverAddress, tcpPort);
-    });
+    testTCPClient(serverAddress, tcpPort);
+   
 
-    std::thread secureTcpThread([this, serverAddress, secureTcpPort]() {
-        testSecureTCPClient(serverAddress, secureTcpPort);
-    });
+    testSecureTCPClient(serverAddress, secureTcpPort);
+    
 
-    std::thread udpThread([this, serverAddress, udpPort]() {
-        testUDPClient(serverAddress, udpPort);
-    });
+    testUDPClient(serverAddress, udpPort);
+    
 
 //    std::thread downloadThread([this, serverAddress, downloadPort]() {
- //       testDownload(serverAddress, downloadPort);
+        testDownload(serverAddress, downloadPort);
  //   });
 
     // Wait for all threads to complete
    
-    tcpThread.join();
-    secureTcpThread.join();
-    udpThread.join();
-  //  downloadThread.join();
 
     printMessage("\nAll client tests completed");
 }
