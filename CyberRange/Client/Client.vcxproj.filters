@@ -43,14 +43,23 @@
     <ClCompile Include="LoginDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="LoginDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="MainMenu.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="LoginDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="MainMenu.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

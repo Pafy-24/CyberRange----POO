@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="Client">
+    <qresource prefix="/background">
+        <file>pngtree.jpg</file>
+        <file>fundal.jpg</file>
     </qresource>
 </RCC>
