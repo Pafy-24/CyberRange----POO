@@ -19,7 +19,15 @@ public:
     ~MainMenu();
 
 private slots:
-    void on_pushButton_clicked();
+    //void on_logoutButton_clicked();
+    void on_ChallengesButton_clicked();
+    void on_CompeteButton_clicked();
+	void on_DashboardButton_clicked();
+	void on_HomeButton_clicked();
+	void on_LeaderboardButton_clicked();
+	void on_ProfileButton_clicked();
+	void on_SettingsButton_clicked();
+	void on_TrainingButton_clicked();
 
 private:
     Ui::MainMenu* ui;

@@ -2,5 +2,6 @@
     <qresource prefix="/background">
         <file>pngtree.jpg</file>
         <file>fundal.jpg</file>
+        <file>fundal3.jpg</file>
     </qresource>
 </RCC>

@@ -38,21 +38,32 @@ void LoginDialog::on_loginButton_clicked()
     QString username = ui->lineEditUsername->text();
     QString password = ui->lineEditPassword->text();
 
-    if (username == "admin" && password == "1234") 
-    {
-        MainMenu* menu = new MainMenu();
-        menu->show();
-        this->close(); // inchide fereastra de login
+    if (username == "admin" && password == "1234")
+    { 
+        // Fade out LoginDialog
+        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+        fadeOut->setDuration(500);
+        fadeOut->setStartValue(1);
+        fadeOut->setEndValue(0);
+
+        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+            // dupa fade-out: open MainMenu
+            MainMenu* menu = new MainMenu();
+            menu->show();
+            this->close(); 
+            });
+        fadeOut->start();
     }
-    else 
-    {
-        QMessageBox::warning(this, "Login Failed", "Wrong username or password.");
+    else {
+        QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
     }
 }
 
 void LoginDialog::on_registerButton_clicked()
 {
-    reject(); // închide cu eșec
+    MainMenu* menu = new MainMenu();
+    menu->show();
+    this->close();
 }
 
 void LoginDialog::on_exitButton_clicked()
