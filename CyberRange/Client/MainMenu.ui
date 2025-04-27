@@ -15,10 +15,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
-    background-image: url(:/background/fundal3.jpg);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: black;
+    background-color: rgba(13, 3, 25, 255)
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
@@ -34,6 +31,11 @@
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QFrame" name="frameLeftMenu">
+         <property name="font">
+          <font>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="frameShape">
           <enum>QFrame::Shape::StyledPanel</enum>
          </property>
@@ -43,6 +45,30 @@
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QPushButton" name="HomeButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Home</string>
             </property>
@@ -50,6 +76,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="DashboardButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Dashboard</string>
             </property>
@@ -57,6 +107,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="ChallengesButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Challenges</string>
             </property>
@@ -64,6 +138,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="CompeteButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Compete</string>
             </property>
@@ -71,6 +169,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="LeaderboardButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>LeaderBoard</string>
             </property>
@@ -78,6 +200,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="TrainingButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Training</string>
             </property>
@@ -85,6 +231,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="ProfileButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Profile</string>
             </property>
@@ -92,6 +262,30 @@
           </item>
           <item>
            <widget class="QPushButton" name="SettingsButton">
+            <property name="font">
+             <font>
+              <pointsize>13</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
             <property name="text">
              <string>Settings</string>
             </property>
@@ -116,6 +310,9 @@
               <pointsize>14</pointsize>
              </font>
             </property>
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <widget class="QWidget" name="Dashboard">
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
@@ -126,6 +323,9 @@
                   <italic>true</italic>
                   <bold>true</bold>
                  </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-image: url(:/background/fundal2.jpg)</string>
                 </property>
                 <property name="text">
                  <string>DASHBOARD</string>

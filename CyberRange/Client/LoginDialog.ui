@@ -68,6 +68,9 @@ QLineEdit:focus {
     border: 2px solid white;
 }</string>
    </property>
+   <property name="echoMode">
+    <enum>QLineEdit::EchoMode::Password</enum>
+   </property>
   </widget>
   <widget class="QPushButton" name="loginButton">
    <property name="geometry">
@@ -138,6 +141,14 @@ QPushButton:pressed {
      <height>31</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <italic>false</italic>
+     <bold>true</bold>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
@@ -155,6 +166,9 @@ QLineEdit:focus {
    <property name="text">
     <string>USERNAME:</string>
    </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
    <property name="readOnly">
     <bool>true</bool>
    </property>
@@ -167,6 +181,12 @@ QLineEdit:focus {
      <width>101</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
    </property>
    <property name="autoFillBackground">
     <bool>false</bool>
@@ -184,6 +204,9 @@ QLineEdit:focus {
    </property>
    <property name="text">
     <string>PASSWORD:</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
    <property name="readOnly">
     <bool>true</bool>
