@@ -18,8 +18,7 @@ private:
 
     // Helper methods for tests
     void printMessage(const std::string& message);
-    void testTCPClient(const std::string& serverAddress, int port);
-    void testSecureTCPClient(const std::string& serverAddress, int port);
+    void testTCPClient(const std::string& serverAddress, int port, bool useTLS);
     void testUDPClient(const std::string& serverAddress, int port);
     void testDownload(const std::string& serverAddress, int port);
 };

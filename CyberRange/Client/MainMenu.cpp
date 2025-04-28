@@ -3,6 +3,7 @@
 #include "ui_MainMenu.h"
 #include "ui_LoginDialog.h"
 #include "LoginDialog.h"
+#include "Client.h"
 
 MainMenu::MainMenu(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainMenu)
 {
@@ -103,5 +104,11 @@ void MainMenu::on_SettingsButton_clicked()
 }
 void MainMenu::on_TrainingButton_clicked()
 {
-	ui->stackedWidget->setCurrentIndex(6);
+    ui->stackedWidget->setCurrentIndex(6);
+}
+void MainMenu::on_ConnButton_clicked()
+{
+	Client* client = new Client();
+    client->show();
+	this->close();
 }

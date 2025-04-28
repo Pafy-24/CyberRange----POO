@@ -1,17 +1,21 @@
 ﻿#include "pch.h"
 #include "UDPSock.h"
 #include <iostream>
+#include <thread>
+#include <filesystem>
 
 UDPSock::UDPSock(const std::string& addr, int port)
     : udpSocket(nullptr), address(addr), port(port), connected(false),
     isServer(false), timeout(sf::seconds(30)), maxPacketSize(8192),
-    tlsEnabled(false), dtlsContext(nullptr) {
+    tlsEnabled(false), dtlsContext(nullptr), serverRunning(false) {
 }
 
 UDPSock::~UDPSock() {
     if (connected) {
         disconnect();
     }
+
+    stopServer();
 
     if (udpSocket) {
         delete udpSocket;
@@ -30,8 +34,6 @@ bool UDPSock::connect() {
     udpSocket = new sf::UdpSocket();
     udpSocket->setBlocking(true);
 
-    // Pentru UDP, nu există o conexiune directă
-    // În schimb, legăm socketul la un port disponibil
     sf::Socket::Status status = udpSocket->bind(sf::Socket::AnyPort);
 
     if (status != sf::Socket::Status::Done) {
@@ -41,7 +43,6 @@ bool UDPSock::connect() {
         return false;
     }
 
-    // Dacă DTLS este activat, configurăm conexiunea securizată
     if (tlsEnabled) {
         if (!setupDTLS()) {
             disconnect();
@@ -58,7 +59,6 @@ bool UDPSock::disconnect() {
         return true;
     }
 
-    // Curățați mai întâi DTLS dacă este activat
     if (tlsEnabled && dtlsContext) {
         cleanupDTLS();
     }
@@ -83,21 +83,18 @@ int UDPSock::send(const std::string& data) {
         return -1;
     }
 
-    std::size_t bytesSent = 0;
+    std::size_t bytesSent = data.length();
 
-    // În cazul în care DTLS este activat, implementați logica de trimitere DTLS aici
     if (tlsEnabled && dtlsContext) {
-        // Implementare trimitere DTLS
         std::cerr << "DTLS send not implemented yet" << std::endl;
         return -1;
     }
     else {
-        // Trimitere normală
         sf::IpAddress recipient(address);
-        sf::Packet Packet;
-		Packet << data;
-		
-        sf::Socket::Status status = udpSocket->send(Packet, recipient, static_cast<unsigned short>(port));
+        sf::Packet packet;
+        packet << data;
+
+        sf::Socket::Status status = udpSocket->send(packet, recipient, static_cast<unsigned short>(port));
 
         if (status != sf::Socket::Status::Done) {
             std::cerr << "Error sending data: " << static_cast<int>(status) << std::endl;
@@ -114,20 +111,16 @@ std::string UDPSock::receive() {
         return "";
     }
 
-    char buffer[8192];
-    std::size_t bytesRead = 0;
+    sf::Packet packet;
     sf::IpAddress sender;
     unsigned short senderPort;
 
-    // În cazul în care DTLS este activat, implementați logica de primire DTLS aici
     if (tlsEnabled && dtlsContext) {
-        // Implementare primire DTLS
         std::cerr << "DTLS receive not implemented yet" << std::endl;
         return "";
     }
     else {
-        // Primire normală
-        sf::Socket::Status status = udpSocket->receive(buffer, maxPacketSize, bytesRead, sender, senderPort);
+        sf::Socket::Status status = udpSocket->receive(packet, sender, senderPort);
 
         if (status != sf::Socket::Status::Done) {
             std::cerr << "Error receiving data: " << static_cast<int>(status) << std::endl;
@@ -135,8 +128,9 @@ std::string UDPSock::receive() {
         }
     }
 
-    buffer[bytesRead] = '\0';
-    return std::string(buffer, bytesRead);
+    std::string data;
+    packet >> data;
+    return data;
 }
 
 bool UDPSock::bind(int bindPort) {
@@ -165,14 +159,10 @@ bool UDPSock::bind(int bindPort) {
 }
 
 bool UDPSock::listen(int backlog) {
-    // Pentru UDP, nu există listen
-    std::cerr << "UDP sockets do not listen for connections" << std::endl;
     return isServer && connected;
 }
 
 Connection* UDPSock::accept() {
-    // Pentru UDP, nu există accept
-    std::cerr << "UDP sockets do not accept connections" << std::endl;
     return nullptr;
 }
 
@@ -190,7 +180,6 @@ bool UDPSock::enableTLS() {
         return false;
     }
 
-    // Pentru UDP, utilizăm DTLS
     std::cout << "Enabling DTLS for UDP socket" << std::endl;
     tlsEnabled = true;
     return true;
@@ -219,9 +208,10 @@ bool UDPSock::broadcast(const std::string& data) {
     }
 
     sf::IpAddress broadcastAddr = sf::IpAddress::Broadcast;
-    std::size_t bytesSent = 0;
-	sf::Packet Packet;Packet << data;
-    sf::Socket::Status status = udpSocket->send(Packet, broadcastAddr, static_cast<unsigned short>(port));
+    sf::Packet packet;
+    packet << data;
+
+    sf::Socket::Status status = udpSocket->send(packet, broadcastAddr, static_cast<unsigned short>(port));
 
     if (status != sf::Socket::Status::Done) {
         std::cerr << "Error broadcasting data: " << static_cast<int>(status) << std::endl;
@@ -237,14 +227,11 @@ std::string UDPSock::receiveFrom(std::string& sender) {
         return "";
     }
 
-    char buffer[8192];
-    std::size_t bytesRead = 0;
+    sf::Packet packet;
     sf::IpAddress senderAddr;
     unsigned short senderPort;
 
-    sf::Socket::Status status = udpSocket->receive(buffer,
-        static_cast<std::size_t>(maxPacketSize),
-        bytesRead, senderAddr, senderPort);
+    sf::Socket::Status status = udpSocket->receive(packet, senderAddr, senderPort);
 
     if (status != sf::Socket::Status::Done) {
         std::cerr << "Error receiving data: " << static_cast<int>(status) << std::endl;
@@ -252,16 +239,15 @@ std::string UDPSock::receiveFrom(std::string& sender) {
     }
 
     sender = senderAddr.toString() + ":" + std::to_string(senderPort);
-    buffer[bytesRead] = '\0';
-    return std::string(buffer, bytesRead);
+    std::string data;
+    packet >> data;
+    return data;
 }
 
 bool UDPSock::setupDTLS() {
-    // Implementare simplificată pentru DTLS
     if (tlsEnabled && !dtlsContext) {
         std::cout << "Setting up DTLS connection..." << std::endl;
-        // Placeholder pentru inițializarea DTLS
-        dtlsContext = (void*)1; // Simulăm că am creat un context DTLS
+        dtlsContext = (void*)1;
         return true;
     }
     return tlsEnabled;
@@ -270,8 +256,76 @@ bool UDPSock::setupDTLS() {
 bool UDPSock::cleanupDTLS() {
     if (dtlsContext) {
         std::cout << "Cleaning up DTLS resources..." << std::endl;
-        // Eliberarea resurselor DTLS
         dtlsContext = nullptr;
     }
     return true;
+}
+
+bool UDPSock::runServer() {
+    if (serverRunning) {
+        std::cerr << "Server is already running" << std::endl;
+        return false;
+    }
+
+
+    if (!bind(port)) {
+        std::cerr << "Failed to bind server socket" << std::endl;
+        return false;
+    }
+
+    serverRunning = true;
+
+    std::thread serverThread([this]() {
+        std::cout << "UDP server started on port " << getPort() << std::endl;
+
+        while (serverRunning) {
+            handleClientRequest();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+
+        std::cout << "UDP server stopped" << std::endl;
+        });
+
+    serverThread.detach();
+    return true;
+}
+
+void UDPSock::stopServer() {
+    if (serverRunning) {
+        serverRunning = false;
+        disconnect();
+    }
+}
+
+bool UDPSock::isServerRunning() const {
+    return serverRunning;
+}
+
+void UDPSock::handleClientRequest() {
+    if (!isServer || !connected || udpSocket == nullptr) {
+        return;
+    }
+
+    sf::Packet packet;
+    sf::IpAddress clientAddr;
+    unsigned short clientPort;
+
+    sf::Socket::Status status = udpSocket->receive(packet, clientAddr, clientPort);
+
+    if (status != sf::Socket::Status::Done) {
+        return;
+    }
+
+    std::string data;
+    packet >> data;
+
+    if (!data.empty()) {
+        std::cout << "Received from " << clientAddr.toString() << ":" << clientPort
+            << " - " << data.length() << " bytes" << std::endl;
+
+        // Echo the data back to the client
+        sf::Packet response;
+        response << "Echo: " + data;
+        udpSocket->send(response, clientAddr, clientPort);
+    }
 }

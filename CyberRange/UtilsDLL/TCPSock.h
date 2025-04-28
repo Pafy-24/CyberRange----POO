@@ -2,10 +2,10 @@
 #include "Connection.h"
 #include <string>
 #include <SFML/Network.hpp>
+#include <atomic>
 
 class UTILS_API TCPSock : public Connection {
 protected:
-    // Socket properties
     sf::TcpSocket* tcpSocket;
     sf::TcpListener* tcpListener;
     std::string address;
@@ -14,18 +14,13 @@ protected:
     bool isServer;
     sf::Time timeout;
     bool tlsEnabled;
-    void* tlsContext; // Pentru implementarea TLS
+    void* tlsContext;
+    std::atomic<bool> serverRunning;
 
 public:
-    // Client constructor
     TCPSock(const std::string& addr, int port);
-
-    // Server constructor
     explicit TCPSock(int port);
-
-    // Socket created from accept()
     TCPSock(sf::TcpSocket* sock, const std::string& clientAddr, int clientPort);
-
     virtual ~TCPSock();
 
     bool connect() override;
@@ -48,11 +43,15 @@ public:
     void setTimeout(int ms) override;
     int getTimeout() const override;
 
+    bool runServer() override;
+    void stopServer() override;
+    bool isServerRunning() const override;
+
     void setBlocking(bool blocking);
     bool isBlocking() const;
 
 protected:
-    // Helper pentru TLS
     virtual bool setupTLS();
     virtual bool cleanupTLS();
+    virtual void handleClientRequest(TCPSock* clientSock);
 };

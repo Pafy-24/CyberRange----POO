@@ -1,26 +1,33 @@
 ﻿#include "pch.h"
 #include "TCPSock.h"
 #include <iostream>
+#include <thread>
+#include <filesystem>
 
 TCPSock::TCPSock(const std::string& addr, int port)
     : tcpSocket(nullptr), tcpListener(nullptr), address(addr), port(port),
-    connected(false), isServer(false), timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr) {
+    connected(false), isServer(false), timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr),
+    serverRunning(false) {
 }
 
 TCPSock::TCPSock(int port)
     : tcpSocket(nullptr), tcpListener(nullptr), address("0.0.0.0"), port(port),
-    connected(false), isServer(true), timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr) {
+    connected(false), isServer(true), timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr),
+    serverRunning(false) {
 }
 
 TCPSock::TCPSock(sf::TcpSocket* sock, const std::string& clientAddr, int clientPort)
     : tcpSocket(sock), tcpListener(nullptr), address(clientAddr), port(clientPort),
-    connected(true), isServer(false), timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr) {
+    connected(true), isServer(false), timeout(sf::seconds(30)), tlsEnabled(false), tlsContext(nullptr),
+    serverRunning(false) {
 }
 
 TCPSock::~TCPSock() {
     if (connected) {
         disconnect();
     }
+
+    stopServer();
 
     if (tcpSocket) {
         delete tcpSocket;
@@ -53,7 +60,6 @@ bool TCPSock::connect() {
         return false;
     }
 
-    // Dacă TLS este activat, configurați conexiunea securizată
     if (tlsEnabled) {
         if (!setupTLS()) {
             disconnect();
@@ -70,7 +76,6 @@ bool TCPSock::disconnect() {
         return true;
     }
 
-    // Curățați mai întâi TLS dacă este activat
     if (tlsEnabled && tlsContext) {
         cleanupTLS();
     }
@@ -97,14 +102,11 @@ int TCPSock::send(const std::string& data) {
 
     std::size_t bytesSent = 0;
 
-    // În cazul în care TLS este activat, implementați logica de trimitere TLS aici
     if (tlsEnabled && tlsContext) {
-        // Implementare trimitere TLS
         std::cerr << "TLS send not implemented yet" << std::endl;
         return -1;
     }
     else {
-        // Trimitere normală
         sf::Socket::Status status = tcpSocket->send(data.c_str(), data.length(), bytesSent);
 
         if (status != sf::Socket::Status::Done) {
@@ -125,14 +127,11 @@ std::string TCPSock::receive() {
     char buffer[4096];
     std::size_t bytesRead = 0;
 
-    // În cazul în care TLS este activat, implementați logica de primire TLS aici
     if (tlsEnabled && tlsContext) {
-        // Implementare primire TLS
         std::cerr << "TLS receive not implemented yet" << std::endl;
         return "";
     }
     else {
-        // Primire normală
         sf::Socket::Status status = tcpSocket->receive(buffer, sizeof(buffer) - 1, bytesRead);
 
         if (status == sf::Socket::Status::Disconnected) {
@@ -181,7 +180,6 @@ bool TCPSock::listen(int backlog) {
         return false;
     }
 
-    // În SFML, listen este combinat cu bind
     connected = true;
     return true;
 }
@@ -206,7 +204,6 @@ Connection* TCPSock::accept() {
 
     TCPSock* clientSock = new TCPSock(clientSocket, clientAddr.toString(), clientPort);
 
-    // Dacă serverul are TLS activat, clientul ar trebui să aibă de asemenea
     if (tlsEnabled) {
         clientSock->enableTLS();
         clientSock->setupTLS();
@@ -229,7 +226,6 @@ bool TCPSock::enableTLS() {
         return false;
     }
 
-    // Aceasta este o implementare simplificată
     tlsEnabled = true;
     return true;
 }
@@ -267,12 +263,9 @@ bool TCPSock::isBlocking() const {
 }
 
 bool TCPSock::setupTLS() {
-    // Implementare simplificată pentru TLS
-    // În implementarea reală, aici ar trebui inclus codul pentru inițializarea OpenSSL
     if (tlsEnabled && !tlsContext) {
         std::cout << "Setting up TLS connection..." << std::endl;
-        // Placeholder pentru inițializarea TLS
-        tlsContext = (void*)1; // Simulăm că am creat un context TLS
+        tlsContext = (void*)1;
         return true;
     }
     return tlsEnabled;
@@ -281,8 +274,88 @@ bool TCPSock::setupTLS() {
 bool TCPSock::cleanupTLS() {
     if (tlsContext) {
         std::cout << "Cleaning up TLS resources..." << std::endl;
-        // Eliberarea resurselor TLS
         tlsContext = nullptr;
     }
     return true;
+}
+
+bool TCPSock::runServer() {
+    if (serverRunning) {
+        std::cerr << "Server is already running" << std::endl;
+        return false;
+    }
+
+
+    if (!bind(port)) {
+        std::cerr << "Failed to bind server socket" << std::endl;
+        return false;
+    }
+
+    if (!listen()) {
+        std::cerr << "Failed to start listening" << std::endl;
+        return false;
+    }
+
+    serverRunning = true;
+
+    std::thread serverThread([this]() {
+        std::cout << "TCP server started on port " << getPort() << std::endl;
+
+        while (serverRunning) {
+            Connection* conn = accept();
+            if (!conn) {
+                if (!serverRunning) {
+                    break;
+                }
+                std::cerr << "Failed to accept client connection" << std::endl;
+                continue;
+            }
+
+            TCPSock* clientSock = dynamic_cast<TCPSock*>(conn);
+            if (!clientSock) {
+                std::cerr << "Invalid client connection type" << std::endl;
+                delete conn;
+                continue;
+            }
+
+            std::thread clientThread(&TCPSock::handleClientRequest, this, clientSock);
+            clientThread.detach();
+        }
+
+        std::cout << "TCP server stopped" << std::endl;
+        });
+
+    serverThread.detach();
+    return true;
+}
+
+void TCPSock::stopServer() {
+    if (serverRunning) {
+        serverRunning = false;
+        disconnect();
+    }
+}
+
+bool TCPSock::isServerRunning() const {
+    return serverRunning;
+}
+
+void TCPSock::handleClientRequest(TCPSock* clientSock) {
+    if (!clientSock || !clientSock->isConnected()) {
+        std::cerr << "Invalid client connection" << std::endl;
+        delete clientSock;
+        return;
+    }
+
+    std::cout << "New client connected: " << clientSock->getAddress() << ":" << clientSock->getPort() << std::endl;
+
+    try {
+        std::string request = clientSock->receive();
+        clientSock->send("Server response: Received " + std::to_string(request.length()) + " bytes");
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Exception handling client request: " << e.what() << std::endl;
+    }
+
+    delete clientSock;
 }

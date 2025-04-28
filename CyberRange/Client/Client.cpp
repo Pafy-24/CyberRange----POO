@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "Client.h"
 #include <iostream>
-#include <string>
 #include <thread>
 #include <chrono>
 #include <fstream>
@@ -9,173 +8,94 @@
 #include "UDPSock.h"
 #include "transfer_sock.h"
 
-// Function to print thread-safe messages  
-void Client::printMessage(const std::string& message) {  
-   QString qMessage = QString::fromStdString(message);
-   QMetaObject::invokeMethod(this, [this, qMessage]() {
-       ui.plainTextEdit->appendPlainText(qMessage);
-       ui.plainTextEdit->ensureCursorVisible();
-       }, Qt::QueuedConnection);
-   QApplication::processEvents(); 
-   ui.plainTextEdit->update();
-   ui.plainTextEdit->repaint();
+// Thread-safe UI message printing
+void Client::printMessage(const std::string& message) {
+    QString qMessage = QString::fromStdString(message);
+    QMetaObject::invokeMethod(this, [this, qMessage]() {
+        ui.plainTextEdit->appendPlainText(qMessage);
+        ui.plainTextEdit->ensureCursorVisible();
+        }, Qt::QueuedConnection);
+    QApplication::processEvents();
 }
 
-// Test standard TCP client functionality
-void Client::testTCPClient(const std::string& serverAddress, int port) {
-    printMessage("----- Testing Standard TCP Client -----");
+// Test TCP client (standard and secure)
+void Client::testTCPClient(const std::string& serverAddress, int port, bool useTLS) {
+    std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
+    printMessage("\n----- Testing " + serverType + " Client -----");
     printMessage("Connecting to " + serverAddress + ":" + std::to_string(port));
 
-    // Create TCP socket
-    TCPSock tcpClient(serverAddress, port);
+    TCPSock client(serverAddress, port);
+    client.setTimeout(5000);
 
-    // Set socket options
-    tcpClient.setBlocking(true);
-    tcpClient.setTimeout(5000); // 5 seconds timeout
-
-    // Connect to server
-    if (!tcpClient.connect()) {
-        printMessage("Failed to connect to TCP server");
-        return;
-    }
-
-    printMessage("Connected to TCP server at " + tcpClient.getAddress() + ":" + std::to_string(tcpClient.getPort()));
-
-    // Send test message
-    std::string testMessage = "Hello from TCP client!";
-    printMessage("Sending: " + testMessage);
-
-    if (tcpClient.send(testMessage) < 0) {
-        printMessage("Failed to send message");
-        tcpClient.disconnect();
-        return;
-    }
-
-    // Wait for response
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::string response = tcpClient.receive();
-
-    if (!response.empty()) {
-        printMessage("Received response: " + response);
-    }
-    else {
-        printMessage("No response received");
-    }
-
-    // Disconnect
-    tcpClient.disconnect();
-    printMessage("TCP client test completed");
-}
-
-// Test secure TCP client with TLS functionality
-void Client::testSecureTCPClient(const std::string& serverAddress, int port) {
-    printMessage("\n----- Testing Secure TCP Client (TLS) -----");
-    printMessage("Connecting to " + serverAddress + ":" + std::to_string(port));
-
-    // Create TCP socket
-    TCPSock tcpClient(serverAddress, port);
-
-    // Set socket options
-    tcpClient.setBlocking(true);
-    tcpClient.setTimeout(5000); // 5 seconds timeout
-
-    // Enable TLS before connecting
-    if (!tcpClient.enableTLS()) {
+    if (useTLS && !client.enableTLS()) {
         printMessage("Failed to enable TLS");
         return;
     }
 
-    printMessage("TLS enabled: " + std::string(tcpClient.isTLSEnabled() ? "true" : "false"));
-
-    // Connect to secure server
-    if (!tcpClient.connect()) {
-        printMessage("Failed to connect to secure TCP server");
+    if (!client.connect()) {
+        printMessage("Failed to connect to " + serverType + " server");
         return;
     }
 
-    printMessage("Connected securely to TCP server at " + tcpClient.getAddress() + ":" +
-        std::to_string(tcpClient.getPort()));
+    printMessage("Connected to " + serverType + " server at " + client.getAddress() + ":" +
+        std::to_string(client.getPort()));
 
-    // Send test message over secure connection
-    std::string testMessage = "Hello from secure TCP client!";
-    printMessage("Sending encrypted: " + testMessage);
+    std::string testMessage = "Hello from " + serverType + " client!";
+    printMessage("Sending: " + testMessage);
 
-    if (tcpClient.send(testMessage) < 0) {
-        printMessage("Failed to send secure message");
-        tcpClient.disconnect();
+    if (client.send(testMessage) < 0) {
+        printMessage("Failed to send message");
+        client.disconnect();
         return;
     }
 
-    // Wait for response
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::string response = tcpClient.receive();
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::string response = client.receive();
+    printMessage(response.empty() ? "No response received" : "Received: " + response);
 
-    if (!response.empty()) {
-        printMessage("Received encrypted response: " + response);
-    }
-    else {
-        printMessage("No response received");
-    }
-
-    // Disconnect
-    tcpClient.disconnect();
-    printMessage("Secure TCP client test completed");
+    client.disconnect();
+    printMessage(serverType + " client test completed");
 }
 
-// Test UDP client functionality
+// Test UDP client
 void Client::testUDPClient(const std::string& serverAddress, int port) {
     printMessage("\n----- Testing UDP Client -----");
     printMessage("Setting up UDP client for " + serverAddress + ":" + std::to_string(port));
 
-    // Create UDP socket
-    UDPSock udpClient(serverAddress, port);
-
-    // Connect to server (sets destination for send)
-    if (!udpClient.connect()) {
+    UDPSock client(serverAddress, port);
+    if (!client.connect()) {
         printMessage("Failed to set up UDP client");
         return;
     }
 
-    printMessage("UDP client ready");
-
-    // Send test message
     std::string testMessage = "Hello from UDP client!";
-    printMessage("Sending UDP: " + testMessage);
+    printMessage("Sending: " + testMessage);
 
-    if (udpClient.send(testMessage) < 0) {
+    if (client.send(testMessage) < 0) {
         printMessage("Failed to send UDP message");
-        udpClient.disconnect();
+        client.disconnect();
         return;
     }
 
-    // Wait for response
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::string response = udpClient.receive();
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::string response = client.receive();
+    printMessage(response.empty() ? "No UDP response received" : "Received: " + response);
 
-    if (!response.empty()) {
-        printMessage("Received UDP response: " + response);
-    }
-    else {
-        printMessage("No UDP response received");
-    }
-
-    // Test broadcast functionality
     printMessage("Testing UDP broadcast...");
-    if (udpClient.broadcast("Broadcast message to all")) {
+    if (client.broadcast("Broadcast message")) {
         printMessage("Broadcast sent");
     }
     else {
         printMessage("Failed to send broadcast");
     }
 
-    // Test receiving from specific sender
     std::string sender;
-    std::string fromResponse = udpClient.receiveFrom(sender);
+    std::string fromResponse = client.receiveFrom(sender);
     if (!fromResponse.empty()) {
-        printMessage("Received UDP message from " + sender + ": " + fromResponse);
+        printMessage("Received from " + sender + ": " + fromResponse);
     }
 
-    udpClient.disconnect();
+    client.disconnect();
     printMessage("UDP client test completed");
 }
 
@@ -184,146 +104,118 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     printMessage("\n----- Testing Download Client -----");
     printMessage("Setting up download from " + serverAddress + ":" + std::to_string(port));
 
-    // Create download socket
     transfer_sock conn(serverAddress, port);
-
-    // Test first download - small file
-    std::string smallFile = "test_small.dat";
-    std::string smallFileDest = "downloaded_small.dat";
-
-    printMessage("Starting small file download test");
-
-
-    // Connect the downloader first
     if (!conn.connect()) {
         printMessage("Failed to connect download socket");
         return;
     }
 
+    // Set progress and completion callbacks
+    conn.setProgressCallback([this](int progress, const std::string& filePath, long fileSize) {
+        printMessage("Download progress for " + filePath + ": " + std::to_string(progress) + "%");
+        });
 
-    printMessage("Starting download for: " + smallFile);
-    printMessage("Saving to: " + smallFileDest);
+    conn.setCompleteCallback([this](bool success, const std::string& filePath, TransferType type) {
+        printMessage(success ? "Download completed: " + filePath : "Download failed: " + filePath);
+        });
+
+    // Test small file download
+    std::string smallFile = "test_small.dat";
+    std::string smallFileDest = "downloaded_small.dat";
+    printMessage("Starting download: " + smallFile + " to " + smallFileDest);
 
     if (!conn.downloadFile(smallFile, smallFileDest)) {
-        printMessage("Failed to start download");
+        printMessage("Failed to start small file download");
         return;
     }
 
-    // Monitor download progress
-    int lastProgress = -1;
-    while (conn.getProgress() < 100) {
-        int currentProgress = conn.getProgress();
-        if (currentProgress != lastProgress) {
-            printMessage("Download progress: " + std::to_string(currentProgress) + "%");
-            lastProgress = currentProgress;
-        }
-
-        // Small delay to prevent CPU hogging
+    while (conn.getCurrentTransferType() != TransferType::NONE) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    printMessage("Small file download complete!");
-    printMessage("File size: " + std::to_string(conn.getFileSize()) + " bytes");
-
-    // Verify the downloaded file exists
-    std::ifstream smallFileCheck(smallFileDest, std::ios::binary);
-    if (smallFileCheck.good()) {
-        // Get file size
-        smallFileCheck.seekg(0, std::ios::end);
-        std::streamsize fileSize = smallFileCheck.tellg();
-        smallFileCheck.close();
-        printMessage("File successfully saved with size: " + std::to_string(fileSize) + " bytes");
+    // Verify downloaded file
+    std::ifstream check(smallFileDest, std::ios::binary);
+    if (check.good()) {
+        check.seekg(0, std::ios::end);
+        printMessage("Small file size: " + std::to_string(check.tellg()) + " bytes");
+        check.close();
     }
     else {
-        printMessage("Error: Downloaded file not found or cannot be opened");
+        printMessage("Error: Small file not found");
     }
 
-    // Test second download - large file with cancellation
+    // Test large file download with cancellation
     std::string largeFile = "test_large.dat";
     std::string largeFileDest = "downloaded_large.dat";
-
-    printMessage("\nStarting large file download test with cancellation");
-
-    // Set priority for this download
-    conn.setPriority(2);  // Higher priority
-    printMessage("Set download priority to 2");
-
-    printMessage("Starting download for: " + largeFile);
-    printMessage("Saving to: " + largeFileDest);
+    conn.setPriority(2);
+    printMessage("\nStarting large file download: " + largeFile + " to " + largeFileDest + " (Priority: 2)");
 
     if (!conn.downloadFile(largeFile, largeFileDest)) {
-        printMessage("Failed to start download");
+        printMessage("Failed to start large file download");
         return;
     }
 
-    // Monitor download progress and cancel at 50%
-    lastProgress = -1;
-    while (conn.getProgress() < 100) {
-        int currentProgress = conn.getProgress();
-        if (currentProgress != lastProgress) {
-            printMessage("Download progress: " + std::to_string(currentProgress) + "%");
-            lastProgress = currentProgress;
-
-            // Cancel at approximately 50%
-            if (currentProgress >= 50 && currentProgress < 55) {
-                printMessage("Cancelling download at " + std::to_string(currentProgress) + "%");
-                conn.cancelTransfer();
-                break;
-            }
+    int progress = 0;
+    while (conn.getCurrentTransferType() != TransferType::NONE && progress < 50) {
+        progress = conn.getProgress();
+        if (progress >= 50) {
+            printMessage("Cancelling download at " + std::to_string(progress) + "%");
+            conn.cancelTransfer();
         }
-
-        // Small delay
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    printMessage("Download cancelled successfully");
-
-    // Restart the download
-    printMessage("\nRestarting the large file download");
-
-    // Reconnect
+    // Restart large file download
+    printMessage("\nRestarting large file download");
     conn.disconnect();
-    
+    if (!conn.connect()) {
+        printMessage("Failed to reconnect for large file download");
+        return;
+    }
+
+    if (!conn.downloadFile(largeFile, largeFileDest)) {
+        printMessage("Failed to restart large file download");
+        return;
+    }
+
+    while (conn.getCurrentTransferType() != TransferType::NONE) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    // Verify downloaded file
+    check.open(largeFileDest, std::ios::binary);
+    if (check.good()) {
+        check.seekg(0, std::ios::end);
+        printMessage("Large file size: " + std::to_string(check.tellg()) + " bytes");
+        check.close();
+    }
+    else {
+        printMessage("Error: Large file not found");
+    }
+
+    printMessage("Download tests completed");
 }
 
-Client::Client(QWidget* parent)
-    : QMainWindow(parent)
-{
+Client::Client(QWidget* parent) : QMainWindow(parent) {
     ui.setupUi(this);
 }
 
-Client::~Client()
-{
-}
+Client::~Client() {}
 
-void Client::on_pushButton_clicked()
-{
+void Client::on_pushButton_clicked() {
     ui.plainTextEdit->clear();
     printMessage("Running network tests...");
 
-    // Test settings
     std::string serverAddress = "127.0.0.1";
-    int tcpPort = 1337;        // Standard TCP
-    int secureTcpPort = 1338;  // Secure TCP with TLS
-    int udpPort = 8081;        // UDP
-    int downloadPort = 8082;   // Download server
+    int tcpPort = 1337;
+    int secureTcpPort = 1338;
+    int udpPort = 8081;
+    int downloadPort = 8082;
 
-    // Run tests in separate threads
-    testTCPClient(serverAddress, tcpPort);
-   
-
-    testSecureTCPClient(serverAddress, secureTcpPort);
-    
-
+    testTCPClient(serverAddress, tcpPort, false);
+    testTCPClient(serverAddress, secureTcpPort, true);
     testUDPClient(serverAddress, udpPort);
-    
-
-//    std::thread downloadThread([this, serverAddress, downloadPort]() {
-        testDownload(serverAddress, downloadPort);
- //   });
-
-    // Wait for all threads to complete
-   
+    testDownload(serverAddress, downloadPort);
 
     printMessage("\nAll client tests completed");
 }

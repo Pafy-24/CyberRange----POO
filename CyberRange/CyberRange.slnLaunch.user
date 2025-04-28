@@ -8,7 +8,7 @@
       },
       {
         "Path": "Server\\Server.vcxproj",
-        "Action": "Start"
+        "Action": "StartWithoutDebugging"
       }
     ]
   }

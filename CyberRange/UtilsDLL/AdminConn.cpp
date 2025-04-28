@@ -6,10 +6,11 @@
 #include <iomanip>
 #include <sstream>
 
+
 AdminConn::AdminConn(int listenPort, const std::string& dbConnStr)
     : dbConnection(nullptr), clientSocket(nullptr), serverSocket(nullptr),
     privilege(0), secure(true), connected(false), port(listenPort),
-    timeout(30000), tlsEnabled(false) {
+    timeout(30000), tlsEnabled(false), serverRunning(false), stopRequested(false) {
 
     // Create database connection
     dbConnection = new DBConn(dbConnStr);
@@ -21,7 +22,7 @@ AdminConn::AdminConn(int listenPort, const std::string& dbConnStr)
 AdminConn::AdminConn(TCPSock* clientSock, const std::string& dbConnStr)
     : dbConnection(nullptr), clientSocket(clientSock), serverSocket(nullptr),
     privilege(0), secure(true), connected(false), port(0),
-    timeout(30000), tlsEnabled(false) {
+    timeout(30000), tlsEnabled(false), serverRunning(false), stopRequested(false) {
 
     // Create database connection
     dbConnection = new DBConn(dbConnStr);
@@ -38,6 +39,17 @@ AdminConn::AdminConn(TCPSock* clientSock, const std::string& dbConnStr)
 AdminConn::~AdminConn() {
     // Clear sensitive data
     adminKey.clear();
+
+    // Clean up client connections
+    for (auto* conn : clientConnections) {
+        delete conn;
+    }
+    clientConnections.clear();
+
+    // Stop server if running
+    if (serverRunning) {
+        stopServer();
+    }
 
     // Disconnect and clean up
     if (connected) {
@@ -56,6 +68,8 @@ AdminConn::~AdminConn() {
 
     // Note: clientSocket is handled by disconnect()
 }
+
+
 
 bool AdminConn::connect() {
     // If we're in server mode, bind and listen
@@ -401,3 +415,84 @@ bool AdminConn::sendResponseToClient(const std::string& response) {
 
     return clientSocket->send(response) > 0;
 }
+
+
+
+bool AdminConn::runServer() {
+    if (!serverSocket) {
+        if (!bind(port)) {
+            std::cerr << "Failed to bind server socket" << std::endl;
+            return false;
+        }
+
+        if (!listen()) {
+            std::cerr << "Failed to listen on server socket" << std::endl;
+            return false;
+        }
+    }
+
+    if (serverRunning) {
+        std::cerr << "Server is already running" << std::endl;
+        return true;
+    }
+
+    serverRunning = true;
+    stopRequested = false;
+
+    std::cout << "Admin server started on port " << port << std::endl;
+
+    // Start accepting connections in a loop
+    while (!stopRequested) {
+        Connection* newConn = accept();
+        if (newConn) {
+            std::cout << "New admin connection accepted from " << newConn->getAddress() << std::endl;
+
+            // Store connection for cleanup later
+            clientConnections.push_back(newConn);
+
+            // Process client request
+            AdminConn* adminConn = dynamic_cast<AdminConn*>(newConn);
+            if (adminConn) {
+                adminConn->processClientRequest();
+            }
+        }
+
+        // Brief sleep to avoid busy waiting
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    serverRunning = false;
+    std::cout << "Admin server stopped" << std::endl;
+    return true;
+}
+
+void AdminConn::stopServer() {
+    if (!serverRunning) {
+        std::cerr << "Server is not running" << std::endl;
+        return;
+    }
+
+    stopRequested = true;
+
+    // Wait for server to stop
+    int maxWait = 50; // 5 seconds max (50 * 100ms)
+    while (serverRunning && maxWait > 0) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        maxWait--;
+    }
+
+    // Clean up client connections
+    for (auto* conn : clientConnections) {
+        conn->disconnect();
+        delete conn;
+    }
+    clientConnections.clear();
+
+    std::cout << "Server stop requested" << std::endl;
+}
+
+bool AdminConn::isServerRunning() const {
+    return serverRunning;
+}
+
+

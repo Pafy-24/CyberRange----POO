@@ -26,9 +26,6 @@
     <QtRcc Include="Client.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="Client.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtMoc Include="Client.h">
       <Filter>Header Files</Filter>
     </QtMoc>
@@ -48,19 +45,22 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="LoginDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="MainMenu.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-  </ItemGroup>
-  <ItemGroup>
     <QtMoc Include="LoginDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="MainMenu.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="LoginDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Client.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="MainMenu.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

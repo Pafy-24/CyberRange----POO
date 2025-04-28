@@ -4,9 +4,11 @@
 #include <regex>
 #include <sstream>
 
+
 DBConn::DBConn(const std::string& connStr)
     : dbSocket(nullptr), connectionString(connStr), port(3306),
-    dbType("mysql"), connected(false), timeout(30000), tlsEnabled(false) {
+    dbType("mysql"), connected(false), timeout(30000), tlsEnabled(false),
+    serverRunning(false) {
 
     // Parse the connection string to extract host, port, etc.
     parseConnectionString();
@@ -14,6 +16,7 @@ DBConn::DBConn(const std::string& connStr)
     // Enable TLS by default for database connections
     enableTLS();
 }
+
 
 DBConn::~DBConn() {
     if (connected) {
@@ -273,3 +276,35 @@ bool DBConn::sanitizeQuery(std::string& query) {
 
     return true;
 }
+
+
+
+
+bool DBConn::bind(int port) {
+    throw std::runtime_error("Operation not supported: DBConn does not support bind operation");
+    return false;
+}
+
+bool DBConn::listen(int backlog) {
+    throw std::runtime_error("Operation not supported: DBConn does not support listen operation");
+    return false;
+}
+
+Connection* DBConn::accept() {
+    throw std::runtime_error("Operation not supported: DBConn does not support accept operation");
+    return nullptr;
+}
+
+bool DBConn::runServer() {
+    throw std::runtime_error("Operation not supported: DBConn is a client connection only");
+    return false;
+}
+
+void DBConn::stopServer() {
+    throw std::runtime_error("Operation not supported: DBConn is a client connection only");
+}
+
+bool DBConn::isServerRunning() const {
+    return false; // Always false for DBConn
+}
+

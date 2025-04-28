@@ -3,6 +3,8 @@
 #include "TCPSock.h"
 #include <string>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 class UTILS_API AdminConn : public Connection {
 private:
@@ -22,6 +24,9 @@ private:
     int port;
     int timeout;
     bool tlsEnabled;
+    bool serverRunning;
+    std::vector<Connection*> clientConnections;
+    bool stopRequested;
 
 protected:
     bool sanitizeQuery(std::string& query);
@@ -50,6 +55,11 @@ public:
     bool bind(int port) override;
     bool listen(int backlog = 5) override;
     Connection* accept() override;
+
+    // Server operations
+    bool runServer() override;
+    void stopServer() override;
+    bool isServerRunning() const override;
 
     // Admin specific methods
     void setAdminKey(const std::string& key);

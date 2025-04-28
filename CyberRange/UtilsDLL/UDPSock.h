@@ -2,6 +2,7 @@
 #include "Connection.h"
 #include <string>
 #include <SFML/Network.hpp>
+#include <atomic>
 
 class UTILS_API UDPSock : public Connection {
 protected:
@@ -12,10 +13,10 @@ protected:
     bool isServer;
     sf::Time timeout;
     int maxPacketSize;
-
-    // Pentru DTLS (echivalentul UDP al TLS)
     bool tlsEnabled;
     void* dtlsContext;
+    std::atomic<bool> serverRunning;
+    std::string rootDirectory;
 
 public:
     UDPSock(const std::string& addr, int port);
@@ -41,6 +42,10 @@ public:
     void setTimeout(int ms) override;
     int getTimeout() const override;
 
+    bool runServer() override;
+    void stopServer() override;
+    bool isServerRunning() const override;
+
     void setMaxPacketSize(int size);
     bool broadcast(const std::string& data);
     std::string receiveFrom(std::string& sender);
@@ -48,4 +53,5 @@ public:
 protected:
     bool setupDTLS();
     bool cleanupDTLS();
+    virtual void handleClientRequest();
 };

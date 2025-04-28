@@ -2,6 +2,7 @@
 #include "Connection.h"
 #include "TCPSock.h"
 #include <string>
+#include <stdexcept> // For std::runtime_error
 
 class UTILS_API DBConn : public Connection {
 private:
@@ -16,6 +17,7 @@ private:
     bool connected;
     int timeout;
     bool tlsEnabled;
+    bool serverRunning; // Added for interface compatibility
 
 protected:
     virtual bool sanitizeQuery(std::string& query);
@@ -37,10 +39,15 @@ public:
     void setTimeout(int ms) override;
     int getTimeout() const override;
 
-    // These methods are not applicable for DB connections but required by interface
-    bool bind(int port) override { return false; }
-    bool listen(int backlog = 5) override { return false; }
-    Connection* accept() override { return nullptr; }
+    // These methods are not applicable for DB connections and will throw exceptions
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
+    Connection* accept() override;
+
+    // Server operations
+    bool runServer() override;
+    void stopServer() override;
+    bool isServerRunning() const override;
 
     // DB specific methods
     void setDbType(const std::string& type);

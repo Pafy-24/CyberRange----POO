@@ -29,6 +29,8 @@ private slots:
 	void on_SettingsButton_clicked();
 	void on_TrainingButton_clicked();
 
+    void on_ConnButton_clicked();
+
 private:
     Ui::MainMenu* ui;
 };

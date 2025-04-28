@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<UI version="4.0">
  <class>ClientClass</class>
  <widget class="QMainWindow" name="ClientClass">
   <property name="geometry">
@@ -93,4 +92,4 @@
    </hints>
   </connection>
  </connections>
-</ui>
+</UI>

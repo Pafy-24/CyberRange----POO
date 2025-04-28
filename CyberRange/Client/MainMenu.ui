@@ -412,6 +412,13 @@ QPushButton:pressed {
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QPushButton" name="ConnButton">
+                <property name="text">
+                 <string>Connectivity</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </widget>
             <widget class="QWidget" name="Training">
@@ -465,7 +472,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">

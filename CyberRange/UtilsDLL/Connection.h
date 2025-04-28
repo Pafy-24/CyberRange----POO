@@ -24,5 +24,9 @@ public:
     virtual void setTimeout(int ms) = 0;
     virtual int getTimeout() const = 0;
 
+    virtual bool runServer() = 0;
+    virtual void stopServer() = 0;
+    virtual bool isServerRunning() const = 0;
+
     virtual ~Connection() = default;
 };
