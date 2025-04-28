@@ -54,7 +54,7 @@ public:
 
     explicit transfer_sock(int port);
 
-    transfer_sock(sf::TcpSocket* sock, const std::string& clientAddr, int clientPort);
+    transfer_sock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientAddr, int clientPort);
 
     ~transfer_sock();
 

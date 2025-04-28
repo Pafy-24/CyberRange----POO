@@ -1,31 +1,29 @@
 #pragma once
 #include "Connection.h"
 #include "TCPSock.h"
+#include <memory>
 #include <string>
-#include <stdexcept> // For std::runtime_error
+#include <stdexcept>
 
 class UTILS_API DBConn : public Connection {
 private:
-    TCPSock* dbSocket;
+    std::unique_ptr<TCPSock> dbSocket;
     std::string connectionString;
     std::string host;
     int port;
     std::string username;
     std::string password;
     std::string database;
-    std::string dbType;
     bool connected;
     int timeout;
     bool tlsEnabled;
-    bool serverRunning; // Added for interface compatibility
 
-protected:
-    virtual bool sanitizeQuery(std::string& query);
     bool parseConnectionString();
+    bool sanitizeQuery(std::string& query);
 
 public:
     DBConn(const std::string& connStr);
-    virtual ~DBConn();
+    ~DBConn() override;
 
     bool connect() override;
     bool disconnect() override;
@@ -39,17 +37,11 @@ public:
     void setTimeout(int ms) override;
     int getTimeout() const override;
 
-    // These methods are not applicable for DB connections and will throw exceptions
-    bool bind(int port) override;
-    bool listen(int backlog = 5) override;
-    Connection* accept() override;
-
-    // Server operations
-    bool runServer() override;
-    void stopServer() override;
-    bool isServerRunning() const override;
-
-    // DB specific methods
-    void setDbType(const std::string& type);
-    std::string getDbType() const { return dbType; }
+    // Unsupported operations
+    bool bind(int port) override { throw std::runtime_error("Operation not supported"); }
+    bool listen(int backlog = 5) override { throw std::runtime_error("Operation not supported"); }
+    Connection* accept() override { throw std::runtime_error("Operation not supported"); }
+    bool runServer() override { throw std::runtime_error("Operation not supported"); }
+    void stopServer() override { throw std::runtime_error("Operation not supported"); }
+    bool isServerRunning() const override { return false; }
 };

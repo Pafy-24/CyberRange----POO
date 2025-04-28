@@ -48,8 +48,8 @@ transfer_sock::transfer_sock(int port)
 }
 
 // Socket created from accept()
-transfer_sock::transfer_sock(sf::TcpSocket* sock, const std::string& clientAddr, int clientPort)
-    : TCPSock(sock, clientAddr, clientPort),
+transfer_sock::transfer_sock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientAddr, int clientPort)
+    : TCPSock(std::move(sock), clientAddr, clientPort),
     transferProgress(0),
     filePath(""),
     fileSize(0),
