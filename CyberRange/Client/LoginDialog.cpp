@@ -26,6 +26,7 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     animation1->setStartValue(0.0);
     animation1->setEndValue(1.0);
     animation1->start();
+   //connectToDatabase();
 }
 
 LoginDialog::~LoginDialog()
@@ -73,6 +74,21 @@ void LoginDialog::on_exitButton_clicked()
         QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::Yes) {
         QApplication::quit();
+    }
+}
+
+void LoginDialog::connectToDatabase()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
+    db.setDatabaseName("Driver={SQL Server};Server=DESKTOP-PATRICIA;Database=CyberRangeDB;Trusted_Connection=yes;");
+
+    if (!db.open()) 
+    {
+        qDebug() << "Eroare la conectarea la baza de date:" << db.lastError().text();
+    }
+    else 
+    {
+        qDebug() << "Conectare reușită la CyberRangeDB!";
     }
 }
 

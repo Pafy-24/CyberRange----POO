@@ -4,6 +4,10 @@
 #include <QDialog>
 #include "ui_LoginDialog.h"
 #include <QMouseEvent>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlQuery>
+#include <QtSql/QSqlError>
+#include <QDebug>
 
 namespace Ui {
     class LoginDialog;
@@ -28,6 +32,7 @@ private slots:
     void on_loginButton_clicked();
     void on_registerButton_clicked();
     void on_exitButton_clicked();
+    void connectToDatabase();
 private:
     Ui::LoginDialog* ui;
     QPoint mouseClickPosition;
