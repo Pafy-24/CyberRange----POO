@@ -65,12 +65,12 @@ MainMenu::~MainMenu()
     delete ui;
 }
 
-//void MainMenu::on_logoutButton_clicked()
-//{
-//    this->close();
-//    LoginDialog* login = new LoginDialog();
-//    login->show();
-//}
+void MainMenu::on_logoutButton_clicked()
+{
+    this->close();
+    LoginDialog* login = new LoginDialog();
+    login->show();
+}
 
 void MainMenu::on_ChallengesButton_clicked()
 {

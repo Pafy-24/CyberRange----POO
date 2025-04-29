@@ -19,7 +19,7 @@ public:
     ~MainMenu();
 
 private slots:
-    //void on_logoutButton_clicked();
+    void on_logoutButton_clicked();
     void on_ChallengesButton_clicked();
     void on_CompeteButton_clicked();
 	void on_DashboardButton_clicked();

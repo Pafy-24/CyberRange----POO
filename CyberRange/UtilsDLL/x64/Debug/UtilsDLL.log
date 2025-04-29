@@ -1,2 +1,236 @@
-﻿     Creating library E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.lib and object E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.exp
-  UtilsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+﻿  pch.cpp
+  Admin.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(7,17): warning C4251: 'CUser::id': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Admin.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(8,17): warning C4251: 'CUser::username': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Admin.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(9,17): warning C4251: 'CUser::passwordHash': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Admin.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(11,17): warning C4251: 'CUser::email': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Admin.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\Admin.h(8,30): warning C4251: 'Admin::permissions': 'std::vector<std::string,std::allocator<std::string>>' needs to have dll-interface to be used by clients of 'Admin'
+  (compiling source file '/Admin.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\vector(429,7):
+      see declaration of 'std::vector<std::string,std::allocator<std::string>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\Admin.h(9,17): warning C4251: 'Admin::adminKeyHash': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'Admin'
+  (compiling source file '/Admin.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  AdminConn.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/AdminConn.cpp')
+  
+  Common.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(7,17): warning C4251: 'CUser::id': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Common.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(8,17): warning C4251: 'CUser::username': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Common.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(9,17): warning C4251: 'CUser::passwordHash': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Common.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(11,17): warning C4251: 'CUser::email': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Common.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\Common.h(9,30): warning C4251: 'Common::solvedChallenges': 'std::vector<std::string,std::allocator<std::string>>' needs to have dll-interface to be used by clients of 'Common'
+  (compiling source file '/Common.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\vector(429,7):
+      see declaration of 'std::vector<std::string,std::allocator<std::string>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\Common.h(10,17): warning C4251: 'Common::teamId': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'Common'
+  (compiling source file '/Common.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  CTeam.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(7,17): warning C4251: 'CUser::id': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(8,17): warning C4251: 'CUser::username': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(9,17): warning C4251: 'CUser::passwordHash': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(11,17): warning C4251: 'CUser::email': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CTeam.h(10,17): warning C4251: 'CTeam::id': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CTeam'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CTeam.h(11,17): warning C4251: 'CTeam::name': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CTeam'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CTeam.h(12,25): warning C4251: 'CTeam::users': 'std::vector<CUser *,std::allocator<CUser *>>' needs to have dll-interface to be used by clients of 'CTeam'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\vector(429,7):
+      see declaration of 'std::vector<CUser *,std::allocator<CUser *>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CTeam.h(13,32): warning C4251: 'CTeam::stats': 'std::map<std::string,int,std::less<std::string>,std::allocator<std::pair<const std::string,int>>>' needs to have dll-interface to be used by clients of 'CTeam'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\map(72,7):
+      see declaration of 'std::map<std::string,int,std::less<std::string>,std::allocator<std::pair<const std::string,int>>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CTeam.h(14,17): warning C4251: 'CTeam::logo': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CTeam'
+  (compiling source file '/CTeam.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  CUser.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(7,17): warning C4251: 'CUser::id': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CUser.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(8,17): warning C4251: 'CUser::username': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CUser.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(9,17): warning C4251: 'CUser::passwordHash': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CUser.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(11,17): warning C4251: 'CUser::email': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/CUser.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  CustomSerial.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(10,17): warning C4251: 'JWTEnc::secretKey': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'JWTEnc'
+  (compiling source file '/CustomSerial.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(12,17): warning C4251: 'JWTEnc::algorithm': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'JWTEnc'
+  (compiling source file '/CustomSerial.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  DBConn.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/DBConn.cpp')
+  
+  DLL.cpp
+  dllmain.cpp
+  Scoreboard.cpp
+  transfer_sock.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/transfer_sock.cpp')
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(238,46): warning C4244: 'argument': conversion from 'uintmax_t' to 'const _Ty', possible loss of data
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(238,46): warning C4244:         with
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(238,46): warning C4244:         [
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(238,46): warning C4244:             _Ty=long
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(238,46): warning C4244:         ]
+  (compiling source file '/transfer_sock.cpp')
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(620,23): warning C4244: 'initializing': conversion from 'uintmax_t' to 'long', possible loss of data
+  (compiling source file '/transfer_sock.cpp')
+  
+  JSONDec.cpp
+  JSONEnc.cpp
+  JWTDec.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTDec.cpp(142,19): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file '/JWTDec.cpp')
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTDec.cpp(146,54): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file '/JWTDec.cpp')
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTDec.cpp(164,68): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file '/JWTDec.cpp')
+  
+  JWTEnc.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(10,17): warning C4251: 'JWTEnc::secretKey': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'JWTEnc'
+  (compiling source file '/JWTEnc.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.h(12,17): warning C4251: 'JWTEnc::algorithm': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'JWTEnc'
+  (compiling source file '/JWTEnc.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.cpp(66,47): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file '/JWTEnc.cpp')
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\JWTEnc.cpp(81,68): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  (compiling source file '/JWTEnc.cpp')
+  
+  Socketer.cpp
+  TCPSock.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/TCPSock.cpp')
+  
+  UDPSock.cpp
+  Writer.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(7,17): warning C4251: 'CUser::id': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Writer.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(8,17): warning C4251: 'CUser::username': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Writer.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(9,17): warning C4251: 'CUser::passwordHash': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Writer.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\CUser.h(11,17): warning C4251: 'CUser::email': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'CUser'
+  (compiling source file '/Writer.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\Writer.h(8,30): warning C4251: 'Writer::articles': 'std::vector<std::string,std::allocator<std::string>>' needs to have dll-interface to be used by clients of 'Writer'
+  (compiling source file '/Writer.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\vector(429,7):
+      see declaration of 'std::vector<std::string,std::allocator<std::string>>'
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\Writer.h(9,17): warning C4251: 'Writer::signature': 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of 'Writer'
+  (compiling source file '/Writer.cpp')
+      C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.43.34808\include\xstring(522,7):
+      see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  
+  Generating Code...
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\transfer_sock.cpp(211,1): warning C4715: '`transfer_sock::downloadFile'::`2'::<lambda_1>::operator()': not all control paths return a value
+     Creating library C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.lib and object C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.exp
+  UtilsDLL.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll

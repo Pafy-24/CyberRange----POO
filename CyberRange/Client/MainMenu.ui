@@ -389,6 +389,43 @@ QPushButton:pressed {
             <widget class="QWidget" name="Profile">
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
+               <widget class="QFrame" name="frame">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_12">
+                 <item>
+                  <widget class="QPushButton" name="logoutButton">
+                   <property name="text">
+                    <string>LOGOUT</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
                <widget class="QLabel" name="label_P">
                 <property name="text">
                  <string>PROFILE</string>
@@ -472,7 +509,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
