@@ -79,17 +79,6 @@ void LoginDialog::on_exitButton_clicked()
 
 void LoginDialog::connectToDatabase()
 {
-    QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-    db.setDatabaseName("Driver={SQL Server};Server=DESKTOP-PATRICIA;Database=CyberRangeDB;Trusted_Connection=yes;");
-
-    if (!db.open()) 
-    {
-        qDebug() << "Eroare la conectarea la baza de date:" << db.lastError().text();
-    }
-    else 
-    {
-        qDebug() << "Conectare reușită la CyberRangeDB!";
-    }
 }
 
 void LoginDialog::mousePressEvent(QMouseEvent* event)

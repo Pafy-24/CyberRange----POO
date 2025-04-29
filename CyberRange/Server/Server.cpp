@@ -9,13 +9,7 @@
 #include "UDPSock.h"
 #include "transfer_sock.h"
 
-std::atomic<bool> serverRunning(true);
-std::mutex consoleMutex;
 
-void printMessage(const std::string& message) {
-    std::lock_guard<std::mutex> lock(consoleMutex);
-    std::cout << "[" << std::this_thread::get_id() << "] " << message << std::endl;
-}
 
 void runTCPServer(int port, bool useTLS) {
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
@@ -26,12 +20,12 @@ void runTCPServer(int port, bool useTLS) {
         printMessage("Failed to enable TLS for " + serverType);
         return;
     }
+	if (server.isTLSEnabled())server.setCertificates("server.crt", "server.key");
 
     if (!server.runServer()) {
         printMessage("Failed to start " + serverType + " server on port " + std::to_string(port));
         return;
     }
-
     printMessage(serverType + " Server running on port " + std::to_string(port) + ", TLS: " +
         (server.isTLSEnabled() ? "enabled" : "disabled"));
 
@@ -91,7 +85,7 @@ int main() {
     int securePort = 1338;    // Secure TCP with TLS
     int udpPort = 8081;       // UDP
     int downloadPort = 8082;  // Download server
-
+	serverRunning = true;
     // Start server threads
     std::thread tcpServerThread(runTCPServer, tcpPort, false);
     std::thread secureTcpServerThread(runTCPServer, securePort, true);
@@ -103,14 +97,15 @@ int main() {
     std::cin.get();
 
     // Signal all threads to stop
-    serverRunning = false;
+    serverRunning = true;
 
     // Wait for all threads to finish
-    tcpServerThread.join();
+//    tcpServerThread.join();
     secureTcpServerThread.join();
-    udpServerThread.join();
-    downloadServerThread.join();
+//    udpServerThread.join();
+ //   downloadServerThread.join();
 
+    serverRunning = false;
     printMessage("All servers stopped. Test complete.");
     return 0;
 }

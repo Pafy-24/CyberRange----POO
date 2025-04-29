@@ -16,6 +16,9 @@
     <Filter Include="Header Files\Classes">
       <UniqueIdentifier>{e55ffa19-eb1f-49b5-a4f6-abd32247b3e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Classes\Socketing">
+      <UniqueIdentifier>{ffe7ca5f-e4db-437f-ba3a-f5abc05e2fbf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -33,16 +36,7 @@
     <ClInclude Include="CUser.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Socketer.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="TCPSock.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Team.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="UDPSock.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="UserLogs.h">
@@ -63,9 +57,6 @@
     <ClInclude Include="Common.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Connection.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="CTeam.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
@@ -76,9 +67,6 @@
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="DBLogs.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="transfer_sock.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="JSONDec.h">
@@ -101,6 +89,24 @@
     </ClInclude>
     <ClInclude Include="ServerLogs.h">
       <Filter>Header Files\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Socketer.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="TCPSock.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="transfer_sock.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPSock.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="Connection.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="TcpSocketWrapper.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +162,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AdminConn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DLL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scoreboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

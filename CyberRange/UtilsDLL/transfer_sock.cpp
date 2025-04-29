@@ -28,7 +28,7 @@ transfer_sock::transfer_sock(const std::string& addr, int port)
     filePath(""),
     fileSize(0),
     aborted(false),
-    serverRunning(false),
+    thisServerRunning(false),
     priority(0),
     currentTransfer(TransferType::NONE),
     rootDirectory("./files") {
@@ -39,9 +39,9 @@ transfer_sock::transfer_sock(int port)
     : TCPSock(port),
     transferProgress(0),
     filePath(""),
+    thisServerRunning(false),
     fileSize(0),
     aborted(false),
-    serverRunning(false),
     priority(0),
     currentTransfer(TransferType::NONE),
     rootDirectory("./files") {
@@ -52,9 +52,9 @@ transfer_sock::transfer_sock(std::unique_ptr<sf::TcpSocket> sock, const std::str
     : TCPSock(std::move(sock), clientAddr, clientPort),
     transferProgress(0),
     filePath(""),
+	thisServerRunning(false),
     fileSize(0),
     aborted(false),
-    serverRunning(false),
     priority(0),
     currentTransfer(TransferType::NONE),
     rootDirectory("./files") {
@@ -355,7 +355,7 @@ bool transfer_sock::uploadFile(const std::string& localFile, const std::string& 
 }
 
 bool transfer_sock::runServer(const std::string& rootDir) {
-    if (serverRunning) {
+    if (thisServerRunning) {
         std::cerr << "Server is already running" << std::endl;
         return false;
     }
@@ -383,19 +383,19 @@ bool transfer_sock::runServer(const std::string& rootDir) {
         return false;
     }
 
-    serverRunning = true;
+    thisServerRunning = true;
 
     // Start server thread
     std::thread serverThread([this]() {
         std::cout << "Transfer server started on port " << getPort() << std::endl;
         std::cout << "Using root directory: " << rootDirectory << std::endl;
 
-        while (serverRunning) {
+        while (thisServerRunning) {
             // Accept incoming connection
             Connection* conn = accept();
             if (!conn) {
                 // Check if server was stopped
-                if (!serverRunning) {
+                if (!thisServerRunning) {
                     break;
                 }
                 std::cerr << "Failed to accept client connection" << std::endl;
@@ -422,8 +422,8 @@ bool transfer_sock::runServer(const std::string& rootDir) {
 }
 
 void transfer_sock::stopServer() {
-    if (serverRunning) {
-        serverRunning = false;
+    if (thisServerRunning) {
+        thisServerRunning = false;
         disconnect(); // Force accept() to return with an error
     }
 }

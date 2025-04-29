@@ -7,7 +7,7 @@
 UDPSock::UDPSock(const std::string& addr, int port)
     : udpSocket(nullptr), address(addr), port(port), connected(false),
     isServer(false), timeout(sf::seconds(30)), maxPacketSize(8192),
-    tlsEnabled(false), dtlsContext(nullptr), serverRunning(false) {
+    tlsEnabled(false), dtlsContext(nullptr) {
 }
 
 UDPSock::~UDPSock() {
@@ -262,7 +262,7 @@ bool UDPSock::cleanupDTLS() {
 }
 
 bool UDPSock::runServer() {
-    if (serverRunning) {
+    if (thisServerRunning) {
         std::cerr << "Server is already running" << std::endl;
         return false;
     }
@@ -273,12 +273,12 @@ bool UDPSock::runServer() {
         return false;
     }
 
-    serverRunning = true;
+    thisServerRunning = true;
 
     std::thread serverThread([this]() {
         std::cout << "UDP server started on port " << getPort() << std::endl;
 
-        while (serverRunning) {
+        while (thisServerRunning) {
             handleClientRequest();
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
@@ -291,14 +291,14 @@ bool UDPSock::runServer() {
 }
 
 void UDPSock::stopServer() {
-    if (serverRunning) {
-        serverRunning = false;
+    if (thisServerRunning) {
+        thisServerRunning = false;
         disconnect();
     }
 }
 
 bool UDPSock::isServerRunning() const {
-    return serverRunning;
+    return thisServerRunning;
 }
 
 void UDPSock::handleClientRequest() {

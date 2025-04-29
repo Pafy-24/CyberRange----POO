@@ -28,7 +28,7 @@ private:
     std::string filePath;
     std::atomic<long> fileSize;
     std::atomic<bool> aborted;
-    std::atomic<bool> serverRunning;
+    std::atomic<bool> thisServerRunning;
     int priority;
     TransferType currentTransfer;
     std::string rootDirectory;

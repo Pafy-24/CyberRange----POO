@@ -49,7 +49,7 @@ void Client::testTCPClient(const std::string& serverAddress, int port, bool useT
         return;
     }
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(1500));
     std::string response = client.receive();
     printMessage(response.empty() ? "No response received" : "Received: " + response);
 

@@ -15,7 +15,7 @@ protected:
     int maxPacketSize;
     bool tlsEnabled;
     void* dtlsContext;
-    std::atomic<bool> serverRunning;
+    std::atomic<bool> thisServerRunning;
     std::string rootDirectory;
 
 public:

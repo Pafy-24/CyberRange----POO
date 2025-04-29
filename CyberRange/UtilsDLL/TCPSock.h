@@ -1,5 +1,6 @@
 #pragma once
 #include "Connection.h"
+#include "TcpSocketWrapper.h"
 #include <SFML/Network.hpp>
 #include <openssl/ssl.h>
 #include <memory>
@@ -8,17 +9,20 @@
 
 class UTILS_API TCPSock : public Connection {
 protected:
-    std::unique_ptr<sf::TcpSocket> tcpSocket;
+    std::unique_ptr<TcpSocketWithHandle> tcpSocket;
     std::unique_ptr<sf::TcpListener> tcpListener;
     std::string address;
     int port;
     bool connected;
     bool isServer;
+    std::atomic<bool> thisServerRunning;
     sf::Time timeout;
     bool tlsEnabled;
     std::unique_ptr<SSL, decltype(&SSL_free)> ssl;
     std::unique_ptr<SSL_CTX, decltype(&SSL_CTX_free)> sslCtx;
-    std::atomic<bool> serverRunning;
+
+    std::string certFile; 
+    std::string keyFile;
 
 public:
     TCPSock(const std::string& addr, int port);
@@ -43,6 +47,12 @@ public:
     bool runServer() override;
     void stopServer() override;
     bool isServerRunning() const override;
+
+    void setCertificates(const std::string& cert, const std::string& key) {
+        certFile = cert;
+        keyFile = key;
+        printMessage("Certificate paths set: " + cert + ", " + key);
+    }
 
 protected:
     bool setupTLS();

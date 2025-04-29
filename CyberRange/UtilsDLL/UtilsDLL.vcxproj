@@ -154,6 +154,7 @@
     <ClInclude Include="DBConn.h" />
     <ClInclude Include="DBLogs.h" />
     <ClInclude Include="DLL.h" />
+    <ClInclude Include="TcpSocketWrapper.h" />
     <ClInclude Include="transfer_sock.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="JSONDec.h" />
@@ -180,7 +181,9 @@
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="CustomSerial.cpp" />
     <ClCompile Include="DBConn.cpp" />
+    <ClCompile Include="DLL.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Scoreboard.cpp" />
     <ClCompile Include="transfer_sock.cpp" />
     <ClCompile Include="JSONDec.cpp" />
     <ClCompile Include="JSONEnc.cpp" />
