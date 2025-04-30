@@ -87,9 +87,9 @@ int main() {
     int downloadPort = 8082;  // Download server
 	serverRunning = true;
     // Start server threads
-    std::thread tcpServerThread(runTCPServer, tcpPort, false);
-    std::thread secureTcpServerThread(runTCPServer, securePort, true);
-    std::thread udpServerThread(runUDPServer, udpPort);
+  //  std::thread tcpServerThread(runTCPServer, tcpPort, false);
+//    std::thread secureTcpServerThread(runTCPServer, securePort, true);
+ //   std::thread udpServerThread(runUDPServer, udpPort);
     std::thread downloadServerThread(runDownloadServer, downloadPort);
 
     // Keep server running until user terminates
@@ -97,13 +97,13 @@ int main() {
     std::cin.get();
 
     // Signal all threads to stop
-    serverRunning = true;
+    serverRunning = false;
 
     // Wait for all threads to finish
-//    tcpServerThread.join();
-    secureTcpServerThread.join();
-//    udpServerThread.join();
- //   downloadServerThread.join();
+ //   tcpServerThread.join();
+ //   secureTcpServerThread.join();
+  //  udpServerThread.join();
+    downloadServerThread.join();
 
     serverRunning = false;
     printMessage("All servers stopped. Test complete.");

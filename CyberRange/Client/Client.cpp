@@ -120,8 +120,8 @@ void Client::testDownload(const std::string& serverAddress, int port) {
         });
 
     // Test small file download
-    std::string smallFile = "test_small.dat";
-    std::string smallFileDest = "downloaded_small.dat";
+    std::string smallFile = "server.key";
+    std::string smallFileDest = "E:\\Users\\xxsho\\Documents\\downloaded_small.dat";
     printMessage("Starting download: " + smallFile + " to " + smallFileDest);
 
     if (!conn.downloadFile(smallFile, smallFileDest)) {
@@ -145,7 +145,7 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     }
 
     // Test large file download with cancellation
-    std::string largeFile = "test_large.dat";
+    std::string largeFile = "server.crt";
     std::string largeFileDest = "downloaded_large.dat";
     conn.setPriority(2);
     printMessage("\nStarting large file download: " + largeFile + " to " + largeFileDest + " (Priority: 2)");
@@ -212,9 +212,9 @@ void Client::on_pushButton_clicked() {
     int udpPort = 8081;
     int downloadPort = 8082;
 
-    testTCPClient(serverAddress, tcpPort, false);
-    testTCPClient(serverAddress, secureTcpPort, true);
-    testUDPClient(serverAddress, udpPort);
+  //  testTCPClient(serverAddress, tcpPort, false);
+ //   testTCPClient(serverAddress, secureTcpPort, true);
+ //   testUDPClient(serverAddress, udpPort);
     testDownload(serverAddress, downloadPort);
 
     printMessage("\nAll client tests completed");

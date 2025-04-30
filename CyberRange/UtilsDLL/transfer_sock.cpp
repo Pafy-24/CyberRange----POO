@@ -112,7 +112,7 @@ bool transfer_sock::downloadFile(const std::string& remotePath, const std::strin
             }
 
             // First receive response status
-            std::string response = receiveLine();
+            std::string response = receive(1024);
             if (response != "OK") {
                 std::cerr << "Download request failed: " << response << std::endl;
                 outFile.close();
@@ -402,15 +402,9 @@ bool transfer_sock::runServer(const std::string& rootDir) {
                 continue;
             }
 
-            transfer_sock* clientSock = dynamic_cast<transfer_sock*>(conn);
-            if (!clientSock) {
-                std::cerr << "Invalid client connection type" << std::endl;
-                delete conn;
-                continue;
-            }
 
             // Handle client in a separate thread
-            std::thread clientThread(&transfer_sock::handleClientRequest, this, clientSock);
+            std::thread clientThread(&transfer_sock::handleClientRequest, this, (transfer_sock*)conn);
             clientThread.detach();
         }
 
@@ -545,7 +539,7 @@ void transfer_sock::handleClientRequest(transfer_sock* clientSock) {
 
     try {
         // Receive command
-        std::string request = clientSock->receiveLine();
+        std::string request = clientSock->receive(1024);
         std::vector<std::string> tokens = parseCommand(request);
 
         if (tokens.empty()) {
