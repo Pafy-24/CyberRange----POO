@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "VM.h"
 #include <sstream>
 #include <algorithm>
@@ -5,8 +6,9 @@
 #include <fstream>
 
 
-VM::VM(const std::string& name, const std::string& image, const std::string& address, const std::string& challId)
-    : COrchestrator(address), vmName(name), baseImage(image), memoryMB(1024), cpuCores(1), challengeId(challId) {
+VM::VM(const std::string& userId, const std::string& resourceId, const std::string& name, 
+    const std::string& image, const std::string& address, const std::string& challId)
+    : COrchestrator(userId,resourceId,address), vmName(name), baseImage(image), memoryMB(1024), cpuCores(1), challengeId(challId) {
     std::string ext = baseImage.substr(baseImage.find_last_of(".") + 1);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == "ovf") {
@@ -23,8 +25,8 @@ VM::VM(const std::string& name, const std::string& image, const std::string& add
     }
 }
 
-bool VM::start(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::start(userId, resourceId)) return false;
+bool VM::start() {
+    if (!COrchestrator::start()) return false;
 
     std::stringstream cmd;
     cmd << "\"VBoxManage.exe\" startvm \"" << vmName << "-" << userId << "-" << resourceId << "\" --type headless";
@@ -32,8 +34,8 @@ bool VM::start(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-bool VM::stop(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::stop(userId, resourceId)) return false;
+bool VM::stop() {
+    if (!COrchestrator::stop()) return false;
 
     std::stringstream cmd;
     cmd << "\"VBoxManage.exe\" controlvm \"" << vmName << "-" << userId << "-" << resourceId << "\" poweroff";
@@ -48,8 +50,8 @@ bool VM::stop(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-bool VM::deploy(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::deploy(userId, resourceId)) return false;
+bool VM::deploy() {
+    if (!COrchestrator::deploy()) return false;
 
     // Create Resources/[chall_id] directory and copy image
     std::filesystem::path targetDir = "./Resources/" + challengeId;
@@ -62,12 +64,12 @@ bool VM::deploy(const std::string& userId, const std::string& resourceId) {
     std::string vmId = vmName + "-" + userId + "-" + resourceId;
 
     if (isOVF()) {
-        cmd << "\"VBoxManage.exe\" import \"" << dstPath.string() << "\" --vsys 0 --vmname \"" << vmId << "\"";
-        cmd << " && \"VBoxManage.exe\" modifyvm \"" << vmId << "\" --memory " << memoryMB << " --cpus " << cpuCores;
+        cmd << "VBoxManage import \"" << dstPath.string() << "\" --vsys 0 --vmname \"" << vmId << "\"";
+        cmd << " && VBoxManage modifyvm \"" << vmId << "\" --memory " << memoryMB << " --cpus " << cpuCores;
         cmd << " --nic1 bridged --bridgeadapter1 eth0";
     }
     else {
-        cmd << "\"VBoxManage.exe\" createvm --name \"" << vmId
+        cmd << "VBoxManage createvm --name \"" << vmId
             << "\" --ostype Linux --register && "
             << "\"VBoxManage.exe\" modifyvm \"" << vmId
             << "\" --memory " << memoryMB << " --cpus " << cpuCores
@@ -83,8 +85,8 @@ bool VM::deploy(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-bool VM::undeploy(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::undeploy(userId, resourceId)) return false;
+bool VM::undeploy() {
+    if (!COrchestrator::undeploy()) return false;
 
     std::stringstream cmd;
     cmd << "\"VBoxManage.exe\" unregistervm \"" << vmName << "-" << userId << "-" << resourceId << "\" --delete";
@@ -99,8 +101,8 @@ bool VM::undeploy(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-std::string VM::getStatus(const std::string& userId, const std::string& resourceId) {
-    std::string baseStatus = COrchestrator::getStatus(userId, resourceId);
+std::string VM::getStatus() {
+    std::string baseStatus = COrchestrator::getStatus();
 
     std::stringstream cmd;
     cmd << "\"VBoxManage.exe\" showvminfo \"" << vmName << "-" << userId << "-" << resourceId << "\" --machinereadable";

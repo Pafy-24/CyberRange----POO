@@ -1,14 +1,16 @@
+#include "pch.h"
 #include "Docker.h"
 #include <sstream>
 #include <filesystem>
 #include <fstream>
 
-Docker::Docker(const std::string& image, const std::string& address, const std::string& challId)
-    : COrchestrator(address), imageName(image), port(8080), challengeId(challId) {
+Docker::Docker(const std::string& userId, const std::string& resourceId,const std::string& image, 
+    const std::string& address, const std::string& challId)
+    : COrchestrator(userId,resourceId,address), imageName(image), port(8080), challengeId(challId) {
 }
 
-bool Docker::start(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::start(userId, resourceId)) return false;
+bool Docker::start() {
+    if (!COrchestrator::start()) return false;
 
     std::stringstream cmd;
     cmd << "docker start \"" << userId << "-" << resourceId << "-" << imageName << "\"";
@@ -16,8 +18,8 @@ bool Docker::start(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-bool Docker::stop(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::stop(userId, resourceId)) return false;
+bool Docker::stop() {
+    if (!COrchestrator::stop()) return false;
 
     std::stringstream cmd;
     cmd << "docker stop \"" << userId << "-" << resourceId << "-" << imageName << "\"";
@@ -32,8 +34,8 @@ bool Docker::stop(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-bool Docker::deploy(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::deploy(userId, resourceId)) return false;
+bool Docker::deploy() {
+    if (!COrchestrator::deploy()) return false;
 
     // Create Resources/[chall_id] directory and copy image (for Docker, we assume image is pulled)
     std::filesystem::path targetDir = "./Resources/" + challengeId;
@@ -53,8 +55,8 @@ bool Docker::deploy(const std::string& userId, const std::string& resourceId) {
     return result.find("ERROR") == std::string::npos;
 }
 
-bool Docker::undeploy(const std::string& userId, const std::string& resourceId) {
-    if (!COrchestrator::undeploy(userId, resourceId)) return false;
+bool Docker::undeploy() {
+    if (!COrchestrator::undeploy()) return false;
 
     std::stringstream cmd;
     cmd << "docker rm -f \"" << userId << "-" << resourceId << "-" << imageName << "\"";
@@ -69,8 +71,8 @@ bool Docker::undeploy(const std::string& userId, const std::string& resourceId) 
     return result.find("ERROR") == std::string::npos;
 }
 
-std::string Docker::getStatus(const std::string& userId, const std::string& resourceId) {
-    std::string baseStatus = COrchestrator::getStatus(userId, resourceId);
+std::string Docker::getStatus() {
+    std::string baseStatus = COrchestrator::getStatus();
 
     std::stringstream cmd;
     cmd << "docker inspect \"" << userId << "-" << resourceId << "-" << imageName << "\"";
@@ -97,7 +99,7 @@ void Docker::setPort(int portNum) {
     }
 }
 
-std::string Docker::getLogs(const std::string& userId, const std::string& resourceId) {
+std::string Docker::getLogs() {
     std::stringstream cmd;
     cmd << "docker logs \"" << userId << "-" << resourceId << "-" << imageName << "\"";
     return executeCommand(cmd.str());

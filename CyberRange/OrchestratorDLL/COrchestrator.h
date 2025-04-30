@@ -3,9 +3,11 @@
 #include <mutex>
 #include "Orchestrator.h"
 
-class COrchestrator : public Orchestrator {
+class ORCHESTRATOR_API COrchestrator : public Orchestrator {
 protected:
     std::string baseAddr;
+    std::string userId;
+    std::string resourceId;
     std::mutex resourceMutex;
     int timeoutSeconds;
 
@@ -13,11 +15,12 @@ protected:
     bool isValidId(const std::string& id);
 
 public:
-    COrchestrator(const std::string& address, int timeout = 300);
-    bool start(const std::string& userId, const std::string& resourceId) override;
-    bool stop(const std::string& userId, const std::string& resourceId) override;
-    bool deploy(const std::string& userId, const std::string& resourceId) override;
-    bool undeploy(const std::string& userId, const std::string& resourceId) override;
-    std::string getStatus(const std::string& userId, const std::string& resourceId) override;
+    COrchestrator(const std::string& userId,const std::string& resourceId,const std::string& address, int timeout = 300);
+    bool start() override;
+    bool stop() override;
+    bool deploy() override;
+    bool undeploy() override;
+    std::string getStatus() override;
     void setTimeout(int seconds);
+    std::string getAddress() override;
 };

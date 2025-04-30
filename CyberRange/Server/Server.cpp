@@ -114,92 +114,92 @@ void testConns(){
 void testVM() {
     std::cout << "\n=== Testing VM Functions ===\n";
 
+    std::string userId = "alice";
+    std::string resourceId = "OldVM";
     // Initialize VM orchestrator
-    VM vm("test-vm", "C:\\CTF\\Images\\base.vdi", "192.168.1.100");
+    VM vm(userId,resourceId,"test-vm", ".\\Resources\\Linux_Mint.vdi", "192.168.1.100","chal1");
 
     // Set configuration
     vm.setMemory(2048);
     vm.setCPU(2);
     vm.setTimeout(600);
 
-    std::string userId = "alice";
-    std::string resourceId = "challenge1";
 
     // Test deploy
     std::cout << "Deploying VM for " << userId << "/" << resourceId << "... ";
-    bool deployResult = vm.deploy(userId, resourceId);
+    bool deployResult = vm.deploy();
     std::cout << (deployResult ? "Success" : "Failed") << "\n";
 
     // Test status
-    std::cout << "VM Status:\n" << vm.getStatus(userId, resourceId) << "\n";
+    std::cout << "VM Status:\n" << vm.getStatus() << "\n";
 
     // Test start
     std::cout << "Starting VM... ";
-    bool startResult = vm.start(userId, resourceId);
+    bool startResult = vm.start();
     std::cout << (startResult ? "Success" : "Failed") << "\n";
 
     // Test status again
-    std::cout << "VM Status:\n" << vm.getStatus(userId, resourceId) << "\n";
+    std::cout << "VM Status:\n" << vm.getStatus() << "\n";
 
     // Test stop
     std::cout << "Stopping VM... ";
-    bool stopResult = vm.stop(userId, resourceId);
+    bool stopResult = vm.stop();
     std::cout << (stopResult ? "Success" : "Failed") << "\n";
 
     // Test undeploy
     std::cout << "Undeploying VM... ";
-    bool undeployResult = vm.undeploy(userId, resourceId);
+    bool undeployResult = vm.undeploy();
     std::cout << (undeployResult ? "Success" : "Failed") << "\n";
 
     // Final status
-    std::cout << "Final VM Status:\n" << vm.getStatus(userId, resourceId) << "\n";
+    std::cout << "Final VM Status:\n" << vm.getStatus() << "\n";
 }
 
 void testDocker() {
     std::cout << "\n=== Testing Docker Functions ===\n";
 
+    std::string userId = "bob";
+    std::string resourceId = "DockFiles";
     // Initialize Docker orchestrator
-    Docker docker("nginx", "192.168.1.100");
+    Docker docker(userId, resourceId,"nginx", "192.168.1.100","chal2");
 
     // Set configuration
     docker.setPort(8080);
     docker.setEnv("APP_ENV", "production");
     docker.setTimeout(600);
 
-    std::string userId = "bob";
-    std::string resourceId = "challenge2";
 
     // Test deploy
     std::cout << "Deploying Docker for " << userId << "/" << resourceId << "... ";
-    bool deployResult = docker.deploy(userId, resourceId);
+    bool deployResult = docker.deploy();
     std::cout << (deployResult ? "Success" : "Failed") << "\n";
 
     // Test status
-    std::cout << "Docker Status:\n" << docker.getStatus(userId, resourceId) << "\n";
+    std::cout << "Docker Status:\n" << docker.getStatus() << "\n";
 
     // Test start
     std::cout << "Starting Docker... ";
-    bool startResult = docker.start(userId, resourceId);
+    bool startResult = docker.start();
     std::cout << (startResult ? "Success" : "Failed") << "\n";
 
     // Test status again
-    std::cout << "Docker Status:\n" << docker.getStatus(userId, resourceId) << "\n";
+    std::cout << "Docker Status:\n" << docker.getStatus() << "\n";
 
     // Test logs
-    std::cout << "Docker Logs:\n" << docker.getLogs(userId, resourceId) << "\n";
+    std::cout << "Docker Logs:\n" << docker.getLogs() << "\n";
 
     // Test stop
     std::cout << "Stopping Docker... ";
-    bool stopResult = docker.stop(userId, resourceId);
+    bool stopResult = docker.stop();
     std::cout << (stopResult ? "Success" : "Failed") << "\n";
 
     // Test undeploy
     std::cout << "Undeploying Docker... ";
-    bool undeployResult = docker.undeploy(userId, resourceId);
+    bool undeployResult = docker.undeploy();
     std::cout << (undeployResult ? "Success" : "Failed") << "\n";
 
     // Final status
-    std::cout << "Final Docker Status:\n" << docker.getStatus(userId, resourceId) << "\n";
+    std::cout << "Final Docker Status:\n" << docker.getStatus() << "\n";
 }
 
 

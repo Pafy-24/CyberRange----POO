@@ -4,10 +4,11 @@
 
 class Orchestrator {
 public:
-    virtual bool start(const std::string& userId, const std::string& resourceId) = 0;
-    virtual bool stop(const std::string& userId, const std::string& resourceId) = 0;
-    virtual bool deploy(const std::string& userId, const std::string& resourceId) = 0;
-    virtual bool undeploy(const std::string& userId, const std::string& resourceId) = 0;
-    virtual std::string getStatus(const std::string& userId, const std::string& resourceId) = 0;
+    virtual bool start() = 0;
+    virtual bool stop() = 0;
+    virtual bool deploy() = 0;
+    virtual bool undeploy() = 0;
+    virtual std::string getStatus() = 0;
+	virtual std::string getAddress() = 0;
     virtual ~Orchestrator() = default;
 };
