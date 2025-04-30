@@ -1,12 +1,13 @@
 #pragma once
+#include "DLL.h"
 #include <string>
 
 class Orchestrator {
 public:
-    virtual void start() = 0;
-    virtual void stop() = 0;
-    virtual bool deploy(std::string resource) = 0;
-    virtual bool undeploy(std::string resource) = 0;
-    virtual std::string getStatus() = 0;
+    virtual bool start(const std::string& userId, const std::string& resourceId) = 0;
+    virtual bool stop(const std::string& userId, const std::string& resourceId) = 0;
+    virtual bool deploy(const std::string& userId, const std::string& resourceId) = 0;
+    virtual bool undeploy(const std::string& userId, const std::string& resourceId) = 0;
+    virtual std::string getStatus(const std::string& userId, const std::string& resourceId) = 0;
     virtual ~Orchestrator() = default;
 };

@@ -8,7 +8,8 @@
 #include "TCPSock.h"
 #include "UDPSock.h"
 #include "transfer_sock.h"
-
+#include "VM.h"
+#include "Docker.h"
 
 
 void runTCPServer(int port, bool useTLS) {
@@ -77,7 +78,8 @@ void runDownloadServer(int port) {
     printMessage("Download Server stopped");
 }
 
-int main() {
+
+void testConns(){
     printMessage("Network Test Server Starting");
 
     // Server ports
@@ -85,7 +87,7 @@ int main() {
     int securePort = 1338;    // Secure TCP with TLS
     int udpPort = 8081;       // UDP
     int downloadPort = 8082;  // Download server
-	serverRunning = true;
+    serverRunning = true;
     // Start server threads
   //  std::thread tcpServerThread(runTCPServer, tcpPort, false);
 //    std::thread secureTcpServerThread(runTCPServer, securePort, true);
@@ -107,5 +109,102 @@ int main() {
 
     serverRunning = false;
     printMessage("All servers stopped. Test complete.");
+}
+
+void testVM() {
+    std::cout << "\n=== Testing VM Functions ===\n";
+
+    // Initialize VM orchestrator
+    VM vm("test-vm", "C:\\CTF\\Images\\base.vdi", "192.168.1.100");
+
+    // Set configuration
+    vm.setMemory(2048);
+    vm.setCPU(2);
+    vm.setTimeout(600);
+
+    std::string userId = "alice";
+    std::string resourceId = "challenge1";
+
+    // Test deploy
+    std::cout << "Deploying VM for " << userId << "/" << resourceId << "... ";
+    bool deployResult = vm.deploy(userId, resourceId);
+    std::cout << (deployResult ? "Success" : "Failed") << "\n";
+
+    // Test status
+    std::cout << "VM Status:\n" << vm.getStatus(userId, resourceId) << "\n";
+
+    // Test start
+    std::cout << "Starting VM... ";
+    bool startResult = vm.start(userId, resourceId);
+    std::cout << (startResult ? "Success" : "Failed") << "\n";
+
+    // Test status again
+    std::cout << "VM Status:\n" << vm.getStatus(userId, resourceId) << "\n";
+
+    // Test stop
+    std::cout << "Stopping VM... ";
+    bool stopResult = vm.stop(userId, resourceId);
+    std::cout << (stopResult ? "Success" : "Failed") << "\n";
+
+    // Test undeploy
+    std::cout << "Undeploying VM... ";
+    bool undeployResult = vm.undeploy(userId, resourceId);
+    std::cout << (undeployResult ? "Success" : "Failed") << "\n";
+
+    // Final status
+    std::cout << "Final VM Status:\n" << vm.getStatus(userId, resourceId) << "\n";
+}
+
+void testDocker() {
+    std::cout << "\n=== Testing Docker Functions ===\n";
+
+    // Initialize Docker orchestrator
+    Docker docker("nginx", "192.168.1.100");
+
+    // Set configuration
+    docker.setPort(8080);
+    docker.setEnv("APP_ENV", "production");
+    docker.setTimeout(600);
+
+    std::string userId = "bob";
+    std::string resourceId = "challenge2";
+
+    // Test deploy
+    std::cout << "Deploying Docker for " << userId << "/" << resourceId << "... ";
+    bool deployResult = docker.deploy(userId, resourceId);
+    std::cout << (deployResult ? "Success" : "Failed") << "\n";
+
+    // Test status
+    std::cout << "Docker Status:\n" << docker.getStatus(userId, resourceId) << "\n";
+
+    // Test start
+    std::cout << "Starting Docker... ";
+    bool startResult = docker.start(userId, resourceId);
+    std::cout << (startResult ? "Success" : "Failed") << "\n";
+
+    // Test status again
+    std::cout << "Docker Status:\n" << docker.getStatus(userId, resourceId) << "\n";
+
+    // Test logs
+    std::cout << "Docker Logs:\n" << docker.getLogs(userId, resourceId) << "\n";
+
+    // Test stop
+    std::cout << "Stopping Docker... ";
+    bool stopResult = docker.stop(userId, resourceId);
+    std::cout << (stopResult ? "Success" : "Failed") << "\n";
+
+    // Test undeploy
+    std::cout << "Undeploying Docker... ";
+    bool undeployResult = docker.undeploy(userId, resourceId);
+    std::cout << (undeployResult ? "Success" : "Failed") << "\n";
+
+    // Final status
+    std::cout << "Final Docker Status:\n" << docker.getStatus(userId, resourceId) << "\n";
+}
+
+
+int main() {
+	testVM();
+	testDocker();
     return 0;
 }

@@ -1,27 +1,23 @@
 #pragma once
 #include <string>
-#include <vector>
-#include <map>
+#include <mutex>
 #include "Orchestrator.h"
-#include "Socketer.h"
 
 class COrchestrator : public Orchestrator {
-private:
-    std::string addr;
-    std::vector<Socketer*> sockets;
-    std::map<std::string, std::string> usersData;
-    bool running;
-    int timeout;
+protected:
+    std::string baseAddr;
+    std::mutex resourceMutex;
+    int timeoutSeconds;
+
+    std::string executeCommand(const std::string& command);
+    bool isValidId(const std::string& id);
 
 public:
-    COrchestrator(std::string address);
-    void start() override;
-    void stop() override;
-    bool deploy(std::string resource) override;
-    bool undeploy(std::string resource) override;
-    std::string getStatus() override;
+    COrchestrator(const std::string& address, int timeout = 300);
+    bool start(const std::string& userId, const std::string& resourceId) override;
+    bool stop(const std::string& userId, const std::string& resourceId) override;
+    bool deploy(const std::string& userId, const std::string& resourceId) override;
+    bool undeploy(const std::string& userId, const std::string& resourceId) override;
+    std::string getStatus(const std::string& userId, const std::string& resourceId) override;
     void setTimeout(int seconds);
-    void addSocket(Socketer* socket);
-    void removeSocket(std::string socketId);
-    std::map<std::string, std::string> getUsersData();
 };
