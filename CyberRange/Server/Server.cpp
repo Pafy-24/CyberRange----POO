@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include <iostream>
 #include <string>
 #include <thread>
@@ -33,8 +33,8 @@ void runTCPServer(int port, bool useTLS) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Prevent CPU hogging
     }
 
-    server.stopServer();
-    printMessage(serverType + " Server stopped");
+    //server.stopServer();
+    //printMessage(serverType + " Server stopped");
 }
 
 // UDP Server function
@@ -202,9 +202,25 @@ void testDocker() {
     std::cout << "Final Docker Status:\n" << docker.getStatus() << "\n";
 }
 
-int main() {
-	//testVM();
-	//testDocker();
-	runTCPServer(1338, false);
+int main() 
+{
+    /// PORNIRE SERVER TCP
+    int port = 1337;
+
+    TCPSock server(port); // socketul ca server
+    if (!server.runServer()) 
+    {
+        std::cerr << "Eroare la pornirea serverului pe portul " << port << std::endl;
+        return 1;
+    }
+
+    std::cout << "Server pornit pe portul " << port << ". Apasă Ctrl+C pentru oprire." << std::endl;
+
+	// mentinerea serverului activ
+    while (true) 
+    {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+
     return 0;
 }

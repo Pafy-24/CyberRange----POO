@@ -3,6 +3,7 @@
 #include <QMessageBox>
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
+#include <QDebug>
 #include "MainMenu.h"
 #include <QMouseEvent>
 #include "DBConn.h"
@@ -39,31 +40,42 @@ void LoginDialog::on_loginButton_clicked()
     std::string _username = ui->lineEditUsername->text().toStdString();
     std::string _password = ui->lineEditPassword->text().toStdString();
     std::string role;
-	auto db = std::make_unique<DBConn>("sqlserver://admin:admin@localhost:1338/CyberRangeDB");
+    tcpClient = std::make_unique<TCPSock>("127.0.0.1", 1337);
+    tcpClient->setTimeout(5000);
 
-    if (db->connect())
+    if (!tcpClient->connect()) 
     {
-        if (db->sendLogin(_username, _password, role))
-        {
-            QMessageBox::information(this, "Successfully logged in!", "Role: " + QString::fromStdString(role));
-        }
-        else
-        {
-            QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
-        }
+        QMessageBox::critical(this, "Error", "Connection to server failed!");
+        return;
     }
+    // Trimit comanda AUTH
+    std::string authCommand = "AUTH " + _username + " " + _password + " CyberRangeDB";
 
-    /*if (true)
+    tcpClient->send(authCommand);
+    std::string response = tcpClient->receive();
+    if (response.find("OK") == 0) 
     {
-        if (true)
-        {
-            QMessageBox::information(this,"Test role", "Successfully logged in!");
-        }
-        else
-        {
-            QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
-        }
-    }*/
+        QMessageBox::information(this, "Succes", "Logged in succesfully!");
+
+        // Fade out LoginDialog
+        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+        fadeOut->setDuration(500);
+        fadeOut->setStartValue(1);
+        fadeOut->setEndValue(0);
+
+        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+            // dupa fade-out: open MainMenu
+            MainMenu* menu = new MainMenu(std::move(tcpClient)); // dacă MainMenu primește conexiunea prin constructor
+            menu->show();
+            this->close();
+            });
+        fadeOut->start();
+    }
+    else 
+    {
+        QMessageBox::warning(this, "Error", "Login failed:\n" + QString::fromStdString(response));
+        tcpClient->disconnect();
+    }
 
     //QString username = ui->lineEditUsername->text();
     //QString password = ui->lineEditPassword->text();
@@ -96,9 +108,9 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
-    MainMenu* menu = new MainMenu();
+    /*MainMenu* menu = new MainMenu();
     menu->show();
-    this->close();
+    this->close();*/
 }
 
 void LoginDialog::on_exitButton_clicked()

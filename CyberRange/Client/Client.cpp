@@ -211,9 +211,9 @@ void Client::on_pushButton_clicked() {
     int udpPort = 8081;
     int downloadPort = 8082;
 
-  //  testTCPClient(serverAddress, tcpPort, false);
- //   testTCPClient(serverAddress, secureTcpPort, true);
- //   testUDPClient(serverAddress, udpPort);
+    testTCPClient(serverAddress, tcpPort, false);
+    testTCPClient(serverAddress, secureTcpPort, true);
+    testUDPClient(serverAddress, udpPort);
     testDownload(serverAddress, downloadPort);
 
     printMessage("\nAll client tests completed");

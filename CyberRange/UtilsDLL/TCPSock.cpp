@@ -486,7 +486,8 @@ bool TCPSock::runServer() {
 
             std::unique_ptr<TCPSock> connPtr(conn);
 
-            try {
+            try 
+            {
                 std::thread clientThread(&TCPSock::handleClientRequest, this, std::move(connPtr));
                 clientThread.detach();
             }
