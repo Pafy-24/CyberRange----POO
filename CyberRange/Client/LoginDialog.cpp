@@ -123,11 +123,6 @@ void LoginDialog::on_exitButton_clicked()
     }
 }
 
-void LoginDialog::connectToDatabase() 
-{
-    
-}
-
 void LoginDialog::mousePressEvent(QMouseEvent* event)
 {
     if (event->button() == Qt::LeftButton) {

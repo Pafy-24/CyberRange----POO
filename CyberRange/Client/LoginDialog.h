@@ -33,7 +33,6 @@ private slots:
     void on_loginButton_clicked();
     void on_registerButton_clicked();
     void on_exitButton_clicked();
-    void connectToDatabase();
 private:
     Ui::LoginDialog* ui;
     QPoint mouseClickPosition;

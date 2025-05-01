@@ -1,2 +1,12 @@
-﻿  dllmain.cpp
+﻿  TCPSock.cpp
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TCPSock.cpp(1,9): warning C4603: 'SQL_NOUNICODEMAP': macro is not defined or definition is different after precompiled header use
+  (compiling source file '/TCPSock.cpp')
+      C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TCPSock.cpp(1,9):
+      Add macro to precompiled header instead of defining here
+      C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TCPSock.cpp(2,1):
+      use of precompiled header
+  
+C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/TCPSock.cpp')
+  
   UtilsDLL.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll

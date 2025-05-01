@@ -10,6 +10,7 @@
 #include <sqlext.h>
 #include <sqltypes.h>
 #include <sql.h>
+#include "DBConn.h"
 
 
 TCPSock::TCPSock(const std::string& addr, int port)
@@ -475,6 +476,7 @@ bool TCPSock::runServer() {
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
             }
+            printMessage("Accept reusit de la " + conn->getAddress());
 
             if (!conn->isConnected()) {
                 printMessage("Discarding invalid connection");
@@ -531,7 +533,8 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
     try {
         while (clientSock->isConnected()) {
             std::string request = clientSock->receive();
-            if (request.find("AUTH") == 0) {
+            if (request.find("AUTH") == 0) 
+            {
                 handleDBClient(std::move(clientSock), request);
             }
             else {
@@ -539,9 +542,12 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
                 clientSock->disconnect();
             }
 
-            if (!clientSock->isConnected()) {
-                printMessage("Client disconnected: " + clientInfo);
-                break;
+            if (clientSock)
+            {
+                if (!clientSock->isConnected()) {
+                    printMessage("Client disconnected: " + clientInfo);
+                    break;
+                }
             }
 
             if (!request.empty()) {
@@ -574,15 +580,15 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
 void TCPSock::handleDBClient(std::unique_ptr<TCPSock> clientSock, const std::string& authLine)
 {
     printMessage("Handling DBConn client");
+
     if (!clientSock || !clientSock->isConnected()) {
         printMessage("Invalid DB client");
         return;
     }
 
     std::string clientInfo = clientSock->getAddress() + ":" + std::to_string(clientSock->getPort());
-    printMessage("Handling DBConn client from " + clientInfo);
 
-    // === Parsare linie AUTH ===
+    // Parsează AUTH linia primita
     std::istringstream iss(authLine);
     std::string command, user, pass, dbname;
     iss >> command >> user >> pass >> dbname;
@@ -592,79 +598,39 @@ void TCPSock::handleDBClient(std::unique_ptr<TCPSock> clientSock, const std::str
         return;
     }
 
-    // === ODBC: conectare la baza de date ===
-    SQLHENV hEnv;
-    SQLHDBC hDbc;
-    SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv);
-    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
-    SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc);
+    std::string connectionString = "sqlserver://" + user + ":" + pass + "@localhost:1433/" + dbname;
 
-    std::wstring connStr = L"DRIVER={SQL Server};SERVER=localhost;DATABASE=CyberRangeDB;UID=admin;PWD=adminhash;";
+    try {
+        DBConn db(connectionString);
 
-    SQLWCHAR outstr[1024];
-    SQLSMALLINT outstrlen;
+        if (!db.connect()) {
+            clientSock->send("ERROR: DB connection failed\n");
+            return;
+        }
 
-    SQLRETURN ret = SQLDriverConnectW(
-        hDbc,
-        NULL,
-        (SQLWCHAR*)connStr.c_str(), // <== CONVERTIT la SQLWCHAR*
-        SQL_NTS,
-        outstr,
-        sizeof(outstr),
-        &outstrlen,
-        SQL_DRIVER_COMPLETE
-    );
+        clientSock->send("OK: Authenticated and connected to DB\n");
 
-    if (!SQL_SUCCEEDED(ret)) {
-        clientSock->send("ERROR: Could not connect to database\n");
-        printMessage("ODBC connection failed for " + dbname);
-        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
-        return;
-    }
+        // Execută comenzi SQL până la deconectare
+        while (clientSock->isConnected()) {
+            std::string query = clientSock->receive();
+            if (query.empty()) break;
 
-    clientSock->send("OK: Authenticated and connected to DB\n");
-
-    // === Primesc și execut comenzi SQL ===
-    while (clientSock->isConnected()) {
-        std::string query = clientSock->receive();
-        if (query.empty()) break;
-
-        SQLHSTMT hStmt;
-        SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt);
-        std::wstring wquery(query.begin(), query.end());
-        SQLRETURN retExec = SQLExecDirectW(hStmt, (SQLWCHAR*)wquery.c_str(), SQL_NTS);
-
-        if (SQL_SUCCEEDED(retExec)) {
-            SQLSMALLINT columns;
-            SQLNumResultCols(hStmt, &columns);
-
-            std::string result;
-            char buffer[1024];
-            SQLLEN indicator;
-
-            while (SQLFetch(hStmt) == SQL_SUCCESS) {
-                for (int i = 1; i <= columns; ++i) {
-                    SQLGetData(hStmt, i, SQL_C_CHAR, buffer, sizeof(buffer), &indicator);
-                    result += std::string(buffer) + (i < columns ? " | " : "\n");
-                }
+            if (db.send(query) > 0) {
+                std::string result = db.receive();
+                clientSock->send(result.empty() ? "OK: No result\n" : result);
             }
-
-            if (result.empty()) result = "OK: Executed (no rows returned)\n";
-            clientSock->send(result);
-        }
-        else {
-            clientSock->send("ERROR: SQL execution failed\n");
+            else {
+                clientSock->send("ERROR: Query rejected\n");
+            }
         }
 
-        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+        db.disconnect();
+        printMessage("Client disconnected: " + clientInfo);
     }
-
-    // === Cleanup ===
-    SQLDisconnect(hDbc);
-    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
-    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+    catch (const std::exception& ex) {
+        printMessage("DBConn exception: " + std::string(ex.what()));
+        clientSock->send("ERROR: Internal server error\n");
+    }
 
     clientSock->disconnect();
-    printMessage("DBConn client disconnected: " + clientInfo);
 }
