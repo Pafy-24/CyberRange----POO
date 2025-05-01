@@ -1,8 +1,16 @@
 #include "pch.h"
 #include "CustomSerial.h"
+#include "JWTDec.h"
+#include "JWTEnc.h"
 
-// Universal encode function
-std::string CustomSerial::encode(std::map<std::string, std::string> data, bool useJWT,
+// Constructor initializing members
+CustomSerial::CustomSerial(bool jsonPretty, std::string jwtKey, std::string jwtAlgo)
+    : prettyPrint(jsonPretty), jwtKey(jwtKey), jwtAlgo(jwtAlgo)
+{
+}
+
+// Universal encode function with json support
+std::string CustomSerial::encode(const json& data, bool useJWT,
     const std::string& key, const std::string& algo)
 {
     if (useJWT) {
@@ -13,27 +21,26 @@ std::string CustomSerial::encode(std::map<std::string, std::string> data, bool u
     }
 }
 
-// JSON-specific encode 
-std::string CustomSerial::encodeJSON(std::map<std::string, std::string> data)
+// JSON-specific encode
+std::string CustomSerial::encodeJSON(const json& data, bool prettyPrint)
 {
-    JSONEnc encoder;
-    return encoder.encode(data);
+    return prettyPrint ? data.dump(4) : data.dump();
 }
 
 // JWT-specific encode
-std::string CustomSerial::encodeJWT(std::map<std::string, std::string> data,
+std::string CustomSerial::encodeJWT(const json& data,
     const std::string& key, const std::string& algo)
 {
-    // Convert map to JSON first
-    std::string json = encodeJSON(data);
+    // Convert json to string first
+    std::string jsonStr = encodeJSON(data);
 
     // Then encode as JWT
     JWTEnc encoder(key, algo);
-    return encoder.encode(json);
+    return encoder.encode(jsonStr);
 }
 
 // Universal decode function - auto-detects format
-std::map<std::string, std::string> CustomSerial::decode(const std::string& data,
+json CustomSerial::decode(const std::string& data,
     const std::string& key, const std::string& algo)
 {
     if (isJWTFormat(data)) {
@@ -45,18 +52,27 @@ std::map<std::string, std::string> CustomSerial::decode(const std::string& data,
 }
 
 // JSON-specific decode
-std::map<std::string, std::string> CustomSerial::decodeJSON(const std::string& json)
+json CustomSerial::decodeJSON(const std::string& jsonStr)
 {
-    JSONDec decoder;
-    return decoder.decode(json);
+    try {
+        return json::parse(jsonStr);
+    }
+    catch (const json::parse_error& e) {
+        // Return empty JSON object on error
+        return json::object();
+    }
 }
 
 // JWT-specific decode
-std::map<std::string, std::string> CustomSerial::decodeJWT(const std::string& token,
+json CustomSerial::decodeJWT(const std::string& token,
     const std::string& key, const std::string& algo)
 {
+    // Decode the JWT using JWT decoder
     JWTDec decoder(key, algo);
-    return decoder.decode(token);
+    std::string payload = decoder.decodePayload(token);
+
+    // Parse the payload as JSON
+    return decodeJSON(payload);
 }
 
 // Check if data is valid based on auto-detection
@@ -68,8 +84,13 @@ bool CustomSerial::isValid(const std::string& data,
         return decoder.validate(data);
     }
     else {
-        JSONDec decoder;
-        return decoder.validate(data);
+        try {
+            json::parse(data);
+            return true;
+        }
+        catch (const json::parse_error&) {
+            return false;
+        }
     }
 }
 
@@ -99,4 +120,58 @@ bool CustomSerial::isJWTFormat(const std::string& data)
     }
 
     return true;
+}
+
+// Legacy methods for backward compatibility
+std::string CustomSerial::encode(std::map<std::string, std::string> data, bool useJWT,
+    const std::string& key, const std::string& algo)
+{
+    // Convert old string map to json
+    json jsonData = json::object();
+    for (const auto& pair : data) {
+        jsonData[pair.first] = pair.second;
+    }
+
+    return encode(jsonData, useJWT, key, algo);
+}
+
+std::map<std::string, std::string> CustomSerial::decodeLegacy(const std::string& data,
+    const std::string& key, const std::string& algo)
+{
+    // Use the new decode method but convert the result back to string-only map
+    json jsonResult = decode(data, key, algo);
+    std::map<std::string, std::string> stringResult;
+
+    for (auto& [key, value] : jsonResult.items()) {
+        if (value.is_string()) {
+            stringResult[key] = value.get<std::string>();
+        }
+        else if (value.is_array()) {
+            // For arrays, convert to a comma-separated string
+            std::string joinedArray;
+            for (size_t i = 0; i < value.size(); ++i) {
+                if (value[i].is_string()) {
+                    joinedArray += value[i].get<std::string>();
+                    if (i < value.size() - 1) {
+                        joinedArray += ",";
+                    }
+                }
+            }
+            stringResult[key] = joinedArray;
+        }
+        else if (value.is_number()) {
+            // Convert numbers to strings
+            stringResult[key] = std::to_string(value.get<double>());
+        }
+        else if (value.is_boolean()) {
+            // Convert booleans to strings
+            stringResult[key] = value.get<bool>() ? "true" : "false";
+        }
+        else {
+            // For other types, use empty string
+            stringResult[key] = "";
+        }
+    }
+
+    return stringResult;
 }

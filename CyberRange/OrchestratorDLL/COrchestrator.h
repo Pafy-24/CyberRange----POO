@@ -1,27 +1,26 @@
 #pragma once
 #include <string>
-#include <vector>
-#include <map>
+#include <mutex>
 #include "Orchestrator.h"
-#include "Socketer.h"
 
-class COrchestrator : public Orchestrator {
-private:
-    std::string addr;
-    std::vector<Socketer*> sockets;
-    std::map<std::string, std::string> usersData;
-    bool running;
-    int timeout;
+class ORCHESTRATOR_API COrchestrator : public Orchestrator {
+protected:
+    std::string baseAddr;
+    std::string userId;
+    std::string resourceId;
+    std::mutex resourceMutex;
+    int timeoutSeconds;
+
+    std::string executeCommand(const std::string& command);
+    bool isValidId(const std::string& id);
 
 public:
-    COrchestrator(std::string address);
-    void start() override;
-    void stop() override;
-    bool deploy(std::string resource) override;
-    bool undeploy(std::string resource) override;
+    COrchestrator(const std::string& userId,const std::string& resourceId, int timeout = 300);
+    bool start() override;
+    bool stop() override;
+    bool deploy() override;
+    bool undeploy() override;
     std::string getStatus() override;
     void setTimeout(int seconds);
-    void addSocket(Socketer* socket);
-    void removeSocket(std::string socketId);
-    std::map<std::string, std::string> getUsersData();
+    std::string getAddress() override;
 };

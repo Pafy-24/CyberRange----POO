@@ -19,6 +19,9 @@
     <Filter Include="Header Files\Classes\Socketing">
       <UniqueIdentifier>{ffe7ca5f-e4db-437f-ba3a-f5abc05e2fbf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Classes\ExternalHeaders">
+      <UniqueIdentifier>{c5653ae2-0fda-4188-a97a-e18e054e68c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="TcpSocketWrapper.h">
       <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="json.hpp">
+      <Filter>Header Files\Classes\ExternalHeaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

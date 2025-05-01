@@ -7,7 +7,7 @@ JSONEnc::JSONEnc(bool pretty) : prettyPrint(pretty), escapeUnicode(false)
 {
 }
 
-std::string JSONEnc::encode(std::map<std::string, std::string> data)
+std::string JSONEnc::encode(std::map<std::string, JSONValue> data)
 {
     std::ostringstream oss;
     oss << (prettyPrint ? "{\n" : "{");
@@ -21,10 +21,45 @@ std::string JSONEnc::encode(std::map<std::string, std::string> data)
         }
         first = false;
 
-        oss << (prettyPrint ? "  " : "") << "\"" << escapeString(pair.first) << "\": \"" << escapeString(pair.second) << "\"";
+        oss << (prettyPrint ? "  " : "") << "\"" << escapeString(pair.first) << "\": ";
+
+        // Handle different value types using std::visit
+        std::visit([this, &oss](const auto& value) {
+            using T = std::decay_t<decltype(value)>;
+
+            if constexpr (std::is_same_v<T, std::string>)
+            {
+                oss << "\"" << escapeString(value) << "\"";
+            }
+            else if constexpr (std::is_same_v<T, std::vector<std::string>>)
+            {
+                oss << encodeArray(value);
+            }
+            }, pair.second);
     }
 
     oss << (prettyPrint ? "\n}" : "}");
+    return oss.str();
+}
+
+std::string JSONEnc::encodeArray(const std::vector<std::string>& array)
+{
+    std::ostringstream oss;
+    oss << (prettyPrint ? "[\n" : "[");
+
+    bool first = true;
+    for (const auto& value : array)
+    {
+        if (!first)
+        {
+            oss << (prettyPrint ? ",\n" : ",");
+        }
+        first = false;
+
+        oss << (prettyPrint ? "    " : "") << "\"" << escapeString(value) << "\"";
+    }
+
+    oss << (prettyPrint ? "\n  ]" : "]");
     return oss.str();
 }
 
