@@ -36,8 +36,38 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::on_loginButton_clicked()
 {
+    std::string _username = ui->lineEditUsername->text().toStdString();
+    std::string _password = ui->lineEditPassword->text().toStdString();
+    std::string role;
+	auto db = std::make_unique<DBConn>("sqlserver://admin:admin@localhost:1338/CyberRangeDB");
+
+    if (db->connect())
+    {
+        if (db->sendLogin(_username, _password, role))
+        {
+            QMessageBox::information(this, "Successfully logged in!", "Role: " + QString::fromStdString(role));
+        }
+        else
+        {
+            QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
+        }
+    }
+
+    /*if (true)
+    {
+        if (true)
+        {
+            QMessageBox::information(this,"Test role", "Successfully logged in!");
+        }
+        else
+        {
+            QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
+        }
+    }*/
+
     //QString username = ui->lineEditUsername->text();
     //QString password = ui->lineEditPassword->text();
+
     //if (username == "admin" && password == "1234")
     //{ 
     //    // Fade out LoginDialog
@@ -58,22 +88,10 @@ void LoginDialog::on_loginButton_clicked()
     //{
     //    QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
     //}
-    std::string username = ui->lineEditUsername->text().toStdString();
-    std::string password = ui->lineEditPassword->text().toStdString();
-    std::string role;
-    auto db = std::make_unique<DBConn>("sqlserver://admin:admin@localhost:1338/CyberRangeDB");
-
-    if (db->connect()) 
-    {
-        if (db->sendLogin(username, password, role)) 
-        {
-            QMessageBox::information(this, "Successfully logged in!", "Rol: " + QString::fromStdString(role));
-        }
-        else
-        {
-            QMessageBox::warning(this, "Eșec login", "Nume sau parolă greșite.");
-        }
-    }
+   /* 
+    
+    
+    }*/
 }
 
 void LoginDialog::on_registerButton_clicked()

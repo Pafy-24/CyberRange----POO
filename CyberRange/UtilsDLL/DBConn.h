@@ -20,7 +20,7 @@ private:
 
     bool parseConnectionString();
     bool sanitizeQuery(std::string& query);
-
+    
 public:
     DBConn(const std::string& connStr);
     ~DBConn() override;

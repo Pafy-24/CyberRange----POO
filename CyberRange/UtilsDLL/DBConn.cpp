@@ -47,13 +47,13 @@ bool DBConn::connect() {
     dbSocket->setTimeout(timeout);
 
     // Enable and set up TLS before connecting
-    if (tlsEnabled) {
+    /*if (tlsEnabled) {
         if (!dbSocket->enableTLS()) {
             std::cerr << "Failed to enable TLS" << std::endl;
             dbSocket.reset();
             return false;
         }
-    }
+    }*/
 
     // Connect to the MSSQL server
     if (!dbSocket->connect()) {

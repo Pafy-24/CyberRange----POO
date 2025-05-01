@@ -202,9 +202,9 @@ void testDocker() {
     std::cout << "Final Docker Status:\n" << docker.getStatus() << "\n";
 }
 
-
 int main() {
 	//testVM();
-	testDocker();
+	//testDocker();
+	runTCPServer(1338, false);
     return 0;
 }
