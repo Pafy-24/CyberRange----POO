@@ -1,4 +1,0 @@
-Name: nlohmann_json
-Description: JSON for Modern C++
-Version: 3.11.3
-Cflags: -IE:/Programe/Github/CyberRange----POO/CyberRange/vcpkg_installed/vcpkg/pkgs/nlohmann-json_x64-windows/debug/include
