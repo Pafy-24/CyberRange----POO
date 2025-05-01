@@ -36,6 +36,7 @@ public:
     bool isTLSEnabled() const override;
     void setTimeout(int ms) override;
     int getTimeout() const override;
+    bool sendLogin(const std::string& username, const std::string& password, std::string& roleOut);
 
     // Unsupported operations
     bool bind(int port) override { throw std::runtime_error("Operation not supported"); }

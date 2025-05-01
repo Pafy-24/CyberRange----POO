@@ -1,9 +1,15 @@
-﻿#include "pch.h"
+﻿#define SQL_NOUNICODEMAP
+#include "pch.h"
 #include "TCPSock.h"
 #include <iostream>
 #include <thread>
 #include <mutex>
 #include <openssl/err.h>
+#include <sstream>
+#include <windows.h>
+#include <sqlext.h>
+#include <sqltypes.h>
+#include <sql.h>
 
 
 TCPSock::TCPSock(const std::string& addr, int port)
@@ -30,32 +36,19 @@ TCPSock::TCPSock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientA
     ssl(nullptr, SSL_free), sslCtx(nullptr, SSL_CTX_free) {
 
     if (sock) {
-        // Create our own socket and import socket handle from the provided one
         tcpSocket = std::make_unique<TcpSocketWithHandle>();
-
-        // Store connection information
         printMessage("Client socket created for " + clientAddr + ":" + std::to_string(clientPort));
 
-        // Since SFML doesn't provide a direct way to transfer socket ownership,
-        // we'll adopt the raw socket handle and configure our socket
-
-        // The socket is already connected, we just need to mark it as such
         connected = true;
 
-        // We're taking ownership of the socket itself, so swap it into our class
-        // This ensures that the socket handle isn't closed when sock is destroyed
         auto* rawSocket = sock.release();
 
-        // Dynamic cast to access the handle if possible
         if (auto* socketWithHandle = dynamic_cast<TcpSocketWithHandle*>(rawSocket)) {
-            // We need to duplicate the socket with a new handle
             tcpSocket.reset(socketWithHandle);
         }
         else {
-            // Fall back to creating a new connection
             printMessage("Failed to transfer socket handle - creating new connection");
 
-            // Connect to the address/port directly
             sf::Socket::Status status = tcpSocket->connect(
                 sf::IpAddress(clientAddr),
                 static_cast<unsigned short>(clientPort),
@@ -67,7 +60,6 @@ TCPSock::TCPSock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientA
                 connected = false;
             }
 
-            // Clean up the original socket
             delete rawSocket;
         }
     }
@@ -227,8 +219,6 @@ bool TCPSock::listen(int backlog) {
         return false;
     }
 
-    // Note: SFML's TcpListener::listen already includes listening functionality
-    // so we just mark the socket as connected to indicate it's ready to accept
     connected = true;
     printMessage("Listening for connections on port " + std::to_string(port));
     return true;
@@ -244,8 +234,6 @@ Connection* TCPSock::accept() {
     sf::Socket::Status status = tcpListener->accept(*clientSocket);
 
     if (status != sf::Socket::Status::Done) {
-        // Only log errors if there's an actual error and we're still running the server
-        // Don't log for sf::Socket::Status::NotReady which just means no pending connection
         if (thisServerRunning && status != sf::Socket::Status::NotReady) {
             printMessage("Error accepting connection: " + std::to_string(static_cast<int>(status)));
         }
@@ -257,15 +245,11 @@ Connection* TCPSock::accept() {
 
     printMessage("Accepted connection from " + clientAddr.toString() + ":" + std::to_string(clientPort));
 
-    // Create a new TCPSock for the client and transfer the socket
     auto clientSock = new TCPSock(std::move(clientSocket), clientAddr.toString(), clientPort);
 
-    // Apply TLS if server has it enabled
     if (tlsEnabled) {
-        // Since we're creating a new connection, we need to set TLS before the connection is established
         clientSock->tlsEnabled = true;
 
-        // Setup TLS for the client connection
         if (!clientSock->setupTLS()) {
             printMessage("Failed to set up TLS for client connection");
             delete clientSock;
@@ -313,14 +297,12 @@ bool TCPSock::setupTLS() {
         return false;
     }
 
-    // If SSL is already set up, don't initialize again
     if (ssl) {
         return true;
     }
 
     printMessage("Setting up TLS for " + address + ":" + std::to_string(port) + "...");
 
-    // Initialize OpenSSL libraries if needed
     static bool sslInitialized = false;
     static std::mutex sslInitMutex;
 
@@ -333,7 +315,6 @@ bool TCPSock::setupTLS() {
         }
     }
 
-    // Create SSL context based on whether this is a server or client
     const SSL_METHOD* method = isServer ? TLS_server_method() : TLS_client_method();
     sslCtx = std::unique_ptr<SSL_CTX, decltype(&SSL_CTX_free)>(
         SSL_CTX_new(method), SSL_CTX_free);
@@ -343,12 +324,10 @@ bool TCPSock::setupTLS() {
         return false;
     }
 
-    // Configure SSL context with appropriate security settings
     SSL_CTX_set_options(sslCtx.get(), SSL_OP_NO_SSLv2 | SSL_OP_NO_SSLv3 | SSL_OP_NO_TLSv1 | SSL_OP_NO_TLSv1_1);
 
-    // In server mode, we need to set up certificates
     if (isServer) {
-        // Use the certificate and key files if they were specified
+        
         const char* cert = certFile.empty() ? "server.crt" : certFile.c_str();
         const char* key = keyFile.empty() ? "server.key" : keyFile.c_str();
 
@@ -365,7 +344,6 @@ bool TCPSock::setupTLS() {
             return false;
         }
 
-        // Verify the private key matches the certificate
         if (SSL_CTX_check_private_key(sslCtx.get()) != 1) {
             printMessage("Private key does not match certificate: " +
                 std::string(ERR_error_string(ERR_get_error(), nullptr)));
@@ -375,18 +353,14 @@ bool TCPSock::setupTLS() {
         printMessage("Certificate and private key loaded successfully");
     }
 
-    // For simplicity in this example, we're using a less strict verification mode
-    // In production, you'd want proper certificate verification
     SSL_CTX_set_verify(sslCtx.get(), SSL_VERIFY_NONE, nullptr);
 
-    // Create SSL object
     ssl = std::unique_ptr<SSL, decltype(&SSL_free)>(SSL_new(sslCtx.get()), SSL_free);
     if (!ssl) {
         printMessage("Failed to create SSL object: " + std::string(ERR_error_string(ERR_get_error(), nullptr)));
         return false;
     }
 
-    // Ensure we have a valid socket and get its handle
     if (!tcpSocket) {
         printMessage("No valid socket for TLS setup");
         return false;
@@ -409,7 +383,6 @@ bool TCPSock::setupTLS() {
         return false;
     }
 
-    // Perform SSL handshake based on server/client role
     printMessage("Performing SSL handshake...");
     int result;
     int retry_count = 0;
@@ -417,38 +390,31 @@ bool TCPSock::setupTLS() {
 
     while (retry_count < max_retries) {
         if (isServer) {
-            // Server accepts SSL connection
             result = SSL_accept(ssl.get());
         }
         else {
-            // Client initiates SSL connection
             result = SSL_connect(ssl.get());
         }
 
         if (result == 1) {
-            // Success!
             break;
         }
 
         int error = SSL_get_error(ssl.get(), result);
 
-        // Handle specific error cases
         if (error == SSL_ERROR_WANT_READ || error == SSL_ERROR_WANT_WRITE) {
-            // Need to retry the operation
             retry_count++;
             printMessage("Retrying SSL handshake, attempt " + std::to_string(retry_count));
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
             continue;
         }
 
-        // Any other error is fatal
         unsigned long errCode = ERR_get_error();
         char errBuffer[256];
         ERR_error_string_n(errCode, errBuffer, sizeof(errBuffer));
 
         printMessage("SSL handshake failed: " + std::string(errBuffer) + " (code: " + std::to_string(error) + ")");
 
-        // Additional debugging information
         if (error == SSL_ERROR_SSL) {
             printMessage("Protocol error. Check if both sides are using SSL/TLS.");
         }
@@ -464,7 +430,6 @@ bool TCPSock::setupTLS() {
         return false;
     }
 
-    // Log the negotiated protocol and cipher
     printMessage("SSL connection established using " +
         std::string(SSL_get_version(ssl.get())) +
         " with cipher " +
@@ -473,7 +438,6 @@ bool TCPSock::setupTLS() {
     printMessage("TLS setup completed successfully for " + address + ":" + std::to_string(port));
     return true;
 }
-
 
 bool TCPSock::cleanupTLS() {
     if (ssl) {
@@ -500,7 +464,6 @@ bool TCPSock::runServer() {
     std::thread serverThread([this]() {
         printMessage("TCP server started on port " + std::to_string(port));
 
-        // Set listener to non-blocking mode to allow clean shutdown
         if (tcpListener) {
             tcpListener->setBlocking(false);
         }
@@ -509,22 +472,18 @@ bool TCPSock::runServer() {
             auto conn = dynamic_cast<TCPSock*>(accept());
             if (!conn) {
                 if (!thisServerRunning) break;
-                // Small sleep to prevent CPU spike if accept fails repeatedly
                 std::this_thread::sleep_for(std::chrono::milliseconds(100));
                 continue;
             }
 
-            // Verify connection before creating thread
             if (!conn->isConnected()) {
                 printMessage("Discarding invalid connection");
                 delete conn;
                 continue;
             }
 
-            // Log connection info
             printMessage("New client connection established from " + conn->getAddress() + ":" + std::to_string(conn->getPort()));
 
-            // Create a unique_ptr to manage the connection in the new thread
             std::unique_ptr<TCPSock> connPtr(conn);
 
             try {
@@ -566,25 +525,27 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
     std::string clientInfo = clientSock->getAddress() + ":" + std::to_string(clientSock->getPort());
     printMessage("Handling client request from " + clientInfo);
 
-    // Set a reasonable timeout for operations
-    clientSock->setTimeout(10000);  // 10 seconds timeout
+    clientSock->setTimeout(10000);
 
     try {
-        // Keep connection alive to handle multiple requests
         while (clientSock->isConnected()) {
             std::string request = clientSock->receive();
+            if (request.find("AUTH") == 0) {
+                handleDBClient(std::move(clientSock), request);
+            }
+            else {
+                clientSock->send("ERROR: Unknown protocol\n");
+                clientSock->disconnect();
+            }
 
-            // Check if client disconnected
             if (!clientSock->isConnected()) {
                 printMessage("Client disconnected: " + clientInfo);
                 break;
             }
 
-            // Process received data
             if (!request.empty()) {
                 printMessage("Received " + std::to_string(request.length()) + " bytes from " + clientInfo);
 
-                // Send response back to client
                 std::string response = "Server response: Received " + std::to_string(request.length()) + " bytes";
                 int sent = clientSock->send(response);
 
@@ -597,7 +558,6 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
                 }
             }
             else {
-                // No data received but still connected - could be waiting for more data
                 std::this_thread::sleep_for(std::chrono::milliseconds(50));
             }
         }
@@ -606,7 +566,104 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
         printMessage("Exception handling client connection " + clientInfo + ": " + std::string(e.what()));
     }
 
-    // Ensure clean disconnect
     clientSock->disconnect();
     printMessage("Client connection from " + clientInfo + " handled and closed");
+}
+
+void TCPSock::handleDBClient(std::unique_ptr<TCPSock> clientSock, const std::string& authLine)
+{
+    printMessage("Handling DBConn client");
+    if (!clientSock || !clientSock->isConnected()) {
+        printMessage("Invalid DB client");
+        return;
+    }
+
+    std::string clientInfo = clientSock->getAddress() + ":" + std::to_string(clientSock->getPort());
+    printMessage("Handling DBConn client from " + clientInfo);
+
+    // === Parsare linie AUTH ===
+    std::istringstream iss(authLine);
+    std::string command, user, pass, dbname;
+    iss >> command >> user >> pass >> dbname;
+
+    if (command != "AUTH") {
+        clientSock->send("ERROR: Expected AUTH command\n");
+        return;
+    }
+
+    // === ODBC: conectare la baza de date ===
+    SQLHENV hEnv;
+    SQLHDBC hDbc;
+    SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv);
+    SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
+    SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc);
+
+    std::wstring connStr = L"DRIVER={SQL Server};SERVER=localhost;DATABASE=CyberRangeDB;UID=admin;PWD=adminhash;";
+
+    SQLWCHAR outstr[1024];
+    SQLSMALLINT outstrlen;
+
+    SQLRETURN ret = SQLDriverConnectW(
+        hDbc,
+        NULL,
+        (SQLWCHAR*)connStr.c_str(), // <== CONVERTIT la SQLWCHAR*
+        SQL_NTS,
+        outstr,
+        sizeof(outstr),
+        &outstrlen,
+        SQL_DRIVER_COMPLETE
+    );
+
+    if (!SQL_SUCCEEDED(ret)) {
+        clientSock->send("ERROR: Could not connect to database\n");
+        printMessage("ODBC connection failed for " + dbname);
+        SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+        SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+        return;
+    }
+
+    clientSock->send("OK: Authenticated and connected to DB\n");
+
+    // === Primesc și execut comenzi SQL ===
+    while (clientSock->isConnected()) {
+        std::string query = clientSock->receive();
+        if (query.empty()) break;
+
+        SQLHSTMT hStmt;
+        SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &hStmt);
+        std::wstring wquery(query.begin(), query.end());
+        SQLRETURN retExec = SQLExecDirectW(hStmt, (SQLWCHAR*)wquery.c_str(), SQL_NTS);
+
+        if (SQL_SUCCEEDED(retExec)) {
+            SQLSMALLINT columns;
+            SQLNumResultCols(hStmt, &columns);
+
+            std::string result;
+            char buffer[1024];
+            SQLLEN indicator;
+
+            while (SQLFetch(hStmt) == SQL_SUCCESS) {
+                for (int i = 1; i <= columns; ++i) {
+                    SQLGetData(hStmt, i, SQL_C_CHAR, buffer, sizeof(buffer), &indicator);
+                    result += std::string(buffer) + (i < columns ? " | " : "\n");
+                }
+            }
+
+            if (result.empty()) result = "OK: Executed (no rows returned)\n";
+            clientSock->send(result);
+        }
+        else {
+            clientSock->send("ERROR: SQL execution failed\n");
+        }
+
+        SQLFreeHandle(SQL_HANDLE_STMT, hStmt);
+    }
+
+    // === Cleanup ===
+    SQLDisconnect(hDbc);
+    SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
+    SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
+
+    clientSock->disconnect();
+    printMessage("DBConn client disconnected: " + clientInfo);
 }

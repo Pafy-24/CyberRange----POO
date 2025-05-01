@@ -5,6 +5,7 @@
 #include <QGraphicsOpacityEffect>
 #include "MainMenu.h"
 #include <QMouseEvent>
+#include "DBConn.h"
 
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDialog)
 {
@@ -26,7 +27,6 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     animation1->setStartValue(0.0);
     animation1->setEndValue(1.0);
     animation1->start();
-   //connectToDatabase();
 }
 
 LoginDialog::~LoginDialog()
@@ -36,27 +36,43 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::on_loginButton_clicked()
 {
-    QString username = ui->lineEditUsername->text();
-    QString password = ui->lineEditPassword->text();
+    //QString username = ui->lineEditUsername->text();
+    //QString password = ui->lineEditPassword->text();
+    //if (username == "admin" && password == "1234")
+    //{ 
+    //    // Fade out LoginDialog
+    //    QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+    //    fadeOut->setDuration(500);
+    //    fadeOut->setStartValue(1);
+    //    fadeOut->setEndValue(0);
 
-    if (username == "admin" && password == "1234")
-    { 
-        // Fade out LoginDialog
-        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
-        fadeOut->setDuration(500);
-        fadeOut->setStartValue(1);
-        fadeOut->setEndValue(0);
+    //    connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+    //        // dupa fade-out: open MainMenu
+    //        MainMenu* menu = new MainMenu();
+    //        menu->show();
+    //        this->close(); 
+    //        });
+    //    fadeOut->start();
+    //}
+    //else 
+    //{
+    //    QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
+    //}
+    std::string username = ui->lineEditUsername->text().toStdString();
+    std::string password = ui->lineEditPassword->text().toStdString();
+    std::string role;
+    auto db = std::make_unique<DBConn>("sqlserver://admin:admin@localhost:1338/CyberRangeDB");
 
-        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-            // dupa fade-out: open MainMenu
-            MainMenu* menu = new MainMenu();
-            menu->show();
-            this->close(); 
-            });
-        fadeOut->start();
-    }
-    else {
-        QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
+    if (db->connect()) 
+    {
+        if (db->sendLogin(username, password, role)) 
+        {
+            QMessageBox::information(this, "Successfully logged in!", "Rol: " + QString::fromStdString(role));
+        }
+        else
+        {
+            QMessageBox::warning(this, "Eșec login", "Nume sau parolă greșite.");
+        }
     }
 }
 
@@ -77,8 +93,9 @@ void LoginDialog::on_exitButton_clicked()
     }
 }
 
-void LoginDialog::connectToDatabase()
+void LoginDialog::connectToDatabase() 
 {
+    
 }
 
 void LoginDialog::mousePressEvent(QMouseEvent* event)

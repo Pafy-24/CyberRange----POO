@@ -10,7 +10,6 @@
 #include "transfer_sock.h"
 
 
-
 void runTCPServer(int port, bool useTLS) {
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
     printMessage("Starting " + serverType + " Server on port " + std::to_string(port));

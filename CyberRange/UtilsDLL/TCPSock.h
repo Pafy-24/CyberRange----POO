@@ -58,4 +58,5 @@ protected:
     bool setupTLS();
     bool cleanupTLS();
     virtual void handleClientRequest(std::unique_ptr<TCPSock> clientSock);
+    virtual void handleDBClient(std::unique_ptr<TCPSock> clientSock, const std::string& authLine);
 };

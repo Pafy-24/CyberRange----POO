@@ -61,26 +61,8 @@ bool DBConn::connect() {
         dbSocket.reset();
         return false;
     }
-
-    // Send authentication data
-    std::string authData = "AUTH " + username + " " + password + " " + database;
-    if (dbSocket->send(authData) <= 0) {
-        std::cerr << "Failed to send authentication data" << std::endl;
-        dbSocket.reset();
-        return false;
-    }
-
-    // Wait for authentication response
-    std::string response = dbSocket->receive();
-    if (response.empty() || response.find("OK") == std::string::npos) {
-        std::cerr << "Authentication failed: " << response << std::endl;
-        dbSocket.reset();
-        return false;
-    }
-
     connected = true;
     std::cout << "Connected to MSSQL server at " << host << ":" << port << " with TLS: " << (tlsEnabled ? "enabled" : "disabled") << std::endl;
-    return true;
 }
 
 bool DBConn::disconnect() {
@@ -98,14 +80,17 @@ bool DBConn::isConnected() const {
     return connected && dbSocket && dbSocket->isConnected();
 }
 
-int DBConn::send(const std::string& query) {
-    if (!isConnected()) {
+int DBConn::send(const std::string& query) 
+{
+    if (!isConnected()) 
+    {
         std::cerr << "Not connected to database" << std::endl;
         return -1;
     }
 
     std::string sanitizedQuery = query;
-    if (!sanitizeQuery(sanitizedQuery)) {
+    if (!sanitizeQuery(sanitizedQuery)) 
+    {
         std::cerr << "Query failed sanitization checks" << std::endl;
         return -1;
     }
@@ -169,4 +154,27 @@ void DBConn::setTimeout(int ms) {
 
 int DBConn::getTimeout() const {
     return timeout;
+}
+
+bool DBConn::sendLogin(const std::string& username, const std::string& password, std::string& roleOut)
+{
+    // Send authentication data
+    std::string authData = "AUTH " + username + " " + password + " " + database;
+    if (send(authData) <= 0) 
+    {
+        std::cerr << "Failed to send authentication data" << std::endl;
+        dbSocket.reset();
+        return false;
+    }
+
+    // Wait for authentication response
+    std::string response = dbSocket->receive();
+    if (response.empty() || response.find("OK") == std::string::npos) 
+    {
+        roleOut = response.substr(4); // extrage rolul (ex: student/admin)
+        std::cerr << "Authentication failed: " << response << std::endl;
+        dbSocket.reset();
+        return false;
+    }
+    return true;
 }
