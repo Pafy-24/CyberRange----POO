@@ -1,5 +1,4 @@
-﻿#include "pch.h"
-#include "Client.h"
+﻿#include "Client.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
