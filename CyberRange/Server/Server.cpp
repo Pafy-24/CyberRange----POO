@@ -117,7 +117,7 @@ void testVM() {
     std::string userId = "alice";
     std::string resourceId = "OldVM";
     // Initialize VM orchestrator
-    VM vm(userId,resourceId,"test-vm", ".\\Resources\\Linux_Mint.vdi", "192.168.1.100","chal1");
+    VM vm(userId,resourceId,"test-vm", ".\\Resources\\Linux_Mint.vdi","chal1");
 
     // Set configuration
     vm.setMemory(2048);
@@ -161,7 +161,7 @@ void testDocker() {
     std::string userId = "bob";
     std::string resourceId = "DockFiles";
     // Initialize Docker orchestrator
-    Docker docker(userId, resourceId,"nginx", "192.168.1.100","chal2");
+    Docker docker(userId, resourceId,"nginx","chal2");
 
     // Set configuration
     docker.setPort(8080);
@@ -188,6 +188,7 @@ void testDocker() {
     // Test logs
     std::cout << "Docker Logs:\n" << docker.getLogs() << "\n";
 
+    std::cout << "Address:" << docker.getAddress() << '\n';
     // Test stop
     std::cout << "Stopping Docker... ";
     bool stopResult = docker.stop();
@@ -204,7 +205,7 @@ void testDocker() {
 
 
 int main() {
-	testVM();
+	//testVM();
 	testDocker();
     return 0;
 }

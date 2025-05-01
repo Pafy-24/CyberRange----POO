@@ -7,8 +7,8 @@
 
 
 VM::VM(const std::string& userId, const std::string& resourceId, const std::string& name, 
-    const std::string& image, const std::string& address, const std::string& challId)
-    : COrchestrator(userId,resourceId,address), vmName(name), baseImage(image), memoryMB(1024), cpuCores(1), challengeId(challId) {
+    const std::string& image, const std::string& challId)
+    : COrchestrator(userId,resourceId), vmName(name), baseImage(image), memoryMB(1024), cpuCores(1), challengeId(challId) {
     std::string ext = baseImage.substr(baseImage.find_last_of(".") + 1);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == "ovf") {

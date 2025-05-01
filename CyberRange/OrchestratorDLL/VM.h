@@ -15,7 +15,7 @@ private:
 
 public:
     VM(const std::string& userId, const std::string& resourceId, const std::string& name, 
-        const std::string& image, const std::string& address, const std::string& challId);
+        const std::string& image, const std::string& challId);
     bool start() override;
     bool stop() override;
     bool deploy() override;

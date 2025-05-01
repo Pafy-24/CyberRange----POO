@@ -15,7 +15,7 @@ protected:
     bool isValidId(const std::string& id);
 
 public:
-    COrchestrator(const std::string& userId,const std::string& resourceId,const std::string& address, int timeout = 300);
+    COrchestrator(const std::string& userId,const std::string& resourceId, int timeout = 300);
     bool start() override;
     bool stop() override;
     bool deploy() override;

@@ -5,8 +5,8 @@
 #include <array>
 #include <windows.h>
 
-COrchestrator::COrchestrator(const std::string& userId, const std::string& resourceId,const std::string& address, int timeout)
-    : baseAddr(address), timeoutSeconds(timeout), userId(userId), resourceId(resourceId){
+COrchestrator::COrchestrator(const std::string& userId, const std::string& resourceId,int timeout)
+    :  timeoutSeconds(timeout), userId(userId), resourceId(resourceId){
 }
 
 std::string COrchestrator::executeCommand(const std::string& command) {

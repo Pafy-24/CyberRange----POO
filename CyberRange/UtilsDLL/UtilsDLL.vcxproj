@@ -154,6 +154,7 @@
     <ClInclude Include="DBConn.h" />
     <ClInclude Include="DBLogs.h" />
     <ClInclude Include="DLL.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="TcpSocketWrapper.h" />
     <ClInclude Include="transfer_sock.h" />
     <ClInclude Include="framework.h" />

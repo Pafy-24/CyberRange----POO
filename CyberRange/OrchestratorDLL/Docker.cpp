@@ -1,12 +1,16 @@
 #include "pch.h"
 #include "Docker.h"
+#include <CustomSerial.h>
 #include <sstream>
 #include <filesystem>
 #include <fstream>
 
+#include <string>
+#include <algorithm>
+
 Docker::Docker(const std::string& userId, const std::string& resourceId,const std::string& image, 
-    const std::string& address, const std::string& challId)
-    : COrchestrator(userId,resourceId,address), imageName(image), port(8080), challengeId(challId) {
+    const std::string& challId)
+    : COrchestrator(userId,resourceId), imageName(image), port(8080), challengeId(challId) {
 }
 
 bool Docker::start() {
@@ -105,13 +109,28 @@ std::string Docker::getLogs() {
     return executeCommand(cmd.str());
 }
 
+
 std::string Docker::getAddress() {
     std::stringstream cmd;
-    cmd << "docker inspect \"" << userId << "-" << resourceId << "-" << imageName
-        << "\" --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}'";
+    cmd << "docker inspect \"" << userId << "-" << resourceId << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
 
-    std::string ip = result.empty() ? "unknown" : result;
-    ip.erase(std::remove(ip.begin(), ip.end(), '\n'), ip.end());
-    return ip + ":" + std::to_string(port);
+    if (result.empty())
+        return "unknown";
+
+    try {
+        json data = json::parse(result);
+        // docker inspect returns a list of containers, so access the first
+        std::string ip = data[0]["NetworkSettings"]["IPAddress"];
+
+        // Clean the IP (just in case)
+        ip.erase(std::remove(ip.begin(), ip.end(), '\n'), ip.end());
+
+        if (ip.empty()) return "unknown";
+
+        return ip + ":" + std::to_string(port);
+    }
+    catch (const std::exception& e) {
+        return "unknown";
+    }
 }
