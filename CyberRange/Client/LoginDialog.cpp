@@ -11,6 +11,7 @@
 
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDialog)
 {
+    ClientMng::getInstance()->start();
     ui->setupUi(this);
     this->setWindowFlags(Qt::FramelessWindowHint);
 

@@ -208,8 +208,8 @@ void Client::on_pushButton_clicked() {
     // Run tests in a separate thread to avoid blocking the UI
     std::thread testThread([this, serverAddress, tcpPort, secureTcpPort, udpPort, downloadPort]() {
         testTCPClient(serverAddress, tcpPort, false);
-      //  testTCPClient(serverAddress, secureTcpPort, true);
-      //  testUDPClient(serverAddress, udpPort);
+      // TLS:: testTCPClient(serverAddress, secureTcpPort, true);
+        testUDPClient(serverAddress, udpPort);
         testDownload(serverAddress, downloadPort);
         printMessage("\nAll client tests completed");
         });

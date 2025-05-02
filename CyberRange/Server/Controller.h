@@ -7,12 +7,12 @@ public:
 		try {
 			client->handleRequest(data, client);
 		}
-		catch (const std::exception& e) {
+		catch (...) {
 			try {
 				client->send("ERROR: No handler for request");
 			}
 			catch (...) {
-				std::cerr << "Failed to send error response: " << e.what() << std::endl;
+				std::cerr << "Failed to send error response: " << std::endl;
 			}
 		}
 	}

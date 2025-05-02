@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 #include <stdexcept>
+#include <sql.h>
+#include <sqlext.h>
 
 class UTILS_API DBConn : public Connection {
 protected:
@@ -14,6 +16,8 @@ protected:
     std::string username;
     std::string password;
     std::string database;
+    SQLHENV hEnv = nullptr;
+    SQLHDBC hDbc = nullptr;
     bool connected;
     int timeout;
     bool tlsEnabled;
@@ -48,4 +52,5 @@ public:
     void setCertificates(const std::string& cert, const std::string& key) override;
 
     bool sendLogin(const std::string& username, const std::string& password, std::string& roleOut);
+    std::vector<std::map<std::string, std::string>> fetchAll(const std::string& query);
 };
