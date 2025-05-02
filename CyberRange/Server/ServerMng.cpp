@@ -18,6 +18,7 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
 
 ServerMng::ServerMng(int port, std::string address)
     : isRunning(false), port(port), serverAddress(address), loader(new Loader()) {
+	this->attachController("default", new Controller());
 }
 
 ServerMng::~ServerMng() {
@@ -33,8 +34,8 @@ void ServerMng::start() {
 
     runTCPServer(port, false);
    // runTCPServer(port + 1, true);
-   // runUDPServer(port + 2);
-  //  runDownloadServer(port + 3);
+    runUDPServer(port + 2);
+    runDownloadServer(port + 3);
 
     std::cout << "Server manager started" << std::endl;
 }
@@ -162,7 +163,6 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
             ctrl.second->handleRequest(data, client);
         }
         };
-
     if (!conn->startListening(handler)) {
         printMessage("Failed to start " + serverType + " server on port " + std::to_string(port));
         return;
@@ -200,7 +200,7 @@ void ServerMng::runUDPServer(int port) {
 void ServerMng::runDownloadServer(int port) {
     printMessage("Starting Download Server on port " + std::to_string(port));
 
-    auto conn = ConnsFactory::createConnection(ConnectionType::TRANSFER, "", port);
+    auto conn = ConnsFactory::createConnection(ConnectionType::TRANSFER, "", port,"","./server_files");
     if (!conn) {
         printMessage("Failed to create Download server on port " + std::to_string(port));
         return;

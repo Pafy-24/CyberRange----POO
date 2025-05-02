@@ -1,5 +1,14 @@
+<<<<<<< HEAD
 ﻿  ConnsFactory.cpp
 C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
   (compiling source file '/ConnsFactory.cpp')
   
   UtilsDLL.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+=======
+﻿  The vcpkg manifest was disabled, but we found a manifest file in E:\Programe\Github\CyberRange----POO\CyberRange\. You may want to enable vcpkg manifests in your properties page or pass /p:VcpkgEnableManifest=true to the msbuild invocation.
+  ConnsFactory.cpp
+E:\Programe\Github\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/ConnsFactory.cpp')
+  
+  UtilsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+>>>>>>> 149ced2a0ca66112a0c41dde9f42a6a467439dba
