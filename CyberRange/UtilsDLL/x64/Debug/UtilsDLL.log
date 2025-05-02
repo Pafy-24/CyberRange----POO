@@ -1,2 +1,17 @@
+<<<<<<< HEAD
 ﻿  JSONDec.cpp
   UtilsDLL.vcxproj -> C:\Users\Admin\Desktop\ATM CALC\PATRICIA\ANUL 2\SEMESTRUL 2\POO-PROIECT\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+=======
+﻿  The vcpkg manifest was disabled, but we found a manifest file in E:\Programe\Github\CyberRange----POO\CyberRange\. You may want to enable vcpkg manifests in your properties page or pass /p:VcpkgEnableManifest=true to the msbuild invocation.
+  AdminConn.cpp
+E:\Programe\Github\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/AdminConn.cpp')
+  
+  DBConn.cpp
+E:\Programe\Github\CyberRange----POO\CyberRange\UtilsDLL\TcpSocketWrapper.h(15,37): warning C4244: 'return': conversion from 'sf::SocketHandle' to 'int', possible loss of data
+  (compiling source file '/DBConn.cpp')
+  
+  Generating Code...
+     Creating library E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.lib and object E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.exp
+  UtilsDLL.vcxproj -> E:\Programe\Github\CyberRange----POO\CyberRange\x64\Debug\UtilsDLL.dll
+>>>>>>> 6777364d02a204f10779b20fd66726004c84bcdd

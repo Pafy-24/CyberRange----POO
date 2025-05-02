@@ -148,6 +148,7 @@
     <ClInclude Include="CLogger.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Connection.h" />
+    <ClInclude Include="ConnsFactory.h" />
     <ClInclude Include="CTeam.h" />
     <ClInclude Include="CUser.h" />
     <ClInclude Include="CustomSerial.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AdminConn.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="ConnsFactory.cpp" />
     <ClCompile Include="CTeam.cpp" />
     <ClCompile Include="CUser.cpp" />
     <ClCompile Include="CustomSerial.cpp" />

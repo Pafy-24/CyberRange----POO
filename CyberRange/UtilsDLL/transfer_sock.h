@@ -5,23 +5,6 @@
 #include <vector>
 #include <functional>
 
-enum class TransferType {
-    UPLOAD,
-    DOWNLOAD,
-    NONE
-};
-
-struct TransferRequest {
-    std::string path;
-    std::string destination;
-    TransferType type;
-    long size;
-    int priority;
-};
-
-using TransferProgressCallback = std::function<void(int progress, const std::string& filePath, long fileSize)>;
-using TransferCompleteCallback = std::function<void(bool success, const std::string& filePath, TransferType type)>;
-
 class UTILS_API transfer_sock : public TCPSock {
 private:
     std::atomic<int> transferProgress;
@@ -29,51 +12,47 @@ private:
     std::atomic<long> fileSize;
     std::atomic<bool> aborted;
     std::atomic<bool> thisServerRunning;
-    int priority;
-    TransferType currentTransfer;
     std::string rootDirectory;
-
-    TransferProgressCallback progressCallback;
-    TransferCompleteCallback completeCallback;
 
     std::string receiveLine();
     std::string receive(int maxSize);
     int receiveRaw(char* buffer, int size);
-    int sendRaw(const char* buffer, int size);
+    int sendRaw(const std::string& buffer, int size);
 
-    // Server request handling
-    void handleClientRequest(transfer_sock* clientSock);
     bool handleDownloadRequest(transfer_sock* clientSock, const std::string& remotePath);
     bool handleUploadRequest(transfer_sock* clientSock, const std::string& remotePath, long fileSize);
 
-    // Utility functions
     std::string normalizePath(const std::string& path) const;
     std::vector<std::string> parseCommand(const std::string& command) const;
+
+protected:
+    void handleClientRequest(std::unique_ptr<TCPSock> clientSock) override;
+
 public:
     transfer_sock(const std::string& addr, int port);
-
     explicit transfer_sock(int port);
-
     transfer_sock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientAddr, int clientPort);
-
     ~transfer_sock();
 
-    bool downloadFile(const std::string& remotePath, const std::string& destination);
+    bool connect() override;
+    bool disconnect() override;
+    bool isConnected() const override;
+    int send(const std::string& data) override;
+    std::string receive() override;
+    std::string getAddress() const override;
+    int getPort() const override;
+    bool enableTLS() override;
+    bool isTLSEnabled() const override;
+    void setTimeout(int ms) override;
+    int getTimeout() const override;
+    std::string getType() const override { return "TRANSFER"; }
+    void handleRequest(const std::string& data, Connection* client = nullptr) override;
 
-    bool uploadFile(const std::string& localFile, const std::string& remotePath);
-
-    bool runServer(const std::string& rootDirectory = "./files");
-    void stopServer();
-
-    // Transfer management
-    int getProgress() const;
-    void cancelTransfer();
-    void setPriority(int prio);
-    long getFileSize() const;
-    TransferType getCurrentTransferType() const;
-
-    // Event callbacks
-    void setProgressCallback(TransferProgressCallback callback);
-    void setCompleteCallback(TransferCompleteCallback callback);
-
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
+    Connection* accept() override;
+    bool startListening(std::function<void(const std::string&, Connection*)> handler) override;
+    void stopServer() override;
+    bool isServerRunning() const override;
+    void setCertificates(const std::string& cert, const std::string& key) override;
 };

@@ -6,7 +6,7 @@
 #include <QDebug>
 #include "MainMenu.h"
 #include <QMouseEvent>
-#include "DBConn.h"
+#include "ConnsFactory.h"
 
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDialog)
 {
@@ -40,7 +40,7 @@ void LoginDialog::on_loginButton_clicked()
     std::string _username = ui->lineEditUsername->text().toStdString();
     std::string _password = ui->lineEditPassword->text().toStdString();
     std::string role;
-    tcpClient = std::make_unique<TCPSock>("127.0.0.1", 1337);
+	tcpClient = ConnsFactory::createConnection(ConnectionType::TCP, "127.0.0.1", 1337);
     tcpClient->setTimeout(5000);
 
     if (!tcpClient->connect()) 
@@ -65,7 +65,7 @@ void LoginDialog::on_loginButton_clicked()
 
         connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
             // dupa fade-out: open MainMenu
-            MainMenu* menu = new MainMenu(std::move(tcpClient)); // dacă MainMenu primește conexiunea prin constructor
+            MainMenu* menu = new MainMenu(); // dacă MainMenu primește conexiunea prin constructor
             menu->show();
             this->close();
             });
@@ -108,9 +108,9 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
-    /*MainMenu* menu = new MainMenu();
+    MainMenu* menu = new MainMenu();
     menu->show();
-    this->close();*/
+    this->close();
 }
 
 void LoginDialog::on_exitButton_clicked()

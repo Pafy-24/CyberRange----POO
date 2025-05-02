@@ -1,35 +1,22 @@
 #pragma once
-#include "DBConn.h"
 #include "TCPSock.h"
+#include "DBConn.h"
 #include <string>
 #include <vector>
 #include <thread>
 #include <chrono>
 
-class UTILS_API AdminConn : public Connection {
+class UTILS_API AdminConn : public virtual TCPSock, public virtual DBConn {
 private:
-    // Connection to the database server
-    DBConn* dbConnection;
-
-    // Connection to the client
-    TCPSock* clientSocket;
-
-    // Server socket for accepting client connections
-    TCPSock* serverSocket;
-
     std::string adminKey;
     int privilege;
     bool secure;
-    bool connected;
-    int port;
-    int timeout;
-    bool tlsEnabled;
-    bool serverRunning;
     std::vector<Connection*> clientConnections;
     bool stopRequested;
 
 protected:
-    bool sanitizeQuery(std::string& query);
+
+    bool sanitizeQuery(std::string& query) override;
     bool verifyAdminCommand(const std::string& command);
 
 public:
@@ -37,10 +24,11 @@ public:
     AdminConn(int listenPort, const std::string& dbConnStr);
 
     // Constructor for direct client connection
-    AdminConn(TCPSock* clientSock, const std::string& dbConnStr);
+    AdminConn(std::unique_ptr<sf::TcpSocket> clientSock, const std::string& clientAddr, int clientPort, const std::string& dbConnStr);
 
-    virtual ~AdminConn();
+    ~AdminConn() override;
 
+    // Connection interface methods (from TCPSock or DBConn, overridden as needed)
     bool connect() override;
     bool disconnect() override;
     bool isConnected() const override;
@@ -52,16 +40,19 @@ public:
     bool isTLSEnabled() const override;
     void setTimeout(int ms) override;
     int getTimeout() const override;
+    std::string getType() const override { return "Admin"; }
+    void handleRequest(const std::string& data, Connection* client = nullptr) override;
+
+    // Server operations (from TCPSock)
     bool bind(int port) override;
     bool listen(int backlog = 5) override;
     Connection* accept() override;
-
-    // Server operations
-    bool runServer() override;
+    bool runServer() ;
     void stopServer() override;
     bool isServerRunning() const override;
+    void setCertificates(const std::string& cert, const std::string& key) override;
 
-    // Admin specific methods
+    // Admin-specific methods
     void setAdminKey(const std::string& key);
     bool verifyPrivilege(int level) const;
     void enableSecureMode();

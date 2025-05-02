@@ -173,7 +173,7 @@
     <ClCompile Include="VM.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="chall-types-h.txt" />
+    <Text Include="ChallTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />

@@ -46,16 +46,6 @@ bool DBConn::connect() {
     dbSocket = std::make_unique<TCPSock>(host, port);
     dbSocket->setTimeout(timeout);
 
-    // Enable and set up TLS before connecting
-    /*if (tlsEnabled) {
-        if (!dbSocket->enableTLS()) {
-            std::cerr << "Failed to enable TLS" << std::endl;
-            dbSocket.reset();
-            return false;
-        }
-    }*/
-
-    // Connect to the MSSQL server
     if (!dbSocket->connect()) {
         std::cerr << "Failed to connect to MSSQL server" << std::endl;
         dbSocket.reset();
@@ -63,6 +53,7 @@ bool DBConn::connect() {
     }
     connected = true;
     std::cout << "Connected to MSSQL server at " << host << ":" << port << " with TLS: " << (tlsEnabled ? "enabled" : "disabled") << std::endl;
+    return true;
 }
 
 bool DBConn::disconnect() {
@@ -80,17 +71,14 @@ bool DBConn::isConnected() const {
     return connected && dbSocket && dbSocket->isConnected();
 }
 
-int DBConn::send(const std::string& query) 
-{
-    if (!isConnected()) 
-    {
+int DBConn::send(const std::string& query) {
+    if (!isConnected()) {
         std::cerr << "Not connected to database" << std::endl;
         return -1;
     }
 
     std::string sanitizedQuery = query;
-    if (!sanitizeQuery(sanitizedQuery)) 
-    {
+    if (!sanitizeQuery(sanitizedQuery)) {
         std::cerr << "Query failed sanitization checks" << std::endl;
         return -1;
     }
@@ -156,25 +144,56 @@ int DBConn::getTimeout() const {
     return timeout;
 }
 
-bool DBConn::sendLogin(const std::string& username, const std::string& password, std::string& roleOut)
-{
-    // Send authentication data
+bool DBConn::sendLogin(const std::string& username, const std::string& password, std::string& roleOut) {
     std::string authData = "AUTH " + username + " " + password + " " + database;
-    if (send(authData) <= 0) 
-    {
+    if (send(authData) <= 0) {
         std::cerr << "Failed to send authentication data" << std::endl;
         dbSocket.reset();
         return false;
     }
 
-    // Wait for authentication response
     std::string response = dbSocket->receive();
-    if (response.empty() || response.find("OK") == std::string::npos) 
-    {
-        roleOut = response.substr(4); // extrage rolul (ex: student/admin)
+    if (response.empty() || response.find("OK") == std::string::npos) {
+        roleOut = response.substr(4);
         std::cerr << "Authentication failed: " << response << std::endl;
         dbSocket.reset();
         return false;
     }
     return true;
+}
+
+void DBConn::handleRequest(const std::string& data, Connection* client) {
+    std::cerr << "DBConn does not support server request handling" << std::endl;
+}
+
+bool DBConn::bind(int port) {
+    std::cerr << "DBConn does not support binding" << std::endl;
+    return false;
+}
+
+bool DBConn::listen(int backlog) {
+    std::cerr << "DBConn does not support listening" << std::endl;
+    return false;
+}
+
+Connection* DBConn::accept() {
+    std::cerr << "DBConn does not support accepting connections" << std::endl;
+    return nullptr;
+}
+
+bool DBConn::startListening(std::function<void(const std::string&, Connection*)> handler) {
+    std::cerr << "DBConn does not support starting a server" << std::endl;
+    return false;
+}
+
+void DBConn::stopServer() {
+    std::cerr << "DBConn does not support server operations" << std::endl;
+}
+
+bool DBConn::isServerRunning() const {
+    return false;
+}
+
+void DBConn::setCertificates(const std::string& cert, const std::string& key) {
+    std::cerr << "DBConn does not support setting certificates" << std::endl;
 }

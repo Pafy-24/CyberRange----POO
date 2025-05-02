@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include "ui_MainMenu.h"
 #include <QApplication>
-#include "TCPSock.h"
+#include "ConnsFactory.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainMenu; }
@@ -16,7 +16,7 @@ class MainMenu : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainMenu(std::unique_ptr<TCPSock> client, QWidget* parent = nullptr);
+    explicit MainMenu( QWidget* parent = nullptr);
     ~MainMenu();
 
 private slots:
@@ -34,7 +34,7 @@ private slots:
 
 private:
     Ui::MainMenu* ui;
-    std::unique_ptr<TCPSock> tcpClient;
+    std::unique_ptr<Connection> tcpClient;
 };
 
 #endif // MAINMENU_H
