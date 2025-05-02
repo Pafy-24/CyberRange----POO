@@ -3,6 +3,7 @@
 #include <string>
 #include <SFML/Network.hpp>
 #include <atomic>
+#include <functional>
 
 class UTILS_API UDPSock : public Connection {
 protected:
@@ -12,11 +13,10 @@ protected:
     bool connected;
     bool isServer;
     sf::Time timeout;
-    int maxPacketSize;
     bool tlsEnabled;
     void* dtlsContext;
     std::atomic<bool> thisServerRunning;
-    std::string rootDirectory;
+    std::function<void(const std::string&, Connection*)> requestHandler;
 
 public:
     UDPSock(const std::string& addr, int port);
@@ -25,30 +25,25 @@ public:
     bool connect() override;
     bool disconnect() override;
     bool isConnected() const override;
-
     int send(const std::string& data) override;
     std::string receive() override;
+    std::string getAddress() const override;
+    int getPort() const override;
+    bool enableTLS() override;
+    bool isTLSEnabled() const override;
+    void setTimeout(int ms) override;
+    int getTimeout() const override;
+    std::string getType() const override { return "UDP"; }
+    void handleRequest(const std::string& data, Connection* client = nullptr) override;
 
     bool bind(int port) override;
     bool listen(int backlog = 5) override;
     Connection* accept() override;
-
-    std::string getAddress() const override;
-    int getPort() const override;
-
-    bool enableTLS() override;
-    bool isTLSEnabled() const override;
-
-    void setTimeout(int ms) override;
-    int getTimeout() const override;
-
-    bool runServer() override;
+    
+    bool startListening(std::function<void(const std::string&, Connection*)> handler) override;
     void stopServer() override;
     bool isServerRunning() const override;
-
-    void setMaxPacketSize(int size);
-    bool broadcast(const std::string& data);
-    std::string receiveFrom(std::string& sender);
+    void setCertificates(const std::string& cert, const std::string& key) override;
 
 protected:
     bool setupDTLS();

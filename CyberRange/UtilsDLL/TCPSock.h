@@ -6,6 +6,7 @@
 #include <memory>
 #include <string>
 #include <atomic>
+#include <functional>
 
 class UTILS_API TCPSock : public Connection {
 protected:
@@ -20,9 +21,9 @@ protected:
     bool tlsEnabled;
     std::unique_ptr<SSL, decltype(&SSL_free)> ssl;
     std::unique_ptr<SSL_CTX, decltype(&SSL_CTX_free)> sslCtx;
-
-    std::string certFile; 
+    std::string certFile;
     std::string keyFile;
+    std::function<void(const std::string&, Connection*)> requestHandler;
 
 public:
     TCPSock(const std::string& addr, int port);
@@ -35,28 +36,25 @@ public:
     bool isConnected() const override;
     int send(const std::string& data) override;
     std::string receive() override;
-    bool bind(int port) override;
-    bool listen(int backlog = 5) override;
-    Connection* accept() override;
     std::string getAddress() const override;
     int getPort() const override;
     bool enableTLS() override;
     bool isTLSEnabled() const override;
     void setTimeout(int ms) override;
     int getTimeout() const override;
-    bool runServer() override;
+    std::string getType() const override { return "TCP"; }
+    void handleRequest(const std::string& data, Connection* client = nullptr) override;
+
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
+    Connection* accept() override;
+    bool startListening(std::function<void(const std::string&, Connection*)> handler) override;
     void stopServer() override;
     bool isServerRunning() const override;
-
-    void setCertificates(const std::string& cert, const std::string& key) {
-        certFile = cert;
-        keyFile = key;
-        printMessage("Certificate paths set: " + cert + ", " + key);
-    }
+    void setCertificates(const std::string& cert, const std::string& key) override;
 
 protected:
     bool setupTLS();
     bool cleanupTLS();
     virtual void handleClientRequest(std::unique_ptr<TCPSock> clientSock);
-    virtual void handleDBClient(std::unique_ptr<TCPSock> clientSock, const std::string& authLine);
 };

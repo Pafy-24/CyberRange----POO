@@ -20,7 +20,7 @@ private:
 
     bool parseConnectionString();
     bool sanitizeQuery(std::string& query);
-    
+
 public:
     DBConn(const std::string& connStr);
     ~DBConn() override;
@@ -36,13 +36,16 @@ public:
     bool isTLSEnabled() const override;
     void setTimeout(int ms) override;
     int getTimeout() const override;
-    bool sendLogin(const std::string& username, const std::string& password, std::string& roleOut);
+    std::string getType() const override { return "DB"; }
+    void handleRequest(const std::string& data, Connection* client = nullptr) override;
 
-    // Unsupported operations
-    bool bind(int port) override { throw std::runtime_error("Operation not supported"); }
-    bool listen(int backlog = 5) override { throw std::runtime_error("Operation not supported"); }
-    Connection* accept() override { throw std::runtime_error("Operation not supported"); }
-    bool runServer() override { throw std::runtime_error("Operation not supported"); }
-    void stopServer() override { throw std::runtime_error("Operation not supported"); }
-    bool isServerRunning() const override { return false; }
+    bool bind(int port) override;
+    bool listen(int backlog = 5) override;
+    Connection* accept() override;
+    bool startListening(std::function<void(const std::string&, Connection*)> handler) override;
+    void stopServer() override;
+    bool isServerRunning() const override;
+    void setCertificates(const std::string& cert, const std::string& key) override;
+
+    bool sendLogin(const std::string& username, const std::string& password, std::string& roleOut);
 };

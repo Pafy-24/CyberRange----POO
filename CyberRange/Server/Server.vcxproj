@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="ServerMng.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CController.h" />

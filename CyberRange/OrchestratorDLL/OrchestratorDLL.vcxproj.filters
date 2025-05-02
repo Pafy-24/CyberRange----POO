@@ -85,7 +85,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="chall-types-h.txt">
+    <Text Include="ChallTypes.h">
       <Filter>Header Files\classes</Filter>
     </Text>
   </ItemGroup>

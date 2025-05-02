@@ -51,9 +51,6 @@
     <ClInclude Include="Admin.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="AdminConn.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="CLogger.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
@@ -64,9 +61,6 @@
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="CustomSerial.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="DBConn.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="DBLogs.h">
@@ -113,6 +107,15 @@
     </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Header Files\Classes\ExternalHeaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ConnsFactory.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="AdminConn.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="DBConn.h">
+      <Filter>Header Files\Classes\Socketing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +177,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Scoreboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConnsFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
