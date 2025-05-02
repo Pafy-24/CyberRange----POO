@@ -30,7 +30,18 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     animation1->setEndValue(1.0);
     animation1->start();
 
-	connectToServer(); // Conectare la server
+    ClientMng* clientMng = ClientMng::getInstance(1337, "127.0.0.1");
+    clientMng->start();
+    if (!clientMng->isConnected()) 
+    {
+        QMessageBox::critical(this, "Error", "Connection to server failed.");
+        this->close();
+        return;
+    }
+    else
+    {
+		ui->label->setText("Succesfully connected to server!");
+    }
 }
 
 LoginDialog::~LoginDialog()
@@ -47,8 +58,10 @@ void LoginDialog::on_loginButton_clicked()
     // Trimit comanda AUTH
     std::string authCommand = "AUTH " + _username + " " + _password + " CyberRangeDB";
 
-    tcpClient->send(authCommand);
-    std::string response = tcpClient->receive();
+	ClientMng* clientMng = ClientMng::getInstance();
+	clientMng->sendRequest(authCommand);
+    std::string response = clientMng->getConnection()->receive();
+
     if (response.find("OK") == 0) 
     {
         QMessageBox::information(this, "Succes", "Logged in succesfully!");
@@ -59,6 +72,7 @@ void LoginDialog::on_loginButton_clicked()
         fadeOut->setStartValue(1);
         fadeOut->setEndValue(0);
 
+		std::string role = response.substr(3); // extragere rol din raspuns
         connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
             // dupa fade-out: open MainMenu
             MainMenu* menu = new MainMenu(); // dacă MainMenu primește conexiunea prin constructor
@@ -70,7 +84,6 @@ void LoginDialog::on_loginButton_clicked()
     else 
     {
         QMessageBox::warning(this, "Error", "Login failed:\n" + QString::fromStdString(response));
-        tcpClient->disconnect();
     }
 
     //QString username = ui->lineEditUsername->text();
@@ -100,7 +113,9 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
+	std::string userRole = "admin"; // Default role for new users
     MainMenu* menu = new MainMenu();
+    menu->configureUIForRole(userRole);
     menu->show();
     this->close();
 }
@@ -113,24 +128,6 @@ void LoginDialog::on_exitButton_clicked()
     if (reply == QMessageBox::Yes) {
         QApplication::quit();
     }
-}
-
-void LoginDialog::connectToServer()
-{
-    ClientMng* clientMng = ClientMng::getInstance(1337, "127.0.0.1");
-    if (!clientMng->isConnected())
-    {
-        clientMng->start();
-    }
-	tcpClient = clientMng->getConnection();
-	if (tcpClient) 
-    {
-        clientMng->sendRequest("ping_from_client");
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(500)); // așteptăm răspunsul
-        clientMng->receiveResponse(); // citim răspunsul (dacă serverul trimite ceva)
-    }
-    //clientMng->stop();
 }
 
 void LoginDialog::mousePressEvent(QMouseEvent* event)

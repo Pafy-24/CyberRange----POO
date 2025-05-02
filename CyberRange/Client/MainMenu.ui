@@ -1,4 +1,5 @@
-<UI version="4.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MainMenu</class>
  <widget class="QMainWindow" name="MainMenu">
   <property name="geometry">
@@ -32,7 +33,7 @@
         <widget class="QFrame" name="frameLeftMenu">
          <property name="font">
           <font>
-           <pointsize>10</pointsize>
+           <pointsize>13</pointsize>
           </font>
          </property>
          <property name="frameShape">
@@ -42,11 +43,26 @@
           <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>8</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>8</number>
+          </property>
+          <property name="bottomMargin">
+           <number>8</number>
+          </property>
           <item>
            <widget class="QPushButton" name="HomeButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -71,13 +87,19 @@ QPushButton:pressed {
             <property name="text">
              <string>Home</string>
             </property>
+            <property name="iconSize">
+             <size>
+              <width>11</width>
+              <height>12</height>
+             </size>
+            </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="DashboardButton">
+           <widget class="QPushButton" name="DashboardAdminButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -105,10 +127,10 @@ QPushButton:pressed {
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="ChallengesButton">
+           <widget class="QPushButton" name="DashboardWriterButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -131,15 +153,15 @@ QPushButton:pressed {
 }</string>
             </property>
             <property name="text">
-             <string>Challenges</string>
+             <string>Dashboard</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="CompeteButton">
+           <widget class="QPushButton" name="DashboardCommonButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -162,15 +184,15 @@ QPushButton:pressed {
 }</string>
             </property>
             <property name="text">
-             <string>Compete</string>
+             <string>Dashboard</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="LeaderboardButton">
+           <widget class="QPushButton" name="ManageUsersButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -193,7 +215,7 @@ QPushButton:pressed {
 }</string>
             </property>
             <property name="text">
-             <string>LeaderBoard</string>
+             <string>Manage Users</string>
             </property>
            </widget>
           </item>
@@ -201,7 +223,7 @@ QPushButton:pressed {
            <widget class="QPushButton" name="TrainingButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -229,10 +251,165 @@ QPushButton:pressed {
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="CreateContestButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Create Contest</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="AddChallengeButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Add Challenge</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ReviewFlagsButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Review Flags</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="JoinContestButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Join Contest</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="SolveChallengeButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Solve Challenge</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="ProfileButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -263,7 +440,7 @@ QPushButton:pressed {
            <widget class="QPushButton" name="SettingsButton">
             <property name="font">
              <font>
-              <pointsize>13</pointsize>
+              <pointsize>12</pointsize>
               <italic>true</italic>
              </font>
             </property>
@@ -312,7 +489,7 @@ QPushButton:pressed {
             <property name="styleSheet">
              <string notr="true"/>
             </property>
-            <widget class="QWidget" name="Dashboard">
+            <widget class="QWidget" name="DashboardAdmin">
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
                <widget class="QLabel" name="label_Dash">
@@ -327,10 +504,32 @@ QPushButton:pressed {
                  <string notr="true">background-image: url(:/background/fundal2.jpg)</string>
                 </property>
                 <property name="text">
-                 <string>DASHBOARD</string>
+                 <string>DASHBOARD ADMIN</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="DashboardCommon">
+             <layout class="QVBoxLayout" name="verticalLayout_18">
+              <item>
+               <widget class="QCheckBox" name="checkBox">
+                <property name="text">
+                 <string>CheckBox</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="DashboardWriter">
+             <layout class="QVBoxLayout" name="verticalLayout_17">
+              <item>
+               <widget class="QToolButton" name="toolButton">
+                <property name="text">
+                 <string>...</string>
                 </property>
                </widget>
               </item>
@@ -339,9 +538,108 @@ QPushButton:pressed {
             <widget class="QWidget" name="Home">
              <layout class="QVBoxLayout" name="verticalLayout_7">
               <item>
-               <widget class="QLabel" name="label_H">
+               <widget class="QFrame" name="frame_2">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_13">
+                 <item>
+                  <widget class="QFrame" name="frame_4">
+                   <property name="frameShape">
+                    <enum>QFrame::Shape::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Shadow::Raised</enum>
+                   </property>
+                   <widget class="QFrame" name="frame_6">
+                    <property name="geometry">
+                     <rect>
+                      <x>380</x>
+                      <y>20</y>
+                      <width>221</width>
+                      <height>111</height>
+                     </rect>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::Shape::StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Shadow::Raised</enum>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_3">
+                   <property name="frameShape">
+                    <enum>QFrame::Shape::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Shadow::Raised</enum>
+                   </property>
+                   <widget class="QFrame" name="frame_7">
+                    <property name="geometry">
+                     <rect>
+                      <x>20</x>
+                      <y>20</y>
+                      <width>221</width>
+                      <height>121</height>
+                     </rect>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::Shape::StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Shadow::Raised</enum>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="frame_5">
+                   <property name="frameShape">
+                    <enum>QFrame::Shape::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Shadow::Raised</enum>
+                   </property>
+                   <widget class="QFrame" name="frame_8">
+                    <property name="geometry">
+                     <rect>
+                      <x>410</x>
+                      <y>10</y>
+                      <width>201</width>
+                      <height>141</height>
+                     </rect>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::Shape::StyledPanel</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Shadow::Raised</enum>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="CreateContest">
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <item>
+               <widget class="QLabel" name="label_cc">
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
                 <property name="text">
-                 <string>HOME</string>
+                 <string>CREATE CONTEST</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -350,12 +648,50 @@ QPushButton:pressed {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="Leaderboard">
+            <widget class="QWidget" name="JoinContest">
+             <layout class="QVBoxLayout" name="verticalLayout_15">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="font">
+                 <font>
+                  <pointsize>15</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>JOIN CONTEST</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ReviewSubmission">
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="font">
+                 <font>
+                  <pointsize>15</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>REVIEW SUBMISSION</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ManageUsers">
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <item>
-               <widget class="QLabel" name="label_L">
+               <widget class="QLabel" name="label_MU">
                 <property name="text">
-                 <string>LEADERBOARD</string>
+                 <string>MANAGE USERS</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -364,7 +700,7 @@ QPushButton:pressed {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="Challenges">
+            <widget class="QWidget" name="AddChallenge">
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
                <widget class="QLabel" name="label_Ch">
@@ -376,7 +712,7 @@ QPushButton:pressed {
                  </font>
                 </property>
                 <property name="text">
-                 <string>CHALLENGES</string>
+                 <string>ADD CHALLENGE</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -471,7 +807,7 @@ QPushButton:pressed {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="Compete">
+            <widget class="QWidget" name="SolveChallenge">
              <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
                <widget class="QLabel" name="label_Comp">
@@ -508,7 +844,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>17</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
@@ -516,7 +852,13 @@ QPushButton:pressed {
      <string>Menu</string>
     </property>
    </widget>
+   <widget class="QMenu" name="menuStart">
+    <property name="title">
+     <string>Start</string>
+    </property>
+   </widget>
    <addaction name="menuMenu"/>
+   <addaction name="menuStart"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -533,4 +875,4 @@ QPushButton:pressed {
  </widget>
  <resources/>
  <connections/>
-</UI>
+</ui>
