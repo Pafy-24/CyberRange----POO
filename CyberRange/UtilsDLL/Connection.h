@@ -1,6 +1,7 @@
 #pragma once
 #include "DLL.h"
 #include <string>
+#include <functional>
 
 class UTILS_API Connection {
 public:

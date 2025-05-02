@@ -5,8 +5,8 @@
 #include "LoginDialog.h"
 #include "Client.h"
 
-MainMenu::MainMenu(std::unique_ptr<TCPSock> client, QWidget* parent)
-    : QMainWindow(parent), tcpClient(std::move(client)), ui(new Ui::MainMenu)
+MainMenu::MainMenu( QWidget* parent)
+    : QMainWindow(parent), ui(new Ui::MainMenu)
 {
     ui->setupUi(this);
     ui->frameLeftMenu->setStyleSheet(

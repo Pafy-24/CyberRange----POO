@@ -168,9 +168,9 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
         return;
     }
 
+    printMessage(serverType + " Server running on port " + std::to_string(port) + ", TLS: " + 
+        std::string(conn->isTLSEnabled() ? "enabled" : "disabled"));
     addConnection(conn.release());
-    printMessage(serverType + " Server running on port " + std::to_string(port) + ", TLS: " +
-        (conn->isTLSEnabled() ? "enabled" : "disabled"));
 }
 
 void ServerMng::runUDPServer(int port) {

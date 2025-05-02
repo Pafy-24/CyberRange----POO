@@ -6,7 +6,7 @@
 #include <stdexcept>
 
 class UTILS_API DBConn : public Connection {
-private:
+protected:
     std::unique_ptr<TCPSock> dbSocket;
     std::string connectionString;
     std::string host;
@@ -19,7 +19,7 @@ private:
     bool tlsEnabled;
 
     bool parseConnectionString();
-    bool sanitizeQuery(std::string& query);
+    virtual bool sanitizeQuery(std::string& query);
 
 public:
     DBConn(const std::string& connStr);

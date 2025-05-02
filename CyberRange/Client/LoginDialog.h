@@ -8,7 +8,7 @@
 #include <QtSql/QSqlQuery>
 #include <QtSql/QSqlError>
 #include <QDebug>
-#include "TCPSock.h"
+#include "ConnsFactory.h"
 
 namespace Ui {
     class LoginDialog;
@@ -37,7 +37,7 @@ private:
     Ui::LoginDialog* ui;
     QPoint mouseClickPosition;
     bool mousePressed;
-    std::unique_ptr<TCPSock> tcpClient;  // <-- conexiune TCP
+    std::unique_ptr<Connection> tcpClient;  // <-- conexiune TCP
 };
 
 #endif // LOGINDIALOG_H
