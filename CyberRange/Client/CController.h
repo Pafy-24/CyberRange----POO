@@ -3,12 +3,14 @@
 #include "Controller.h"
 
 class CController : public Controller {
-private:
+protected:
     std::string controllerName;
 
 public:
-    CController(std::string name);
-    void handleServerResponse(const std::string& response) override;
+    explicit CController(const std::string& name);
+    virtual ~CController() = default;
+
     std::string getControllerName() override;
-    bool validateResponse(const std::string& response) override;
+    virtual void handleServerResponse(const std::string& response) override;
+    virtual bool validateResponse(const std::string& response) override;
 };

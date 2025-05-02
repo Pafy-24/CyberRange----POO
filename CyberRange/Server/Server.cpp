@@ -26,6 +26,11 @@ void testConns() {
 }
 
 int main() {
-    testConns();
+    //testConns();
+    int basePort = 1337;
+    ServerMng* serverMgr = ServerMng::getInstance(basePort, "0.0.0.0");
+    serverRunning = true;
+    serverMgr->start();
+
     return 0;
 }

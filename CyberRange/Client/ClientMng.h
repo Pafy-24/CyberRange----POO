@@ -2,43 +2,48 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <map>
 #include <mutex>
 #include "Connection.h"
-#include "Loader.h"
 #include "Controller.h"
+#include "Loader.h"
 
-class ClientMng { //singleton clientmng
+class ClientMng 
+{
 private:
     static ClientMng* instance;
+    static std::mutex instanceMutex;
 
-    // Mutex to ensure thread safety
-    static std::mutex mtx;
+    std::mutex controllerMutex;
+    std::map<std::string, Controller*> controllers;
 
-    ClientMng(std::string address, int port); // constructor
+    Loader* loader;
+    Connection* serverConn;
 
-    ClientMng(const ClientMng&); // copy constructor
-    ClientMng& operator=(const ClientMng&); // assignment operator
+    bool connected;
+    int port;
+    std::string serverAddress;
 
-    ClientMng(ClientMng&&); // move constructor
-    ClientMng& operator=(ClientMng&&); // move assignment operator
-    ~ClientMng(); // destructor
+    ClientMng(int port, const std::string& address);
 
 public:
-    static ClientMng* getInstance();
-    void setValues(std::string address, int port);
-    bool connect();
-    void disconnect();
-    void sendRequest(const std::string& requestData);
-    std::string receiveResponse();  // sau poate chiar bool + out param
-    void registerController(Controller* ctrl);
-    Controller* getController(std::string name);
+    static ClientMng* getInstance(int port = 1337, const std::string& address = "127.0.0.1");
+    ~ClientMng();
 
+    ClientMng(const ClientMng&) = delete;
+    ClientMng& operator=(const ClientMng&) = delete;
 
-private:
-    Connection* serverConn;
-    Loader* loader;
-    std::vector<Controller*> controllers;
-    bool connected;
-    std::string serverAddress;
-    int serverPort;
+    bool start();        // init conexiune
+    void stop();         // inchide conexiunea
+
+    void sendRequest(const std::string& data);
+    void receiveResponse();  // va delega la controllerul potrivit
+
+    void attachController(const std::string& name, Controller* ctrl);
+    void removeController(const std::string& name);
+
+    Controller* getController(const std::string& name);
+    Connection* getConnection();
+
+    bool isConnected() const;
 };

@@ -8,7 +8,7 @@ private:
     std::map<std::string, Controller*> controllerMap;
 
 public:
-    Loader();
+    Loader() {};
     void loadControllers();
     Controller* getController(std::string name);
 };

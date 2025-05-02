@@ -33,11 +33,12 @@ private slots:
     void on_loginButton_clicked();
     void on_registerButton_clicked();
     void on_exitButton_clicked();
+	void connectToServer();
 private:
     Ui::LoginDialog* ui;
     QPoint mouseClickPosition;
     bool mousePressed;
-    std::unique_ptr<Connection> tcpClient;  // <-- conexiune TCP
+    Connection* tcpClient;  // <-- conexiune TCP
 };
 
 #endif // LOGINDIALOG_H

@@ -7,6 +7,7 @@
 #include "MainMenu.h"
 #include <QMouseEvent>
 #include "ConnsFactory.h"
+#include "ClientMng.h"
 
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDialog)
 {
@@ -28,6 +29,8 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     animation1->setStartValue(0.0);
     animation1->setEndValue(1.0);
     animation1->start();
+
+	connectToServer(); // Conectare la server
 }
 
 LoginDialog::~LoginDialog()
@@ -40,14 +43,7 @@ void LoginDialog::on_loginButton_clicked()
     std::string _username = ui->lineEditUsername->text().toStdString();
     std::string _password = ui->lineEditPassword->text().toStdString();
     std::string role;
-	tcpClient = ConnsFactory::createConnection(ConnectionType::TCP, "127.0.0.1", 1337);
-    tcpClient->setTimeout(5000);
-
-    if (!tcpClient->connect()) 
-    {
-        QMessageBox::critical(this, "Error", "Connection to server failed!");
-        return;
-    }
+	
     // Trimit comanda AUTH
     std::string authCommand = "AUTH " + _username + " " + _password + " CyberRangeDB";
 
@@ -100,10 +96,6 @@ void LoginDialog::on_loginButton_clicked()
     //{
     //    QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
     //}
-   /* 
-    
-    
-    }*/
 }
 
 void LoginDialog::on_registerButton_clicked()
@@ -121,6 +113,24 @@ void LoginDialog::on_exitButton_clicked()
     if (reply == QMessageBox::Yes) {
         QApplication::quit();
     }
+}
+
+void LoginDialog::connectToServer()
+{
+    ClientMng* clientMng = ClientMng::getInstance(1337, "127.0.0.1");
+    if (!clientMng->isConnected())
+    {
+        clientMng->start();
+    }
+	tcpClient = clientMng->getConnection();
+	if (tcpClient) 
+    {
+        clientMng->sendRequest("ping_from_client");
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500)); // așteptăm răspunsul
+        clientMng->receiveResponse(); // citim răspunsul (dacă serverul trimite ceva)
+    }
+    //clientMng->stop();
 }
 
 void LoginDialog::mousePressEvent(QMouseEvent* event)
