@@ -10,7 +10,7 @@
 class ClientMng { //singleton clientmng
 private:
 	static ClientMng* instance;
-
+    
     // Mutex to ensure thread safety
     static std::mutex mtx;
 
