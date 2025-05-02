@@ -9,23 +9,23 @@
 
 class ClientMng { //singleton clientmng
 private:
-	static ClientMng* instance;
-    
+    static ClientMng* instance;
+
     // Mutex to ensure thread safety
     static std::mutex mtx;
 
     ClientMng(std::string address, int port); // constructor
 
-	ClientMng(const ClientMng&); // copy constructor
-	ClientMng& operator=(const ClientMng&); // assignment operator
+    ClientMng(const ClientMng&); // copy constructor
+    ClientMng& operator=(const ClientMng&); // assignment operator
 
-	ClientMng(ClientMng&&); // move constructor
-	ClientMng& operator=(ClientMng&&); // move assignment operator
-	~ClientMng(); // destructor
+    ClientMng(ClientMng&&); // move constructor
+    ClientMng& operator=(ClientMng&&); // move assignment operator
+    ~ClientMng(); // destructor
 
 public:
-	static ClientMng* getInstance(); 
-	void setValues(std::string address, int port); 
+    static ClientMng* getInstance();
+    void setValues(std::string address, int port);
     bool connect();
     void disconnect();
     void sendRequest(const std::string& requestData);
