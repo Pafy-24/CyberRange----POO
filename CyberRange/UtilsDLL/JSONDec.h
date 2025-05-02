@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <vector>
+#include <iostream>
 #include <variant>
 
 // Define JSON value type that can be either a string or an array of strings

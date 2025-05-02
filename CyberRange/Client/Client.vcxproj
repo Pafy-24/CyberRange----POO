@@ -93,7 +93,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AuthController.cpp" />
+    <ClCompile Include="CController.cpp" />
+    <ClCompile Include="ChallClientController.cpp" />
+    <ClCompile Include="ClientMng.cpp" />
+    <ClCompile Include="ContestClientController.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Loader.cpp" />
+    <ClCompile Include="LogClientController.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="TeamClientController.cpp" />
     <QtRcc Include="Client.qrc" />
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
@@ -113,6 +122,21 @@
     <QtUic Include="Client.ui" />
     <QtUic Include="LoginDialog.ui" />
     <QtUic Include="MainMenu.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AuthController.h" />
+    <ClInclude Include="CController.h" />
+    <ClInclude Include="ChallClientController.h" />
+    <ClInclude Include="ClientMng.h" />
+    <ClInclude Include="ContestClientController.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Loader.h" />
+    <ClInclude Include="LogClientController.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="TeamClientController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Client.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

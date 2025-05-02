@@ -598,7 +598,8 @@ void TCPSock::handleDBClient(std::unique_ptr<TCPSock> clientSock, const std::str
         return;
     }
 
-    std::string connectionString = "sqlserver://" + user + ":" + pass + "@localhost:1433/" + dbname;
+    //std::string connectionString = "sqlserver://" + user + ":" + pass + "@localhost:1433/" + dbname;
+    std::string connectionString = "sqlserver://admin:adminhash@localhost:1433/" + dbname;
 
     try {
         DBConn db(connectionString);
