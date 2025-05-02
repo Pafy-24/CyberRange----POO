@@ -10,7 +10,6 @@
 
 class UTILS_API TCPSock : public Connection {
 protected:
-    std::unique_ptr<TcpSocketWithHandle> tcpSocket;
     std::unique_ptr<sf::TcpListener> tcpListener;
     std::string address;
     int port;
@@ -26,6 +25,7 @@ protected:
     std::function<void(const std::string&, Connection*)> requestHandler;
 
 public:
+    std::unique_ptr<TcpSocketWithHandle> tcpSocket;
     TCPSock(const std::string& addr, int port);
     explicit TCPSock(int port);
     TCPSock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientAddr, int clientPort);

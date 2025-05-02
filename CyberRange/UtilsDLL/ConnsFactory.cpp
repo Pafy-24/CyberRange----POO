@@ -39,7 +39,9 @@ std::unique_ptr<Connection> ConnsFactory::createConnection(
             throw std::runtime_error("Address or port required for transfer connection");
         }
         if (address.empty()) {
-            return std::make_unique<transfer_sock>(port);
+			auto sock = std::make_unique<transfer_sock>(port);
+			sock->setRootDirectory(rootDir);
+            return sock;
         }
         return std::make_unique<transfer_sock>(address, port);
 

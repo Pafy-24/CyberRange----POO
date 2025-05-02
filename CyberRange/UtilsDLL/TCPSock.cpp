@@ -456,9 +456,7 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
                 requestHandler(request, clientSock.get());
             }
             else {
-                clientSock->send("ERROR: Unknown protocol\n");
-                clientSock->disconnect();
-                break;
+				handleRequest(request, clientSock.get());
             }
         }
     }
@@ -470,10 +468,6 @@ void TCPSock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
 }
 
 void TCPSock::handleRequest(const std::string& data, Connection* client) {
-    if (requestHandler) {
-        requestHandler(data, client);
-    }
-    else {
-        printMessage("No request handler set for data: " + data);
-    }
+
+    client->send("ERROR: Unknown protocol\n");
 }

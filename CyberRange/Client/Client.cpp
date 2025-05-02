@@ -107,10 +107,6 @@ void Client::testDownload(const std::string& serverAddress, int port) {
         return;
     }
 
-    if (!conn->connect()) {
-        printMessage("Failed to connect download socket");
-        return;
-    }
 
     auto downloadFile = [&](const std::string& remoteFile, const std::string& localFile) {
         printMessage("Starting download: " + remoteFile + " to " + localFile);
@@ -176,13 +172,23 @@ void Client::testDownload(const std::string& serverAddress, int port) {
         };
 
     // Test small file download
+    if (!conn->connect()) {
+        printMessage("Failed to connect download socket");
+        return;
+    }
     std::string smallFile = "server.key";
-    std::string smallFileDest = "downloaded_small.dat";
+    std::string smallFileDest = "E:\\Users\\xxsho\\OneDrive\\Desktop\\downloaded_small.dat";
     downloadFile(smallFile, smallFileDest);
 
+
     // Test large file download
+    conn = ConnsFactory::createConnection(ConnectionType::TRANSFER, serverAddress, port);
+    if (!conn->connect()) {
+        printMessage("Failed to connect download socket");
+        return;
+    }
     std::string largeFile = "server.crt";
-    std::string largeFileDest = "downloaded_large.dat";
+    std::string largeFileDest = "E:\\Users\\xxsho\\OneDrive\\Desktop\\downloaded_large.dat";
     downloadFile(largeFile, largeFileDest);
 
     conn->disconnect();
@@ -202,8 +208,8 @@ void Client::on_pushButton_clicked() {
     // Run tests in a separate thread to avoid blocking the UI
     std::thread testThread([this, serverAddress, tcpPort, secureTcpPort, udpPort, downloadPort]() {
         testTCPClient(serverAddress, tcpPort, false);
-        testTCPClient(serverAddress, secureTcpPort, true);
-        testUDPClient(serverAddress, udpPort);
+      //  testTCPClient(serverAddress, secureTcpPort, true);
+      //  testUDPClient(serverAddress, udpPort);
         testDownload(serverAddress, downloadPort);
         printMessage("\nAll client tests completed");
         });

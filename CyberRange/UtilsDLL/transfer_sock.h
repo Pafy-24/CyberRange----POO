@@ -32,27 +32,21 @@ public:
     transfer_sock(const std::string& addr, int port);
     explicit transfer_sock(int port);
     transfer_sock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientAddr, int clientPort);
-    ~transfer_sock();
+    ~transfer_sock() override;
 
-    bool connect() override;
-    bool disconnect() override;
-    bool isConnected() const override;
-    int send(const std::string& data) override;
-    std::string receive() override;
-    std::string getAddress() const override;
-    int getPort() const override;
-    bool enableTLS() override;
-    bool isTLSEnabled() const override;
-    void setTimeout(int ms) override;
-    int getTimeout() const override;
+    // Root directory management
+    void setRootDirectory(const std::string& dir);
+    std::string getRootDirectory() const;
+
+    // Transfer progress and control
+    int getTransferProgress() const;
+    void abortTransfer();
+
+    // Use parent TCPSock implementations
     std::string getType() const override { return "TRANSFER"; }
     void handleRequest(const std::string& data, Connection* client = nullptr) override;
 
-    bool bind(int port) override;
-    bool listen(int backlog = 5) override;
-    Connection* accept() override;
     bool startListening(std::function<void(const std::string&, Connection*)> handler) override;
     void stopServer() override;
     bool isServerRunning() const override;
-    void setCertificates(const std::string& cert, const std::string& key) override;
 };
