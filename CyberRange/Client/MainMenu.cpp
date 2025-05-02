@@ -9,6 +9,13 @@ MainMenu::MainMenu( QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainMenu)
 {
     ui->setupUi(this);
+    ui->stackedWidget->setCurrentIndex(3);
+    QPixmap pix(":/background/logo.png");
+    ui->logoLabel->setPixmap(pix.scaled(300, 200, Qt::KeepAspectRatio));
+    ui->titleLabel->setAlignment(Qt::AlignCenter);
+    ui->quoteLabel->setAlignment(Qt::AlignCenter);
+    ui->textBrowser->setAlignment(Qt::AlignCenter);
+
     ui->frameLeftMenu->setStyleSheet(
         "QFrame {"
         "background-color: rgba(13, 3, 25, 255);"
