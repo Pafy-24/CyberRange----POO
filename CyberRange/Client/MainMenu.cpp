@@ -9,6 +9,13 @@ MainMenu::MainMenu( QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainMenu)
 {
     ui->setupUi(this);
+    ui->stackedWidget->setCurrentIndex(3);
+    QPixmap pix(":/background/logo.png");
+    ui->logoLabel->setPixmap(pix.scaled(300, 200, Qt::KeepAspectRatio));
+    ui->titleLabel->setAlignment(Qt::AlignCenter);
+    ui->quoteLabel->setAlignment(Qt::AlignCenter);
+    ui->textBrowser->setAlignment(Qt::AlignCenter);
+
     ui->frameLeftMenu->setStyleSheet(
         "QFrame {"
         "background-color: rgba(13, 3, 25, 255);"
@@ -73,40 +80,115 @@ void MainMenu::on_logoutButton_clicked()
     login->show();
 }
 
-void MainMenu::on_ChallengesButton_clicked()
+void MainMenu::on_AddChallengeButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->stackedWidget->setCurrentIndex(8);
 }
 
-void MainMenu::on_CompeteButton_clicked()
+void MainMenu::on_CreateContestButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(7);
+    ui->stackedWidget->setCurrentIndex(4);
 }
 
-void MainMenu::on_DashboardButton_clicked()
+void MainMenu::on_DashboardAdminButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(0);
 }
+
+void MainMenu::on_DashboardCommonButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+
+void MainMenu::on_DashboardWriterButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
 void MainMenu::on_HomeButton_clicked()
 {
-	ui->stackedWidget->setCurrentIndex(1);
+	ui->stackedWidget->setCurrentIndex(3);
 }
-void MainMenu::on_LeaderboardButton_clicked()
-{
-	ui->stackedWidget->setCurrentIndex(2);
-}
-void MainMenu::on_ProfileButton_clicked()
-{
-	ui->stackedWidget->setCurrentIndex(4);
-}
-void MainMenu::on_SettingsButton_clicked()
+
+void MainMenu::on_JoinContestButton_clicked()
 {
 	ui->stackedWidget->setCurrentIndex(5);
 }
+
+void MainMenu::on_ManageUsersButton_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(7);
+}
+
+void MainMenu::on_ProfileButton_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(9);
+}
+
+void MainMenu::on_ReviewFlagsButton_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(6);
+}
+
+void MainMenu::on_SettingsButton_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(10);
+}
+
+void MainMenu::on_SolveChallengeButton_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(12);
+}
+
 void MainMenu::on_TrainingButton_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(6);
+    ui->stackedWidget->setCurrentIndex(11);
 }
+
+void MainMenu::configureUIForRole(std::string role)
+{
+    // Ascundem totul la început
+    ui->AddChallengeButton->hide();
+    ui->CreateContestButton->hide();
+    ui->DashboardAdminButton->hide();
+    ui->DashboardWriterButton->hide();
+    ui->DashboardCommonButton->hide();
+    ui->HomeButton->hide();
+    ui->JoinContestButton->hide();
+    ui->ManageUsersButton->hide();
+    ui->ProfileButton->hide();
+    ui->ReviewFlagsButton->hide();
+    ui->SettingsButton->hide();
+    ui->SolveChallengeButton->hide();
+    ui->TrainingButton->hide();
+
+    // Elemente comune
+    ui->HomeButton->show();
+    ui->SettingsButton->show();
+    ui->ProfileButton->show();
+    
+
+    if (role == "admin") 
+    {
+        ui->DashboardAdminButton->show();
+        ui->ManageUsersButton->show();
+        ui->CreateContestButton->show();
+    }
+    else if (role == "writer") 
+    {
+        ui->DashboardWriterButton->show();
+        ui->AddChallengeButton->show();
+        ui->ReviewFlagsButton->show();
+    }
+    else if (role == "common") 
+    {
+        ui->DashboardCommonButton->show();
+        ui->JoinContestButton->show();
+        ui->TrainingButton->show();
+        ui->SolveChallengeButton->show();
+    }
+}
+
 void MainMenu::on_ConnButton_clicked()
 {
 	Client* client = new Client();

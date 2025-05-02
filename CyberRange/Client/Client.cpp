@@ -22,7 +22,8 @@ void Client::printMessage(const std::string& message) {
     QApplication::processEvents();
 }
 
-void Client::testTCPClient(const std::string& serverAddress, int port, bool useTLS) {
+void Client::testTCPClient(const std::string& serverAddress, int port, bool useTLS) 
+{
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
     printMessage("\n----- Testing " + serverType + " Client -----");
     printMessage("Connecting to " + serverAddress + ":" + std::to_string(port));
