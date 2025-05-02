@@ -32,9 +32,9 @@ void ServerMng::start() {
     isRunning = true;
 
     runTCPServer(port, false);
-    runTCPServer(port + 1, true);
+   // runTCPServer(port + 1, true);
     runUDPServer(port + 2);
-    runDownloadServer(port + 3);
+  //  runDownloadServer(port + 3);
 
     std::cout << "Server manager started" << std::endl;
 }
