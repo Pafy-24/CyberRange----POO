@@ -9,13 +9,13 @@ private:
     std::string imageType; // "vdi", "vmdk", or "ovf"
     int memoryMB;
     int cpuCores;
-    std::string challengeId;
+    int challengeId;
 
     bool isOVF() const { return imageType == "ovf"; }
 
 public:
-    VM(const std::string& userId, const std::string& resourceId, const std::string& name, 
-        const std::string& image, const std::string& challId);
+    VM(int userId, int resourceId, const std::string& name,
+        const std::string& image, int challId);
     bool start() override;
     bool stop() override;
     bool deploy() override;

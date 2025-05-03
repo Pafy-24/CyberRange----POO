@@ -23,12 +23,12 @@ protected:
     bool tlsEnabled;
 
     bool parseConnectionString();
-    virtual bool sanitizeQuery(std::string& query);
 
 public:
     DBConn(const std::string& connStr);
     ~DBConn() override;
 
+    virtual bool sanitizeQuery(std::string& query);
     bool connect() override;
     bool disconnect() override;
     bool isConnected() const override;

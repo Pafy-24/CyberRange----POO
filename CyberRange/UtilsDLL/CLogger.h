@@ -1,20 +1,16 @@
 #pragma once
 #include <string>
+#include <mutex>
+#include <vector>
+#include <functional>
 #include "Logger.h"
 
-class CLogger : public Logger {
+class UTILS_API CLogger : public Logger {
 private:
-    int logLevel;
-    std::string logFile;
-    bool console;
-    std::string dateFormat;
+    std::mutex logMutex;
+    std::vector<std::function<void(const std::string&)>> observers;
 
 public:
-    CLogger(std::string file, int level);
-    void log(std::string message, int level) override;
-    void setLogLevel(int level) override;
-    void setOutputFile(std::string path) override;
-    std::string getLastLog() override;
-    void enableConsole(bool enable);
-    void setDateFormat(std::string format);
+    void log(const std::string& message) override;
+    void attachObserver(std::function<void(const std::string&)> observer) override;
 };

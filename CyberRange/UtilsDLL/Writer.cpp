@@ -1,45 +1,38 @@
 #include "pch.h"
 #include "Writer.h"
 
-Writer::Writer(std::string username, std::string email) : CUser(username, email)
+Writer::Writer(std::string username, std::string email, int id)
+    : CUser(username, email, id)
 {
-    SetAccessLevel(5); // utilizator writer
-	id = "WRT_" + username;
+    SetAccessLevel(5);
     articles.clear();
     signature = "";
 }
 
-bool Writer::articleExists(const std::string& articleId) const 
+bool Writer::articleExists(const std::string& articleId) const
 {
-    for (const auto& art : articles) 
-    {
-        if (art == articleId) 
-        {
-            return true;
-        }
-    }
-    return false;
+    return std::find(articles.begin(), articles.end(), articleId) != articles.end();
 }
 
-void Writer::AddArticle(const std::string& articleId) 
+void Writer::AddArticle(const std::string& articleId)
 {
-    if (!articleExists(articleId)) 
+    if (!articleExists(articleId))
     {
         articles.push_back(articleId);
     }
 }
 
-const std::vector<std::string>& Writer::GetArticles() const 
+const std::vector<std::string>& Writer::GetArticles() const
 {
     return articles;
 }
 
-void Writer::SetSignature(const std::string& sig) 
+void Writer::SetSignature(const std::string& sig)
 {
     signature = sig;
 }
 
-std::string Writer::GetSignature() const 
+std::string Writer::GetSignature() const
 {
     return signature;
 }

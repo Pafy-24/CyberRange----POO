@@ -5,17 +5,18 @@
 
 class ORCHESTRATOR_API COrchestrator : public Orchestrator {
 protected:
+	int id;
     std::string baseAddr;
-    std::string userId;
-    std::string resourceId;
+    int userId;
     std::mutex resourceMutex;
     int timeoutSeconds;
 
     std::string executeCommand(const std::string& command);
-    bool isValidId(const std::string& id);
 
 public:
-    COrchestrator(const std::string& userId,const std::string& resourceId, int timeout = 300);
+    COrchestrator(int userId,int id, int timeout = 300);
+    int getId() const override;
+    void setId(int id) override;
     bool start() override;
     bool stop() override;
     bool deploy() override;

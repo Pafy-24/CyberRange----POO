@@ -30,31 +30,16 @@
     <ClInclude Include="ChallFactory.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
-    <ClInclude Include="ChallMng.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
     <ClInclude Include="ChallMngBuilder.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
     <ClInclude Include="Contest.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
-    <ClInclude Include="COrchestrator.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Docker.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
     <ClInclude Include="File.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
-    <ClInclude Include="Orchestrator.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
     <ClInclude Include="Tab.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
-    <ClInclude Include="VM.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
     <ClInclude Include="CChall.h">
@@ -64,6 +49,21 @@
       <Filter>Header Files\classes</Filter>
     </ClInclude>
     <ClInclude Include="Chall.h">
+      <Filter>Header Files\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="ChallMng.h">
+      <Filter>Header Files\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Docker.h">
+      <Filter>Header Files\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Orchestrator.h">
+      <Filter>Header Files\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="VM.h">
+      <Filter>Header Files\classes</Filter>
+    </ClInclude>
+    <ClInclude Include="COrchestrator.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
   </ItemGroup>
@@ -83,13 +83,26 @@
     <ClCompile Include="COrchestrator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Chall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Contest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Tab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChallMng.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ChallTypes.h">
       <Filter>Header Files\classes</Filter>
     </Text>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

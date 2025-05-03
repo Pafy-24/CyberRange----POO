@@ -5,8 +5,18 @@
 #include <array>
 #include <windows.h>
 
-COrchestrator::COrchestrator(const std::string& userId, const std::string& resourceId,int timeout)
-    :  timeoutSeconds(timeout), userId(userId), resourceId(resourceId){
+COrchestrator::COrchestrator(int userId, int id,int timeout)
+    :  timeoutSeconds(timeout), userId(userId), id(id){
+}
+
+int COrchestrator::getId() const
+{
+    return id;
+}
+
+void COrchestrator::setId(int id)
+{
+	this->id = id;
 }
 
 std::string COrchestrator::executeCommand(const std::string& command) {
@@ -30,38 +40,32 @@ std::string COrchestrator::executeCommand(const std::string& command) {
     return result;
 }
 
-bool COrchestrator::isValidId(const std::string& id) {
-    return !id.empty() && id.find(' ') == std::string::npos && id.find('"') == std::string::npos;
-}
 
 bool COrchestrator::start() {
     std::lock_guard<std::mutex> lock(resourceMutex);
-    return isValidId(userId) && isValidId(resourceId);
+    return 1;
 }
 
 bool COrchestrator::stop() {
     std::lock_guard<std::mutex> lock(resourceMutex);
-    return isValidId(userId) && isValidId(resourceId);
+    return 1;
 }
 
 bool COrchestrator::deploy() {
     std::lock_guard<std::mutex> lock(resourceMutex);
-    return isValidId(userId) && isValidId(resourceId);
+    return 1;
 }
 
 bool COrchestrator::undeploy() {
     std::lock_guard<std::mutex> lock(resourceMutex);
-    return isValidId(userId) && isValidId(resourceId);
+    return 1;
 }
 
 std::string COrchestrator::getStatus() {
     std::lock_guard<std::mutex> lock(resourceMutex);
-    if (!isValidId(userId) || !isValidId(resourceId)) {
-        return "Invalid user or resource ID";
-    }
 
     std::stringstream status;
-    status << "User: " << userId << "\nResource: " << resourceId << "\n";
+    status << "User: " << userId << "\nResource: " << id << "\n";
     return status.str();
 }
 

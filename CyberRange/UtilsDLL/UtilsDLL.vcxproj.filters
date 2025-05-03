@@ -22,6 +22,15 @@
     <Filter Include="Header Files\Classes\ExternalHeaders">
       <UniqueIdentifier>{c5653ae2-0fda-4188-a97a-e18e054e68c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Classes\Users">
+      <UniqueIdentifier>{50b88428-af3f-4f89-a67e-2752bd0f2198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Classes\DataWorks">
+      <UniqueIdentifier>{2c459871-0f2c-43d5-9712-a0806bb8a776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Classes\Logs">
+      <UniqueIdentifier>{2fd65328-20a6-4731-97ca-3c65ecd561a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -33,58 +42,7 @@
     <ClInclude Include="DLL.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="User.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CUser.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Team.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="UserLogs.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Writer.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Admin.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CLogger.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CTeam.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomSerial.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="DBLogs.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="JSONDec.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="JSONEnc.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="JWTDec.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="JWTEnc.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Logger.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Scoreboard.h">
-      <Filter>Header Files\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="ServerLogs.h">
       <Filter>Header Files\Classes</Filter>
     </ClInclude>
     <ClInclude Include="Socketer.h">
@@ -116,6 +74,60 @@
     </ClInclude>
     <ClInclude Include="DBConn.h">
       <Filter>Header Files\Classes\Socketing</Filter>
+    </ClInclude>
+    <ClInclude Include="CTeam.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="CUser.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="Admin.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="Writer.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="Team.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONDec.h">
+      <Filter>Header Files\Classes\DataWorks</Filter>
+    </ClInclude>
+    <ClInclude Include="JSONEnc.h">
+      <Filter>Header Files\Classes\DataWorks</Filter>
+    </ClInclude>
+    <ClInclude Include="JWTDec.h">
+      <Filter>Header Files\Classes\DataWorks</Filter>
+    </ClInclude>
+    <ClInclude Include="JWTEnc.h">
+      <Filter>Header Files\Classes\DataWorks</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomSerial.h">
+      <Filter>Header Files\Classes\DataWorks</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Header Files\Classes\Users</Filter>
+    </ClInclude>
+    <ClInclude Include="UserLogs.h">
+      <Filter>Header Files\Classes\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerLogs.h">
+      <Filter>Header Files\Classes\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="Logger.h">
+      <Filter>Header Files\Classes\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="DBLogs.h">
+      <Filter>Header Files\Classes\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="CLogger.h">
+      <Filter>Header Files\Classes\Logs</Filter>
+    </ClInclude>
+    <ClInclude Include="UsersFactory.h">
+      <Filter>Header Files\Classes\Users</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +192,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConnsFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CLogger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UsersFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

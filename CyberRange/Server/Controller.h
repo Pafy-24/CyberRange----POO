@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+#include "CLogger.h"
+#include "Connection.h"
 
 class Controller {
 public:

@@ -1,18 +1,16 @@
 #pragma once
-#include <string>
 #include "CController.h"
-#include "ChallMng.h"
 #include "Chall.h"
+#include "DBController.h"
 
 class ChallController : public CController {
 private:
-    ChallMng* challMng;
+    DBController* dbController;
+    std::map<std::string, Chall*> challenges;
 
 public:
-    ChallController(ChallMng& mng);
-    void createChallenge(std::string params);
-    void updateChallenge(std::string id, std::string params);
-    void deleteChallenge(std::string id);
-    void listChallenges(std::string contestId);
-    Chall* getChallenge(std::string id);
+    ChallController(DBController* dbCtrl);
+    void handleRequest(const std::string& data, Connection* client) override;
+    void loadChallenge(const std::string& challId);
+    void unloadChallenge(const std::string& challId);
 };

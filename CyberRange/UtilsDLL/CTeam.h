@@ -7,24 +7,30 @@
 
 class UTILS_API CTeam : public Team {
 private:
-    std::string id;
+    int id;
+    int contestId;
     std::string name;
-    std::vector<CUser*> users;
+    std::vector<User*> users;
     std::map<std::string, int> stats;
     std::string logo;
     bool active;
 
 public:
-    CTeam(std::string name);
-    std::string GetId() override;
+    CTeam(std::string name, int id = 0, int contestId = 0);
+    int GetId() override;
+    int GetContestId() override;
     std::string GetName() override;
-    std::vector<CUser*> GetMembers() override;
-    void AddMember(CUser* user) override;
-    void RemoveMember(std::string userId) override;
+    std::vector<User*> GetMembers() override;
+    void SetLogo(std::string logoPath) override;
+    std::string GetLogo() override;
+    void SetId(int id) override;
+    void SetContestId(int contestId) override;
+    void SetName(std::string name) override;
+    void AddMember(User* user) override;
+    void RemoveMember(int userId) override;
     int GetScore() override;
     void AddStats(std::string key, int value);
     std::map<std::string, int> GetStats();
-    void SetLogo(std::string logoPath);
-    std::string GetLogo();
     void SetActive(bool active);
+    bool IsActive() const;
 };

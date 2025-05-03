@@ -6,9 +6,9 @@
 #include <fstream>
 
 
-VM::VM(const std::string& userId, const std::string& resourceId, const std::string& name, 
-    const std::string& image, const std::string& challId)
-    : COrchestrator(userId,resourceId), vmName(name), baseImage(image), memoryMB(1024), cpuCores(1), challengeId(challId) {
+VM::VM(int userId, int id, const std::string& name, 
+    const std::string& image, int challId)
+    : COrchestrator(userId,id), vmName(name), baseImage(image), memoryMB(1024), cpuCores(1), challengeId(challId) {
     std::string ext = baseImage.substr(baseImage.find_last_of(".") + 1);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == "ovf") {
@@ -29,7 +29,7 @@ bool VM::start() {
     if (!COrchestrator::start()) return false;
 
     std::stringstream cmd;
-    cmd << "\"VBoxManage.exe\" startvm \"" << vmName << "-" << userId << "-" << resourceId << "\" --type headless";
+    cmd << "\"VBoxManage.exe\" startvm \"" << vmName << "-" << userId << "-" << id << "\" --type headless";
     std::string result = executeCommand(cmd.str());
     return result.find("ERROR") == std::string::npos;
 }
@@ -38,7 +38,7 @@ bool VM::stop() {
     if (!COrchestrator::stop()) return false;
 
     std::stringstream cmd;
-    cmd << "\"VBoxManage.exe\" controlvm \"" << vmName << "-" << userId << "-" << resourceId << "\" poweroff";
+    cmd << "\"VBoxManage.exe\" controlvm \"" << vmName << "-" << userId << "-" << id << "\" poweroff";
     std::string result = executeCommand(cmd.str());
 
     // Delete files in Resources/[chall_id]
@@ -61,7 +61,7 @@ bool VM::deploy() {
     std::filesystem::copy_file(srcPath, dstPath, std::filesystem::copy_options::overwrite_existing);
 
     std::stringstream cmd;
-    std::string vmId = vmName + "-" + userId + "-" + resourceId;
+    std::string vmId = vmName + "-" + std::to_string(userId) + "-" + std::to_string(id);
 
     if (isOVF()) {
         cmd << "VBoxManage import \"" << dstPath.string() << "\" --vsys 0 --vmname \"" << vmId << "\"";
@@ -89,7 +89,7 @@ bool VM::undeploy() {
     if (!COrchestrator::undeploy()) return false;
 
     std::stringstream cmd;
-    cmd << "\"VBoxManage.exe\" unregistervm \"" << vmName << "-" << userId << "-" << resourceId << "\" --delete";
+    cmd << "\"VBoxManage.exe\" unregistervm \"" << vmName << "-" << userId << "-" << id << "\" --delete";
     std::string result = executeCommand(cmd.str());
 
     // Delete files in Resources/[chall_id]
@@ -105,12 +105,12 @@ std::string VM::getStatus() {
     std::string baseStatus = COrchestrator::getStatus();
 
     std::stringstream cmd;
-    cmd << "\"VBoxManage.exe\" showvminfo \"" << vmName << "-" << userId << "-" << resourceId << "\" --machinereadable";
+    cmd << "\"VBoxManage.exe\" showvminfo \"" << vmName << "-" << userId << "-" << id << "\" --machinereadable";
     std::string result = executeCommand(cmd.str());
 
     std::stringstream status;
     status << baseStatus;
-    status << "VM Name: " << vmName << "-" << userId << "-" << resourceId << "\n";
+    status << "VM Name: " << vmName << "-" << userId << "-" << id << "\n";
     status << "Image Type: " << imageType << "\n";
     status << "Memory: " << memoryMB << "MB\n";
     status << "CPUs: " << cpuCores << "\n";

@@ -173,11 +173,13 @@
     <ClInclude Include="UDPSock.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="UserLogs.h" />
+    <ClInclude Include="UsersFactory.h" />
     <ClInclude Include="Writer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Admin.cpp" />
     <ClCompile Include="AdminConn.cpp" />
+    <ClCompile Include="CLogger.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ConnsFactory.cpp" />
     <ClCompile Include="CTeam.cpp" />
@@ -201,6 +203,7 @@
     <ClCompile Include="Socketer.cpp" />
     <ClCompile Include="TCPSock.cpp" />
     <ClCompile Include="UDPSock.cpp" />
+    <ClCompile Include="UsersFactory.cpp" />
     <ClCompile Include="Writer.cpp" />
   </ItemGroup>
   <ItemGroup>

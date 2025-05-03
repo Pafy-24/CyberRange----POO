@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "ServerMng.h"
+#include "CustomSerial.h"
 #include "ConnsFactory.h"
+#include "DBController.h"
+#include "UserController.h"
+#include "TeamController.h"
+#include "ChallController.h"
 #include <iostream>
 #include <algorithm>
 #include <thread>
@@ -18,7 +23,15 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
 
 ServerMng::ServerMng(int port, std::string address)
     : isRunning(false), port(port), serverAddress(address), loader(new Loader()) {
-	this->attachController("default", new Controller());
+    // Initialize DBController
+    DBController* dbCtrl = new DBController("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
+    attachController("DBController", dbCtrl);
+
+    // Initialize other controllers
+    attachController("UserController", new UserController(dbCtrl));
+    attachController("TeamController", new TeamController(dbCtrl));
+    attachController("ChallController", new ChallController(dbCtrl));
+    attachController("default", new Controller());
 }
 
 ServerMng::~ServerMng() {
@@ -32,9 +45,10 @@ void ServerMng::start() {
     }
     isRunning = true;
 
+    // Load initial data
+    loader->loadAll();
+
     runTCPServer(port, false);
-   // runTCPServer(port + 1, true);
-   // runUDPServer(port + 2);
     runDownloadServer(port + 3);
 
     std::cout << "Server manager started" << std::endl;
@@ -45,6 +59,9 @@ void ServerMng::stop() {
         return;
     }
     isRunning = false;
+
+    // Save and unload data
+    loader->saveUnload();
 
     {
         std::lock_guard<std::mutex> lock(connectionsMutex);
@@ -110,6 +127,7 @@ void ServerMng::processRequests() {
 void ServerMng::attachController(std::string name, Controller* ctrl) {
     if (ctrl) {
         controllers[name] = ctrl;
+        loader->registerObject(nullptr, name); // Register controller
         std::cout << "Attached controller: " << name << std::endl;
     }
 }
@@ -140,6 +158,30 @@ ChallMng* ServerMng::getChallMng(std::string contestId) {
     return nullptr;
 }
 
+void ServerMng::addToken(const std::string& token)
+{
+	std::lock_guard<std::mutex> lock(instanceMutex);
+	auto it = std::find(tokens.begin(), tokens.end(), token);
+	if (it == tokens.end()) {
+		tokens.push_back(token);
+		std::cout << "Added token: " << token << std::endl;
+	}
+	else {
+		std::cout << "Token already exists: " << token << std::endl;
+	}
+}
+
+void ServerMng::removeToken(const std::string& token)
+{
+	std::lock_guard<std::mutex> lock(instanceMutex);
+	auto it = std::remove(tokens.begin(), tokens.end(), token);
+	if (it != tokens.end()) {
+		tokens.erase(it, tokens.end());
+		std::cout << "Removed token: " << token << std::endl;
+	}
+
+}
+
 void ServerMng::runTCPServer(int port, bool useTLS) {
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
     printMessage("Starting " + serverType + " Server on port " + std::to_string(port));
@@ -159,8 +201,19 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
     }
 
     auto handler = [this](const std::string& data, Connection* client) {
-        for (const auto& ctrl : controllers) {
-            ctrl.second->handleRequest(data, client);
+        try {
+            json j = json::parse(data);
+            std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
+            auto it = controllers.find(controllerName);
+            if (it != controllers.end()) {
+                it->second->handleRequest(data, client);
+            }
+            else {
+                controllers["default"]->handleRequest(data, client);
+            }
+        }
+        catch (const std::exception& e) {
+            client->send("ERROR: Invalid request format");
         }
         };
     if (!conn->startListening(handler)) {
@@ -168,7 +221,7 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
         return;
     }
 
-    printMessage(serverType + " Server running on port " + std::to_string(port) + ", TLS: " + 
+    printMessage(serverType + " Server running on port " + std::to_string(port) + ", TLS: " +
         std::string(conn->isTLSEnabled() ? "enabled" : "disabled"));
     addConnection(conn.release());
 }
@@ -183,8 +236,19 @@ void ServerMng::runUDPServer(int port) {
     }
 
     auto handler = [this](const std::string& data, Connection* client) {
-        for (const auto& ctrl : controllers) {
-            ctrl.second->handleRequest(data, client);
+        try {
+            json j = json::parse(data);
+            std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
+            auto it = controllers.find(controllerName);
+            if (it != controllers.end()) {
+                it->second->handleRequest(data, client);
+            }
+            else {
+                controllers["default"]->handleRequest(data, client);
+            }
+        }
+        catch (const std::exception& e) {
+            client->send("ERROR: Invalid request format");
         }
         };
 
@@ -200,15 +264,26 @@ void ServerMng::runUDPServer(int port) {
 void ServerMng::runDownloadServer(int port) {
     printMessage("Starting Download Server on port " + std::to_string(port));
 
-    auto conn = ConnsFactory::createConnection(ConnectionType::TRANSFER, "", port,"","./server_files");
+    auto conn = ConnsFactory::createConnection(ConnectionType::TRANSFER, "", port, "", "./server_files");
     if (!conn) {
         printMessage("Failed to create Download server on port " + std::to_string(port));
         return;
     }
 
     auto handler = [this](const std::string& data, Connection* client) {
-        for (const auto& ctrl : controllers) {
-            ctrl.second->handleRequest(data, client);
+        try {
+            json j = json::parse(data);
+            std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
+            auto it = controllers.find(controllerName);
+            if (it != controllers.end()) {
+                it->second->handleRequest(data, client);
+            }
+            else {
+                controllers["default"]->handleRequest(data, client);
+            }
+        }
+        catch (const std::exception& e) {
+            client->send("ERROR: Invalid request format");
         }
         };
 

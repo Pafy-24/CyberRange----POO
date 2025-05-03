@@ -2,27 +2,57 @@
 #include "CTeam.h"
 #include <algorithm>
 
-CTeam::CTeam(std::string name) : name(name), logo(""), active(true)
+CTeam::CTeam(std::string name, int id, int contestId)
+    : name(name), id(id), contestId(contestId), logo(""), active(true)
 {
-    id = "TEAM_" + name;
 }
 
-std::string CTeam::GetId() 
+int CTeam::GetId()
 {
     return id;
 }
 
-std::string CTeam::GetName() 
+int CTeam::GetContestId()
+{
+    return contestId;
+}
+
+std::string CTeam::GetName()
 {
     return name;
 }
 
-std::vector<CUser*> CTeam::GetMembers() 
+std::vector<User*> CTeam::GetMembers()
 {
     return users;
 }
 
-void CTeam::AddMember(CUser* user) 
+void CTeam::SetLogo(std::string logoPath)
+{
+    logo = logoPath;
+}
+
+std::string CTeam::GetLogo()
+{
+    return logo;
+}
+
+void CTeam::SetId(int id)
+{
+    this->id = id;
+}
+
+void CTeam::SetContestId(int contestId)
+{
+    this->contestId = contestId;
+}
+
+void CTeam::SetName(std::string name)
+{
+    this->name = name;
+}
+
+void CTeam::AddMember(User* user)
 {
     if (user == nullptr)
         return;
@@ -34,42 +64,38 @@ void CTeam::AddMember(CUser* user)
     users.push_back(user);
 }
 
-void CTeam::RemoveMember(std::string userId) 
+void CTeam::RemoveMember(int userId)
 {
-    users.erase(std::remove_if(users.begin(), users.end(), [&](CUser* user) {return user->GetId() == userId;}), users.end());
+    users.erase(std::remove_if(users.begin(), users.end(),
+        [userId](User* user) { return user->GetId() == userId; }), users.end());
 }
 
-int CTeam::GetScore() 
+int CTeam::GetScore()
 {
     int total = 0;
-    for (const auto& pair : stats) 
+    for (const auto& pair : stats)
     {
         total += pair.second;
     }
     return total;
 }
 
-void CTeam::AddStats(std::string key, int value) 
+void CTeam::AddStats(std::string key, int value)
 {
     stats[key] += value;
 }
 
-std::map<std::string, int> CTeam::GetStats() 
+std::map<std::string, int> CTeam::GetStats()
 {
     return stats;
 }
 
-void CTeam::SetLogo(std::string logoPath) 
+void CTeam::SetActive(bool active)
 {
-    logo = logoPath;
+    this->active = active;
 }
 
-std::string CTeam::GetLogo() 
+bool CTeam::IsActive() const
 {
-    return logo;
-}
-
-void CTeam::SetActive(bool isActive) 
-{
-    active = isActive;
+    return active;
 }

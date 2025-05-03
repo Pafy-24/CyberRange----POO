@@ -8,11 +8,11 @@ private:
     std::string imageName;
     std::map<std::string, std::string> envVars;
     int port;
-    std::string challengeId;
+    int challengeId;
 
 public:
-    Docker(const std::string& userId, const std::string& resourceId,const std::string& image, 
-        const std::string& challId);
+    Docker(int userId, int resourceId,const std::string& image, 
+        int challId);
     bool start() override;
     bool stop() override;
     bool deploy() override;

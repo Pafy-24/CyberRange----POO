@@ -161,6 +161,9 @@
     <ClInclude Include="VM.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Chall.cpp" />
+    <ClCompile Include="ChallMng.cpp" />
+    <ClCompile Include="Contest.cpp" />
     <ClCompile Include="COrchestrator.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Docker.cpp" />
@@ -170,6 +173,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Tab.cpp" />
     <ClCompile Include="VM.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

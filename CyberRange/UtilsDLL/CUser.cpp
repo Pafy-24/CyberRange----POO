@@ -16,27 +16,49 @@ std::string CUser::hashPassword(const std::string& password) const
     return ss.str();
 }
 
-CUser::CUser(std::string username, std::string email) : username(username), email(email), accessLevel(0), active(true) 
+CUser::CUser(std::string username, std::string email, int id)
+    : id(id), username(username), email(email), accessLevel(0), active(true), passwordHash("")
 {
-    id = "USR_" + username;
 }
 
-std::string CUser::GetId()
+int CUser::GetId()
 {
-    return std::string();
+    return id;
 }
+
 std::string CUser::GetUsername()
 {
-	return username;
+    return username;
+}
+
+std::string CUser::GetEmail()
+{
+    return email;
+}
+
+void CUser::SetUsername(std::string username)
+{
+    this->username = username;
+}
+
+void CUser::SetEmail(std::string email)
+{
+    this->email = email;
+}
+
+void CUser::SetId(int id)
+{
+    this->id = id;
 }
 
 bool CUser::Authenticate(std::string password)
 {
     return passwordHash == hashPassword(password);
 }
+
 int CUser::GetAccessLevel()
 {
-	return accessLevel;
+    return accessLevel;
 }
 
 void CUser::SetAccessLevel(int level)
@@ -46,17 +68,15 @@ void CUser::SetAccessLevel(int level)
 
 void CUser::SetPassword(std::string password)
 {
-	passwordHash = hashPassword(password);
+    passwordHash = hashPassword(password);
 }
-std::string CUser::GetEmail()
-{
-	return email;
-}
+
 void CUser::SetActive(bool active)
 {
-	this->active = active;
+    this->active = active;
 }
+
 bool CUser::IsActive() const
 {
-	return active;
+    return active;
 }

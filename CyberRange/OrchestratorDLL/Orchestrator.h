@@ -4,6 +4,8 @@
 
 class Orchestrator {
 public:
+	virtual int getId() const = 0;
+	virtual void setId(int id) = 0;
     virtual bool start() = 0;
     virtual bool stop() = 0;
     virtual bool deploy() = 0;

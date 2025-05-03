@@ -1,22 +1,22 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "CChallMng.h"
 
-class Tab: public CChallMng {
+class Tab {
 private:
-    std::string id;
+    int id;
     std::string name;
     std::vector<std::string> challIds;
     bool visible;
 
 public:
-    Tab(std::string name);
-    std::string getId();
-    std::string getName();
-    void addChallenge(std::string challId);
-    void removeChallenge(std::string challId);
-    std::vector<std::string> getChallenges();
-    void setVisible(bool visible);
-    bool isVisible();
+    Tab(const std::string& name,int id=0);
+    int getId() const;
+    std::string getName() const;
+    std::vector<std::string> getChallenges() const;
+    bool isVisible() const;
+
+    void addChallenge(const std::string& challId);
+    void removeChallenge(const std::string& challId);
+    void setVisible(bool vis);
 };

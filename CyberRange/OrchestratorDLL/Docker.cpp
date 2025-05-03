@@ -8,16 +8,16 @@
 #include <string>
 #include <algorithm>
 
-Docker::Docker(const std::string& userId, const std::string& resourceId,const std::string& image, 
-    const std::string& challId)
-    : COrchestrator(userId,resourceId), imageName(image), port(8080), challengeId(challId) {
+Docker::Docker(int userId, int id,const std::string& image, 
+    int challId)
+    : COrchestrator(userId,id), imageName(image), port(8080), challengeId(challId) {
 }
 
 bool Docker::start() {
     if (!COrchestrator::start()) return false;
 
     std::stringstream cmd;
-    cmd << "docker start \"" << userId << "-" << resourceId << "-" << imageName << "\"";
+    cmd << "docker start \"" << userId << "-" << id << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
     return result.find("ERROR") == std::string::npos;
 }
@@ -26,7 +26,7 @@ bool Docker::stop() {
     if (!COrchestrator::stop()) return false;
 
     std::stringstream cmd;
-    cmd << "docker stop \"" << userId << "-" << resourceId << "-" << imageName << "\"";
+    cmd << "docker stop \"" << userId << "-" << id << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
 
     // Delete files in Resources/[chall_id]
@@ -47,7 +47,7 @@ bool Docker::deploy() {
     // Note: Docker images are managed by Docker daemon, not copied as files
 
     std::stringstream cmd;
-    cmd << "docker run -d --name \"" << userId << "-" << resourceId << "-" << imageName
+    cmd << "docker run -d --name \"" << userId << "-" << id << "-" << imageName
         << "\" --network bridge -p " << port << ":" << port;
 
     for (const auto& env : envVars) {
@@ -63,7 +63,7 @@ bool Docker::undeploy() {
     if (!COrchestrator::undeploy()) return false;
 
     std::stringstream cmd;
-    cmd << "docker rm -f \"" << userId << "-" << resourceId << "-" << imageName << "\"";
+    cmd << "docker rm -f \"" << userId << "-" << id << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
 
     // Delete files in Resources/[chall_id]
@@ -79,12 +79,12 @@ std::string Docker::getStatus() {
     std::string baseStatus = COrchestrator::getStatus();
 
     std::stringstream cmd;
-    cmd << "docker inspect \"" << userId << "-" << resourceId << "-" << imageName << "\"";
+    cmd << "docker inspect \"" << userId << "-" << id << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
 
     std::stringstream status;
     status << baseStatus;
-    status << "Container: " << userId << "-" << resourceId << "-" << imageName << "\n";
+    status << "Container: " << userId << "-" << id << "-" << imageName << "\n";
     status << "Port: " << port << "\n";
     status << "State: " << (result.find("\"Running\": true") != std::string::npos ? "Running" : "Stopped") << "\n";
 
@@ -105,14 +105,14 @@ void Docker::setPort(int portNum) {
 
 std::string Docker::getLogs() {
     std::stringstream cmd;
-    cmd << "docker logs \"" << userId << "-" << resourceId << "-" << imageName << "\"";
+    cmd << "docker logs \"" << userId << "-" << id << "-" << imageName << "\"";
     return executeCommand(cmd.str());
 }
 
 
 std::string Docker::getAddress() {
     std::stringstream cmd;
-    cmd << "docker inspect \"" << userId << "-" << resourceId << "-" << imageName << "\"";
+    cmd << "docker inspect \"" << userId << "-" << id << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
 
     if (result.empty())

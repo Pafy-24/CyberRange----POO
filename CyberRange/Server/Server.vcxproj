@@ -130,8 +130,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CController.cpp" />
+    <ClCompile Include="ChallController.cpp" />
+    <ClCompile Include="DBController.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ServerMng.cpp" />
+    <ClCompile Include="TeamController.cpp" />
+    <ClCompile Include="UserController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CController.h" />
