@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ClientMng.h"
 #include "ConnsFactory.h"
+#include "ChallClientController.h"
+#include "ContestClientController.h"
 #include <iostream>
 #include <thread>
 
@@ -18,7 +20,11 @@ ClientMng* ClientMng::getInstance(int port, const std::string& address)
 }
 
 ClientMng::ClientMng(int port, const std::string& address)
-    : port(port), serverAddress(address), loader(new Loader()), serverConn(nullptr), connected(false) {}
+    : port(port), serverAddress(address), loader(new Loader()), serverConn(nullptr), connected(false)
+{
+    attachController("ChallClientController", new ChallClientController());
+    attachController("ContestClientController", new ContestClientController());
+}
 
 ClientMng::~ClientMng() 
 {

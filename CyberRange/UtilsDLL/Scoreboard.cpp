@@ -32,3 +32,16 @@ std::string Scoreboard::exportJSON()
 {
     return std::string();
 }
+
+void Scoreboard::addScore(const std::string& teamId, int score)
+{
+    for (auto& pair : teamScores) 
+    {
+        if (pair.first == teamId) 
+        {
+            pair.second = score;  // actualizare scor existent
+            return;
+        }
+    }
+    teamScores.emplace_back(teamId, score);
+}

@@ -1,11 +1,13 @@
 #pragma once
-#include <string>
 #include "CController.h"
+#include <string>
 
 class ContestClientController : public CController {
 public:
     ContestClientController();
-    void listContests();
-    void registerForContest(std::string contestId);
-    void getScoreboard(std::string contestId);
+
+    void requestContestList();
+    void requestScoreboard(const std::string& contestId);
+
+    void handleServerResponse(const std::string& responseStr) override;
 };

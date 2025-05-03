@@ -3,8 +3,9 @@
 #include <vector>
 #include <utility>
 #include <ctime>
+#include "DLL.h"
 
-class Scoreboard {
+class UTILS_API Scoreboard {
 private:
     std::string contestId;
     std::vector<std::pair<std::string, int>> teamScores;
@@ -19,4 +20,5 @@ public:
     void setUpdateInterval(int seconds);
     time_t getLastUpdateTime();
     std::string exportJSON();
+    void addScore(const std::string& teamId, int score);
 };

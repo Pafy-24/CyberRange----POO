@@ -10,14 +10,14 @@ bool testDB() {
     try {
         std::string connStr = "sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB";
 
-        DBController dbCtrl(connStr);
-        if (!dbCtrl.connect()) {
+        DBController* dbCtrl = DBController::getInstance(connStr);
+        if (!dbCtrl->connect()) {
             std::cerr << "Connection failed" << std::endl;
             return false;
         }
 
         std::string query = "SELECT * FROM Users;";
-        auto results = dbCtrl.executeQuery(query);
+        auto results = dbCtrl->executeQuery(query);
 
         std::cout << "Results:\n";
         for (const auto& row : results) {
@@ -27,7 +27,7 @@ bool testDB() {
             std::cout << std::endl;
         }
 
-        dbCtrl.disconnect();
+        dbCtrl->disconnect();
         return true;
     }
     catch (const std::exception& ex) {

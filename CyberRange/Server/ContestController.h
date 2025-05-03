@@ -12,7 +12,6 @@ class ContestController : public CController {
 private:
     std::map<std::string, Contest*> contests;
 	DBController* dbController;
-
 public:
     ContestController(DBController* dbCtrl);
     void createContest(std::string contestData);

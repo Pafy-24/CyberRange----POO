@@ -1,1 +1,83 @@
 #include "ContestClientController.h"
+#include "ClientMng.h"
+#include "ChallMng.h"
+#include "Contest.h"
+#include "Scoreboard.h"
+#include "json.hpp"
+#include <iostream>
+
+using json = nlohmann::json;
+
+ContestClientController::ContestClientController()
+    : CController("Contest") {}
+
+void ContestClientController::requestContestList() 
+{
+    json req = {
+        {"controller", "Contest"},
+        {"action", "getContestList"},
+        {"payload", json::object()}
+    };
+    ClientMng::getInstance()->sendRequest(req.dump());
+}
+
+void ContestClientController::requestScoreboard(const std::string& contestId) 
+{
+    json req = {
+        {"controller", "Contest"},
+        {"action", "getScoreboard"},
+        {"payload", { {"contestId", contestId} }}
+    };
+    ClientMng::getInstance()->sendRequest(req.dump());
+}
+
+void ContestClientController::handleServerResponse(const std::string& responseStr) 
+{
+    try {
+        json response = json::parse(responseStr);
+
+        if (!response.contains("action") || !response.contains("status")) 
+        {
+            std::cerr << "[ContestClientController] Invalid response format.\n";
+            return;
+        }
+
+        std::string action = response["action"];
+        std::string status = response["status"];
+
+        // Handle getContestList
+        if (action == "getContestList" && status == "success") 
+        {
+            auto data = response["data"];
+            for (const auto& c : data) 
+            {
+                int id = std::stoi(c["contestId"].get<std::string>());
+                std::string name = c["name"];
+                Contest* contest = new Contest(name, id);
+                ChallMng::getInstance()->addContest(contest);
+            }
+            std::cout << "[ContestClientController] Contest list loaded.\n";
+        }
+
+        // Handle getScoreboard
+        else if (action == "getScoreboard" && status == "success") 
+        {
+            std::string contestId = response["contestId"];
+            auto scores = response["scoreboard"];
+            Scoreboard* sb = new Scoreboard(contestId);
+
+            for (auto it = scores.begin(); it != scores.end(); ++it) 
+            {
+                std::string teamId = it.key();
+                int score = it.value();
+                sb->addScore(teamId, score);
+            }
+
+            // TODO: afiseaza Scoreboard în orchestrare
+            std::cout << "[ContestClientController] Scoreboard received for contest " << contestId << "\n";
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "[ContestClientController] Error: " << e.what() << "\n";
+    }
+}

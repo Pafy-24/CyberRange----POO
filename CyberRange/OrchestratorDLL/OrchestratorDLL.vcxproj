@@ -146,7 +146,6 @@
     <ClInclude Include="Chall.h" />
     <ClInclude Include="ChallFactory.h" />
     <ClInclude Include="ChallMng.h" />
-    <ClInclude Include="ChallMngBuilder.h" />
     <ClInclude Include="Contest.h" />
     <ClInclude Include="COrchestrator.h" />
     <ClInclude Include="DLL.h" />
@@ -160,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Chall.cpp" />
+    <ClCompile Include="ChallFactory.cpp" />
     <ClCompile Include="ChallMng.cpp" />
     <ClCompile Include="Contest.cpp" />
     <ClCompile Include="COrchestrator.cpp" />
