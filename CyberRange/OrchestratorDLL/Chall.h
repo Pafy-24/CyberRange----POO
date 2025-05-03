@@ -4,7 +4,7 @@
 #include "ChallTypes.h"
 #include "Orchestrator.h"
 
-class Chall {
+class ORCHESTRATOR_API Chall {
 protected:
     int id;
     std::string name;

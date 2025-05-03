@@ -13,4 +13,5 @@ public:
     void handleRequest(const std::string& data, Connection* client) override;
     void loadUser(const std::string& userId);
     void unloadUser(const std::string& userId);
+	DBController* getDB() const { return dbController; }
 };

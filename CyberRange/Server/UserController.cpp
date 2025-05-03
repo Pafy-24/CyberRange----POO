@@ -24,14 +24,17 @@ void UserController::handleRequest(const std::string& data, Connection* client) 
             std::string username = j["username"].get<std::string>();
             std::string password = j["password"].get<std::string>();
 
-            std::string query = "SELECT * FROM Users WHERE username = '" + username +
-                "' AND password = '" + password + "'";
+            std::string query = "SELECT * FROM Users WHERE Username = '" + username +
+                "' AND PasswordHash = '" + password + "'";
             auto results = dbController->executeQuery(query);
 
-            if (!results.empty()) {
+            if (!results.empty()) 
+            {
                 json userData = {
                     {"userId", results[0]["userId"]},
-                    {"username", username}
+					{"username", username},
+					{"role", results[0]["role"]},
+					{"lastActive", results[0]["lastActive"]}
                 };
                 std::string token = CustomSerial::encodeJWT(userData.dump());
 
@@ -40,7 +43,8 @@ void UserController::handleRequest(const std::string& data, Connection* client) 
                 client->send(json{ {"status", "success"}, {"token", token} }.dump());
                 logger->log("User logged in: " + username);
             }
-            else {
+            else 
+            {
                 client->send("ERROR: Invalid credentials");
             }
         }
@@ -75,7 +79,7 @@ void UserController::loadUser(const std::string& userId) {
         return;
     }
 
-    std::string query = "SELECT * FROM Users WHERE userId = '" + userId + "'";
+    std::string query = "SELECT * FROM Users WHERE UserID = '" + userId + "'";
     auto results = dbController->executeQuery(query);
 
     if (!results.empty()) {
@@ -88,7 +92,7 @@ void UserController::loadUser(const std::string& userId) {
 void UserController::unloadUser(const std::string& userId) {
     auto it = users.find(userId);
     if (it != users.end()) {
-        std::string query = "UPDATE Users SET lastActive = GETDATE() WHERE userId = '" + userId + "'";
+        std::string query = "UPDATE Users SET lastActive = GETDATE() WHERE UserID = '" + userId + "'";
         dbController->executeUpdate(query);
         delete it->second;
         users.erase(it);

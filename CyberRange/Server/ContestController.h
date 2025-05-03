@@ -11,17 +11,17 @@
 class ContestController : public CController {
 private:
     std::map<std::string, Contest*> contests;
-    ChallMng& challMng;
-    TeamController& teamCtrl;
+	DBController* dbController;
 
 public:
-    ContestController(ChallMng& challMng, TeamController& teamCtrl);
+    ContestController(DBController* dbCtrl);
     void createContest(std::string contestData);
+	void handleRequest(const std::string& data, Connection* client);
     void updateContest(std::string contestId, std::string contestData);
     void deleteContest(std::string contestId);
     Contest* getContest(std::string contestId);
-    bool addTeamToContest(std::string teamId, std::string contestId);
-    bool removeTeamFromContest(std::string teamId, std::string contestId);
-    std::vector<Contest*> listContests();
     Scoreboard* getScoreboard(std::string contestId);
+    void loadContest(const std::string& contestId);
+    std::map<std::string, Contest*>& getContests() { return contests; }
+    DBController* getDB();
 };

@@ -80,17 +80,19 @@ void ChallController::loadChallenge(const std::string& challId) {
         return;
     }
 
-    std::string query = "SELECT * FROM Challenges WHERE challId = ?";
+    std::string query = "SELECT * FROM Challenges WHERE ChallengeID = ?";
     auto results = dbController->executeQuery(query, { challId });
 
-    if (!results.empty()) {
+    if (!results.empty()) 
+    {
         Chall* challenge = new Chall(results[0]["title"], {}, std::stoi(results[0]["challId"]));
         challenge->setDescription(results[0]["description"]);
         challenge->setFlag(results[0]["flag"]);
         challenges[challId] = challenge;
         logger->log("Loaded challenge: " + challId);
     }
-    else {
+    else 
+    {
         logger->log("Failed to load challenge: " + challId);
     }
 }
@@ -98,10 +100,15 @@ void ChallController::loadChallenge(const std::string& challId) {
 void ChallController::unloadChallenge(const std::string& challId) {
     auto it = challenges.find(challId);
     if (it != challenges.end()) {
-        std::string query = "UPDATE Challenges SET lastActive = GETDATE() WHERE challId = ?";
+        std::string query = "UPDATE Challenges SET lastActive = GETDATE() WHERE ChallengeID = ?";
         dbController->executeUpdate(query, { challId });
         delete it->second;
         challenges.erase(it);
         logger->log("Unloaded challenge: " + challId);
     }
+}
+
+DBController* ChallController::getDB() const
+{
+	return dbController;
 }

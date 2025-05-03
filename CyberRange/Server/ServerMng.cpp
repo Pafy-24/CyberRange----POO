@@ -6,6 +6,7 @@
 #include "UserController.h"
 #include "TeamController.h"
 #include "ChallController.h"
+#include "ContestController.h"
 #include <iostream>
 #include <algorithm>
 #include <thread>
@@ -22,16 +23,21 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
 }
 
 ServerMng::ServerMng(int port, std::string address)
-    : isRunning(false), port(port), serverAddress(address), loader(new Loader()) {
+    : isRunning(false), port(port), serverAddress(address) {
     // Initialize DBController
-    DBController* dbCtrl = new DBController("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
+    DBController* dbCtrl = DBController::getInstance("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
+	loader = Loader::getInstance();
+
     attachController("DBController", dbCtrl);
 
     // Initialize other controllers
     attachController("UserController", new UserController(dbCtrl));
     attachController("TeamController", new TeamController(dbCtrl));
     attachController("ChallController", new ChallController(dbCtrl));
+    attachController("ContestController", new ContestController(dbCtrl));
     attachController("default", new Controller());
+
+	loader->attachControllers(controllers);
 }
 
 ServerMng::~ServerMng() {

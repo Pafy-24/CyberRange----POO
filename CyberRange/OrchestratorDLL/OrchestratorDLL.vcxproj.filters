@@ -42,12 +42,6 @@
     <ClInclude Include="Tab.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
-    <ClInclude Include="CChall.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
-    <ClInclude Include="CChallMng.h">
-      <Filter>Header Files\classes</Filter>
-    </ClInclude>
     <ClInclude Include="Chall.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>

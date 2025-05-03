@@ -13,4 +13,5 @@ public:
     void handleRequest(const std::string& data, Connection* client) override;
     void loadChallenge(const std::string& challId);
     void unloadChallenge(const std::string& challId);
+    DBController* getDB() const;
 };

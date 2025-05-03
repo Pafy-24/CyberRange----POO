@@ -7,14 +7,16 @@
 
 class DBController : public CController {
 private:
-    DBConn* dbConnection;
-    std::string connectionString;
-    bool isConnected;
-
-    bool sanitizeInput(const std::string& input); 
-
-public:
+	static DBController* instance;
+	DBController() = default;
     DBController(std::string connString);
+
+	DBController(const DBController&) = delete;
+	DBController& operator=(const DBController&) = delete;
+	DBController(DBController&&) = delete;
+	DBController& operator=(DBController&&) = delete;
+public:
+    static DBController* getInstance(std::string connString);
     ~DBController();
 
     bool connect();
@@ -25,4 +27,10 @@ public:
     bool commitTransaction();
     bool rollbackTransaction();
     bool testConnection();
+private:
+    DBConn* dbConnection;
+    std::string connectionString;
+    bool isConnected;
+
+    bool sanitizeInput(const std::string& input);
 };

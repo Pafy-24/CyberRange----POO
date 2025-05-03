@@ -6,7 +6,7 @@
 #include "Contest.h"
 #include "Tab.h"
 
-class ChallMng {
+class ORCHESTRATOR_API ChallMng {
 private:
     std::vector<Chall*> challenges;
     std::map<int, Contest*> contests;

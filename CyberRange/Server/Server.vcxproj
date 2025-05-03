@@ -132,7 +132,9 @@
   <ItemGroup>
     <ClCompile Include="CController.cpp" />
     <ClCompile Include="ChallController.cpp" />
+    <ClCompile Include="ContestController.cpp" />
     <ClCompile Include="DBController.cpp" />
+    <ClCompile Include="Loader.cpp" />
     <ClCompile Include="Server.cpp" />
     <ClCompile Include="ServerMng.cpp" />
     <ClCompile Include="TeamController.cpp" />

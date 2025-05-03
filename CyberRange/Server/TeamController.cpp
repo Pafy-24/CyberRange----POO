@@ -65,7 +65,7 @@ void TeamController::loadTeam(const std::string& teamId) {
         return;
     }
 
-    std::string query = "SELECT * FROM Teams WHERE teamId = '" + teamId + "'";
+    std::string query = "SELECT * FROM Teams WHERE TeamID = '" + teamId + "'";
     auto results = dbController->executeQuery(query);
 
     if (!results.empty()) {
@@ -78,7 +78,7 @@ void TeamController::loadTeam(const std::string& teamId) {
 void TeamController::unloadTeam(const std::string& teamId) {
     auto it = teams.find(teamId);
     if (it != teams.end()) {
-        std::string query = "UPDATE Teams SET lastActive = GETDATE() WHERE teamId = '" + teamId + "'";
+        std::string query = "UPDATE Teams SET lastActive = GETDATE() WHERE TeamID = '" + teamId + "'";
         dbController->executeUpdate(query);
         delete it->second;
         teams.erase(it);

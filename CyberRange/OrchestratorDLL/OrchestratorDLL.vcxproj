@@ -143,8 +143,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CChall.h" />
-    <ClInclude Include="CChallMng.h" />
     <ClInclude Include="Chall.h" />
     <ClInclude Include="ChallFactory.h" />
     <ClInclude Include="ChallMng.h" />
