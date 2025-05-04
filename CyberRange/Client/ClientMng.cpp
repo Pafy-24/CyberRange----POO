@@ -3,6 +3,7 @@
 #include "ConnsFactory.h"
 #include "ChallClientController.h"
 #include "ContestClientController.h"
+#include "AuthController.h"
 #include <iostream>
 #include <thread>
 
@@ -24,6 +25,7 @@ ClientMng::ClientMng(int port, const std::string& address)
 {
     attachController("ChallClientController", new ChallClientController());
     attachController("ContestClientController", new ContestClientController());
+    attachController("AuthController", new AuthController());
 }
 
 ClientMng::~ClientMng() 

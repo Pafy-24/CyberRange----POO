@@ -10,6 +10,9 @@
 #include <iostream>
 #include <algorithm>
 #include <thread>
+#include <json.hpp>
+
+using json = nlohmann::json;
 
 ServerMng* ServerMng::instance = nullptr;
 std::mutex ServerMng::instanceMutex;
@@ -26,7 +29,7 @@ ServerMng::ServerMng(int port, std::string address)
     : isRunning(false), port(port), serverAddress(address) {
     // Initialize DBController
     DBController* dbCtrl = DBController::getInstance("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
-	loader = Loader::getInstance();
+	loader = new Loader();
 
     attachController("DBController", dbCtrl);
 
@@ -37,7 +40,7 @@ ServerMng::ServerMng(int port, std::string address)
     attachController("ContestController", new ContestController(dbCtrl));
     attachController("default", new Controller());
 
-	loader->attachControllers(controllers);
+	//loader->attachControllers(controllers);
 }
 
 ServerMng::~ServerMng() {
@@ -52,7 +55,7 @@ void ServerMng::start() {
     isRunning = true;
 
     // Load initial data
-    loader->loadAll();
+    //loader->loadAll();
 
     runTCPServer(port, false);
     runDownloadServer(port + 3);
@@ -67,7 +70,7 @@ void ServerMng::stop() {
     isRunning = false;
 
     // Save and unload data
-    loader->saveUnload();
+    //loader->saveUnload();
 
     {
         std::lock_guard<std::mutex> lock(connectionsMutex);
@@ -83,15 +86,10 @@ void ServerMng::stop() {
     }
     controllers.clear();
 
-    for (auto* chall : challMngs) {
-        delete chall;
-    }
-    challMngs.clear();
-
-    for (auto* user : users) {
+    /*for (auto* user : users) {
         delete user;
     }
-    users.clear();
+    users.clear();*/
 
     delete loader;
     loader = nullptr;
@@ -155,12 +153,22 @@ Connection* ServerMng::getConnection(int id) {
     return nullptr;
 }
 
+Controller* ServerMng::getController(const std::string& name)
+{
+    auto it = controllers.find(name);
+    if (it != controllers.end()) 
+    {
+        return it->second;
+    }
+    return nullptr;
+}
+
 ChallMng* ServerMng::getChallMng(std::string contestId) {
-    for (auto* chall : challMngs) {
+    //for (auto* chall : challMngs) {
         //if (chall->getContestId() == contestId) {
             //return chall;
         //}
-    }
+    //}
     return nullptr;
 }
 

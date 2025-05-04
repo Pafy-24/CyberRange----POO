@@ -76,7 +76,8 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
                     parsed.push_back(row);
                 }
 
-                ChallMng::getInstance()->loadChallengesFromData(parsed);
+                ChallMng* challmng = new ChallMng();
+                challmng->loadChallengesFromData(parsed);
                 std::cout << "[ChallClientController] Challenges loaded: " << parsed.size() << "\n";
             }
             else

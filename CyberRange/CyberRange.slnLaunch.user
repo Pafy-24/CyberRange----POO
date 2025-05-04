@@ -4,6 +4,10 @@
     "Projects": [
       {
         "Path": "Server\\Server.vcxproj",
+        "Action": "StartWithoutDebugging"
+      },
+      {
+        "Path": "Client\\Client.vcxproj",
         "Action": "Start"
       }
     ]

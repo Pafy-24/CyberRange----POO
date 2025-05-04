@@ -5,11 +5,12 @@
 class AuthController : public CController {
 private:
     std::string token;
-
+	std::string currentUser;
 public:
-    AuthController();
-    bool login(std::string username, std::string password);
-    bool validateToken();
-    void logout();
-    std::string getToken();
+	AuthController();
+    void requestLogin(const std::string& username, const std::string& password);
+    std::string getToken() const;
+    std::string getCurrentUser() const;
+
+    void handleServerResponse(const std::string& responseStr) override;
 };

@@ -21,7 +21,7 @@ private:
     std::map<int,User*> users;
     std::vector<std::string> tokens;
     std::mutex tokenMutex;
-    Loader loader;
+    Loader* loader;
     bool isRunning;
     int port;
     std::string serverAddress;
@@ -46,12 +46,10 @@ public:
     void attachController(std::string name, Controller* ctrl);
     void removeController(std::string name);
     Connection* getConnection(int id);
+	Controller* getController(const std::string& name);
     ChallMng* getChallMng(std::string contestId);
     void addToken(const std::string& token);
     void removeToken(const std::string& token);
     const std::vector<std::string>& getTokens() const { return tokens; }
     std::mutex& getTokenMutex() { return tokenMutex; }
-
-
-
 };

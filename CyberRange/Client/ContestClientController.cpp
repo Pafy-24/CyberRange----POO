@@ -54,7 +54,8 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
                 int id = std::stoi(c["contestId"].get<std::string>());
                 std::string name = c["name"];
                 Contest* contest = new Contest(name, id);
-                ChallMng::getInstance()->addContest(contest);
+                ChallMng* challmng = new ChallMng(); 
+                challmng->addContest(contest);
             }
             std::cout << "[ContestClientController] Contest list loaded.\n";
         }

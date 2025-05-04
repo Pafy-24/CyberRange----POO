@@ -4,10 +4,12 @@
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
 #include <QDebug>
+#include <QTimer>
 #include "MainMenu.h"
 #include <QMouseEvent>
 #include "ConnsFactory.h"
 #include "ClientMng.h"
+#include "AuthController.h"
 
 LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDialog)
 {
@@ -54,62 +56,44 @@ void LoginDialog::on_loginButton_clicked()
 {
     std::string _username = ui->lineEditUsername->text().toStdString();
     std::string _password = ui->lineEditPassword->text().toStdString();
-    std::string role;
-	
-    // Trimit comanda AUTH
-    std::string authCommand = "AUTH " + _username + " " + _password + " CyberRangeDB";
 
-	ClientMng* clientMng = ClientMng::getInstance();
-	clientMng->sendRequest(authCommand);
-    std::string response = clientMng->getConnection()->receive();
-
-    if (response.find("OK") == 0) 
+    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
+    if (!authCtrl) 
     {
-        QMessageBox::information(this, "Succes", "Logged in succesfully!");
-
-        // Fade out LoginDialog
-        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
-        fadeOut->setDuration(500);
-        fadeOut->setStartValue(1);
-        fadeOut->setEndValue(0);
-
-		std::string role = response.substr(3); // extragere rol din raspuns
-        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-            // dupa fade-out: open MainMenu
-            MainMenu* menu = new MainMenu(); // dacă MainMenu primește conexiunea prin constructor
-            menu->show();
-            this->close();
-            });
-        fadeOut->start();
-    }
-    else 
-    {
-        QMessageBox::warning(this, "Error", "Login failed:\n" + QString::fromStdString(response));
+        QMessageBox::warning(this, "Eroare", "Nu s-a gasit AuthController.");
+        return;
     }
 
-    //QString username = ui->lineEditUsername->text();
-    //QString password = ui->lineEditPassword->text();
+    authCtrl->requestLogin(_username, _password);
 
-    //if (username == "admin" && password == "1234")
-    //{ 
-    //    // Fade out LoginDialog
-    //    QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
-    //    fadeOut->setDuration(500);
-    //    fadeOut->setStartValue(1);
-    //    fadeOut->setEndValue(0);
+    // Așteptăm puțin ca răspunsul să vină și să fie procesat de controller
+    QTimer::singleShot(200, this, [=]()
+        {
+            if (!authCtrl->getToken().empty()) 
+            {
+                // Login reușit
+                QMessageBox::information(this, "Succes", "Autentificare reușită ca: " +
+                    QString::fromStdString(authCtrl->getCurrentUser()));
 
-    //    connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-    //        // dupa fade-out: open MainMenu
-    //        MainMenu* menu = new MainMenu();
-    //        menu->show();
-    //        this->close(); 
-    //        });
-    //    fadeOut->start();
-    //}
-    //else 
-    //{
-    //    QMessageBox::warning(this, "Login Failed", "Invalid username or password.");
-    //}
+                // Fade-out și trecere la MainMenu
+                QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+                fadeOut->setDuration(500);
+                fadeOut->setStartValue(1);
+                fadeOut->setEndValue(0);
+
+                connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+                    MainMenu* menu = new MainMenu();
+                    menu->show();
+                    this->close();
+                    });
+                fadeOut->start();
+            }
+            else 
+            {
+                QMessageBox::warning(this, "Eroare", "Autentificare eșuată. Verifică datele.");
+            }
+        }
+    );
 }
 
 void LoginDialog::on_registerButton_clicked()

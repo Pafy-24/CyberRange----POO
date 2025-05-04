@@ -20,6 +20,8 @@ public:
 
     void handleRequest(const std::string& data, Connection* client) override;
     void loadUser(const std::string& userId);
+    void loadUserByUsername(const std::string& username);
+    void loadUserByEmail(const std::string& email);
     void unloadUser(const std::string& userId);
 	DBController* getDB() const { return dbController; }
 };

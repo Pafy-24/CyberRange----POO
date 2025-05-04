@@ -3,223 +3,105 @@
 #include "TeamController.h"
 #include "ChallController.h"
 #include "ContestController.h"
+#include "ServerMng.h"
+#include <iostream>
 
-Loader* Loader::instance = nullptr;
-Loader* Loader::getInstance()
+Controller* getController(const std::string& name) 
 {
-    if (!instance) 
-    {
-        instance = new Loader();
-    }
-    return instance;
+    return ServerMng::getInstance()->getController(name);
 }
 
-void Loader::loadUsers()
+// ---------------------- Load methods ----------------------
+
+void Loader::loadUser(int id, Connection* conn) 
 {
-    auto* userCtrl = dynamic_cast<UserController*>(getController("UserController"));
-    if (!userCtrl) 
-    {
-        std::cout << "[Loader] UserController not found\n";
-        return;
-    }
+    auto* ctrl = dynamic_cast<UserController*>(getController("UserController"));
+    if (ctrl) 
+        ctrl->loadUser(std::to_string(id));
+    registerObject(conn, "user:" + std::to_string(id));
+}
 
-    DBController* db = userCtrl->getDB();
-    if (!db)
-    {
-        std::cout << "[Loader] DBController not found in UserController\n";
-        return;
-    }
+void Loader::loadUserByUsername(std::string username, Connection* conn) 
+{
+    auto* ctrl = dynamic_cast<UserController*>(getController("UserController"));
+    if (ctrl) 
+        ctrl->loadUserByUsername(username);
+    registerObject(conn, "user:" + username);
+}
 
-    auto results = db->executeQuery("SELECT UserID FROM Users");
-    int count = 0;
+void Loader::loadUserByEmail(std::string email, Connection* conn) 
+{
+    auto* ctrl = dynamic_cast<UserController*>(getController("UserController"));
+    if (ctrl) 
+        ctrl->loadUserByEmail(email);
+    registerObject(conn, "user:" + email);
+}
 
-    for (const auto& row : results) 
+void Loader::loadChall(int id, Connection* conn) 
+{
+    auto* ctrl = dynamic_cast<ChallController*>(getController("ChallController"));
+    if (ctrl) 
+        ctrl->loadChallenge(std::to_string(id));
+    registerObject(conn, "chall:" + std::to_string(id));
+}
+
+void Loader::loadTeam(int id, Connection* conn)
+{
+    auto* ctrl = dynamic_cast<TeamController*>(getController("TeamController"));
+    if (ctrl) 
+        ctrl->loadTeam(std::to_string(id));
+    registerObject(conn, "team:" + std::to_string(id));
+}
+
+void Loader::loadContest(int id, Connection* conn)
+{
+    auto* ctrl = dynamic_cast<ContestController*>(getController("ContestController"));
+    if (ctrl)
+        ctrl->loadContest(std::to_string(id));
+    registerObject(conn, "contest:" + std::to_string(id));
+}
+
+//void Loader::loadTab(int id, Connection* conn)
+//{
+//    auto* ctrl = dynamic_cast<TabController*>(getController("TabController"));
+//    if (ctrl) 
+//        ctrl->loadTab(std::to_string(id));
+//    registerObject(conn, "tab:" + std::to_string(id));
+//}
+
+// ---------------------- Save/Unload ----------------------
+
+void Loader::save(Connection* conn) 
+{
+    if (objLoaded.count(conn)) 
     {
-        if (row.count("UserID")) 
+        for (const auto& objId : objLoaded[conn]) 
         {
-            userCtrl->loadUser(row.at("UserID"));
-            count++;
+            //saveObject(objId);
         }
     }
-
-    std::cout << "[Loader] Loaded " << count << " users from DB.\n";
+    std::cout << "[Loader] Saved all objects for connection.\n";
 }
 
-void Loader::loadChalls()
+void Loader::unload(Connection* conn) 
 {
-    auto* challCtrl = dynamic_cast<ChallController*>(getController("ChallController"));
-    if (!challCtrl) 
+    if (objLoaded.count(conn)) 
     {
-        std::cout << "[Loader] ChallController not found\n";
-        return;
+        objLoaded.erase(conn);
+        std::cout << "[Loader] Unloaded all objects for connection.\n";
     }
-
-    DBController* db = challCtrl->getDB();
-    if (!db) 
-    {
-        std::cout << "[Loader] DBController not found in ChallController\n";
-        return;
-    }
-
-    std::vector<std::map<std::string, std::string>> results = db->executeQuery("SELECT ChallengeID FROM Challenges");
-
-    int count = 0;
-    for (const auto& row : results) 
-    {
-        if (row.count("ChallengeID")) 
-        {
-            challCtrl->loadChallenge(row.at("ChallengeID"));
-            count++;
-        }
-    }
-
-    std::cout << "[Loader] Loaded " << count << " challenges from DB.\n";
 }
 
-void Loader::loadTeams()
+void Loader::saveUnload(Connection* conn) 
 {
-    auto* teamCtrl = dynamic_cast<TeamController*>(getController("TeamController"));
-    if (!teamCtrl) 
-    {
-        std::cout << "[Loader] TeamController not found\n";
-        return;
-    }
-
-    DBController* db = teamCtrl->getDB();
-    if (!db) 
-    {
-        std::cout << "[Loader] DBController not found in TeamController\n";
-        return;
-    }
-
-    auto results = db->executeQuery("SELECT TeamID FROM Teams");
-    int count = 0;
-
-    for (const auto& row : results) 
-    {
-        if (row.count("TeamID")) 
-        {
-            teamCtrl->loadTeam(row.at("TeamID"));
-            count++;
-        }
-    }
-
-    std::cout << "[Loader] Loaded " << count << " teams from DB.\n";
+    save(conn);
+    unload(conn);
 }
 
-void Loader::loadContests()
-{
-	auto* contestCtrl = dynamic_cast<ContestController*>(getController("ContestController"));
-	if (!contestCtrl)
-	{
-		std::cout << "[Loader] ContestController not found\n";
-		return;
-	}
-	DBController* db = contestCtrl->getDB();
-	if (!db)
-	{
-		std::cout << "[Loader] DBController not found in ContestController\n";
-		return;
-	}
-	auto results = db->executeQuery("SELECT ContestID FROM Contests");
-	int count = 0;
-	for (const auto& row : results)
-	{
-		if (row.count("ContestID"))
-		{
-			contestCtrl->loadContest(row.at("ContestID"));
-			count++;
-		}
-	}
-	std::cout << "[Loader] Loaded " << count << " contests from DB.\n";
-}
+// ---------------------- Internal helpers ----------------------
 
-void Loader::loadAll()
-{
-    std::cout << "[Loader] Loading all entities..." << std::endl;
+void Loader::registerObject(Connection* conn, std::string objId) {
+    objLoaded[conn].insert(objId);
 
-    loadUsers();
-    loadTeams();
-	loadChalls();
-	loadContests();
-
-    std::cout << "[Loader] All entities loaded." << std::endl;
-}
-
-void Loader::saveUnload()
-{
-    std::cout << "[Loader] Saving and unloading all entities..." << std::endl;
-
-    auto* userCtrl = dynamic_cast<UserController*>(getController("UserController"));
-    auto* teamCtrl = dynamic_cast<TeamController*>(getController("TeamController"));
-    auto* challCtrl = dynamic_cast<ChallController*>(getController("ChallController"));
-
-    if (userCtrl) 
-    {
-        for (const auto& pair : objLoaded) 
-        {
-            if (pair.second == "UserController") 
-            {
-                //userCtrl->unloadUser(pair.first->getId());
-            }
-        }
-    }
-
-    if (teamCtrl) 
-    {
-        for (const auto& pair : objLoaded) 
-        {
-            if (pair.second == "TeamController") 
-            {
-                //teamCtrl->unloadTeam(pair.first->getId());
-            }
-        }
-    }
-
-    if (challCtrl) 
-    {
-        for (const auto& pair : objLoaded) 
-        {
-            if (pair.second == "ChallController") 
-            {
-                //challCtrl->unloadChallenge(pair.first->getId());
-            }
-        }
-    }
-
-    std::cout<<"[Loader] All entities unloaded." << std::endl;
-}
-
-Controller* Loader::getController(std::string name)
-{
-    auto it = controllerMap.find(name);
-    if (it != controllerMap.end()) 
-    {
-        return it->second;
-    }
-    std::cout << "[Loader] Controller not found: " << name << std::endl;
-    return nullptr;
-}
-
-void Loader::registerObject(Connection* conn, std::string objId)
-{
-    objLoaded[conn] = objId;
-    std::cout << "[Loader] Registered object: " << objId << std::endl;
-}
-
-void Loader::attachControllers(std::map<std::string, Controller*> controllerMAP)
-{
-	this->controllerMap = controllerMAP;
-}
-
-bool Loader::isLoaded(std::string objId)
-{
-    for (const auto& pair : objLoaded) 
-    {
-        if (pair.second == objId) 
-        {
-            return true;
-        }
-    }
-    return false;
+    std::cout << "[Loader] Registered object: " << objId << " for connection.\n";
 }

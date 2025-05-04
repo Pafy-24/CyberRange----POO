@@ -1,7 +1,6 @@
 #include "UsersFactory.h"
 #include "UserController.h"
 #include "ServerMng.h"
-#include "json.hpp"
 #include "CustomSerial.h"
 #include <iostream>
 
@@ -117,6 +116,47 @@ void UserController::loadUser(const std::string& userId) {
 		User* user = UsersFactory::CreateUser(UserType::COMMON, results[0]["username"], results[0]["userId"]).release();
         users[userId] = user;
         logger->log("Loaded user: " + userId);
+    }
+}
+
+void UserController::loadUserByUsername(const std::string& username) {
+    for (auto it = users.begin(); it != users.end(); ++it) {
+        if (it->second && it->second->GetUsername() == username) {
+            return;
+        }
+    }
+
+    std::string query = "SELECT * FROM Users WHERE username = '" + username + "'";
+    auto results = dbController->executeQuery(query);
+
+    if (!results.empty()) {
+        std::string userId = results[0]["userId"];
+        User* user = UsersFactory::CreateUser(UserType::COMMON, username, userId).release();
+        users[userId] = user;
+        logger->log("Loaded user by username: " + username);
+    }
+}
+
+void UserController::loadUserByEmail(const std::string& email) {
+    for (auto it = users.begin(); it != users.end(); ++it) 
+    {
+        if (it->second && it->second->GetEmail() == email) 
+        {
+            return;
+        }
+    }
+
+    std::string query = "SELECT * FROM Users WHERE email = '" + email + "'";
+    auto results = dbController->executeQuery(query);
+
+    if (!results.empty()) 
+    {
+        std::string userId = results[0]["userId"];
+        std::string username = results[0]["username"];
+        User* user = UsersFactory::CreateUser(UserType::COMMON, username, userId).release();
+        user->SetEmail(email);
+        users[userId] = user;
+        logger->log("Loaded user by email: " + email);
     }
 }
 
