@@ -69,7 +69,7 @@ void TeamController::loadTeam(const std::string& teamId) {
     auto results = dbController->executeQuery(query);
 
     if (!results.empty()) {
-		Team* team = UsersFactory::CreateTeam(results[0]["teamName"], 0, std::stoi(results[0]["teamId"])).release();
+		Team* team = UsersFactory::CreateTeam(results[0]["TeamName"], 0, std::stoi(results[0]["TeamID"])).release();
         teams[teamId] = team;
         logger->log("Loaded team: " + teamId);
     }

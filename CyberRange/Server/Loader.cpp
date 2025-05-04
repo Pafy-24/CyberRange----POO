@@ -37,7 +37,7 @@ void Loader::loadUsers()
     {
         if (row.count("UserID")) 
         {
-            userCtrl->loadUser(row.at("userId"));
+            userCtrl->loadUser(row.at("UserID"));
             count++;
         }
     }
@@ -66,9 +66,9 @@ void Loader::loadChalls()
     int count = 0;
     for (const auto& row : results) 
     {
-        if (row.count("challId")) 
+        if (row.count("ChallengeID")) 
         {
-            challCtrl->loadChallenge(row.at("challId"));
+            challCtrl->loadChallenge(row.at("ChallengeID"));
             count++;
         }
     }
@@ -92,14 +92,14 @@ void Loader::loadTeams()
         return;
     }
 
-    auto results = db->executeQuery("SELECT teamId FROM Teams");
+    auto results = db->executeQuery("SELECT TeamID FROM Teams");
     int count = 0;
 
     for (const auto& row : results) 
     {
-        if (row.count("teamId")) 
+        if (row.count("TeamID")) 
         {
-            teamCtrl->loadTeam(row.at("teamId"));
+            teamCtrl->loadTeam(row.at("TeamID"));
             count++;
         }
     }
@@ -125,9 +125,9 @@ void Loader::loadContests()
 	int count = 0;
 	for (const auto& row : results)
 	{
-		if (row.count("contestId"))
+		if (row.count("ContestID"))
 		{
-			contestCtrl->loadContest(row.at("contestId"));
+			contestCtrl->loadContest(row.at("ContestID"));
 			count++;
 		}
 	}
