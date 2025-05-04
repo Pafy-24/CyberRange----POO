@@ -6,7 +6,8 @@
 
 std::atomic<bool> serverRunning(false);
 
-bool testDB() {
+bool testDB() 
+{
     try {
         std::string connStr = "sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB";
 
@@ -60,6 +61,6 @@ int main() {
         std::cerr << "Database test failed" << std::endl;
         //return 1;
     }
-    testConns();
+  //  testConns();
     return 0;
 }
