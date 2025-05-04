@@ -6,6 +6,7 @@
 #include "ChallMng.h"
 #include "Loader.h"
 #include "User.h"
+#include "Team.h"
 
 class ServerMng {
 private:
@@ -15,11 +16,12 @@ private:
     std::vector<Connection*> connections;
     std::mutex connectionsMutex;
     std::map<std::string, Controller*> controllers;
-    std::vector<ChallMng*> challMngs;
-    std::vector<User*> users;
+    ChallMng challMng;
+	std::map<int,Team*> teams;
+    std::map<int,User*> users;
     std::vector<std::string> tokens;
     std::mutex tokenMutex;
-    Loader* loader;
+    Loader loader;
     bool isRunning;
     int port;
     std::string serverAddress;
@@ -49,4 +51,7 @@ public:
     void removeToken(const std::string& token);
     const std::vector<std::string>& getTokens() const { return tokens; }
     std::mutex& getTokenMutex() { return tokenMutex; }
+
+
+
 };

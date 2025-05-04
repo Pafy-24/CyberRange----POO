@@ -11,17 +11,39 @@ UserController::UserController(DBController* dbCtrl)
     : CController("UserController"), dbController(dbCtrl) {
 }
 
+void UserController::Login(const json& data, Connection* client)
+{
+}
+
+void UserController::Register(const json& data, Connection* client)
+{
+}
+
+void UserController::Update(const json& data, Connection* client)
+{
+}
+
+void UserController::Delete(const json& data, Connection* client)
+{
+}
+
+void UserController::Logout(const json& data, Connection* client)
+{
+}
+
 void UserController::handleRequest(const std::string& data, Connection* client) {
     if (!validateRequest(data, client)) {
         return;
     }
 
     try {
-        json j = json::parse(data);
+        json j = json::parse(data)[0];
         std::string action = j["action"].get<std::string>();
 
-        if (action == "login") {
-            std::string username = j["username"].get<std::string>();
+        if (action == "LOGIN") {
+			Login(j, client);
+
+            /*std::string username = j["username"].get<std::string>();
             std::string password = j["password"].get<std::string>();
 
             std::string query = "SELECT * FROM Users WHERE Username = '" + username +
@@ -46,9 +68,9 @@ void UserController::handleRequest(const std::string& data, Connection* client) 
             else 
             {
                 client->send("ERROR: Invalid credentials");
-            }
+            }*/
         }
-        else if (action == "getUser") {
+        else if (action == "REGISTER") {
             std::string userId = j["userId"].get<std::string>();
             loadUser(userId);
 
@@ -63,6 +85,15 @@ void UserController::handleRequest(const std::string& data, Connection* client) 
             else {
                 client->send("ERROR: User not found");
             }
+        }
+        else if (action == "UPDATE") {
+            Update(data, client);
+        }
+        else if (action == "DELETE") {
+            Delete(data, client);
+        }
+        else if (action == "LOGOUT") {
+            Logout(data, client);
         }
         else {
             client->send("ERROR: Invalid action");
