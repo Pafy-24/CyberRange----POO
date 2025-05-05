@@ -114,6 +114,10 @@ void ServerMng::removeConnection(Connection* conn) {
     std::lock_guard<std::mutex> lock(connectionsMutex);
     auto it = std::find(connections.begin(), connections.end(), conn);
     if (it != connections.end()) {
+        if (loader) {
+            loader->saveUnload(conn);
+        }
+
         (*it)->stopServer();
         delete* it;
         connections.erase(it);
@@ -122,6 +126,8 @@ void ServerMng::removeConnection(Connection* conn) {
 }
 
 void ServerMng::processRequests() {
+    checkConnections();
+
     std::lock_guard<std::mutex> lock(connectionsMutex);
     for (auto* conn : connections) {
         if (conn->isServerRunning()) {
@@ -341,4 +347,30 @@ void ServerMng::runDownloadServer(int port) {
 
     addConnection(conn.release());
     printMessage("Download Server running on port " + std::to_string(port));
+}
+
+
+void ServerMng::checkConnections() {
+    std::lock_guard<std::mutex> lock(connectionsMutex);
+    auto it = connections.begin();
+    while (it != connections.end()) {
+        Connection* conn = *it;
+
+
+        if (!conn->isServerRunning() || !conn->isConnected()) {
+            if (loader) {
+                loader->saveUnload(conn);
+            }
+
+            std::cout << "Connection closed: " << conn->getType() << " on port " << conn->getPort() << std::endl;
+
+            conn->stopServer();
+            delete conn;
+
+            it = connections.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 }
