@@ -60,22 +60,21 @@ void LoginDialog::on_loginButton_clicked()
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
     if (!authCtrl) 
     {
-        QMessageBox::warning(this, "Eroare", "Nu s-a gasit AuthController.");
+        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
         return;
     }
 
     authCtrl->requestLogin(_username, _password);
 
-    // Așteptăm puțin ca răspunsul să vină și să fie procesat de controller
-    QTimer::singleShot(200, this, [=]()
+    // Verificăm după 300ms dacă login-ul a reușit
+    QTimer::singleShot(300, this, [=]() 
         {
             if (!authCtrl->getToken().empty()) 
             {
                 // Login reușit
-                QMessageBox::information(this, "Succes", "Autentificare reușită ca: " +
-                    QString::fromStdString(authCtrl->getCurrentUser()));
+                std::string userRole = authCtrl->getRole();
+                QMessageBox::information(this, "Succes", "Autentificare reușită!");
 
-                // Fade-out și trecere la MainMenu
                 QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
                 fadeOut->setDuration(500);
                 fadeOut->setStartValue(1);
@@ -83,26 +82,70 @@ void LoginDialog::on_loginButton_clicked()
 
                 connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
                     MainMenu* menu = new MainMenu();
+                    menu->configureUIForRole(userRole);
                     menu->show();
                     this->close();
                     });
+
                 fadeOut->start();
             }
             else 
             {
-                QMessageBox::warning(this, "Eroare", "Autentificare eșuată. Verifică datele.");
+                QMessageBox::warning(this, "Eroare", "Autentificare eșuată. Verifică datele introduse.");
             }
-        }
-    );
+        });
 }
 
-void LoginDialog::on_registerButton_clicked()
+//void LoginDialog::on_registerButton_clicked()
+//{
+//	std::string userRole = "admin"; // Default role for new users
+//    MainMenu* menu = new MainMenu();
+//    menu->configureUIForRole(userRole);
+//    menu->show();
+//    this->close();
+//}
+
+void LoginDialog::on_registerButton_clicked() 
 {
-	std::string userRole = "admin"; // Default role for new users
-    MainMenu* menu = new MainMenu();
-    menu->configureUIForRole(userRole);
-    menu->show();
-    this->close();
+    std::string username = ui->lineEditUsername->text().toStdString();
+    std::string password = ui->lineEditPassword->text().toStdString();
+    std::string email = ui->lineEditEmail->text().toStdString();
+
+    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("Auth"));
+    if (!authCtrl) 
+    {
+        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
+        return;
+    }
+
+    authCtrl->requestRegister(username, password, email);
+
+    QTimer::singleShot(300, this, [=]() 
+        {
+            if (!authCtrl->getToken().empty()) 
+            {
+                QMessageBox::information(this, "Succes", "Înregistrare reușită! Autentificat automat.");
+
+                QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+                fadeOut->setDuration(500);
+                fadeOut->setStartValue(1);
+                fadeOut->setEndValue(0);
+
+                connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+                    MainMenu* menu = new MainMenu();
+                    std::string userRole = "common"; // Default role for new users
+                    menu->configureUIForRole(userRole);
+                    menu->show();
+                    this->close();
+                    });
+
+                fadeOut->start();
+            }
+            else 
+            {
+                QMessageBox::warning(this, "Eroare", "Înregistrare eșuată. Verifică dacă username-ul este disponibil.");
+            }
+        });
 }
 
 void LoginDialog::on_exitButton_clicked()

@@ -31,7 +31,7 @@ background-size: cover;</string>
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>240</y>
+     <y>210</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -52,7 +52,7 @@ QLineEdit:focus {
    <property name="geometry">
     <rect>
      <x>380</x>
-     <y>300</y>
+     <y>260</y>
      <width>171</width>
      <height>31</height>
     </rect>
@@ -75,7 +75,7 @@ QLineEdit:focus {
   <widget class="QPushButton" name="loginButton">
    <property name="geometry">
     <rect>
-     <x>380</x>
+     <x>390</x>
      <y>370</y>
      <width>81</width>
      <height>31</height>
@@ -136,7 +136,7 @@ QPushButton:pressed {
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>240</y>
+     <y>210</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -177,7 +177,7 @@ QLineEdit:focus {
    <property name="geometry">
     <rect>
      <x>210</x>
-     <y>300</y>
+     <y>260</y>
      <width>101</width>
      <height>31</height>
     </rect>
@@ -287,6 +287,38 @@ QPushButton {
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditEmail2">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>310</y>
+     <width>101</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>EMAIL:</string>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEditEmail">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>310</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
    </property>
   </widget>
  </widget>
