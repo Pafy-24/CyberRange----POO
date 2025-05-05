@@ -4,7 +4,6 @@
 #include "CustomSerial.h"
 #include <iostream>
 
-using json = nlohmann::json;
 
 UserController::UserController(DBController* dbCtrl)
     : CController("UserController"), dbController(dbCtrl) {

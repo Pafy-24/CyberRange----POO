@@ -10,9 +10,6 @@
 #include <iostream>
 #include <algorithm>
 #include <thread>
-#include <json.hpp>
-
-using json = nlohmann::json;
 
 ServerMng* ServerMng::instance = nullptr;
 std::mutex ServerMng::instanceMutex;
