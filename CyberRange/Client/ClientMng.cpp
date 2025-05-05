@@ -104,7 +104,7 @@ void ClientMng::receiveResponse()
         std::cout << "Cannot receive response: not connected to server.\n";
         return;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::string response = serverConn->receive();
     if (response.empty()) return;
 

@@ -22,6 +22,7 @@ void AuthController::requestLogin(const std::string& username, const std::string
     };
 
     ClientMng::getInstance()->sendRequest(req.dump());
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ClientMng::getInstance()->receiveResponse();
 
 }
