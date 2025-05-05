@@ -17,8 +17,7 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     ui->setupUi(this);
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    ui->lineEditEmail->hide();
-    ui->lineEditEmail2->hide();
+    ui->stackedWidget->setCurrentIndex(0);
     QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(this);
     ui->labelWelcome->setGraphicsEffect(effect);
 
@@ -45,7 +44,7 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     }
     else
     {
-		ui->label->setText("Succesfully connected to server!");
+		//ui->label->setText("Succesfully connected to server!");
     }
 }
 
@@ -94,11 +93,12 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
-	int userRole = 1; // Default role for new users
-    MainMenu* menu = new MainMenu();
-    menu->configureUIForRole(userRole);
-    menu->show();
-    this->close();
+    ui->stackedWidget->setCurrentIndex(1);
+	//int userRole = 1; // Default role for new users
+ //   MainMenu* menu = new MainMenu();
+ //   menu->configureUIForRole(userRole);
+ //   menu->show();
+ //   this->close();
 }
 
 //void LoginDialog::on_registerButton_clicked()
@@ -147,6 +147,16 @@ void LoginDialog::on_exitButton_clicked()
     if (reply == QMessageBox::Yes) {
         QApplication::quit();
     }
+}
+
+void LoginDialog::on_pushButtonRegisterNow_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(0);
+}
+
+void LoginDialog::on_pushButtonBackToLogin_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(0);
 }
 
 void LoginDialog::mousePressEvent(QMouseEvent* event)
