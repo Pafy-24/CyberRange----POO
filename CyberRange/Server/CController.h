@@ -11,6 +11,6 @@ protected:
 
 public:
     CController(std::string name);
-    bool validateRequest(const std::string& data, Connection* client);
+    bool validateRequest(const std::string& data, Connection* client, bool need2Blogged);
     void handleRequest(const std::string& data, Connection* client);
 };

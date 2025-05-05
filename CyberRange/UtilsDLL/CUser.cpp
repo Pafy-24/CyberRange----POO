@@ -36,6 +36,11 @@ std::string CUser::GetEmail()
     return email;
 }
 
+std::string CUser::GetPassword()
+{
+    return passwordHash;
+}
+
 void CUser::SetUsername(std::string username)
 {
     this->username = username;

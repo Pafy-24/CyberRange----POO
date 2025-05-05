@@ -25,6 +25,7 @@ private:
 
     std::vector<std::string> tokens;
     std::mutex tokenMutex;
+    std::string SecretKey;
     Loader* loader;
     bool isRunning;
     int port;
@@ -35,12 +36,12 @@ private:
     void runUDPServer(int port);
     void runDownloadServer(int port);
 
+    ServerMng(const ServerMng&) = delete;
+    ServerMng& operator=(const ServerMng&) = delete;
+
 public:
     static ServerMng* getInstance(int port = 1337, const std::string& address = "0.0.0.0");
     ~ServerMng();
-
-    ServerMng(const ServerMng&) = delete;
-    ServerMng& operator=(const ServerMng&) = delete;
 
     void start();
     void stop();
@@ -57,6 +58,8 @@ public:
     void addToken(const std::string& token);
     void removeToken(const std::string& token);
 
+    std::string getSecretKey() const {return SecretKey;}
+
     const std::vector<std::string>& getTokens() const { return tokens; }
     std::mutex& getTokenMutex() { return tokenMutex; }
 
@@ -67,4 +70,7 @@ public:
 
     void pushUser(User* user, Connection* conn);
     void pushTeam(Team* team, Connection* conn);
+
+    User* findUser(const std::string& usrName_email);
+
 };

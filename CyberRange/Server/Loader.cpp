@@ -66,7 +66,7 @@ void Loader::loadUser(int id, Connection* conn)
     }
 }
 
-void Loader::loadUserByUsername(const std::string& username, Connection* conn) 
+int Loader::loadUserByUsername(const std::string& username, Connection* conn) 
 {
     std::string query = "SELECT UserID FROM Users WHERE Username = '" + username + "'";
 
@@ -74,10 +74,12 @@ void Loader::loadUserByUsername(const std::string& username, Connection* conn)
     if (!results.empty())
     {
         loadUser(std::stoi(results[0].at("UserID")), conn);
+        return std::stoi(results[0].at("UserID"));
     }
+    return -1;
 }
 
-void Loader::loadUserByEmail(const std::string& email, Connection* conn) 
+int Loader::loadUserByEmail(const std::string& email, Connection* conn) 
 {
     std::string query = "SELECT UserID FROM Users WHERE Email = '" + email + "'";
 
@@ -85,7 +87,9 @@ void Loader::loadUserByEmail(const std::string& email, Connection* conn)
     if (!results.empty())
     {
         loadUser(std::stoi(results[0].at("UserID")), conn);
+        return std::stoi(results[0].at("UserID"));
     }
+    return -1;
 }
 
 void Loader::loadTeam(int id, Connection* conn)
@@ -167,7 +171,6 @@ void Loader::loadChall(int id, Contest* mng, Connection* conn)
 
 void Loader::loadChall(int id, Tab* mng, Connection* conn)
 {
-    // Implementation for loading a challenge into a Tab
     std::string query = "SELECT * FROM Challenges WHERE ChallengeID = '" + std::to_string(id) + "'";
     auto results = ServerMng::getInstance()->getDBController()->executeQuery(query);
 
@@ -251,7 +254,7 @@ void Loader::save(Connection* conn)
     {
         for (const auto& objId : objLoaded[conn]) 
         {
-            // saveObject(objId); // Placeholder for actual save logic
+            
         }
     }
     std::cout << "[Loader] Saved all objects for connection.\n";

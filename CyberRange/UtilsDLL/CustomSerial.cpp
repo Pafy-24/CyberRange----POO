@@ -31,12 +31,9 @@ std::string CustomSerial::encodeJSON(const json& data, bool prettyPrint)
 std::string CustomSerial::encodeJWT(const json& data,
     const std::string& key, const std::string& algo)
 {
-    // Convert json to string first
-    std::string jsonStr = encodeJSON(data);
 
-    // Then encode as JWT
     JWTEnc encoder(key, algo);
-    return encoder.encode(jsonStr);
+    return encoder.encode(data);
 }
 
 // Universal decode function - auto-detects format

@@ -28,6 +28,12 @@ ServerMng::ServerMng(int port, std::string address)
     dbController = new DBController("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
 	loader = new Loader();
 
+    srand(time(NULL));
+     std::generate_n(SecretKey.begin(), 32, []() {
+         static const char c[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
+         return c[rand() % (sizeof(c) - 1)]; });
+
+
     // Initialize other controllers
     attachController("UserController", new UserController(dbController));
     attachController("TeamController", new TeamController(dbController));
@@ -212,6 +218,16 @@ void ServerMng::pushTeam(Team* team, Connection* conn) {
 	teams[team->GetId()].second.push_back(conn);
 }
 
+User* ServerMng::findUser(const std::string& usrName_email)
+{
+    for (auto& user : users) {
+        if (user.second.first->GetUsername() == usrName_email ||
+            user.second.first->GetEmail() == usrName_email) {
+            return user.second.first;
+        }
+    }
+}
+
 void ServerMng::runTCPServer(int port, bool useTLS) {
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
     printMessage("Starting " + serverType + " Server on port " + std::to_string(port));
@@ -233,7 +249,7 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
     auto handler = [this](const std::string& data, Connection* client) {
         try {
             json j = json::parse(data);
-            std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
+            std::string controllerName = j["controller"];
             auto it = controllers.find(controllerName);
             if (it != controllers.end()) {
                 it->second->handleRequest(data, client);

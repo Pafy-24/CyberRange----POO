@@ -109,16 +109,15 @@ void ClientMng::receiveResponse()
     if (response.empty()) return;
 
     std::lock_guard<std::mutex> lock(controllerMutex);
-    for (const auto& pair : controllers) 
-    {
-        Controller* ctrl = pair.second;
-        if (ctrl->validateResponse(response)) 
-        {
-            ctrl->handleServerResponse(response);
-            return;
-        }
+    try {
+        auto ctrlName = json::parse(response)["controller"];
+        controllers[ctrlName]->handleServerResponse(response);
     }
-    std::cout << "No controller handled the response: " << response << "\n";
+    catch(...){
+
+        std::cout << "Invalid request:" << response << "\n";
+    }
+
 }
 
 void ClientMng::attachController(const std::string& name, Controller* ctrl) 

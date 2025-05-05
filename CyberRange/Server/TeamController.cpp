@@ -10,7 +10,7 @@ TeamController::TeamController(DBController* dbCtrl)
 }
 
 void TeamController::handleRequest(const std::string& data, Connection* client) {
-    if (!validateRequest(data, client)) {
+    if (!validateRequest(data, client,1)) {
         return;
     }
 
