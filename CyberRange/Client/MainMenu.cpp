@@ -4,6 +4,9 @@
 #include "ui_LoginDialog.h"
 #include "LoginDialog.h"
 #include "Client.h"
+#include <qmessagebox.h>
+#include "AuthController.h"
+#include "ClientMng.h"
 
 MainMenu::MainMenu( QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainMenu)
@@ -75,7 +78,7 @@ MainMenu::~MainMenu()
     delete ui;
 }
 
-void MainMenu::on_logoutButton_clicked()
+void MainMenu::on_pushButtonLogout_clicked()
 {
     this->close();
     LoginDialog* login = new LoginDialog();
@@ -162,6 +165,33 @@ void MainMenu::on_pushButtonViewLC_clicked()
 	ui->stackedWidget->setCurrentIndex(5);
 }
 
+void MainMenu::on_pushButtonSubmit_clicked()
+{
+    const std::string username = ui->lineEditNewUsername->text().toStdString();
+    const std::string password = ui->lineEditNewPasswd->text().toStdString();
+    const std::string email = ui->lineEditNewEmail->text().toStdString();
+
+    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
+    if (!authCtrl) {
+        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
+        return;
+    }
+
+    authCtrl->requestUpdate(username, password, email);
+}
+
+void MainMenu::on_pushButtonDeleteAcc_clicked()
+{
+    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
+    if (!authCtrl) {
+        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
+        return;
+    }
+
+    authCtrl->requestDelete();
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
 void MainMenu::configureUIForRole(int role)
 {
     // Ascundem totul la început
@@ -176,7 +206,7 @@ void MainMenu::configureUIForRole(int role)
     ui->ProfileButton->hide();
     ui->ReviewFlagsButton->hide();
     ui->SettingsButton->hide();
-    ui->SolveChallengeButton->hide();
+    ui->TabButton->hide();
     ui->TrainingButton->hide();
 
     // Elemente comune
@@ -191,7 +221,7 @@ void MainMenu::configureUIForRole(int role)
         ui->DashboardCommonButton->show();
         ui->ContestsButton->show();
         ui->TrainingButton->show();
-        ui->SolveChallengeButton->show();
+        ui->TabButton->show();
         break;
     case 5:
         ui->DashboardWriterButton->show();

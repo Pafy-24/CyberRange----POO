@@ -67,12 +67,12 @@ void UserController::Register(const json& data, Connection* client)
         std::string username = data["payload"].value("username", "");
         std::string password = data["payload"].value("password", "");
         std::string email = data["payload"].value("email", "");
-        std::string role = "common"; // implicit
+        std::string role = "student"; // implicit
 
         if (username.empty() || password.empty() || email.empty())
         {
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
                 {"message", "Missing required fields"}
@@ -87,7 +87,7 @@ void UserController::Register(const json& data, Connection* client)
         if (!existing.empty())
         {
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
                 {"message", "Username or email already exists"}
@@ -96,45 +96,23 @@ void UserController::Register(const json& data, Connection* client)
             return;
         }
 
-        // Generate a more reliable unique ID
-        int userId = rand() % 1000000 + 1000000; // Temporary solution
-        std::string checkIdQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
-        while (!dbController->executeQuery(checkIdQuery).empty()) {
-            userId = rand() % 1000000 + 1000000;
-            checkIdQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
-        }
-
-        std::string insertQuery = "INSERT INTO Users (UserID, Username, PasswordHash, Email, Role) VALUES ('" +
-            std::to_string(userId) + "', '" + username + "', '" + password + "', '" + email + "', '" + role + "')";
+        std::string insertQuery = "INSERT INTO Users (Username, PasswordHash, Email, Role) VALUES ('" + username + "', '" + password + 
+            "', '" + email + "', '" + role + "')";
 
         if (dbController->executeUpdate(insertQuery)) {
-            json payload = {
-                {"userId", userId},
-                {"username", username},
-                {"email", email},
-                {"role", role}
-            };
-
-            std::string token = CustomSerial::encodeJWT(payload.dump(), ServerMng::getInstance()->getSecretKey());
-            ServerMng::getInstance()->addToken(token);
 
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
-                {"status", "success"},
-                {"token", token},
-                {"username", username},
-                {"role", role}
+                {"status", "success"}
             };
             client->send(response.dump());
             logger->log("User registered: " + username);
 
-            // Load the user into memory
-            ServerMng::getInstance()->getLoader()->loadUser(userId, client);
         }
         else {
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
                 {"message", "Failed to insert user"}
@@ -144,7 +122,7 @@ void UserController::Register(const json& data, Connection* client)
     }
     catch (const std::exception& e) {
         json response = {
-            {"controller", "Auth"},
+            {"controller", "AuthController"},
             {"action", "register"},
             {"status", "error"},
             {"message", "Registration failed: " + std::string(e.what())}
@@ -159,7 +137,7 @@ void UserController::Update(const json& data, Connection* client)
     try {
         if (!data.contains("token") || !data.contains("payload")) {
             json response = {
-                {"controller", "UserController"},
+                {"controller", "AuthController"},
                 {"action", "update"},
                 {"status", "error"},
                 {"message", "Missing token or payload"}
@@ -172,7 +150,7 @@ void UserController::Update(const json& data, Connection* client)
         auto& tokens = ServerMng::getInstance()->getTokens();
         if (std::find(tokens.begin(), tokens.end(), token) == tokens.end()) {
             json response = {
-                {"controller", "UserController"},
+                {"controller", "AuthController"},
                 {"action", "update"},
                 {"status", "error"},
                 {"message", "Invalid or expired token"}
@@ -182,7 +160,8 @@ void UserController::Update(const json& data, Connection* client)
         }
 
         // Decode token to get user ID
-        json userData = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
+        std::string userDataStr = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
+        json userData = json::parse(userDataStr);
         int userId = userData["userId"];
 
         // Prepare update fields
@@ -199,7 +178,7 @@ void UserController::Update(const json& data, Connection* client)
 
         if (updateFields.empty()) {
             json response = {
-                {"controller", "UserController"},
+                {"controller", "AuthController"},
                 {"action", "update"},
                 {"status", "error"},
                 {"message", "No fields to update"}
@@ -223,14 +202,14 @@ void UserController::Update(const json& data, Connection* client)
             auto& users = ServerMng::getInstance()->getUsers();
             if (users.find(userId) != users.end() && users[userId].first != nullptr) {
                 User* user = users[userId].first;
-                if (data["payload"].contains("username")) {
+                if (data["payload"].contains("username") && !data["payload"]["username"].get<std::string>().empty()) {
                     user->SetUsername(data["payload"]["username"]);
                 }
-                if (data["payload"].contains("email")) {
-                    user->SetEmail(data["payload"]["email"]);
+                if (data["payload"].contains("email") && !data["payload"]["email"].get<std::string>().empty()) {
+					user->SetEmail(data["payload"]["email"]);
                 }
-                if (data["payload"].contains("password")) {
-                    user->SetPassword(data["payload"]["password"]);
+                if (data["payload"].contains("password") && !data["payload"]["password"].get<std::string>().empty()) {
+					user->SetPassword(data["payload"]["password"]);
                 }
 
                 // Create new token with updated info
@@ -247,7 +226,7 @@ void UserController::Update(const json& data, Connection* client)
                 ServerMng::getInstance()->addToken(newToken);
 
                 json response = {
-                    {"controller", "UserController"},
+                    {"controller", "AuthController"},
                     {"action", "update"},
                     {"status", "success"},
                     {"token", newToken},
@@ -258,7 +237,7 @@ void UserController::Update(const json& data, Connection* client)
             }
             else {
                 json response = {
-                    {"controller", "UserController"},
+                    {"controller", "AuthController"},
                     {"action", "update"},
                     {"status", "error"},
                     {"message", "User not found in memory"}
@@ -268,7 +247,7 @@ void UserController::Update(const json& data, Connection* client)
         }
         else {
             json response = {
-                {"controller", "UserController"},
+                {"controller", "AuthController"},
                 {"action", "update"},
                 {"status", "error"},
                 {"message", "Failed to update user in database"}
@@ -278,7 +257,7 @@ void UserController::Update(const json& data, Connection* client)
     }
     catch (const std::exception& e) {
         json response = {
-            {"controller", "UserController"},
+            {"controller", "AuthController"},
             {"action", "update"},
             {"status", "error"},
             {"message", "Update failed: " + std::string(e.what())}

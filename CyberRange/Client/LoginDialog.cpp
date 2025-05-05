@@ -17,8 +17,7 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     ui->setupUi(this);
     this->setWindowFlags(Qt::FramelessWindowHint);
 
-    ui->lineEditEmail->hide();
-    ui->lineEditEmail2->hide();
+    ui->stackedWidget->setCurrentIndex(0);
     QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(this);
     ui->labelWelcome->setGraphicsEffect(effect);
 
@@ -42,10 +41,6 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
         QMessageBox::critical(this, "Error", "Connection to server failed.");
         this->close();
         return;
-    }
-    else
-    {
-		ui->label->setText("Succesfully connected to server!");
     }
 }
 
@@ -94,50 +89,13 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
-	int userRole = 1; // Default role for new users
-    MainMenu* menu = new MainMenu();
-    menu->configureUIForRole(userRole);
-    menu->show();
-    this->close();
+    ui->stackedWidget->setCurrentIndex(1);
+	//int userRole = 1; // Default role for new users
+ //   MainMenu* menu = new MainMenu();
+ //   menu->configureUIForRole(userRole);
+ //   menu->show();
+ //   this->close();
 }
-
-//void LoginDialog::on_registerButton_clicked()
-//{
-//    const std::string username = ui->lineEditUsername->text().toStdString();
-//    const std::string password = ui->lineEditPassword->text().toStdString();
-//    const std::string email = ui->lineEditEmail->text().toStdString();
-//
-//    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("Auth"));
-//    if (!authCtrl) {
-//        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
-//        return;
-//    }
-//
-//    connect(authCtrl, &AuthController::loginSucceeded, this, [=]() {
-//        QMessageBox::information(this, "Succes", "Înregistrare reușită!");
-//
-//        std::string userRole = authCtrl->getRole();  // presupui că e „common”
-//        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
-//        fadeOut->setDuration(500);
-//        fadeOut->setStartValue(1);
-//        fadeOut->setEndValue(0);
-//
-//        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-//            MainMenu* menu = new MainMenu();
-//            menu->configureUIForRole(userRole);
-//            menu->show();
-//            this->close();
-//            });
-//
-//        fadeOut->start();
-//        });
-//
-//    connect(authCtrl, &AuthController::loginFailed, this, [=](const QString& message) {
-//        QMessageBox::warning(this, "Eroare", "Înregistrare eșuată:\n" + message);
-//        });
-//
-//    authCtrl->requestRegister(username, password, email);
-//}
 
 void LoginDialog::on_exitButton_clicked()
 {
@@ -147,6 +105,27 @@ void LoginDialog::on_exitButton_clicked()
     if (reply == QMessageBox::Yes) {
         QApplication::quit();
     }
+}
+
+void LoginDialog::on_pushButtonRegisterNow_clicked()
+{
+    const std::string username = ui->lineEditUsernameReg->text().toStdString();
+    const std::string password = ui->lineEditPasswdReg->text().toStdString();
+    const std::string email = ui->lineEditEmailReg->text().toStdString();
+
+    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
+    if (!authCtrl) {
+        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
+        return;
+    }
+
+    authCtrl->requestRegister(username, password, email);
+	ui->stackedWidget->setCurrentIndex(0);
+}
+
+void LoginDialog::on_pushButtonBackToLogin_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(0);
 }
 
 void LoginDialog::mousePressEvent(QMouseEvent* event)

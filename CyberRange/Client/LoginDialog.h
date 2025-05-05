@@ -28,11 +28,16 @@ protected:
 
 signals:
     void loginSuccess();
+	void registrationSuccess();
 
 private slots:
     void on_loginButton_clicked();
     void on_registerButton_clicked();
     void on_exitButton_clicked();
+
+	void on_pushButtonRegisterNow_clicked();
+	void on_pushButtonBackToLogin_clicked();
+
 private:
     Ui::LoginDialog* ui;
     QPoint mouseClickPosition;

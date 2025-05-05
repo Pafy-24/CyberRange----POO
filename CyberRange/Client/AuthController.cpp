@@ -24,6 +24,45 @@ void AuthController::requestLogin(const std::string& username, const std::string
     ClientMng::getInstance()->sendRequest(req.dump());
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     ClientMng::getInstance()->receiveResponse();
+}
+
+void AuthController::requestRegister(const std::string& username, const std::string& password, const std::string& email)
+{
+    json req = {
+        {"controller", "UserController"},
+        {"action", "register"},
+        {"payload", {
+            {"username", username},
+            {"password", password},
+            {"email", email}
+        }}
+    };
+
+    ClientMng::getInstance()->sendRequest(req.dump());
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    ClientMng::getInstance()->receiveResponse();
+}
+
+void AuthController::requestUpdate(const std::string& username, const std::string& password, const std::string& email)
+{
+    json req = {
+        {"controller", "UserController"},
+        {"action", "update"},
+		{"token", token},
+        {"payload", {
+            {"username", username},
+            {"password", password},
+            {"email", email}
+        }}
+    };
+
+    ClientMng::getInstance()->sendRequest(req.dump());
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    ClientMng::getInstance()->receiveResponse();
+}
+
+void AuthController::requestDelete()
+{
 
 }
 
@@ -59,14 +98,54 @@ void AuthController::handleServerResponse(const std::string& responseStr)
                     break;
                 }*/
 
-                qDebug() << "[AuthController] Login reușit. Utilizator:" << QString::fromStdString(currentUser);
+                qDebug() << "[AuthController] Login succesfully done. User:" << QString::fromStdString(currentUser);
                 emit loginSucceeded(); // semnal pentru UI
             }
             else 
             {
                 QString msg = QString::fromStdString(response.value("message", "Login failed."));
-                qWarning() << "[AuthController] Login eșuat:" << msg;
+                qWarning() << "[AuthController] Login failed:" << msg;
                 emit loginFailed(msg); // semnal pentru UI
+            }
+        }
+		else if (action == "register")
+		{
+			if (status == "success")
+			{
+				qDebug() << "[AuthController] Registered successfully.";
+			}
+			else
+			{
+				QString msg = QString::fromStdString(response.value("message", "Registration failed."));
+				qWarning() << "[AuthController] Înregistrare eșuată:" << msg;
+				//emit loginFailed(msg); // semnal pentru UI
+			}
+		}
+		else if (action == "update")
+		{
+			if (status == "success")
+			{
+				qDebug() << "[AuthController] User updated successfully.";
+			}
+			else
+			{
+				QString msg = QString::fromStdString(response.value("message", "Update failed."));
+				qWarning() << "[AuthController] Actualizare eșuată:" << msg;
+			}
+		}
+        else if (action == "logout")
+        {
+            if (status == "success")
+            {
+                token.clear();
+                currentUser.clear();
+                role = 0;
+                qDebug() << "[AuthController] Logout reușit.";
+            }
+            else
+            {
+                QString msg = QString::fromStdString(response.value("message", "Logout failed."));
+                qWarning() << "[AuthController] Logout eșuat:" << msg;
             }
         }
     }
@@ -75,21 +154,6 @@ void AuthController::handleServerResponse(const std::string& responseStr)
         qCritical() << "[AuthController] Eroare parsare răspuns server:" << e.what();
         emit loginFailed("Eroare internă în timpul autentificării.");
     }
-}
-
-void AuthController::requestRegister(const std::string& username, const std::string& password, const std::string& email)
-{
-    json req = {
-        {"controller", "UserController"},
-        {"action", "register"},
-        {"payload", {
-            {"username", username},
-            {"password", password},
-            {"email", email}
-        }}
-    };
-
-    ClientMng::getInstance()->sendRequest(req.dump());
 }
 
 void AuthController::requestLogout()
