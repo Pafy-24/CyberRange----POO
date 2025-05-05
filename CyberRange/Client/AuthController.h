@@ -3,7 +3,7 @@
 #include "CController.h"
 #include <QObject>
 
-class AuthController : public QObject, public CController 
+class AuthController : public QObject, public CController
 {
     Q_OBJECT
 public:
@@ -11,21 +11,31 @@ public:
 
     void requestLogin(const std::string& username, const std::string& password);
     void requestRegister(const std::string& username, const std::string& password, const std::string& email);
-    void requestUpdate(const std::string& username, const std::string& password, const std::string& email);
-	void requestDelete();
-	void requestLogout();
+    void requestUpdate(const std::string& username, const std::string& old, const std::string& password, const std::string& email);
+    void requestDelete();
+    void requestLogout();
+
     std::string getToken() const;
     std::string getCurrentUser() const;
     bool isAuthenticated() const;
-	int getRole() const;
+    int getRole() const;
+
     void handleServerResponse(const std::string& responseStr) override;
 
 signals:
     void loginSucceeded();
     void loginFailed(const QString& message);
+    void registerSucceeded();
+    void registerFailed(const QString& message);
+    void updateSucceeded();
+    void updateFailed(const QString& message);
+    void deleteSucceeded();
+    void deleteFailed(const QString& message);
+    void logoutSucceeded();
+    void logoutFailed(const QString& message);
 
 private:
     std::string token;
     std::string currentUser;
-	int role;
+    int role;
 };

@@ -6,14 +6,18 @@
 #include "AuthController.h"
 #include <iostream>
 #include <thread>
+#include <QTimer>
+#include <json.hpp>
+
+using json = nlohmann::json;
 
 ClientMng* ClientMng::instance = nullptr;
 std::mutex ClientMng::instanceMutex;
 
-ClientMng* ClientMng::getInstance(int port, const std::string& address) 
+ClientMng* ClientMng::getInstance(int port, const std::string& address)
 {
     std::lock_guard<std::mutex> lock(instanceMutex);
-    if (instance == nullptr) 
+    if (instance == nullptr)
     {
         instance = new ClientMng(port, address);
     }
@@ -26,58 +30,75 @@ ClientMng::ClientMng(int port, const std::string& address)
     attachController("ChallClientController", new ChallClientController());
     attachController("ContestClientController", new ContestClientController());
     attachController("AuthController", new AuthController());
+
 }
 
-ClientMng::~ClientMng() 
+ClientMng::~ClientMng()
 {
     stop();
     std::lock_guard<std::mutex> lock(instanceMutex);
     instance = nullptr;
 }
 
-bool ClientMng::start() 
+bool ClientMng::start()
 {
-    if (connected) 
+    if (connected && serverConn && serverConn->isConnected())
     {
         std::cout << "Client already connected.\n";
-        return false;
+        return true;
     }
 
-    auto conn = ConnsFactory::createConnection(ConnectionType::TCP, serverAddress, port);
-    if (!conn) 
-    {
-        std::cout << "Failed to create connection object.\n";
-        return false;
+    // Cleanup any existing connection first
+    if (serverConn) {
+        serverConn->disconnect();
+        delete serverConn;
+        serverConn = nullptr;
     }
 
-    if (!conn->connect()) 
-    {
-        std::cout << "Failed to connect to server at " << serverAddress << ":" << port << "\n";
+    try {
+        auto conn = ConnsFactory::createConnection(ConnectionType::TCP, serverAddress, port);
+        if (!conn)
+        {
+            std::cout << "Failed to create connection object.\n";
+            return false;
+        }
+
+        if (!conn->connect())
+        {
+            std::cout << "Failed to connect to server at " << serverAddress << ":" << port << "\n";
+            return false;
+        }
+        serverConn = conn.release();
+
+        connected = true;
+        std::cout << "Connected to server at " << serverAddress << ":" << port << "\n";
+        return connected;
+    }
+    catch (const std::exception& e) {
+        std::cout << "Exception during connection: " << e.what() << "\n";
         return false;
     }
-    serverConn = conn.release();
-
-    connected = true;
-    std::cout << "Connected to server at " << serverAddress << ":" << port << "\n";
-    return connected;
 }
 
-void ClientMng::stop() 
+void ClientMng::stop()
 {
     if (!connected) return;
 
-    if (serverConn) 
+    if (serverConn)
     {
         serverConn->disconnect();
         delete serverConn;
         serverConn = nullptr;
     }
 
-    for (auto& pair : controllers) 
     {
-        delete pair.second;
+        std::lock_guard<std::mutex> lock(controllerMutex);
+        for (auto& pair : controllers)
+        {
+            delete pair.second;
+        }
+        controllers.clear();
     }
-    controllers.clear();
 
     delete loader;
     loader = nullptr;
@@ -86,60 +107,80 @@ void ClientMng::stop()
     std::cout << "Client connection closed.\n";
 }
 
-void ClientMng::sendRequest(const std::string& data) 
+void ClientMng::sendRequest(const std::string& data)
 {
-    if (!connected || !serverConn) 
+    if (!connected || !serverConn)
     {
-        std::cout << "Cannot send request: not connected to server.\n";
-        return;
+        std::cout << "Cannot send request: not connected to server. Attempting to reconnect...\n";
+        if (!start()) {
+            std::cout << "Reconnection failed.\n";
+            throw std::runtime_error("Failed to connect to server");
+        }
     }
 
-    serverConn->send(data);
+    if (!serverConn->send(data)) {
+        std::cout << "Failed to send data.\n";
+        throw std::runtime_error("Failed to send data to server");
+    }
 }
 
-void ClientMng::receiveResponse() 
+void ClientMng::receiveResponse()
 {
-    if (!connected || !serverConn) 
+    if (!connected || !serverConn)
     {
         std::cout << "Cannot receive response: not connected to server.\n";
+        throw std::runtime_error("Not connected to server");
+    }
+
+    std::string response = serverConn->receive();
+    if (response.empty()) {
+        std::cout << "Received empty response from server.\n";
         return;
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-    std::string response = serverConn->receive();
-    if (response.empty()) return;
 
-    std::lock_guard<std::mutex> lock(controllerMutex);
     try {
-        std::string ctrlName = json::parse(response)["controller"];
-        controllers[ctrlName]->handleServerResponse(response);
-    }
-    catch(...){
+        auto jsonResponse = json::parse(response);
+        if (!jsonResponse.contains("controller")) {
+            std::cout << "Invalid response format: missing controller field.\n";
+            return;
+        }
 
-        std::cout << "Invalid request:" << response << "\n";
-    }
+        std::string ctrlName = jsonResponse["controller"];
+        std::lock_guard<std::mutex> lock(controllerMutex);
+        auto it = controllers.find(ctrlName);
+        if (it == controllers.end()) {
+            std::cout << "No controller found for: " << ctrlName << "\n";
+            return;
+        }
 
+        it->second->handleServerResponse(response);
+    }
+    catch (const std::exception& e) {
+        std::cout << "Error processing response: " << e.what() << "\n";
+        std::cout << "Response was: " << response << "\n";
+    }
 }
 
-void ClientMng::attachController(const std::string& name, Controller* ctrl) 
+void ClientMng::attachController(const std::string& name, Controller* ctrl)
 {
-    if (ctrl) 
+    if (ctrl)
     {
         std::lock_guard<std::mutex> lock(controllerMutex);
         auto it = controllers.find(name);
-        if (it != controllers.end()) 
+        if (it != controllers.end())
         {
-            delete it->second;  // evitam un memory leak
+            delete it->second;  // avoid memory leak
         }
         controllers[name] = ctrl;
         std::cout << "Attached client controller: " << name << "\n";
     }
 }
 
-void ClientMng::removeController(const std::string& name) 
+void ClientMng::removeController(const std::string& name)
 {
     std::lock_guard<std::mutex> lock(controllerMutex);
     auto it = controllers.find(name);
-    if (it != controllers.end()) 
+    if (it != controllers.end())
     {
         delete it->second;
         controllers.erase(it);
@@ -147,19 +188,18 @@ void ClientMng::removeController(const std::string& name)
     }
 }
 
-Controller* ClientMng::getController(const std::string& name) 
+Controller* ClientMng::getController(const std::string& name)
 {
-    std::lock_guard<std::mutex> lock(controllerMutex);
     auto it = controllers.find(name);
     return it != controllers.end() ? it->second : nullptr;
 }
 
 Connection* ClientMng::getConnection()
 {
-	return serverConn;
+    return serverConn;
 }
 
-bool ClientMng::isConnected() const 
+bool ClientMng::isConnected() const
 {
-    return connected;
+    return connected && serverConn && serverConn->isConnected();
 }
