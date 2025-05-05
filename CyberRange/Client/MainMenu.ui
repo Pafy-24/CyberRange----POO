@@ -19,8 +19,8 @@
 }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
-    <item>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
      <widget class="QFrame" name="Content">
       <property name="frameShape">
        <enum>QFrame::Shape::StyledPanel</enum>
@@ -490,50 +490,450 @@ QPushButton:pressed {
              <string notr="true"/>
             </property>
             <widget class="QWidget" name="DashboardAdmin">
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <widget class="QLabel" name="label_Dash">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                  <italic>true</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">background-image: url(:/background/fundal2.jpg)</string>
-                </property>
-                <property name="text">
-                 <string>DASHBOARD ADMIN</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_Dash">
+              <property name="geometry">
+               <rect>
+                <x>250</x>
+                <y>30</y>
+                <width>140</width>
+                <height>19</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-image: url(:/background/fundal2.jpg)</string>
+              </property>
+              <property name="text">
+               <string>DASHBOARD ADMIN</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_7">
+              <property name="geometry">
+               <rect>
+                <x>60</x>
+                <y>140</y>
+                <width>161</width>
+                <height>211</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_3">
+               <item>
+                <widget class="QLineEdit" name="lineEditNrUsers2">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Number of users:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="lineEditNrUsers"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QFrame" name="frame_8">
+              <property name="geometry">
+               <rect>
+                <x>250</x>
+                <y>140</y>
+                <width>161</width>
+                <height>211</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QLineEdit" name="lineEditQuickAddC">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Quick add a contest:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonQuickAddC">
+                 <property name="text">
+                  <string>Add new Contest</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QFrame" name="frame_9">
+              <property name="geometry">
+               <rect>
+                <x>440</x>
+                <y>140</y>
+                <width>161</width>
+                <height>211</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QLineEdit" name="lineEditViewLastC">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>View last contests:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonViewLC">
+                 <property name="text">
+                  <string>View last Contests</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
             <widget class="QWidget" name="DashboardCommon">
-             <layout class="QVBoxLayout" name="verticalLayout_18">
-              <item>
-               <widget class="QCheckBox" name="checkBox">
-                <property name="text">
-                 <string>CheckBox</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QFrame" name="frame_10">
+              <property name="geometry">
+               <rect>
+                <x>60</x>
+                <y>140</y>
+                <width>161</width>
+                <height>211</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <item>
+                <widget class="QLineEdit" name="lineEditPractice">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Practice</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonPractice">
+                 <property name="text">
+                  <string>Practice</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QLabel" name="label_Dash_2">
+              <property name="geometry">
+               <rect>
+                <x>210</x>
+                <y>30</y>
+                <width>211</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-image: url(:/background/fundal2.jpg)</string>
+              </property>
+              <property name="text">
+               <string>DASHBOARD COMMON</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_11">
+              <property name="geometry">
+               <rect>
+                <x>250</x>
+                <y>140</y>
+                <width>161</width>
+                <height>211</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_18">
+               <item>
+                <widget class="QLineEdit" name="lineEdit_3">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Join Contest</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonJC">
+                 <property name="text">
+                  <string>Join Contest</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QFrame" name="frame_12">
+              <property name="geometry">
+               <rect>
+                <x>440</x>
+                <y>140</y>
+                <width>161</width>
+                <height>211</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_19">
+               <item>
+                <widget class="QLineEdit" name="lineEdit_4">
+                 <property name="font">
+                  <font>
+                   <pointsize>13</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>Solve Challenge</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButtonSC">
+                 <property name="text">
+                  <string>Solve Challenge</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
             <widget class="QWidget" name="DashboardWriter">
-             <layout class="QVBoxLayout" name="verticalLayout_17">
-              <item>
-               <widget class="QToolButton" name="toolButton">
-                <property name="text">
-                 <string>...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QFrame" name="frame_13">
+              <property name="geometry">
+               <rect>
+                <x>50</x>
+                <y>150</y>
+                <width>161</width>
+                <height>191</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_Dash_3">
+              <property name="geometry">
+               <rect>
+                <x>210</x>
+                <y>50</y>
+                <width>211</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-image: url(:/background/fundal2.jpg)</string>
+              </property>
+              <property name="text">
+               <string>DASHBOARD WRITER</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_14">
+              <property name="geometry">
+               <rect>
+                <x>240</x>
+                <y>150</y>
+                <width>161</width>
+                <height>191</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_15">
+              <property name="geometry">
+               <rect>
+                <x>430</x>
+                <y>150</y>
+                <width>161</width>
+                <height>191</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+             </widget>
             </widget>
             <widget class="QWidget" name="Home">
              <property name="sizePolicy">
@@ -727,6 +1127,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QLineEdit" name="lineEdit"/>
+              </item>
              </layout>
             </widget>
             <widget class="QWidget" name="JoinContest">
@@ -782,25 +1185,271 @@ li.checked::marker { content: &quot;\2612&quot;; }
              </layout>
             </widget>
             <widget class="QWidget" name="AddChallenge">
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <item>
-               <widget class="QLabel" name="label_Ch">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                  <italic>true</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>ADD CHALLENGE</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_Ch">
+              <property name="geometry">
+               <rect>
+                <x>250</x>
+                <y>50</y>
+                <width>152</width>
+                <height>19</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>ADD NEW CHALLENGE</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditName2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>100</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Add challenge name:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditName">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>100</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditDescription2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>140</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Add challenge description:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditDescription">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>140</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditContest2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>180</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Add contestID:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditContest">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>180</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditTab2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>220</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Add tabID:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditTab">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>220</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditDifficulty2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>260</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Add difficulty:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditDifficulty">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>260</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditScore2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>300</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Add score:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditScore">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>300</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditTags2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>340</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Add tags:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditTags">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>340</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditFilesPath2">
+              <property name="geometry">
+               <rect>
+                <x>150</x>
+                <y>380</y>
+                <width>131</width>
+                <height>21</height>
+               </rect>
+              </property>
+              <property name="text">
+               <string>Add files path:</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QLineEdit" name="lineEditFilesPath">
+              <property name="geometry">
+               <rect>
+                <x>340</x>
+                <y>380</y>
+                <width>113</width>
+                <height>20</height>
+               </rect>
+              </property>
+             </widget>
             </widget>
             <widget class="QWidget" name="Profile">
              <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -925,7 +1574,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>809</width>
-     <height>33</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
