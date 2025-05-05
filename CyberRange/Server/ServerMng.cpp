@@ -29,9 +29,10 @@ ServerMng::ServerMng(int port, std::string address)
 	loader = new Loader();
 
     srand(time(NULL));
-     std::generate_n(SecretKey.begin(), 32, []() {
-         static const char c[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
-         return c[rand() % (sizeof(c) - 1)]; });
+    SecretKey.resize(32);
+    std::generate_n(SecretKey.begin(), 32, []() {
+        static const char c[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
+        return c[rand() % (sizeof(c) - 1)]; });
 
 
     // Initialize other controllers
