@@ -125,7 +125,7 @@
     <QtUic Include="MainMenu.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AuthController.h" />
+    <QtMoc Include="AuthController.h" />
     <ClInclude Include="CController.h" />
     <ClInclude Include="ChallClientController.h" />
     <ClInclude Include="ClientMng.h" />

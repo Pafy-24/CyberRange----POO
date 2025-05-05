@@ -1,55 +1,30 @@
 ﻿#include "AuthController.h"
 #include "ClientMng.h"
+#include <QTimer>
+#include <QDebug>
 #include <json.hpp>
-#include <iostream>
 
 using json = nlohmann::json;
 
-AuthController::AuthController() : CController("Auth") {}
+AuthController::AuthController()
+    : CController("AuthController") // Numele controllerului pentru identificare 
+{}
 
-void AuthController::requestLogin(const std::string& username, const std::string& password) 
+void AuthController::requestLogin(const std::string& username, const std::string& password)
 {
     json req = {
-        {"controller", "Auth"},
+        {"controller", "UserController"},
         {"action", "login"},
         {"payload", {
             {"username", username},
             {"password", password}
         }}
     };
+
     ClientMng::getInstance()->sendRequest(req.dump());
 }
 
-void AuthController::requestRegister(const std::string& username, const std::string& password, const std::string& email)
-{
-    json req = {
-        {"controller", "Auth"},
-        {"action", "register"},
-        {"payload", {
-            {"username", username},
-            {"password", password},
-            {"email", email}
-        }}
-    };
-    ClientMng::getInstance()->sendRequest(req.dump());
-}
-
-
-std::string AuthController::getToken() const 
-{
-    return token;
-}
-
-std::string AuthController::getCurrentUser() const {
-    return currentUser;
-}
-
-std::string AuthController::getRole() const
-{
-    return role;
-}
-
-void AuthController::handleServerResponse(const std::string& responseStr) 
+void AuthController::handleServerResponse(const std::string& responseStr)
 {
     try {
         json response = json::parse(responseStr);
@@ -62,42 +37,78 @@ void AuthController::handleServerResponse(const std::string& responseStr)
 
         if (action == "login") 
         {
-            if (status == "success") {
-                token = response.value("token", "");
-                currentUser = response.value("username", "");
-                role = response.value("role", "common");  // <- rol aici
-
-                std::cout << "[AuthController] Login successful. User: " << currentUser << " (role: " << role << ")\n";
-            }
-            else 
-            {
-                std::string msg = response.value("message", "Login failed.");
-                std::cerr << "[AuthController] Login failed: " << msg << "\n";
-                // TODO: notificare UI cu mesaj de eroare
-            }
-        }
-        else if (action == "register") 
-        {
             if (status == "success") 
             {
                 token = response.value("token", "");
                 currentUser = response.value("username", "");
-                std::cout << "[AuthController] Register successful. User: " << currentUser << "\n";
+				role = response.value("role", "");
+
+                qDebug() << "[AuthController] Login reușit. Utilizator:" << QString::fromStdString(currentUser);
+                emit loginSucceeded(); // semnal pentru UI
             }
             else 
             {
-                std::string msg = response.value("message", "Register failed.");
-                std::cerr << "[AuthController] Register failed: " << msg << "\n";
+                QString msg = QString::fromStdString(response.value("message", "Login failed."));
+                qWarning() << "[AuthController] Login eșuat:" << msg;
+                emit loginFailed(msg); // semnal pentru UI
             }
         }
-
     }
-    catch (const std::exception& e) {
-        std::cerr << "[AuthController] Error parsing server response: " << e.what() << "\n";
+    catch (const std::exception& e) 
+    {
+        qCritical() << "[AuthController] Eroare parsare răspuns server:" << e.what();
+        emit loginFailed("Eroare internă în timpul autentificării.");
     }
 }
 
-bool AuthController::isAuthenticated() const
+void AuthController::requestRegister(const std::string& username, const std::string& password, const std::string& email)
+{
+    json req = {
+        {"controller", "UserController"},
+        {"action", "register"},
+        {"payload", {
+            {"username", username},
+            {"password", password},
+            {"email", email}
+        }}
+    };
+
+    ClientMng::getInstance()->sendRequest(req.dump());
+}
+
+void AuthController::requestLogout()
+{
+    if (token.empty()) {
+        qWarning() << "[AuthController] Nu există sesiune activă pentru logout.";
+        emit loginFailed("Nu ești autentificat.");
+        return;
+    }
+
+    json req = {
+        {"controller", "UserController"},
+        {"action", "logout"},
+        {"token", token}
+    };
+
+    ClientMng::getInstance()->sendRequest(req.dump());
+}
+
+std::string AuthController::getToken() const 
+{
+    return token;
+}
+
+std::string AuthController::getCurrentUser() const 
+{
+    return currentUser;
+}
+
+bool AuthController::isAuthenticated() const 
 {
     return !token.empty();
+}
+
+std::string AuthController::getRole() const
+{
+    return role;
 }

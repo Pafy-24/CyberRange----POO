@@ -304,6 +304,17 @@ QPushButton {
      <bold>true</bold>
     </font>
    </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background: transparent;
+    border: 1px solid #a020f0;
+    color: white;
+}
+
+QLineEdit:focus {
+    border: 2px solid white;
+}</string>
+   </property>
    <property name="text">
     <string>EMAIL:</string>
    </property>
@@ -319,6 +330,17 @@ QPushButton {
      <width>171</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit {
+    background: transparent;
+    border: 1px solid #a020f0;
+    color: white;
+}
+
+QLineEdit:focus {
+    border: 2px solid white;
+}</string>
    </property>
   </widget>
  </widget>

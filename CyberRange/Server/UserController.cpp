@@ -11,11 +11,12 @@ UserController::UserController(DBController* dbCtrl)
 
 void UserController::Login(const json& data, Connection* client)
 {
-    std::string username = data["username"];
-    std::string password = data["password"];
+    std::cout << "[Server] Received login request:\n" << data.dump(4) << "\n";
+    std::string username = data["payload"]["username"];
+    std::string password = data["payload"]["password"];
 
-    std::string query = "SELECT * FROM Users WHERE username = '" + username +
-        "' AND password = '" + password + "'";
+    std::string query = "SELECT * FROM Users WHERE Username = '" + username +
+        "' AND PasswordHash = '" + password + "'";
 
     auto results = dbController->executeQuery(query);
 
@@ -43,6 +44,7 @@ void UserController::Login(const json& data, Connection* client)
             {"username", username},
             {"role", results[0]["role"]}
         };
+        std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
         client->send(response.dump());
         logger->log("User logged in: " + username);
     }
@@ -54,6 +56,7 @@ void UserController::Login(const json& data, Connection* client)
             {"status", "error"},
             {"message", "Invalid username or password"}
         };
+        std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
         client->send(response.dump());
         logger->log("Login failed for user: " + username);
     }
