@@ -43,6 +43,23 @@ void AuthController::requestRegister(const std::string& username, const std::str
     ClientMng::getInstance()->receiveResponse();
 }
 
+void AuthController::requestUpdate(const std::string& username, const std::string& password, const std::string& email)
+{
+    json req = {
+        {"controller", "UserController"},
+        {"action", "update"},
+		{"token", token},
+        {"payload", {
+            {"username", username},
+            {"password", password},
+            {"email", email}
+        }}
+    };
+
+    ClientMng::getInstance()->sendRequest(req.dump());
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    ClientMng::getInstance()->receiveResponse();
+}
 
 void AuthController::handleServerResponse(const std::string& responseStr)
 {
@@ -97,6 +114,20 @@ void AuthController::handleServerResponse(const std::string& responseStr)
 			{
 				QString msg = QString::fromStdString(response.value("message", "Registration failed."));
 				qWarning() << "[AuthController] Înregistrare eșuată:" << msg;
+				emit loginFailed(msg); // semnal pentru UI
+			}
+		}
+		else if (action == "update")
+		{
+			if (status == "success")
+			{
+				qDebug() << "[AuthController] User updated successfully.";
+				emit loginSucceeded(); // semnal pentru UI
+			}
+			else
+			{
+				QString msg = QString::fromStdString(response.value("message", "Update failed."));
+				qWarning() << "[AuthController] Actualizare eșuată:" << msg;
 				emit loginFailed(msg); // semnal pentru UI
 			}
 		}

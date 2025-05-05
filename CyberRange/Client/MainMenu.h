@@ -41,6 +41,9 @@ private slots:
 	void on_pushButtonQuickAddC_clicked();
 	void on_pushButtonViewLC_clicked();
 
+	///profile
+	void on_pushButtonSubmit_clicked();
+
 
     void on_ConnButton_clicked();
 
