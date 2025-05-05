@@ -94,7 +94,7 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
-	std::string userRole = "writer"; // Default role for new users
+	std::string userRole = "admin"; // Default role for new users
     MainMenu* menu = new MainMenu();
     menu->configureUIForRole(userRole);
     menu->show();

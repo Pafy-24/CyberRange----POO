@@ -172,6 +172,7 @@ void MainMenu::configureUIForRole(std::string role)
     {
         ui->DashboardAdminButton->show();
         ui->ManageUsersButton->show();
+        ui->AddChallengeButton->show();
         ui->CreateContestButton->show();
     }
     else if (role == "writer") 
