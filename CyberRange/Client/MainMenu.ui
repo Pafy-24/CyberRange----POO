@@ -344,7 +344,7 @@ QPushButton:pressed {
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="JoinContestButton">
+           <widget class="QPushButton" name="ContestsButton">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -1350,7 +1350,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="JoinContest">
+            <widget class="QWidget" name="Contests">
              <layout class="QVBoxLayout" name="verticalLayout_15">
               <item>
                <widget class="QLabel" name="label">
@@ -1360,7 +1360,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
                  </font>
                 </property>
                 <property name="text">
-                 <string>JOIN CONTEST</string>
+                 <string>CONTESTS</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>

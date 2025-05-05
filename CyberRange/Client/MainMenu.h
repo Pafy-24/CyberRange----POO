@@ -17,7 +17,7 @@ class MainMenu : public QMainWindow
 
 public:
     explicit MainMenu( QWidget* parent = nullptr);
-	void configureUIForRole(std::string role);
+	void configureUIForRole(int role);
     ~MainMenu();
 
 private slots:
@@ -28,13 +28,18 @@ private slots:
 	void on_DashboardCommonButton_clicked();
 	void on_DashboardWriterButton_clicked();
 	void on_HomeButton_clicked();
-	void on_JoinContestButton_clicked();
+	void on_ContestsButton_clicked();
 	void on_ManageUsersButton_clicked();
 	void on_ProfileButton_clicked();
 	void on_ReviewFlagsButton_clicked();
 	void on_SettingsButton_clicked();
 	void on_SolveChallengeButton_clicked();
 	void on_TrainingButton_clicked();
+
+	/// dasboard admin
+	void on_pushButtonAddCh_clicked();
+	void on_pushButtonQuickAddC_clicked();
+	void on_pushButtonViewLC_clicked();
 
 
     void on_ConnButton_clicked();

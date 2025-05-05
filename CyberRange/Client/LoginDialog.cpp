@@ -71,7 +71,7 @@ void LoginDialog::on_loginButton_clicked()
     connect(authCtrl, &AuthController::loginSucceeded, this, [=]() {
         QMessageBox::information(this, "Succes", "Autentificare reușită!");
 
-        std::string userRole = authCtrl->getRole();
+        int userRole = authCtrl->getRole();
         QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
         fadeOut->setDuration(500);
         fadeOut->setStartValue(1);
@@ -94,7 +94,7 @@ void LoginDialog::on_loginButton_clicked()
 
 void LoginDialog::on_registerButton_clicked()
 {
-	std::string userRole = "admin"; // Default role for new users
+	int userRole = 1; // Default role for new users
     MainMenu* menu = new MainMenu();
     menu->configureUIForRole(userRole);
     menu->show();

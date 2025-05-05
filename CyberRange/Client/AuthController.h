@@ -15,7 +15,7 @@ public:
     std::string getToken() const;
     std::string getCurrentUser() const;
     bool isAuthenticated() const;
-	std::string getRole() const;
+	int getRole() const;
     void handleServerResponse(const std::string& responseStr) override;
 
 signals:
@@ -25,5 +25,5 @@ signals:
 private:
     std::string token;
     std::string currentUser;
-	std::string role;
+	int role;
 };

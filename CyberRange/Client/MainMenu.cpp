@@ -110,7 +110,7 @@ void MainMenu::on_HomeButton_clicked()
 	ui->stackedWidget->setCurrentIndex(3);
 }
 
-void MainMenu::on_JoinContestButton_clicked()
+void MainMenu::on_ContestsButton_clicked()
 {
 	ui->stackedWidget->setCurrentIndex(5);
 }
@@ -145,7 +145,22 @@ void MainMenu::on_TrainingButton_clicked()
     ui->stackedWidget->setCurrentIndex(11);
 }
 
-void MainMenu::configureUIForRole(std::string role)
+void MainMenu::on_pushButtonAddCh_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(8);
+}
+
+void MainMenu::on_pushButtonQuickAddC_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(4);
+}
+
+void MainMenu::on_pushButtonViewLC_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(5);
+}
+
+void MainMenu::configureUIForRole(int role)
 {
     // Ascundem totul la început
     ui->AddChallengeButton->hide();
@@ -154,7 +169,7 @@ void MainMenu::configureUIForRole(std::string role)
     ui->DashboardWriterButton->hide();
     ui->DashboardCommonButton->hide();
     ui->HomeButton->hide();
-    ui->JoinContestButton->hide();
+    ui->ContestsButton->hide();
     ui->ManageUsersButton->hide();
     ui->ProfileButton->hide();
     ui->ReviewFlagsButton->hide();
@@ -168,25 +183,25 @@ void MainMenu::configureUIForRole(std::string role)
     ui->ProfileButton->show();
     
 
-    if (role == "admin") 
+    switch (role)
     {
+    case 1:
+        ui->DashboardCommonButton->show();
+        ui->ContestsButton->show();
+        ui->TrainingButton->show();
+        ui->SolveChallengeButton->show();
+        break;
+    case 5:
+        ui->DashboardWriterButton->show();
+        ui->AddChallengeButton->show();
+        ui->ReviewFlagsButton->show();
+        break;
+    case 10:
         ui->DashboardAdminButton->show();
         ui->ManageUsersButton->show();
         ui->AddChallengeButton->show();
         ui->CreateContestButton->show();
-    }
-    else if (role == "writer") 
-    {
-        ui->DashboardWriterButton->show();
-        ui->AddChallengeButton->show();
-        ui->ReviewFlagsButton->show();
-    }
-    else if (role == "common") 
-    {
-        ui->DashboardCommonButton->show();
-        ui->JoinContestButton->show();
-        ui->TrainingButton->show();
-        ui->SolveChallengeButton->show();
+        break;
     }
 }
 

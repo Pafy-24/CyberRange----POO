@@ -44,8 +44,8 @@ void AuthController::handleServerResponse(const std::string& responseStr)
                 token = response.value("token", "");
                 currentUser = response.value("username", "");
 
-                int r = response["role"];
-                switch (r)
+                role = response["role"];
+                /*switch (r)
                 {
                 case 1:
                     role = "student";break;
@@ -56,7 +56,7 @@ void AuthController::handleServerResponse(const std::string& responseStr)
                 default:
                     role = "student";
                     break;
-                }
+                }*/
 
                 qDebug() << "[AuthController] Login reușit. Utilizator:" << QString::fromStdString(currentUser);
                 emit loginSucceeded(); // semnal pentru UI
@@ -123,7 +123,7 @@ bool AuthController::isAuthenticated() const
     return !token.empty();
 }
 
-std::string AuthController::getRole() const
+int AuthController::getRole() const
 {
     return role;
 }
