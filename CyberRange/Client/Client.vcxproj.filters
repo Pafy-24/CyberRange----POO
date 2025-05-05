@@ -78,6 +78,9 @@
     <QtMoc Include="MainMenu.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="AuthController.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="LoginDialog.ui">
@@ -98,9 +101,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AuthController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContestClientController.h">

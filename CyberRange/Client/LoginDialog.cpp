@@ -17,6 +17,8 @@ LoginDialog::LoginDialog(QWidget* parent) : QDialog(parent), ui(new Ui::LoginDia
     ui->setupUi(this);
     this->setWindowFlags(Qt::FramelessWindowHint);
 
+    ui->lineEditEmail->hide();
+    ui->lineEditEmail2->hide();
     QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(this);
     ui->labelWelcome->setGraphicsEffect(effect);
 
@@ -54,99 +56,88 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::on_loginButton_clicked()
 {
-    std::string _username = ui->lineEditUsername->text().toStdString();
-    std::string _password = ui->lineEditPassword->text().toStdString();
+    const std::string username = ui->lineEditUsername->text().toStdString();
+    const std::string password = ui->lineEditPassword->text().toStdString();
 
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
-    if (!authCtrl) 
-    {
+    if (!authCtrl) {
         QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
         return;
     }
+    authCtrl->requestLogin(username, password);
 
-    authCtrl->requestLogin(_username, _password);
 
-    // Verificăm după 300ms dacă login-ul a reușit
-    QTimer::singleShot(300, this, [=]() 
-        {
-            if (!authCtrl->getToken().empty()) 
-            {
-                // Login reușit
-                std::string userRole = authCtrl->getRole();
-                QMessageBox::information(this, "Succes", "Autentificare reușită!");
+    // conectăm semnalele o singură dată (sau într-un constructor)
+    connect(authCtrl, &AuthController::loginSucceeded, this, [=]() {
+        QMessageBox::information(this, "Succes", "Autentificare reușită!");
 
-                QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
-                fadeOut->setDuration(500);
-                fadeOut->setStartValue(1);
-                fadeOut->setEndValue(0);
+        std::string userRole = authCtrl->getRole();
+        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+        fadeOut->setDuration(500);
+        fadeOut->setStartValue(1);
+        fadeOut->setEndValue(0);
 
-                connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-                    MainMenu* menu = new MainMenu();
-                    menu->configureUIForRole(userRole);
-                    menu->show();
-                    this->close();
-                    });
+        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+            MainMenu* menu = new MainMenu();
+            menu->configureUIForRole(userRole);
+            menu->show();
+            this->close();
+            });
 
-                fadeOut->start();
-            }
-            else 
-            {
-                QMessageBox::warning(this, "Eroare", "Autentificare eșuată. Verifică datele introduse.");
-            }
+        fadeOut->start();
         });
+
+    connect(authCtrl, &AuthController::loginFailed, this, [=](const QString& message) {
+        QMessageBox::warning(this, "Eroare", "Autentificare eșuată:\n" + message);
+        });
+}
+
+void LoginDialog::on_registerButton_clicked()
+{
+	std::string userRole = "writer"; // Default role for new users
+    MainMenu* menu = new MainMenu();
+    menu->configureUIForRole(userRole);
+    menu->show();
+    this->close();
 }
 
 //void LoginDialog::on_registerButton_clicked()
 //{
-//	std::string userRole = "admin"; // Default role for new users
-//    MainMenu* menu = new MainMenu();
-//    menu->configureUIForRole(userRole);
-//    menu->show();
-//    this->close();
+//    const std::string username = ui->lineEditUsername->text().toStdString();
+//    const std::string password = ui->lineEditPassword->text().toStdString();
+//    const std::string email = ui->lineEditEmail->text().toStdString();
+//
+//    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("Auth"));
+//    if (!authCtrl) {
+//        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
+//        return;
+//    }
+//
+//    connect(authCtrl, &AuthController::loginSucceeded, this, [=]() {
+//        QMessageBox::information(this, "Succes", "Înregistrare reușită!");
+//
+//        std::string userRole = authCtrl->getRole();  // presupui că e „common”
+//        QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
+//        fadeOut->setDuration(500);
+//        fadeOut->setStartValue(1);
+//        fadeOut->setEndValue(0);
+//
+//        connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
+//            MainMenu* menu = new MainMenu();
+//            menu->configureUIForRole(userRole);
+//            menu->show();
+//            this->close();
+//            });
+//
+//        fadeOut->start();
+//        });
+//
+//    connect(authCtrl, &AuthController::loginFailed, this, [=](const QString& message) {
+//        QMessageBox::warning(this, "Eroare", "Înregistrare eșuată:\n" + message);
+//        });
+//
+//    authCtrl->requestRegister(username, password, email);
 //}
-
-void LoginDialog::on_registerButton_clicked() 
-{
-    std::string username = ui->lineEditUsername->text().toStdString();
-    std::string password = ui->lineEditPassword->text().toStdString();
-    std::string email = ui->lineEditEmail->text().toStdString();
-
-    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("Auth"));
-    if (!authCtrl) 
-    {
-        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
-        return;
-    }
-
-    authCtrl->requestRegister(username, password, email);
-
-    QTimer::singleShot(300, this, [=]() 
-        {
-            if (!authCtrl->getToken().empty()) 
-            {
-                QMessageBox::information(this, "Succes", "Înregistrare reușită! Autentificat automat.");
-
-                QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
-                fadeOut->setDuration(500);
-                fadeOut->setStartValue(1);
-                fadeOut->setEndValue(0);
-
-                connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-                    MainMenu* menu = new MainMenu();
-                    std::string userRole = "common"; // Default role for new users
-                    menu->configureUIForRole(userRole);
-                    menu->show();
-                    this->close();
-                    });
-
-                fadeOut->start();
-            }
-            else 
-            {
-                QMessageBox::warning(this, "Eroare", "Înregistrare eșuată. Verifică dacă username-ul este disponibil.");
-            }
-        });
-}
 
 void LoginDialog::on_exitButton_clicked()
 {

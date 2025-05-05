@@ -493,9 +493,9 @@ QPushButton:pressed {
              <widget class="QLabel" name="label_Dash">
               <property name="geometry">
                <rect>
-                <x>250</x>
-                <y>30</y>
-                <width>140</width>
+                <x>200</x>
+                <y>60</y>
+                <width>231</width>
                 <height>19</height>
                </rect>
               </property>
@@ -519,9 +519,9 @@ QPushButton:pressed {
              <widget class="QFrame" name="frame_7">
               <property name="geometry">
                <rect>
-                <x>60</x>
+                <x>20</x>
                 <y>140</y>
-                <width>161</width>
+                <width>181</width>
                 <height>211</height>
                </rect>
               </property>
@@ -543,9 +543,24 @@ QPushButton:pressed {
                 <widget class="QLineEdit" name="lineEditNrUsers2">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>-1</pointsize>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
                  </property>
                  <property name="text">
                   <string>Number of users:</string>
@@ -559,16 +574,32 @@ QPushButton:pressed {
                 </widget>
                </item>
                <item>
-                <widget class="QLineEdit" name="lineEditNrUsers"/>
+                <widget class="QLineEdit" name="lineEditNrUsers">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                </widget>
                </item>
               </layout>
              </widget>
              <widget class="QFrame" name="frame_8">
               <property name="geometry">
                <rect>
-                <x>250</x>
+                <x>230</x>
                 <y>140</y>
-                <width>161</width>
+                <width>181</width>
                 <height>211</height>
                </rect>
               </property>
@@ -590,9 +621,24 @@ QPushButton:pressed {
                 <widget class="QLineEdit" name="lineEditQuickAddC">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>-1</pointsize>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
                  </property>
                  <property name="text">
                   <string>Quick add a contest:</string>
@@ -607,6 +653,26 @@ QPushButton:pressed {
                </item>
                <item>
                 <widget class="QPushButton" name="pushButtonQuickAddC">
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
                  <property name="text">
                   <string>Add new Contest</string>
                  </property>
@@ -619,7 +685,7 @@ QPushButton:pressed {
                <rect>
                 <x>440</x>
                 <y>140</y>
-                <width>161</width>
+                <width>181</width>
                 <height>211</height>
                </rect>
               </property>
@@ -641,9 +707,24 @@ QPushButton:pressed {
                 <widget class="QLineEdit" name="lineEditViewLastC">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>-1</pointsize>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
                  </property>
                  <property name="text">
                   <string>View last contests:</string>
@@ -658,6 +739,26 @@ QPushButton:pressed {
                </item>
                <item>
                 <widget class="QPushButton" name="pushButtonViewLC">
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
                  <property name="text">
                   <string>View last Contests</string>
                  </property>
@@ -694,9 +795,24 @@ QPushButton:pressed {
                 <widget class="QLineEdit" name="lineEditPractice">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>-1</pointsize>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
                  </property>
                  <property name="text">
                   <string>Practice</string>
@@ -708,6 +824,26 @@ QPushButton:pressed {
                </item>
                <item>
                 <widget class="QPushButton" name="pushButtonPractice">
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
                  <property name="text">
                   <string>Practice</string>
                  </property>
@@ -768,9 +904,24 @@ QPushButton:pressed {
                 <widget class="QLineEdit" name="lineEdit_3">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>-1</pointsize>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
                  </property>
                  <property name="text">
                   <string>Join Contest</string>
@@ -782,6 +933,26 @@ QPushButton:pressed {
                </item>
                <item>
                 <widget class="QPushButton" name="pushButtonJC">
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
                  <property name="text">
                   <string>Join Contest</string>
                  </property>
@@ -816,9 +987,24 @@ QPushButton:pressed {
                 <widget class="QLineEdit" name="lineEdit_4">
                  <property name="font">
                   <font>
-                   <pointsize>13</pointsize>
+                   <pointsize>-1</pointsize>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
                  </property>
                  <property name="text">
                   <string>Solve Challenge</string>
@@ -830,6 +1016,26 @@ QPushButton:pressed {
                </item>
                <item>
                 <widget class="QPushButton" name="pushButtonSC">
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
                  <property name="text">
                   <string>Solve Challenge</string>
                  </property>
@@ -867,7 +1073,7 @@ QPushButton:pressed {
                <rect>
                 <x>210</x>
                 <y>50</y>
-                <width>211</width>
+                <width>231</width>
                 <height>21</height>
                </rect>
               </property>
@@ -1188,9 +1394,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLabel" name="label_Ch">
               <property name="geometry">
                <rect>
-                <x>250</x>
-                <y>50</y>
-                <width>152</width>
+                <x>210</x>
+                <y>30</y>
+                <width>221</width>
                 <height>19</height>
                </rect>
               </property>
@@ -1211,16 +1417,31 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditName2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>100</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>80</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
               </property>
               <property name="font">
                <font>
-                <pointsize>10</pointsize>
+                <pointsize>-1</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add challenge name:</string>
@@ -1235,26 +1456,56 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditName">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>100</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>80</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditDescription2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>140</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>130</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
               </property>
               <property name="font">
                <font>
-                <pointsize>10</pointsize>
+                <pointsize>-1</pointsize>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add challenge description:</string>
@@ -1269,21 +1520,51 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditDescription">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>140</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>130</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditContest2">
               <property name="geometry">
                <rect>
-                <x>150</x>
+                <x>110</x>
                 <y>180</y>
-                <width>131</width>
-                <height>21</height>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add contestID:</string>
@@ -1298,21 +1579,51 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditContest">
               <property name="geometry">
                <rect>
-                <x>340</x>
+                <x>330</x>
                 <y>180</y>
-                <width>113</width>
-                <height>20</height>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditTab2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>220</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>230</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add tabID:</string>
@@ -1327,21 +1638,51 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditTab">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>220</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>230</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditDifficulty2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>260</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>280</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add difficulty:</string>
@@ -1356,21 +1697,51 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditDifficulty">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>260</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>280</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditScore2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>300</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>330</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add score:</string>
@@ -1385,21 +1756,51 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditScore">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>300</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>330</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditTags2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>340</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>380</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add tags:</string>
@@ -1414,21 +1815,51 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditTags">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>340</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>380</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
              <widget class="QLineEdit" name="lineEditFilesPath2">
               <property name="geometry">
                <rect>
-                <x>150</x>
-                <y>380</y>
-                <width>131</width>
-                <height>21</height>
+                <x>110</x>
+                <y>430</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
               <property name="text">
                <string>Add files path:</string>
@@ -1443,11 +1874,26 @@ li.checked::marker { content: &quot;\2612&quot;; }
              <widget class="QLineEdit" name="lineEditFilesPath">
               <property name="geometry">
                <rect>
-                <x>340</x>
-                <y>380</y>
-                <width>113</width>
-                <height>20</height>
+                <x>330</x>
+                <y>430</y>
+                <width>191</width>
+                <height>41</height>
                </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
               </property>
              </widget>
             </widget>
@@ -1505,12 +1951,162 @@ QPushButton:pressed {
             <widget class="QWidget" name="Settings">
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
-               <widget class="QLabel" name="label_S">
-                <property name="text">
-                 <string>SETTINGS</string>
+               <widget class="QFrame" name="frame_16">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QLineEdit" name="lineEditOldPasswd2">
+                 <property name="geometry">
+                  <rect>
+                   <x>180</x>
+                   <y>50</y>
+                   <width>113</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Old password:</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewPasswd2">
+                 <property name="geometry">
+                  <rect>
+                   <x>180</x>
+                   <y>80</y>
+                   <width>113</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>New password:</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditOldPasswd">
+                 <property name="geometry">
+                  <rect>
+                   <x>330</x>
+                   <y>50</y>
+                   <width>113</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewPasswd">
+                 <property name="geometry">
+                  <rect>
+                   <x>330</x>
+                   <y>80</y>
+                   <width>113</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>230</x>
+                   <y>10</y>
+                   <width>161</width>
+                   <height>20</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Change your password</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_17">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QCheckBox" name="checkBox">
+                 <property name="geometry">
+                  <rect>
+                   <x>250</x>
+                   <y>10</y>
+                   <width>151</width>
+                   <height>18</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Get notifications on new contests</string>
+                 </property>
+                </widget>
+                <widget class="QCheckBox" name="checkBox_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>250</x>
+                   <y>30</y>
+                   <width>151</width>
+                   <height>18</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Get email on updates</string>
+                 </property>
+                </widget>
+                <widget class="QCheckBox" name="checkBox_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>250</x>
+                   <y>50</y>
+                   <width>161</width>
+                   <height>18</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Get announcements on leaderboard</string>
+                 </property>
+                </widget>
+                <widget class="QCheckBox" name="checkBox_4">
+                 <property name="geometry">
+                  <rect>
+                   <x>250</x>
+                   <y>70</y>
+                   <width>161</width>
+                   <height>18</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Stay up to date in challenges</string>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_18">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_19">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                </widget>
               </item>
