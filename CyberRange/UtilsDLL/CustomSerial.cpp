@@ -2,12 +2,25 @@
 #include "CustomSerial.h"
 #include "JWTDec.h"
 #include "JWTEnc.h"
+#include <openssl/sha.h>
 
 // Constructor initializing members
 CustomSerial::CustomSerial(bool jsonPretty, std::string jwtKey, std::string jwtAlgo)
     : prettyPrint(jsonPretty), jwtKey(jwtKey), jwtAlgo(jwtAlgo)
 {
 }
+std::string CustomSerial::hash(const std::string& str) const
+{
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256(reinterpret_cast<const unsigned char*>(str.c_str()), str.size(), hash);
+
+    std::stringstream ss;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i)
+        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+
+    return ss.str();
+}
+
 
 // Universal encode function with json support
 std::string CustomSerial::encode(const json& data, bool useJWT,
