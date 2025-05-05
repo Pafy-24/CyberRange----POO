@@ -167,7 +167,6 @@ void Loader::loadChall(int id, Contest* mng, Connection* conn)
 
 void Loader::loadChall(int id, Tab* mng, Connection* conn)
 {
-    // Implementation for loading a challenge into a Tab
     std::string query = "SELECT * FROM Challenges WHERE ChallengeID = '" + std::to_string(id) + "'";
     auto results = ServerMng::getInstance()->getDBController()->executeQuery(query);
 
@@ -251,7 +250,7 @@ void Loader::save(Connection* conn)
     {
         for (const auto& objId : objLoaded[conn]) 
         {
-            // saveObject(objId); // Placeholder for actual save logic
+            
         }
     }
     std::cout << "[Loader] Saved all objects for connection.\n";

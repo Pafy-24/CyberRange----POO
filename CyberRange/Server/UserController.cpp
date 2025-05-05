@@ -25,10 +25,10 @@ void UserController::Login(const json& data, Connection* client)
         // construim token
         json userData =
         {
-            {"userId", results[0]["userId"]},
+            {"userId", results[0]["UserId"]},
             {"username", username},
-            {"role", results[0]["role"]},
-            {"lastActive", results[0]["lastActive"]}
+            {"role", results[0]["Role"]},
+            {"lastActive", results[0]["LastActive"]}
         };
         std::string token = CustomSerial::encodeJWT(userData.dump());
 
@@ -37,12 +37,12 @@ void UserController::Login(const json& data, Connection* client)
 
         // răspuns către client
         json response = {
-            {"controller", "Auth"},
+            {"controller", "AuthController"},
             {"action", "login"},
             {"status", "success"},
             {"token", token},
             {"username", username},
-            {"role", results[0]["role"]}
+            {"role", results[0]["Role"]}
         };
         std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
         client->send(response.dump());
@@ -51,7 +51,7 @@ void UserController::Login(const json& data, Connection* client)
     else
     {
         json response = {
-            {"controller", "Auth"},
+            {"controller", "AuthController"},
             {"action", "login"},
             {"status", "error"},
             {"message", "Invalid username or password"}
@@ -144,7 +144,7 @@ void UserController::Logout(const json& data, Connection* client)
             ServerMng::getInstance()->removeToken(token);
 
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "logout"},
                 {"status", "success"},
                 {"message", "Logged out"}
@@ -164,10 +164,7 @@ void UserController::Logout(const json& data, Connection* client)
 
 void UserController::handleRequest(const std::string& data, Connection* client) 
 {
-    if (!validateRequest(data, client)) 
-    {
-        return;
-    }
+    if (!validateRequest(data, client, 0))return;
 
     try {
         json j = json::parse(data);
@@ -187,16 +184,19 @@ void UserController::handleRequest(const std::string& data, Connection* client)
 
         else if (action == "update") 
         {
+            if (!validateRequest(data, client, 0))return;
             Update(j, client);
         }
 
         else if (action == "delete") 
         {
+            if (!validateRequest(data, client, 0))return;
             Delete(j, client);
         }
 
         else if (action == "logout") 
         {
+            if (!validateRequest(data, client, 0))return;
             Logout(j, client);
         }
 

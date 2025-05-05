@@ -233,7 +233,7 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
     auto handler = [this](const std::string& data, Connection* client) {
         try {
             json j = json::parse(data);
-            std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
+            std::string controllerName = j["controller"];
             auto it = controllers.find(controllerName);
             if (it != controllers.end()) {
                 it->second->handleRequest(data, client);

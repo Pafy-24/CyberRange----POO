@@ -33,7 +33,7 @@ void ContestController::createContest(std::string contestData)
 }
 
 void ContestController::handleRequest(const std::string& data, Connection* client) {
-    if (!validateRequest(data, client)) 
+    if (!validateRequest(data, client,1)) 
     {
         return;
     }

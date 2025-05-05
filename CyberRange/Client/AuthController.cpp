@@ -22,6 +22,8 @@ void AuthController::requestLogin(const std::string& username, const std::string
     };
 
     ClientMng::getInstance()->sendRequest(req.dump());
+    ClientMng::getInstance()->receiveResponse();
+
 }
 
 void AuthController::handleServerResponse(const std::string& responseStr)
