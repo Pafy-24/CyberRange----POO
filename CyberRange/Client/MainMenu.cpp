@@ -9,6 +9,8 @@ MainMenu::MainMenu( QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainMenu)
 {
     ui->setupUi(this);
+    this->resize(900, 700); 
+    this->setFixedSize(900, 700);
     ui->stackedWidget->setCurrentIndex(3);
     QPixmap pix(":/background/logo.png");
     ui->logoLabel->setPixmap(pix.scaled(300, 200, Qt::KeepAspectRatio));
