@@ -17,7 +17,7 @@ public:
     void loadUser(int id, Connection* conn);
     int loadUserByUsername(const std::string& username, Connection* conn);
     int loadUserByEmail(const std::string& email, Connection* conn);
-   
+
     void loadTeam(int id, Connection* conn);
 
     void loadChall(int id, Contest* mng, Connection* conn);
@@ -25,7 +25,7 @@ public:
     void loadChall(int id, Tab* mng, Connection* conn);
 
     void loadContest(int id, Connection* conn);
-    void loadTab(int id, Connection* conn); 
+    void loadTab(int id, Connection* conn);
 
     void save(Connection* conn);
     void unload(Connection* conn);
@@ -33,8 +33,8 @@ public:
 
     void registerObject(Connection* conn, const std::string& objId);
 
-    // TO DO bool isLoaded(std::string objId) const;
+    bool isLoaded(Connection* conn, const std::string& objId) const;
 
 private:
-    // TO DO void saveObject(const std::string& objId);
+    void saveObject(const std::string& objId);
 };

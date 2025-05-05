@@ -15,8 +15,8 @@ public:
     void Register(const json& data, Connection* client);
     void Update(const json& data, Connection* client);
     void Delete(const json& data, Connection* client);
-	void Logout(const json& data, Connection* client);
+    void Logout(const json& data, Connection* client);
 
     void handleRequest(const std::string& data, Connection* client) override;
-	DBController* getDB() const { return dbController; }
+    DBController* getDB() const { return dbController; }
 };
