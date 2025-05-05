@@ -24,7 +24,7 @@ public:
     bool Authenticate(std::string password) override;
     int GetAccessLevel() override;
     void SetAccessLevel(int level) override;
-    void SetPassword(std::string password);
+    void SetPassword(const std::string& password) override;
     void SetActive(bool active);
     bool IsActive() const;
 };

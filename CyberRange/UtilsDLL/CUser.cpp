@@ -71,7 +71,7 @@ void CUser::SetAccessLevel(int level)
     accessLevel = level;
 }
 
-void CUser::SetPassword(std::string password)
+void CUser::SetPassword(const std::string& password)
 {
     passwordHash = hashPassword(password);
 }
