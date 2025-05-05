@@ -29,7 +29,7 @@ void Loader::loadUser(int id, Connection* conn)
         {
             User* user = nullptr;
             const auto& result = results[0];
-            const std::string& role = result.at("role");
+            const std::string& role = result.at("Role");
 
             if (role == "admin") 
             {

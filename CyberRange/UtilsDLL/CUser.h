@@ -10,7 +10,6 @@ protected:
     int accessLevel; // 0 = user simplu, 1 = common, 5 = writer, 10 = admin 
     std::string email;
     bool active;
-    std::string hashPassword(const std::string& password) const;
 
 public:
     CUser(std::string username, std::string email, int id = 0);
@@ -21,7 +20,6 @@ public:
     void SetUsername(std::string username) override;
     void SetEmail(std::string email) override;
     void SetId(int id) override;
-    bool Authenticate(std::string password) override;
     int GetAccessLevel() override;
     void SetAccessLevel(int level) override;
     void SetPassword(const std::string& password) override;

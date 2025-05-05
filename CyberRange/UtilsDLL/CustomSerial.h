@@ -18,6 +18,8 @@ public:
     // Constructor
     CustomSerial(bool jsonPretty = false, std::string jwtKey = "", std::string jwtAlgo = "HS256");
 
+    std::string hash(const std::string& str) const;
+
     // Universal encode function
     static std::string encode(const json& data, bool useJWT = false,
         const std::string& key = "", const std::string& algo = "HS256");

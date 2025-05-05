@@ -104,13 +104,13 @@ void ClientMng::receiveResponse()
         std::cout << "Cannot receive response: not connected to server.\n";
         return;
     }
-
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::string response = serverConn->receive();
     if (response.empty()) return;
 
     std::lock_guard<std::mutex> lock(controllerMutex);
     try {
-        auto ctrlName = json::parse(response)["controller"];
+        std::string ctrlName = json::parse(response)["controller"];
         controllers[ctrlName]->handleServerResponse(response);
     }
     catch(...){
