@@ -72,7 +72,7 @@ void UserController::Register(const json& data, Connection* client)
         if (username.empty() || password.empty() || email.empty())
         {
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
                 {"message", "Missing required fields"}
@@ -87,7 +87,7 @@ void UserController::Register(const json& data, Connection* client)
         if (!existing.empty())
         {
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
                 {"message", "Username or email already exists"}
@@ -96,45 +96,23 @@ void UserController::Register(const json& data, Connection* client)
             return;
         }
 
-        // Generate a more reliable unique ID
-        int userId = rand() % 1000000 + 1000000; // Temporary solution
-        std::string checkIdQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
-        while (!dbController->executeQuery(checkIdQuery).empty()) {
-            userId = rand() % 1000000 + 1000000;
-            checkIdQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
-        }
-
-        std::string insertQuery = "INSERT INTO Users (UserID, Username, PasswordHash, Email, Role) VALUES ('" +
-            std::to_string(userId) + "', '" + username + "', '" + password + "', '" + email + "', '" + role + "')";
+        std::string insertQuery = "INSERT INTO Users (Username, PasswordHash, Email, Role) VALUES ('" + username + "', '" + password + 
+            "', '" + email + "', '" + role + "')";
 
         if (dbController->executeUpdate(insertQuery)) {
-            json payload = {
-                {"userId", userId},
-                {"username", username},
-                {"email", email},
-                {"role", role}
-            };
-
-            std::string token = CustomSerial::encodeJWT(payload.dump(), ServerMng::getInstance()->getSecretKey());
-            ServerMng::getInstance()->addToken(token);
 
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
-                {"status", "success"},
-                {"token", token},
-                {"username", username},
-                {"role", role}
+                {"status", "success"}
             };
             client->send(response.dump());
             logger->log("User registered: " + username);
 
-            // Load the user into memory
-            ServerMng::getInstance()->getLoader()->loadUser(userId, client);
         }
         else {
             json response = {
-                {"controller", "Auth"},
+                {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
                 {"message", "Failed to insert user"}
@@ -144,7 +122,7 @@ void UserController::Register(const json& data, Connection* client)
     }
     catch (const std::exception& e) {
         json response = {
-            {"controller", "Auth"},
+            {"controller", "AuthController"},
             {"action", "register"},
             {"status", "error"},
             {"message", "Registration failed: " + std::string(e.what())}
