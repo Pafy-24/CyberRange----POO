@@ -1,24 +1,28 @@
-#include"pch.h"
 #include "Tab.h"
-#include <random>
-#include <algorithm>
 
-Tab::Tab(const std::string& name, int id) : name(name), visible(true),id(id) {
+Tab::Tab(const std::string& name, int id) :
+    name(name),
+    id(id) {
 }
 
-int Tab::getId() const { return id; }
-std::string Tab::getName() const { return name; }
-std::vector<std::string> Tab::getChallenges() const { return challIds; }
-bool Tab::isVisible() const { return visible; }
+int Tab::getId() const {
+    return id;
+}
 
-void Tab::setVisible(bool vis) { visible = vis; }
+std::string Tab::getName() const {
+    return name;
+}
 
-void Tab::addChallenge(const std::string& challId) {
-    if (std::find(challIds.begin(), challIds.end(), challId) == challIds.end()) {
-        challIds.push_back(challId);
+std::map<int, Chall*> Tab::getChallenges() const {
+    return challs;
+}
+
+void Tab::addChallenge(int challId, Chall* chall) {
+    if (challs.find(challId) == challs.end()) {
+		challs[challId] = chall;
     }
 }
 
-void Tab::removeChallenge(const std::string& challId) {
-    challIds.erase(std::remove(challIds.begin(), challIds.end(), challId), challIds.end());
+void Tab::removeChallenge(int challId) {
+    challs.erase(challId);
 }

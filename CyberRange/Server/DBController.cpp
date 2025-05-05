@@ -2,15 +2,6 @@
 #include <stdexcept>
 #include <regex>
 
-DBController* DBController::instance = nullptr;
-DBController* DBController::getInstance(std::string connString)
-{
-	if (instance == nullptr)
-	{
-		instance = new DBController(connString);
-	}
-	return instance;
-}
 
 DBController::DBController(std::string connString)
     : CController("DBController"), connectionString(connString), isConnected(false) {

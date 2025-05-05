@@ -1,22 +1,18 @@
 #pragma once
-#include <string>
-#include <vector>
+#include "DLL.h"
+#include "Chall.h"
 
-class Tab {
+class ORCHESTRATOR_API Tab {
 private:
     int id;
     std::string name;
-    std::vector<std::string> challIds;
-    bool visible;
-
+    std::map<int, Chall*> challs;
 public:
     Tab(const std::string& name,int id=0);
     int getId() const;
     std::string getName() const;
-    std::vector<std::string> getChallenges() const;
-    bool isVisible() const;
+    std::map<int, Chall*> getChallenges() const;
 
-    void addChallenge(const std::string& challId);
-    void removeChallenge(const std::string& challId);
-    void setVisible(bool vis);
+    void addChallenge(int challId, Chall* chall);
+    void removeChallenge(int challId);
 };

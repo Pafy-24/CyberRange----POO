@@ -7,22 +7,22 @@ CTeam::CTeam(std::string name, int id, int contestId)
 {
 }
 
-int CTeam::GetId()
+int CTeam::GetId() const
 {
     return id;
 }
 
-int CTeam::GetContestId()
+int CTeam::GetContestId() const
 {
     return contestId;
 }
 
-std::string CTeam::GetName()
+std::string CTeam::GetName() const
 {
     return name;
 }
 
-std::vector<User*> CTeam::GetMembers()
+std::vector<User*> CTeam::GetMembers() const
 {
     return users;
 }
@@ -32,7 +32,7 @@ void CTeam::SetLogo(std::string logoPath)
     logo = logoPath;
 }
 
-std::string CTeam::GetLogo()
+std::string CTeam::GetLogo() const
 {
     return logo;
 }
@@ -45,6 +45,21 @@ void CTeam::SetId(int id)
 void CTeam::SetContestId(int contestId)
 {
     this->contestId = contestId;
+}
+
+int CTeam::GetContestId() const
+{
+	return contestId;
+}
+
+std::string CTeam::GetName() const
+{
+	return name;
+}
+
+std::vector<User*> CTeam::GetMembers() const
+{
+	return users;
 }
 
 void CTeam::SetName(std::string name)
@@ -70,7 +85,7 @@ void CTeam::RemoveMember(int userId)
         [userId](User* user) { return user->GetId() == userId; }), users.end());
 }
 
-int CTeam::GetScore()
+int CTeam::GetScore() const
 {
     int total = 0;
     for (const auto& pair : stats)
@@ -85,7 +100,7 @@ void CTeam::AddStats(std::string key, int value)
     stats[key] += value;
 }
 
-std::map<std::string, int> CTeam::GetStats()
+std::map<std::string, int> CTeam::GetStats() const
 {
     return stats;
 }
@@ -98,4 +113,14 @@ void CTeam::SetActive(bool active)
 bool CTeam::IsActive() const
 {
     return active;
+}
+
+void CTeam::SetLeader(int id)
+{
+	LeaderID = id;
+}
+
+int CTeam::GetLeader() const
+{
+	return LeaderID;
 }

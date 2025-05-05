@@ -14,4 +14,8 @@ public:
     virtual int GetAccessLevel() = 0;
     virtual void SetAccessLevel(int level) = 0;
     virtual ~User() = default;
+
+    virtual void SetPassword(std::string hash) = 0;
+    virtual void SetActive(bool active) = 0;
+    virtual bool IsActive() const = 0;
 };

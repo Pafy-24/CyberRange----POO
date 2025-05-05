@@ -1,8 +1,6 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <ctime>
 #include "DLL.h"
+#include "Chall.h"
 
 class ORCHESTRATOR_API Contest {
 private:
@@ -10,8 +8,8 @@ private:
     std::string name;
     time_t startTime;
     time_t endTime;
-    std::vector<std::string> challIds;
-    std::vector<std::string> teamIds;
+    std::map<int,Chall*> challs;
+    std::vector<int> teamIds;
     bool active;
 
 public:
@@ -20,15 +18,15 @@ public:
     std::string getName() const;
     time_t getStartTime() const;
     time_t getEndTime() const;
-    std::vector<std::string> getChallenges() const;
-    std::vector<std::string> getTeams() const;
+    std::map<int, Chall*> getChallenges() const;
+    std::vector<int> getTeams() const;
     bool isActive() const;
 
     void setStartTime(time_t start);
     void setEndTime(time_t end);
-    void addChallenge(const std::string& challId);
-    void removeChallenge(const std::string& challId);
-    void addTeam(const std::string& teamId);
-    void removeTeam(const std::string& teamId);
+    void addChallenge(int challId, Chall* chall);
+    void removeChallenge(int challId);
+    void addTeam(int teamId);
+    void removeTeam(int teamId);
     void setActive(bool act);
 };

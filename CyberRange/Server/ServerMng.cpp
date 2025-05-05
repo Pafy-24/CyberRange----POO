@@ -25,16 +25,14 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
 ServerMng::ServerMng(int port, std::string address)
     : isRunning(false), port(port), serverAddress(address) {
     // Initialize DBController
-    DBController* dbCtrl = DBController::getInstance("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
+    dbController = new DBController("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
 	loader = new Loader();
 
-    attachController("DBController", dbCtrl);
-
     // Initialize other controllers
-    attachController("UserController", new UserController(dbCtrl));
-    attachController("TeamController", new TeamController(dbCtrl));
-    attachController("ChallController", new ChallController(dbCtrl));
-    attachController("ContestController", new ContestController(dbCtrl));
+    attachController("UserController", new UserController(dbController));
+    attachController("TeamController", new TeamController(dbController));
+    attachController("ChallController", new ChallController(dbController));
+    attachController("ContestController", new ContestController(dbController));
     attachController("default", new Controller());
 
 	//loader->attachControllers(controllers);
@@ -160,13 +158,21 @@ Controller* ServerMng::getController(const std::string& name)
     return nullptr;
 }
 
-ChallMng* ServerMng::getChallMng(std::string contestId) {
-    //for (auto* chall : challMngs) {
-        //if (chall->getContestId() == contestId) {
-            //return chall;
-        //}
-    //}
-    return nullptr;
+Contest* ServerMng::getContest(int mngID) {
+	auto contests = challMng.getAllContests();
+	auto it = contests.find(mngID);
+	if (it != contests.end()) {
+        return contests[mngID];
+	}
+	return nullptr;
+}
+Tab* ServerMng::getTab(int mngID) {
+	auto tabs = challMng.getAllTabs();
+	auto it = tabs.find(mngID);
+	if (it != tabs.end()) {
+		return tabs[mngID];
+	}
+	return nullptr;
 }
 
 void ServerMng::addToken(const std::string& token)
@@ -191,6 +197,19 @@ void ServerMng::removeToken(const std::string& token)
 		std::cout << "Removed token: " << token << std::endl;
 	}
 
+}
+
+void ServerMng::pushUser(User* user, Connection* conn) {
+    if (users[user->GetId()].first == nullptr) {
+        users[user->GetId()].first = user;
+    }
+    users[user->GetId()].second.push_back(conn);
+}
+void ServerMng::pushTeam(Team* team, Connection* conn) {
+	if (teams[team->GetId()].first == nullptr) {
+		teams[team->GetId()].first = team;
+	}
+	teams[team->GetId()].second.push_back(conn);
 }
 
 void ServerMng::runTCPServer(int port, bool useTLS) {

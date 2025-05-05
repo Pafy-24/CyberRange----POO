@@ -16,9 +16,12 @@ private:
     std::vector<Connection*> connections;
     std::mutex connectionsMutex;
     std::map<std::string, Controller*> controllers;
+	DBController* dbController;
     ChallMng challMng;
-	std::map<int,Team*> teams;
-    std::map<int,User*> users;
+
+	std::map<int, std::pair<Team*, std::list<Connection*>>> teams;
+    std::map<int, std::pair<User*, std::list<Connection*>>> users;
+
     std::vector<std::string> tokens;
     std::mutex tokenMutex;
     Loader* loader;
@@ -47,9 +50,20 @@ public:
     void removeController(std::string name);
     Connection* getConnection(int id);
 	Controller* getController(const std::string& name);
-    ChallMng* getChallMng(std::string contestId);
+	ChallMng* getChallMng() { return &challMng; }
+    Contest* getContest(int mngID);
+	Tab* getTab(int mngID);
     void addToken(const std::string& token);
     void removeToken(const std::string& token);
+
     const std::vector<std::string>& getTokens() const { return tokens; }
     std::mutex& getTokenMutex() { return tokenMutex; }
+
+	DBController* getDBController() { return dbController; }
+	Loader* getLoader() { return loader; }
+	std::map<int, std::pair<Team*, std::list<Connection*>>>& getTeams() { return teams; }
+	std::map<int, std::pair<User*, std::list<Connection*>>>& getUsers() { return users; }
+
+    void pushUser(User* user, Connection* conn);
+    void pushTeam(Team* team, Connection* conn);
 };

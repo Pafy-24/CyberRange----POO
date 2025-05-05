@@ -4,3 +4,8 @@
 #else
 #define ORCHESTRATOR_API __declspec(dllimport)
 #endif
+#include <string>
+#include <vector>
+#include <ctime>
+#include <map>
+#include <algorithm>

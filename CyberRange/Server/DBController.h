@@ -6,17 +6,9 @@
 #include "DBConn.h"
 
 class DBController : public CController {
-private:
-	static DBController* instance;
-	DBController() = default;
-    DBController(std::string connString);
-
-	DBController(const DBController&) = delete;
-	DBController& operator=(const DBController&) = delete;
-	DBController(DBController&&) = delete;
-	DBController& operator=(DBController&&) = delete;
 public:
-    static DBController* getInstance(std::string connString);
+    DBController() = default;
+    DBController(std::string connString);
     ~DBController();
 
     bool connect();
