@@ -3,7 +3,6 @@
 #include "User.h"
 #include "DBController.h"
 
-class json;
 
 class UserController : public CController {
 private:

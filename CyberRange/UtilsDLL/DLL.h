@@ -11,7 +11,8 @@
 #include <iostream>
 #include <thread>
 #include <string>
-
+#include "json.hpp"
+using json = nlohmann::json;
 // Thread-safe message printing utility
 // Export/import the global variables
 extern UTILS_API std::mutex consoleMutex;

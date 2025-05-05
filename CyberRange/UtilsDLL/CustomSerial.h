@@ -1,12 +1,10 @@
 #pragma once
 #include "DLL.h"
-#include "json.hpp"
 #include <string>
 #include <map>
 #include <variant>
 #include <vector>
 
-using json = nlohmann::json;
 
 class UTILS_API CustomSerial {
 private:
