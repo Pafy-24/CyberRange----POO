@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Contest.h"
 
 Contest::Contest(const std::string& name, int id) :

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ChallMng.h"
 
 ChallMng::~ChallMng() {

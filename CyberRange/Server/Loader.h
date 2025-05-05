@@ -4,6 +4,9 @@
 #include <set>
 #include "Controller.h"
 #include "Connection.h"
+#include "Tab.h"
+#include "Contest.h"
+
 
 class Loader {
 private:

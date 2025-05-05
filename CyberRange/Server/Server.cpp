@@ -10,7 +10,7 @@ bool testDB() {
     try {
         std::string connStr = "sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB";
 
-        DBController* dbCtrl = DBController::getInstance(connStr);
+        DBController* dbCtrl = new DBController(connStr);
         if (!dbCtrl->connect()) {
             std::cerr << "Connection failed" << std::endl;
             return false;

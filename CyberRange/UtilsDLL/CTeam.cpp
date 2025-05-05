@@ -47,20 +47,6 @@ void CTeam::SetContestId(int contestId)
     this->contestId = contestId;
 }
 
-int CTeam::GetContestId() const
-{
-	return contestId;
-}
-
-std::string CTeam::GetName() const
-{
-	return name;
-}
-
-std::vector<User*> CTeam::GetMembers() const
-{
-	return users;
-}
 
 void CTeam::SetName(std::string name)
 {

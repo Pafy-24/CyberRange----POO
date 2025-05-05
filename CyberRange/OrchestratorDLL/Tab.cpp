@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Tab.h"
 
 Tab::Tab(const std::string& name, int id) :

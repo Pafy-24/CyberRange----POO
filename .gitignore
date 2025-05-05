@@ -411,3 +411,7 @@ CyberRange/UtilsDLL/x64/Debug/UtilsDLL.log
 CyberRange/UtilsDLL/x64/Debug/UtilsDLL.tlog/link.read.1.tlog
 CyberRange/UtilsDLL/x64/Debug/vc143.idb
 CyberRange/UtilsDLL/x64/Debug/vc143.pdb
+*.ilk
+*.log
+*.tlog
+*.pdb
