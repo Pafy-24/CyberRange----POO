@@ -30,7 +30,7 @@ void UserController::Login(const json& data, Connection* client)
             {"role", results[0]["Role"]},
             {"lastActive", results[0]["LastActive"]}
         };
-        std::string token = CustomSerial::encodeJWT(userData.dump());
+        std::string token = CustomSerial::encodeJWT(userData.dump(), ServerMng::getInstance()->getSecretKey());
 
         // salvăm token în ServerMng
         ServerMng::getInstance()->addToken(token);
@@ -127,11 +127,11 @@ void UserController::Register(const json& data, Connection* client)
     }
 }
 
-void UserController::Update(const json& data, Connection* client) // to do
+void UserController::Update(const json& data, Connection* client) 
 {
 }
 
-void UserController::Delete(const json& data, Connection* client) // to do
+void UserController::Delete(const json& data, Connection* client)
 {
 }
 
@@ -208,25 +208,5 @@ void UserController::handleRequest(const std::string& data, Connection* client)
     catch (const std::exception& e) {
         client->send("ERROR: Request processing failed");
         logger->log(std::string("[UserController] Exception: ") + e.what());
-    }
-}
-
-void UserController::loadUser(const std::string& userId) {
-}
-
-void UserController::loadUserByUsername(const std::string& username) {
-}
-
-void UserController::loadUserByEmail(const std::string& email) {
-}
-
-void UserController::unloadUser(const std::string& userId) {
-    auto it = users.find(userId);
-    if (it != users.end()) {
-        std::string query = "UPDATE Users SET lastActive = GETDATE() WHERE UserID = '" + userId + "'";
-        dbController->executeUpdate(query);
-        delete it->second;
-        users.erase(it);
-        logger->log("Unloaded user: " + userId);
     }
 }

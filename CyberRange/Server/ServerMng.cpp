@@ -28,6 +28,12 @@ ServerMng::ServerMng(int port, std::string address)
     dbController = new DBController("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
 	loader = new Loader();
 
+    srand(time(NULL));
+     std::generate_n(SecretKey.begin(), 32, []() {
+         static const char c[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
+         return c[rand() % (sizeof(c) - 1)]; });
+
+
     // Initialize other controllers
     attachController("UserController", new UserController(dbController));
     attachController("TeamController", new TeamController(dbController));
