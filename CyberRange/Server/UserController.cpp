@@ -67,7 +67,7 @@ void UserController::Register(const json& data, Connection* client)
         std::string username = data["payload"].value("username", "");
         std::string password = data["payload"].value("password", "");
         std::string email = data["payload"].value("email", "");
-        std::string role = "common"; // implicit
+        std::string role = "student"; // implicit
 
         if (username.empty() || password.empty() || email.empty())
         {

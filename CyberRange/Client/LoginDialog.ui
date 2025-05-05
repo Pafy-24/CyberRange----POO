@@ -37,7 +37,7 @@ background-position: center;
 background-size: cover;</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="page_5">
       <property name="styleSheet">

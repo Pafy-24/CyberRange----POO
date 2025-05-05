@@ -375,7 +375,7 @@ QPushButton:pressed {
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="SolveChallengeButton">
+           <widget class="QPushButton" name="TabButton">
             <property name="font">
              <font>
               <pointsize>12</pointsize>
@@ -401,7 +401,7 @@ QPushButton:pressed {
 }</string>
             </property>
             <property name="text">
-             <string>Solve Challenge</string>
+             <string>Tabs</string>
             </property>
            </widget>
           </item>
@@ -2921,7 +2921,7 @@ QCheckBox::indicator:hover {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="SolveChallenge">
+            <widget class="QWidget" name="Tabs">
              <layout class="QVBoxLayout" name="verticalLayout_6">
               <item>
                <widget class="QLabel" name="label_Comp">
@@ -2933,7 +2933,7 @@ QCheckBox::indicator:hover {
                  </font>
                 </property>
                 <property name="text">
-                 <string>COMPETE</string>
+                 <string>TABS</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
