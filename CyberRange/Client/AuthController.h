@@ -12,6 +12,7 @@ public:
     void requestLogin(const std::string& username, const std::string& password);
     void requestRegister(const std::string& username, const std::string& password, const std::string& email);
     void requestUpdate(const std::string& username, const std::string& password, const std::string& email);
+	void requestDelete();
 	void requestLogout();
     std::string getToken() const;
     std::string getCurrentUser() const;

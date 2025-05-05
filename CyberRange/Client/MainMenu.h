@@ -21,7 +21,7 @@ public:
     ~MainMenu();
 
 private slots:
-    void on_logoutButton_clicked();
+    void on_pushButtonLogout_clicked();
     void on_AddChallengeButton_clicked();
     void on_CreateContestButton_clicked();
 	void on_DashboardAdminButton_clicked();
@@ -43,6 +43,7 @@ private slots:
 
 	///profile
 	void on_pushButtonSubmit_clicked();
+	void on_pushButtonDeleteAcc_clicked();
 
 
     void on_ConnButton_clicked();

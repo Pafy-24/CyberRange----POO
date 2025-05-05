@@ -61,6 +61,11 @@ void AuthController::requestUpdate(const std::string& username, const std::strin
     ClientMng::getInstance()->receiveResponse();
 }
 
+void AuthController::requestDelete()
+{
+
+}
+
 void AuthController::handleServerResponse(const std::string& responseStr)
 {
     try {
@@ -108,13 +113,12 @@ void AuthController::handleServerResponse(const std::string& responseStr)
 			if (status == "success")
 			{
 				qDebug() << "[AuthController] Registered successfully.";
-				emit loginSucceeded(); // semnal pentru UI
 			}
 			else
 			{
 				QString msg = QString::fromStdString(response.value("message", "Registration failed."));
 				qWarning() << "[AuthController] Înregistrare eșuată:" << msg;
-				emit loginFailed(msg); // semnal pentru UI
+				//emit loginFailed(msg); // semnal pentru UI
 			}
 		}
 		else if (action == "update")
@@ -122,13 +126,11 @@ void AuthController::handleServerResponse(const std::string& responseStr)
 			if (status == "success")
 			{
 				qDebug() << "[AuthController] User updated successfully.";
-				emit loginSucceeded(); // semnal pentru UI
 			}
 			else
 			{
 				QString msg = QString::fromStdString(response.value("message", "Update failed."));
 				qWarning() << "[AuthController] Actualizare eșuată:" << msg;
-				emit loginFailed(msg); // semnal pentru UI
 			}
 		}
         else if (action == "logout")

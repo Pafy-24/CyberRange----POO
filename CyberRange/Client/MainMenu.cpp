@@ -78,7 +78,7 @@ MainMenu::~MainMenu()
     delete ui;
 }
 
-void MainMenu::on_logoutButton_clicked()
+void MainMenu::on_pushButtonLogout_clicked()
 {
     this->close();
     LoginDialog* login = new LoginDialog();
@@ -178,6 +178,17 @@ void MainMenu::on_pushButtonSubmit_clicked()
     }
 
     authCtrl->requestUpdate(username, password, email);
+}
+
+void MainMenu::on_pushButtonDeleteAcc_clicked()
+{
+    auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
+    if (!authCtrl) {
+        QMessageBox::warning(this, "Eroare", "AuthController indisponibil.");
+        return;
+    }
+
+    authCtrl->requestDelete();
     ui->stackedWidget->setCurrentIndex(0);
 }
 
