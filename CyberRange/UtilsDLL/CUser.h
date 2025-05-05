@@ -17,6 +17,7 @@ public:
     int GetId() override;
     std::string GetUsername() override;
     std::string GetEmail() override;
+    std::string GetPassword() override;
     void SetUsername(std::string username) override;
     void SetEmail(std::string email) override;
     void SetId(int id) override;

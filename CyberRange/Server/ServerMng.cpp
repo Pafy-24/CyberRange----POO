@@ -218,6 +218,16 @@ void ServerMng::pushTeam(Team* team, Connection* conn) {
 	teams[team->GetId()].second.push_back(conn);
 }
 
+User* ServerMng::findUser(const std::string& usrName_email)
+{
+    for (auto& user : users) {
+        if (user.second.first->GetUsername() == usrName_email ||
+            user.second.first->GetEmail() == usrName_email) {
+            return user.second.first;
+        }
+    }
+}
+
 void ServerMng::runTCPServer(int port, bool useTLS) {
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
     printMessage("Starting " + serverType + " Server on port " + std::to_string(port));

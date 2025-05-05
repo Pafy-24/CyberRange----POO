@@ -15,51 +15,50 @@ void UserController::Login(const json& data, Connection* client)
     std::string username = data["payload"]["username"];
     std::string password = data["payload"]["password"];
 
-    std::string query = "SELECT * FROM Users WHERE Username = '" + username +
-        "' AND PasswordHash = '" + password + "'";
 
-    auto results = dbController->executeQuery(query);
+    int id =ServerMng::getInstance()->getLoader()->loadUserByUsername(username, client);
+    if(id==-1)id=ServerMng::getInstance()->getLoader()->loadUserByEmail(username, client);
 
-    if (!results.empty())
+    if (id != -1)
     {
-        // construim token
-        json userData =
-        {
-            {"userId", results[0]["UserId"]},
-            {"username", username},
-            {"role", results[0]["Role"]},
-            {"lastActive", results[0]["LastActive"]}
-        };
-        std::string token = CustomSerial::encodeJWT(userData.dump(), ServerMng::getInstance()->getSecretKey());
+        auto* user = ServerMng::getInstance()->getUsers()[id].first;
+        if (user->GetPassword() == password) {
+            json userData =
+            {
+                {"userId", id},
+                {"username", user->GetUsername()},
+                {"email",user->GetEmail()},
+                {"role", user->GetAccessLevel()}
+            };
+            std::string token = CustomSerial::encodeJWT(userData.dump(), ServerMng::getInstance()->getSecretKey());
 
-        // salvăm token în ServerMng
-        ServerMng::getInstance()->addToken(token);
+            ServerMng::getInstance()->addToken(token);
 
-        // răspuns către client
-        json response = {
-            {"controller", "AuthController"},
-            {"action", "login"},
-            {"status", "success"},
-            {"token", token},
-            {"username", username},
-            {"role", results[0]["Role"]}
-        };
-        std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
-        client->send(response.dump());
-        logger->log("User logged in: " + username);
+            json response = {
+                {"controller", "AuthController"},
+                {"action", "login"},
+                {"status", "success"},
+                {"token", token},
+                {"username", user->GetUsername()},
+                {"role", user->GetAccessLevel()}
+            };
+            std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
+            client->send(response.dump());
+            logger->log("User logged in: " + username);
+            return;
+        }
     }
-    else
-    {
-        json response = {
-            {"controller", "AuthController"},
-            {"action", "login"},
-            {"status", "error"},
-            {"message", "Invalid username or password"}
-        };
-        std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
-        client->send(response.dump());
-        logger->log("Login failed for user: " + username);
-    }
+
+    json response = {
+        {"controller", "AuthController"},
+        {"action", "login"},
+        {"status", "error"},
+        {"message", "Invalid username or password"}
+    };
+    std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
+    client->send(response.dump());
+    logger->log("Login failed for user: " + username);
+    
 }
 
 void UserController::Register(const json& data, Connection* client)

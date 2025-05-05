@@ -70,4 +70,7 @@ public:
 
     void pushUser(User* user, Connection* conn);
     void pushTeam(Team* team, Connection* conn);
+
+    User* findUser(const std::string& usrName_email);
+
 };

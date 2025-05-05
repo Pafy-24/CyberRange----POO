@@ -15,8 +15,8 @@ private:
 
 public:
     void loadUser(int id, Connection* conn);
-    void loadUserByUsername(const std::string& username, Connection* conn);
-    void loadUserByEmail(const std::string& email, Connection* conn);
+    int loadUserByUsername(const std::string& username, Connection* conn);
+    int loadUserByEmail(const std::string& email, Connection* conn);
    
     void loadTeam(int id, Connection* conn);
 

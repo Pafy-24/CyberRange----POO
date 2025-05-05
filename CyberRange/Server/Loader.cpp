@@ -66,7 +66,7 @@ void Loader::loadUser(int id, Connection* conn)
     }
 }
 
-void Loader::loadUserByUsername(const std::string& username, Connection* conn) 
+int Loader::loadUserByUsername(const std::string& username, Connection* conn) 
 {
     std::string query = "SELECT UserID FROM Users WHERE Username = '" + username + "'";
 
@@ -74,10 +74,12 @@ void Loader::loadUserByUsername(const std::string& username, Connection* conn)
     if (!results.empty())
     {
         loadUser(std::stoi(results[0].at("UserID")), conn);
+        return std::stoi(results[0].at("UserID"));
     }
+    return -1;
 }
 
-void Loader::loadUserByEmail(const std::string& email, Connection* conn) 
+int Loader::loadUserByEmail(const std::string& email, Connection* conn) 
 {
     std::string query = "SELECT UserID FROM Users WHERE Email = '" + email + "'";
 
@@ -85,7 +87,9 @@ void Loader::loadUserByEmail(const std::string& email, Connection* conn)
     if (!results.empty())
     {
         loadUser(std::stoi(results[0].at("UserID")), conn);
+        return std::stoi(results[0].at("UserID"));
     }
+    return -1;
 }
 
 void Loader::loadTeam(int id, Connection* conn)
