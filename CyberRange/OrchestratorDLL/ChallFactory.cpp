@@ -4,38 +4,28 @@
 
 Chall* ChallFactory::CreateFromRow(const std::map<std::string, std::string>& row) 
 {
-    std::string name = row.at("title");
-    int id = std::stoi(row.at("challId"));
-    int difficulty = std::stoi(row.at("difficulty"));
-    int points = std::stoi(row.at("points"));
-    std::string flag = row.at("flag");
-    std::string author = row.at("authorId");
-    std::string typeStr = row.at("type");
+    std::string name = row.at("Name");
+    int id = std::stoi(row.at("ChallengeID"));
+    std::string difficulty = row.at("Difficulty");
+    int points = std::stoi(row.at("Score"));
+    std::string flag = row.at("Flag");
+    std::string author = row.at("AuthorId");
+    std::string typesStr = row.at("Tags");
 
-    ChallTypes type;
+    std::vector<ChallTypes> types;
+	for (const auto& typePair : challTypeMap) {
+		if (typesStr.find(typePair.first) != std::string::npos) {
+			types.push_back(typePair.second);
+		}
+	}
 
-    if (typeStr == "Crypto") 
-        type = ChallTypes::Crypto;
-    else if (typeStr == "Pwn") 
-        type = ChallTypes::Pwn;
-    else if (typeStr == "Web") 
-        type = ChallTypes::Web;
-    else if (typeStr == "Forensics") 
-        type = ChallTypes::Forensics;
-    else 
-        type = ChallTypes::Misc;
-
-    Chall* chall = new Chall(name, { type }, id);
+    Chall* chall = new Chall(name, types, id);
     chall->setDifficulty(difficulty);
     chall->setPoints(points);
     chall->setFlag(flag);
-    chall->setAuthor(author);
-
-    if (row.count("description")) 
-        chall->setDescription(row.at("description"));
-    if (row.count("question")) 
-        chall->setQuestion(row.at("question"));
-
+    chall->setAuthor(std::stoi(author));
+    chall->setDescription(row.at("Description"));
+	chall->addFilePath(row.at("FilePath"));
     return chall;
 }
 
@@ -47,7 +37,7 @@ std::vector<Chall*> ChallFactory::CreateFromList(const std::vector<std::map<std:
             result.push_back(CreateFromRow(row));
         }
         catch (const std::exception& e) {
-            // log la nevoie
+            
         }
     }
     return result;

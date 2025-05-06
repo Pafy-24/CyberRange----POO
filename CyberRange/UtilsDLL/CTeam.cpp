@@ -110,3 +110,11 @@ int CTeam::GetLeader() const
 {
 	return LeaderID;
 }
+
+User* CTeam::GetMember(int id) const
+{
+    for (auto* mem : users) {
+        if (mem->GetId() == id)return mem;
+    }
+    return nullptr;
+}

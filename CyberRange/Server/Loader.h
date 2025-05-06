@@ -36,10 +36,23 @@ public:
 
     bool isLoaded(Connection* conn, const std::string& objId) const;
 
+    void saveUser(int userId);
+
+    void saveTeam(int teamId);
+
+    void saveChall(int challId);
+
+    void saveContest(int contestId);
+
+    void saveTab(int tabId);
+
 private:
     void saveObject(const std::string& objId);
     void cleanupUser(int userId, Connection* conn);
     void cleanupTeam(int teamId, Connection* conn);
-    void cleanupUser(int userId);
-    void cleanupTeam(int teamId);
+    void cleanupChall(int challId, Connection* conn);
+    void cleanupContest(int contestId, Connection* conn);
+    void cleanupTab(int tabId, Connection* conn);
 };
+
+Controller* getController(const std::string& name);

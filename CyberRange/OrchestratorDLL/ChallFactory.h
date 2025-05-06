@@ -10,6 +10,9 @@ public:
     // creeaza un challenge dintr-un rand primit de la server
     static Chall* CreateFromRow(const std::map<std::string, std::string>& row);
 
+
+ //   static Chall* CreateChall(const std::string& name,const std::string& desc, const std::string& types, const std::string& folder);
+
     // creeaza o lista de challenge-uri dintr-un vector de randuri
     static std::vector<Chall*> CreateFromList(const std::vector<std::map<std::string, std::string>>& rows);
 };

@@ -23,5 +23,6 @@ public:
     virtual bool IsActive() const = 0;
     virtual void SetLeader(int id) = 0;
     virtual int GetLeader() const = 0;
+    virtual User* GetMember(int id) const = 0;
     virtual ~Team() = default;
 };

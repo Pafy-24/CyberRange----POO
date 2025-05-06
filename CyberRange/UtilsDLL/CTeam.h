@@ -36,5 +36,6 @@ public:
     bool IsActive() const override;
 	void SetLeader(int id) override;
 	int GetLeader() const override;
+    User* GetMember(int id) const override;
 
 };

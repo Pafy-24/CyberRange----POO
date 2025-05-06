@@ -11,6 +11,7 @@ private:
     time_t endTime;
     std::map<int,Chall*> challs;
     std::vector<int> teamIds;
+    int maxTeamUsers;
     bool active;
 
 public:
@@ -34,4 +35,7 @@ public:
     void addTeam(int teamId);
     void removeTeam(int teamId);
     void setActive(bool act);
+
+	void setMaxTeamUsers(int max){maxTeamUsers = max;}
+	int getMaxTeamUsers() const { return maxTeamUsers; }
 };

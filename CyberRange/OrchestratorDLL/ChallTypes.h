@@ -1,9 +1,53 @@
 #pragma once
-
+#include <string>
+#include<map>
 enum class ChallTypes {
     Crypto,
     Pwn,
     Web,
     Forensics,
-    Misc
+    Misc,
+    Steganography,
+    Networking,
+	ReverseEngineering,
+	Hardware,
+	OSINT,
+	BinaryExploitation,
+	MalwareAnalysis,
+	SocialEngineering,
+	PhysicalSecurity,
+	IoT,
+	CloudSecurity,
+	MobileSecurity,
+	ThreatHunting,
+	IncidentResponse,
+	VulnerabilityAssessment,
+	PenetrationTesting,
+	RedTeam,
+	BlueTeam
+};
+static const std::map<std::string, ChallTypes> challTypeMap = {
+       { "Crypto", ChallTypes::Crypto },
+       { "Pwn", ChallTypes::Pwn },
+       { "Web", ChallTypes::Web },
+       { "Forensics", ChallTypes::Forensics },
+       { "Steganography", ChallTypes::Steganography },
+       { "Networking", ChallTypes::Networking },
+       { "ReverseEngineering", ChallTypes::ReverseEngineering },
+       { "Hardware", ChallTypes::Hardware },
+       { "OSINT", ChallTypes::OSINT },
+       { "BinaryExploitation", ChallTypes::BinaryExploitation },
+       { "MalwareAnalysis", ChallTypes::MalwareAnalysis },
+       { "SocialEngineering", ChallTypes::SocialEngineering },
+       { "PhysicalSecurity", ChallTypes::PhysicalSecurity },
+       { "IoT", ChallTypes::IoT },
+       { "CloudSecurity", ChallTypes::CloudSecurity },
+       { "MobileSecurity", ChallTypes::MobileSecurity },
+       { "ThreatHunting", ChallTypes::ThreatHunting },
+       { "IncidentResponse", ChallTypes::IncidentResponse },
+       { "VulnerabilityAssessment", ChallTypes::VulnerabilityAssessment },
+       { "PenetrationTesting", ChallTypes::PenetrationTesting },
+       { "RedTeam", ChallTypes::RedTeam },
+       { "BlueTeam", ChallTypes::BlueTeam },
+       { "Misc", ChallTypes::Misc }
 };
