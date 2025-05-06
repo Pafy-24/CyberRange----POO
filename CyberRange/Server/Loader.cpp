@@ -207,6 +207,8 @@ void Loader::loadContest(int id, Connection* conn)
                 contest->setStartTime(parseDateTime(result.at("StartDate"))); // time_t <- yyyy-mm-dd hh:mm:ss.000
                 contest->setEndTime(parseDateTime(result.at("EndDate")));     // time_t <- yyyy-mm-dd hh:mm:ss.000
                 contest->setDescription(result.at("Description"));
+				contest->setMaxTeamUsers(std::stoi(result.at("TeamMaxUsers")));
+				contest->setOrganizerId(std::stoi(result.at("OrganizerID")));
 
 
                 ServerMng::getInstance()->getChallMng()->addContest(contest);
@@ -467,10 +469,10 @@ void Loader::saveChall(int challId)
     auto* db = ServerMng::getInstance()->getDBController();
 
     // Check if challenge exists
-    std::string checkQuery = "SELECT COUNT defpuncte* as count FROM Challenges WHERE ChallengeID = '" + std::to_string(challId) + "'";
+    std::string checkQuery = "SELECT * FROM Challenges WHERE ChallengeID = '" + std::to_string(challId) + "'";
     auto results = db->executeQuery(checkQuery);
 
-    bool challExists = !results.empty() && std::stoi(results[0]["count"]) > 0;
+    bool challExists = !results.empty();
 
     std::string name = chall->getName();
     std::string description = chall->getDescription();
@@ -479,37 +481,52 @@ void Loader::saveChall(int challId)
     std::string filesPath = chall->getFilesPath();
 
     if (challExists) {
-        std::string query =
-            "UPDATE Challenges SET "
+        std::string query = "UPDATE Challenges SET "
             "Name = '" + name + "', "
             "Description = '" + description + "', "
-            "AuthorID = '" + std::to_string(chall->getAuthor()) + "', "
-            "ContestID = '" + std::to_string(contestId) + "', "
-            "TabID = '" + std::to_string(tabId) + "', "
+            "AuthorID = '" + std::to_string(chall->getAuthor()) + "', ";
+
+        if (contestId != 0) {
+            query += "ContestID = '" + std::to_string(contestId) + "', ";
+        }
+        if (tabId != 0) {
+            query += "TabID = '" + std::to_string(tabId) + "', ";
+        }
+
+        query +=
             "Difficulty = '" + chall->getDiffStr() + "', "
             "Score = '" + std::to_string(chall->getPoints()) + "', "
             "Flag = '" + flag + "', "
             "Tags = '" + tags + "', "
-            "FilesPath = '" + filesPath + "', "
-            "IsActive = '1' "
+			"FilesPath = '" + filesPath + "' "
             "WHERE ChallengeID = '" + std::to_string(challId) + "'";
+
         db->executeUpdate(query);
     }
     else {
-        std::string query =
-            "INSERT INTO Challenges (ChallengeID, Name, Description, AuthorID, ContestID, TabID, Difficulty, Score, Flag, Tags, FilesPath, IsActive) VALUES ('" +
-            std::to_string(challId) + "', '" +
-            name + "', '" +
-            description + "', '" +
-            std::to_string(chall->getAuthor()) + "', '" +
-            std::to_string(contestId) + "', '" +
-            std::to_string(tabId) + "', '" +
-            chall->getDiffStr() + "', '" +
+        std::string columns = "ChallengeID, Name, Description, AuthorID, ";
+        std::string values = "'" + std::to_string(challId) + "', '" + name + "', '" + description + "', '" + std::to_string(chall->getAuthor()) + "', ";
+
+        if (contestId != 0) {
+            columns += "ContestID, ";
+            values += "'" + std::to_string(contestId) + "', ";
+        }
+
+        if (tabId != 0) {
+            columns += "TabID, ";
+            values += "'" + std::to_string(tabId) + "', ";
+        }
+
+        columns += "Difficulty, Score, Flag, Tags, FilesPath";
+        values += "'" + chall->getDiffStr() + "', '" +
             std::to_string(chall->getPoints()) + "', '" +
             flag + "', '" +
             tags + "', '" +
-            filesPath + "', '1')";
+            filesPath;
+
+        std::string query = "INSERT INTO Challenges (" + columns + ") VALUES (" + values + ")";
         db->executeUpdate(query);
+
     }
 
     std::cout << "[Loader] Saved challenge: " << challId << "\n";
@@ -526,26 +543,39 @@ void Loader::saveContest(int contestId)
         if (!results.empty()) {
             contestExists = std::stoi(results[0]["count"]) > 0;
         }
+		//contest->getStartTime() -- time_t / The update command expects an input like yyyy-mm-dd hh:mm:ss.000
+        auto formatTime = [](time_t time) {
+            using namespace std::chrono;
+            system_clock::time_point tp = floor<seconds>(system_clock::from_time_t(time + 7200));
+            std::string out = std::format("{:%Y-%m-%d %H:%M:%S}", tp);
+			out = out.substr(0, out.find('.'));
+			return out;
+        };
+
+        std::string start = formatTime(contest->getStartTime());
+
+		std::string end = formatTime(contest->getEndTime());
+
 
         if (contestExists) {
             std::string query = "UPDATE Contests SET Name = '" + contest->getName() +
                 "', Description = '" + contest->getDescription() +
-                "', StartTime = '" + std::to_string(contest->getStartTime()) +
-                "', EndTime = '" + std::to_string(contest->getEndTime()) +
-                "', MaxTeamUsers = '" + std::to_string(contest->getMaxTeamUsers()) +
-                "', Active = '" + (contest->isActive() ? "1" : "0") +
+                "', StartDate = '" + start +
+                "', EndDate = '" + end +
+                "', TeamMaxUsers = '" + std::to_string(contest->getMaxTeamUsers()) +
+                "', OrganizerID = '" + std::to_string(contest->getOrganizerId()) +
                 "' WHERE ContestID = '" + std::to_string(contestId) + "'";
             ServerMng::getInstance()->getDBController()->executeUpdate(query);
         }
         else {
-            std::string query = "INSERT INTO Contests (ContestID, Name, Description, StartTime, EndTime, MaxTeamUsers, Active) VALUES ('" +
+            std::string query = "INSERT INTO Contests (ContestID, Name, Description, StartDate, EndDate, TeamMaxUsers, OrganizerID) VALUES ('" +
                 std::to_string(contestId) + "', '" +
                 contest->getName() + "', '" +
                 contest->getDescription() + "', '" +
-                std::to_string(contest->getStartTime()) + "', '" +
-                std::to_string(contest->getEndTime()) + "', '" +
+                start + "', '" +
+                end + "', '" +
                 std::to_string(contest->getMaxTeamUsers()) + "', '" +
-                (contest->isActive() ? "1" : "0") + "')";
+                std::to_string(contest->getOrganizerId()) +"')";
             ServerMng::getInstance()->getDBController()->executeUpdate(query);
         }
 

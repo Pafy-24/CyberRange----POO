@@ -71,17 +71,15 @@ void ServerMng::stop() {
     }
     isRunning = false;
 
-    // Save and unload data
-    //loader->saveUnload();
-
-    {
-        std::lock_guard<std::mutex> lock(connectionsMutex);
-        for (auto* conn : connections) {
-            conn->stopServer();
-            delete conn;
-        }
-        connections.clear();
+    std::lock_guard<std::mutex> lock(connectionsMutex);
+    for (auto* conn : connections) {
+		loader->saveUnload(conn);
     }
+    connections.clear();
+	for (auto* server : servers) {
+		server->stopServer();
+		delete server;
+	}
 
     for (auto& ctrl : controllers) {
         delete ctrl.second;
@@ -96,7 +94,6 @@ void ServerMng::stop() {
     delete loader;
     loader = nullptr;
 
-    std::lock_guard<std::mutex> lock(instanceMutex);
     instance = nullptr;
 
     std::cout << "Server manager stopped" << std::endl;
@@ -122,17 +119,6 @@ void ServerMng::removeConnection(Connection* conn) {
         delete* it;
         connections.erase(it);
         std::cout << "Removed connection" << std::endl;
-    }
-}
-
-void ServerMng::processRequests() {
-    checkConnections();
-
-    std::lock_guard<std::mutex> lock(connectionsMutex);
-    for (auto* conn : connections) {
-        if (conn->isServerRunning()) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-        }
     }
 }
 
@@ -255,6 +241,9 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
 
     auto handler = [this](const std::string& data, Connection* client) {
         try {
+			if (std::find(connections.begin(), connections.end(), client) == connections.end())
+            {addConnection(client);}
+			
             json j = json::parse(data);
             std::string controllerName = j["controller"];
             auto it = controllers.find(controllerName);
@@ -276,7 +265,7 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
 
     printMessage(serverType + " Server running on port " + std::to_string(port) + ", TLS: " +
         std::string(conn->isTLSEnabled() ? "enabled" : "disabled"));
-    addConnection(conn.release());
+    servers.push_back(conn.release());
 }
 
 void ServerMng::runUDPServer(int port) {
@@ -290,6 +279,9 @@ void ServerMng::runUDPServer(int port) {
 
     auto handler = [this](const std::string& data, Connection* client) {
         try {
+			if (std::find(connections.begin(), connections.end(), client) == connections.end())
+            {addConnection(client);}
+
             json j = json::parse(data);
             std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
             auto it = controllers.find(controllerName);
@@ -310,8 +302,8 @@ void ServerMng::runUDPServer(int port) {
         return;
     }
 
-    addConnection(conn.release());
     printMessage("UDP Server running on port " + std::to_string(port));
+    servers.push_back(conn.release());
 }
 
 void ServerMng::runDownloadServer(int port) {
@@ -345,32 +337,7 @@ void ServerMng::runDownloadServer(int port) {
         return;
     }
 
-    addConnection(conn.release());
     printMessage("Download Server running on port " + std::to_string(port));
+    servers.push_back(conn.release());
 }
 
-
-void ServerMng::checkConnections() {
-    std::lock_guard<std::mutex> lock(connectionsMutex);
-    auto it = connections.begin();
-    while (it != connections.end()) {
-        Connection* conn = *it;
-
-
-        if (!conn->isServerRunning() || !conn->isConnected()) {
-            if (loader) {
-                loader->saveUnload(conn);
-            }
-
-            std::cout << "Connection closed: " << conn->getType() << " on port " << conn->getPort() << std::endl;
-
-            conn->stopServer();
-            delete conn;
-
-            it = connections.erase(it);
-        }
-        else {
-            ++it;
-        }
-    }
-}
