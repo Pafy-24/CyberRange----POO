@@ -646,9 +646,16 @@ void MainMenu::handleLoadChalls()
 }
 void MainMenu::handleContestDetailsLoad(int id)
 {
-    /*ui->lineEditContestName->setText();
-    ui->lineEditContestStart->setText();
-    ui->lineEditContestEnd->setText();
-    ui->lineEditContestID->setText();
-    ui->lineEditContestAuthor->setText();*/
+	Contest* c = ClientMng::getInstance()->getChallMng()->getContest(id);
+    ui->lineEditContestName->setText(QString::fromStdString(c->getName()));
+    time_t timestamp = c->getStartTime();
+    std::string s = std::to_string(timestamp);
+    ui->lineEditContestStart->setText(QString::fromStdString(s));
+    c->getEndTime();
+    s = std::to_string(timestamp);
+    ui->lineEditContestEnd->setText(QString::fromStdString(s));
+    std::string str = std::to_string(id);
+    ui->lineEditContestID->setText(QString::fromStdString(str));
+    str = std::to_string(c->getOrganizerId());
+    ui->lineEditContestAuthor->setText(QString::fromStdString(str));
 }
