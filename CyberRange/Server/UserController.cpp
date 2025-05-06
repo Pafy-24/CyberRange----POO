@@ -61,10 +61,6 @@ void UserController::Login(const json& data, Connection* client)
 
 }
 
-
-
-// Modificare pentru funcția Register din UserController.cpp
-
 void UserController::Register(const json& data, Connection* client)
 {
     try {
@@ -85,7 +81,6 @@ void UserController::Register(const json& data, Connection* client)
             return;
         }
 
-        // Verificăm dacă utilizatorul există deja folosind loader
         int existingUserId = ServerMng::getInstance()->getLoader()->loadUserByUsername(username, client);
         if (existingUserId != -1) {
             json response = {
@@ -98,7 +93,6 @@ void UserController::Register(const json& data, Connection* client)
             return;
         }
 
-        // Verificăm și adresa de email
         existingUserId = ServerMng::getInstance()->getLoader()->loadUserByEmail(email, client);
         if (existingUserId != -1) {
             json response = {
@@ -111,8 +105,7 @@ void UserController::Register(const json& data, Connection* client)
             return;
         }
 
-        // Creăm obiectul User nou
-        auto newUserPtr = UsersFactory::CreateUser(username, email, -1); // ID va fi generat la salvare
+        auto newUserPtr = UsersFactory::CreateUser(username, email, -1); 
         User* newUser = newUserPtr.release();
         newUser->SetPassword(password);
         int r;
@@ -127,8 +120,6 @@ void UserController::Register(const json& data, Connection* client)
         ServerMng::getInstance()->getLoader()->registerObject(client, "user:" + std::to_string(-1));
         ServerMng::getInstance()->getLoader()->save(client);
         ServerMng::getInstance()->getLoader()->unloadObject(client, "user:" + std::to_string(-1));
-
-        
 
         json response = {
             {"controller", "AuthController"},
@@ -149,8 +140,6 @@ void UserController::Register(const json& data, Connection* client)
         logger->log(std::string("[Register] Exception: ") + e.what());
     }
 }
-
-
 
 void UserController::Update(const json& data, Connection* client)
 {
@@ -179,12 +168,10 @@ void UserController::Update(const json& data, Connection* client)
             return;
         }
 
-        // Decodăm token-ul pentru a obține ID-ul utilizatorului
         std::string userDataStr = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
         json userData = json::parse(userDataStr);
         int userId = userData["userId"];
 
-        // Ne asigurăm că utilizatorul este încărcat
         ServerMng::getInstance()->getLoader()->loadUser(userId, client);
 
         auto& users = ServerMng::getInstance()->getUsers();
@@ -192,13 +179,11 @@ void UserController::Update(const json& data, Connection* client)
             User* user = users[userId].first;
             bool needsUpdate = false;
 
-            // Verificăm și actualizăm numele de utilizator
             if (data["payload"].contains("username") &&
                 data["payload"]["username"].is_string() &&
                 data["payload"]["username"].get<std::string>().size() > 3) {
 
                 std::string newUsername = data["payload"]["username"];
-                // Verificăm dacă numele este deja utilizat de altcineva
                 int existingId = ServerMng::getInstance()->getLoader()->loadUserByUsername(newUsername, client);
                 if (existingId != -1 && existingId != userId) {
                     json response = {
@@ -215,14 +200,12 @@ void UserController::Update(const json& data, Connection* client)
                 needsUpdate = true;
             }
 
-            // Verificăm și actualizăm email-ul
             if (data["payload"].contains("email") &&
                 data["payload"]["email"].is_string() &&
                 data["payload"]["email"].get<std::string>().size() > 3 &&
                 data["payload"]["email"].get<std::string>().find('@') != std::string::npos) {
 
                 std::string newEmail = data["payload"]["email"];
-                // Verificăm dacă email-ul este deja utilizat de altcineva
                 int existingId = ServerMng::getInstance()->getLoader()->loadUserByEmail(newEmail, client);
                 if (existingId != -1 && existingId != userId) {
                     json response = {
@@ -263,7 +246,6 @@ void UserController::Update(const json& data, Connection* client)
                 };
                 std::string newToken = CustomSerial::encodeJWT(newUserData.dump(), ServerMng::getInstance()->getSecretKey());
 
-                // Actualizăm token-ul
                 ServerMng::getInstance()->removeToken(token);
                 ServerMng::getInstance()->addToken(newToken);
 
@@ -309,7 +291,6 @@ void UserController::Update(const json& data, Connection* client)
     }
 }
 
-
 void UserController::Logout(const json& data, Connection* client)
 {
     try {
@@ -351,7 +332,6 @@ void UserController::Logout(const json& data, Connection* client)
     }
 }
 
-
 void UserController::Delete(const json& data, Connection* client)
 {
     try {
@@ -379,11 +359,9 @@ void UserController::Delete(const json& data, Connection* client)
             return;
         }
 
-        // Decode token to get user ID
         json userData = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
         int userId = userData["userId"];
 
-        // Check if user exists in database
         std::string checkQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
         auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
         if (results.empty()) {
@@ -397,14 +375,11 @@ void UserController::Delete(const json& data, Connection* client)
             return;
         }
 
-        // Remove user from teams
         std::string teamQuery = "DELETE FROM UserTeams WHERE UserID = '" + std::to_string(userId) + "'";
         ServerMng::getInstance()->getDBController()->executeUpdate(teamQuery);
 
-        // Delete user from database
         std::string deleteQuery = "DELETE FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
         if (ServerMng::getInstance()->getDBController()->executeUpdate(deleteQuery)) {
-            // Remove user from memory and invalidate token
             auto& users = ServerMng::getInstance()->getUsers();
             if (users.find(userId) != users.end()) {
                 delete users[userId].first;

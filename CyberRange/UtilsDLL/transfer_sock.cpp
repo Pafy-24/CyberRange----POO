@@ -88,7 +88,6 @@ bool transfer_sock::startListening(std::function<void(const std::string&, Connec
         std::cout << "Transfer server started on port " << getPort() << std::endl;
         std::cout << "Using root directory: " << rootDirectory << std::endl;
 
-        // Set listener to non-blocking mode
         if (tcpListener) {
             tcpListener->setBlocking(false);
         }
@@ -109,13 +108,11 @@ bool transfer_sock::startListening(std::function<void(const std::string&, Connec
             try {
                 auto* transferConn = dynamic_cast<transfer_sock*>(conn);
                 if (transferConn) {
-                    // If already a transfer_sock, use it directly
                     std::thread clientThread(&transfer_sock::handleClientRequest, this,
                         std::unique_ptr<TCPSock>(transferConn));
                     clientThread.detach();
                 }
                 else {
-                    // Create a new transfer_sock from the TCPSock connection
                     auto transferClient = std::make_unique<transfer_sock>(
                         std::unique_ptr<sf::TcpSocket>(dynamic_cast<TcpSocketWithHandle*>(
                             conn->tcpSocket.release())),
@@ -127,7 +124,6 @@ bool transfer_sock::startListening(std::function<void(const std::string&, Connec
                         std::move(transferClient));
                     clientThread.detach();
 
-                    delete conn; // Clean up the original connection
                 }
             }
             catch (const std::exception& e) {
@@ -254,14 +250,12 @@ void transfer_sock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
         return;
     }
 
-    // Transfer ownership of the root directory
     transferClient->setRootDirectory(rootDirectory);
 
     std::cout << "Handling client request from " << transferClient->getAddress()
         << ":" << transferClient->getPort() << std::endl;
 
     try {
-        // Set a reasonable timeout for transfer operations
         transferClient->setTimeout(30000);
 
         std::string request = transferClient->receive(1024);
@@ -281,7 +275,6 @@ void transfer_sock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
         std::cerr << "Exception handling client request: " << e.what() << std::endl;
     }
 
-    // Make sure to disconnect when done
     if (transferClient->isConnected()) {
         transferClient->disconnect();
     }
@@ -371,7 +364,6 @@ bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::st
             return false;
         }
 
-        // Signal ready to receive file
         clientSock->send("OK\n");
 
         this->filePath = filePath;
@@ -395,7 +387,6 @@ bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::st
             bytesReceived += received;
             transferProgress = static_cast<int>((bytesReceived * 100) / fileSize);
 
-            // Throttle very large transfers to avoid overloading the socket
             if (bytesReceived % (BUFFER_SIZE * 50) == 0) {
                 std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
@@ -410,7 +401,6 @@ bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::st
         }
         else {
             clientSock->send("ERROR Incomplete transfer\n");
-            // Clean up the incomplete file
             std::filesystem::remove(filePath);
             std::cerr << "Upload incomplete: " << fullPath << " ("
                 << bytesReceived << "/" << fileSize << " bytes)" << std::endl;
@@ -435,15 +425,12 @@ void transfer_sock::abortTransfer() {
 std::string transfer_sock::normalizePath(const std::string& path) const {
     std::string result = path;
 
-    // Remove leading slashes
     while (!result.empty() && (result[0] == '/' || result[0] == '\\')) {
         result.erase(0, 1);
     }
 
-    // Normalize path separators
     std::replace(result.begin(), result.end(), '\\', '/');
 
-    // Handle .. and . in paths
     std::vector<std::string> parts;
     std::istringstream iss(result);
     std::string part;
@@ -459,7 +446,6 @@ std::string transfer_sock::normalizePath(const std::string& path) const {
         }
     }
 
-    // Rebuild path
     result.clear();
     for (const auto& p : parts) {
         if (!result.empty()) {

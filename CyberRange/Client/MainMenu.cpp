@@ -12,6 +12,7 @@
 #include "ClientMng.h"
 #include <qtimer.h>
 #include "ChallClientController.h"
+#include "TabClientController.h"
 #include <string>
 #include <regex>
 
@@ -98,7 +99,6 @@ MainMenu::MainMenu(QWidget* parent)
 
 MainMenu::~MainMenu()
 {
-    // Disconnect all signals to prevent callbacks after destruction
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
     if (authCtrl) {
         disconnect(authCtrl, nullptr, this, nullptr);
@@ -109,7 +109,6 @@ MainMenu::~MainMenu()
 
 void MainMenu::handleLogoutSuccess()
 {
-    // Create a new login dialog before starting the animation
     LoginDialog* login = new LoginDialog();
 
     QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
@@ -118,13 +117,10 @@ void MainMenu::handleLogoutSuccess()
     fadeOut->setEndValue(0);
 
     connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-        // Show the login dialog
         login->show();
-
-        // Clean up properly
         fadeOut->deleteLater();
-        this->hide();  // Hide first
-        this->deleteLater();  // Then schedule for deletion
+        this->hide();  
+        this->deleteLater();
         });
 
     fadeOut->start();
@@ -144,12 +140,10 @@ void MainMenu::on_pushButtonLogout_clicked()
         return;
     }
 
-    // Disable the logout button to prevent multiple clicks
     ui->pushButtonLogout->setEnabled(false);
     ui->pushButtonLogout->setText("Logging out...");
     QApplication::processEvents();
 
-    // Show a confirmation dialog
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Confirm Logout", "Are you sure you want to logout?",
         QMessageBox::Yes | QMessageBox::No);
@@ -158,7 +152,6 @@ void MainMenu::on_pushButtonLogout_clicked()
         authCtrl->requestLogout();
     }
     else {
-        // If user cancels, re-enable the button
         ui->pushButtonLogout->setEnabled(true);
         ui->pushButtonLogout->setText("Logout");
     }
@@ -198,11 +191,9 @@ void MainMenu::on_ContestsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
 
-    // Clear existing content
     ui->contestWidget->clearContents();
     ui->contestWidget->setRowCount(0);
 
-    // Set column count and headers
     ui->contestWidget->setColumnCount(3);
     QStringList headers = { "Name", "Start Date", "End Date" };
     ui->contestWidget->setHorizontalHeaderLabels(headers);
@@ -217,13 +208,11 @@ void MainMenu::on_ContestsButton_clicked()
             return;
         }
 
-        // Show loading indicator
         ui->ContestsButton->setText("Please wait...");
         QApplication::processEvents();
 
         contestCtrl->requestContestList();
 
-        // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->ContestsButton->setEnabled(true);
@@ -242,7 +231,6 @@ void MainMenu::on_ManageUsersButton_clicked()
 }
 
 std::string parse_string(std::string& S) {
-    //Remove double escapation with \ on string
 	std::string result;
 	std::regex re(R"(\\)");
 	std::string replacement = "";
@@ -288,11 +276,10 @@ void MainMenu::on_TabButton_clicked()
             return;
         }
 
-        // Show loading indicator
         ui->ContestsButton->setText("Please wait...");
         QApplication::processEvents();
 
-        challCtrl->requestTabList();
+        //challCtrl->requestTabList();
 
         // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
@@ -310,10 +297,8 @@ void MainMenu::on_TabButton_clicked()
 void MainMenu::onTabSelected(int row)
 {
     QString challName = ui->contestWidget->item(row, 0)->text();
-    // Exemplu: poți deschide o pagină dedicată concursului
     qDebug() << "Clicked chall:" << challName;
-    ///
-    ui->stackedWidget->setCurrentIndex(11); // pagina cu detalii
+    ui->stackedWidget->setCurrentIndex(11);
 }
 
 void MainMenu::on_pushButtonAddCh_clicked()
@@ -333,7 +318,6 @@ void MainMenu::on_pushButtonViewLC_clicked()
 
 void MainMenu::on_pushButtonSubmit_clicked()
 {
-    // Disable the submit button to prevent multiple clicks
     ui->pushButtonSubmit->setEnabled(false);
 
     const std::string username = ui->lineEditNewUsername->text().toStdString();
@@ -341,7 +325,6 @@ void MainMenu::on_pushButtonSubmit_clicked()
     const std::string password = ui->lineEditNewPasswd->text().toStdString();
     const std::string email = ui->lineEditNewEmail->text().toStdString();
 
-    // Confirm changes
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Confirm Update",
         "Are you sure you want to update your profile? You will be logged out after updating.",
@@ -373,7 +356,6 @@ void MainMenu::on_pushButtonDeleteAcc_clicked()
         return;
     }
 
-    // Disable the button to prevent multiple clicks
     ui->pushButtonDeleteAcc->setEnabled(false);
 
     QMessageBox::StandardButton reply;
@@ -382,7 +364,6 @@ void MainMenu::on_pushButtonDeleteAcc_clicked()
         QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::Yes) {
-        // Double confirm for critical action
         reply = QMessageBox::warning(this, "Final Confirmation",
             "ALL YOUR DATA WILL BE PERMANENTLY DELETED. Continue?",
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
@@ -391,7 +372,6 @@ void MainMenu::on_pushButtonDeleteAcc_clicked()
             ui->pushButtonDeleteAcc->setText("Deleting...");
             QApplication::processEvents();
             authCtrl->requestDelete();
-            // The response will be handled by signal handlers
         }
         else {
             ui->pushButtonDeleteAcc->setEnabled(true);
@@ -455,7 +435,6 @@ void MainMenu::configureUIForRole(int role)
 
     this->setWindowTitle(roleText);
 
-    // Show welcome message with role
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
     if (authCtrl) {
         QString username = QString::fromStdString(authCtrl->getCurrentUser());
@@ -482,7 +461,6 @@ void MainMenu::onContestCellClicked(int row, int column)
     if (column == 0) 
     {
         contestName = ui->contestWidget->item(row, column)->text();
-        // Exemplu: poți deschide o pagină dedicată concursului
         qDebug() << "Clicked contest:" << contestName;
         ui->stackedWidget->setCurrentIndex(13); // pagina cu detalii
     }
@@ -504,14 +482,9 @@ void MainMenu::onContestCellClicked(int row, int column)
             ui->ContestsButton->setEnabled(true);
             return;
         }
-
-        // Show loading indicator
         ui->ContestsButton->setText("Please wait...");
         QApplication::processEvents();
-
         contestCtrl->requestContestDetails(contestId);
-
-        // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->ContestsButton->setEnabled(true);
@@ -542,7 +515,6 @@ void MainMenu::on_backButton_clicked()
 void MainMenu::on_descriptionButton_clicked()
 {
 	ui->stackedWidget_3->setCurrentIndex(0);
-    // de pus descriere in label
 }
 
 void MainMenu::on_scoreboardButton_clicked()
@@ -552,12 +524,9 @@ void MainMenu::on_scoreboardButton_clicked()
     ui->scoreboardWidget->setRowCount(rowCount);
     ui->scoreboardWidget->setColumnCount(3);
 
-    // Set headers
-    // Set column headers
     QStringList headers = { "#", "Team/User Name", "Score" };
     ui->scoreboardWidget->setHorizontalHeaderLabels(headers);
 
-    // Hide row numbers (vertical header)
     ui->scoreboardWidget->verticalHeader()->setVisible(false);
     QVector<QPair<QString, int>> teams = {
         { "CyberWarriors", 750 },
@@ -566,14 +535,12 @@ void MainMenu::on_scoreboardButton_clicked()
         { "RedTeamElite", 400 }
     };
 
-    // Exemplu de date statice (le poți înlocui cu cele din baza de date mai târziu)
     for (int i = 0; i < rowCount; ++i) {
         ui->scoreboardWidget->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));               // #
         ui->scoreboardWidget->setItem(i, 1, new QTableWidgetItem(teams[i].first));                      // Team Name
         ui->scoreboardWidget->setItem(i, 2, new QTableWidgetItem(QString::number(teams[i].second)));    // Score
     }
 
-    // redimensionare coloane
     ui->scoreboardWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
@@ -590,26 +557,22 @@ void MainMenu::on_JoinButton_clicked()
 void MainMenu::handleUpdateSuccess()
 {
     QMessageBox::information(this, "Success", "Profile updated successfully!");
-    // The logout will be handled by the AuthController
 }
 
 void MainMenu::handleUpdateFailure(const QString& message)
 {
     QMessageBox::warning(this, "Error", "Update failed:\n" + message);
-    // Re-enable the submit button
     ui->pushButtonSubmit->setEnabled(true);
 }
 
 void MainMenu::handleDeleteSuccess()
 {
     QMessageBox::information(this, "Success", "Account deleted successfully!");
-    // The logout will be handled by the AuthController
 }
 
 void MainMenu::handleDeleteFailure(const QString& message)
 {
     QMessageBox::warning(this, "Error", "Account deletion failed:\n" + message);
-    // Re-enable the delete button
     ui->pushButtonDeleteAcc->setEnabled(true);
 }
 

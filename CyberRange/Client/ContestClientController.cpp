@@ -91,7 +91,6 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
         std::string action = response["action"];
         std::string status = response["status"];
 
-        // Handle getContestList
         if (action == "getContests" && status == "success") 
         {
             auto data = response["contests"];
@@ -125,7 +124,6 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
             std::cout << "[ContestClientController] Contest list loaded.\n";
 			emit loadedContestDetails();
         }
-        // Handle getScoreboard
         else if (action == "getScoreboard" && status == "success") 
         {
             std::string contestId = response["contestId"];
@@ -139,7 +137,6 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
                 sb->addScore(teamId, score);
             }
 
-            // TODO: afiseaza Scoreboard în orchestrare
             std::cout << "[ContestClientController] Scoreboard received for contest " << contestId << "\n";
         }
 		else

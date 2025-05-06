@@ -64,7 +64,6 @@ std::vector<std::map<std::string, std::string>> DBController::executeQuery(const
 
         std::string finalQuery = query;
         if (!params.empty()) {
-            // Replace ? placeholders with escaped params (basic escaping)
             size_t pos = 0;
             std::string tempQuery = query;
             for (const auto& param : params) {
@@ -72,7 +71,6 @@ std::vector<std::map<std::string, std::string>> DBController::executeQuery(const
                     logger->log("Query rejected due to unsafe parameter: " + param);
                     return {};
                 }
-                // Basic escaping: wrap in single quotes and escape quotes
                 std::string escapedParam = param;
                 size_t pos = 0;
                 while ((pos = escapedParam.find('\'', pos)) != std::string::npos) {
@@ -114,7 +112,6 @@ bool DBController::executeUpdate(const std::string& query, const std::vector<std
 
         std::string finalQuery = query;
         if (!params.empty()) {
-            // Replace ? placeholders with escaped params
             size_t pos = 0;
             std::string tempQuery = query;
             for (const auto& param : params) {

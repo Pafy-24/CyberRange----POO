@@ -34,15 +34,12 @@ public:
     transfer_sock(std::unique_ptr<sf::TcpSocket> sock, const std::string& clientAddr, int clientPort);
     ~transfer_sock() override;
 
-    // Root directory management
     void setRootDirectory(const std::string& dir);
     std::string getRootDirectory() const;
 
-    // Transfer progress and control
     int getTransferProgress() const;
     void abortTransfer();
 
-    // Use parent TCPSock implementations
     std::string getType() const override { return "TRANSFER"; }
     void handleRequest(const std::string& data, Connection* client = nullptr) override;
 

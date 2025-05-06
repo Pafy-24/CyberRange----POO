@@ -24,7 +24,6 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
 
 ServerMng::ServerMng(int port, std::string address)
     : isRunning(false), port(port), serverAddress(address) {
-    // Initialize DBController
     dbController = new DBController("sqlserver://administrator:StrongP@ssw0rd!@localhost:1433/CyberRangeDB");
 	loader = new Loader();
 
@@ -34,15 +33,11 @@ ServerMng::ServerMng(int port, std::string address)
         static const char c[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; 
         return c[rand() % (sizeof(c) - 1)]; });
 
-
-    // Initialize other controllers
     attachController("UserController", new UserController());
     attachController("TeamController", new TeamController());
     attachController("ChallController", new ChallController());
     attachController("ContestController", new ContestController());
     attachController("default", new Controller());
-
-	//loader->attachControllers(controllers);
 }
 
 ServerMng::~ServerMng() {
@@ -55,9 +50,6 @@ void ServerMng::start() {
         return;
     }
     isRunning = true;
-
-    // Load initial data
-    //loader->loadAll();
 
     runTCPServer(port, false);
     runDownloadServer(port + 3);

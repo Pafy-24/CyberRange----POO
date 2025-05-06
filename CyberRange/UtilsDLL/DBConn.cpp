@@ -26,7 +26,6 @@ bool DBConn::parseConnectionString() {
 
     std::string conn = connectionString.substr(prefix.size());
 
-    // Split into userinfo and hostinfo
     size_t atPos = conn.rfind('@');
     if (atPos == std::string::npos) {
         std::cerr << "Missing '@' in connection string" << std::endl;
@@ -45,7 +44,6 @@ bool DBConn::parseConnectionString() {
     username = userInfo.substr(0, colonPos);
     password = userInfo.substr(colonPos + 1);
 
-    // host:port/database
     size_t slashPos = hostInfo.find('/');
     if (slashPos == std::string::npos) {
         std::cerr << "Missing '/' before database name" << std::endl;
@@ -188,7 +186,7 @@ bool DBConn::enableTLS() {
         std::cerr << "Cannot enable TLS on active connection" << std::endl;
         return false;
     }
-    tlsEnabled = true; // TLS se negociază automat la nivel de driver
+    tlsEnabled = true; 
     return true;
 }
 

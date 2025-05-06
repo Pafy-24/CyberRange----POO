@@ -29,7 +29,7 @@ protected:
 signals:
     void loginSuccess();
     void registrationSuccess();
-    void shown();  // New signal to indicate the dialog is shown
+    void shown(); 
 
 private slots:
     void on_loginButton_clicked();
@@ -38,7 +38,6 @@ private slots:
     void on_pushButtonRegisterNow_clicked();
     void on_pushButtonBackToLogin_clicked();
 
-    // Handler slots for AuthController signals
     void handleLoginSuccess();
     void handleLoginFailure(const QString& message);
     void handleRegisterSuccess();
@@ -51,7 +50,5 @@ private:
     Ui::LoginDialog* ui;
     QPoint mouseClickPosition;
     bool mousePressed;
-
-    // Track whether connections have been established
     bool signalsConnected;
 };

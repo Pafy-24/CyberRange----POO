@@ -20,8 +20,6 @@ LoginDialog::LoginDialog(QWidget* parent)
     this->setWindowFlags(Qt::FramelessWindowHint);
 
     ui->stackedWidget->setCurrentIndex(0);
-
-    // Create fade-in effect for welcome label
     QGraphicsOpacityEffect* effect = new QGraphicsOpacityEffect(this);
     ui->labelWelcome->setGraphicsEffect(effect);
 
@@ -31,7 +29,6 @@ LoginDialog::LoginDialog(QWidget* parent)
     animation->setEndValue(1);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
 
-    // Create fade-in effect for the entire dialog
     this->setWindowOpacity(0.0);
     QPropertyAnimation* animation1 = new QPropertyAnimation(this, "windowOpacity");
     animation1->setDuration(500);
@@ -39,15 +36,12 @@ LoginDialog::LoginDialog(QWidget* parent)
     animation1->setEndValue(1.0);
     animation1->start(QAbstractAnimation::DeleteWhenStopped);
 
-    // Initialize client manager once with error handling
     try {
         ClientMng* clientMng = ClientMng::getInstance(1337, "127.0.0.1");
         if (!clientMng->isConnected()) {
             if (!clientMng->start()) {
-                // Instead of immediately closing, show an error and allow retry
                 QMessageBox::critical(this, "Connection Error",
                     "Could not connect to the server. Please check your network connection.");
-                // Add a retry button to the login screen instead of closing immediately
                 ui->loginButton->setText("Retry Connection");
                 ui->loginButton->disconnect();
                 connect(ui->loginButton, &QPushButton::clicked, this, &LoginDialog::retryConnection);
@@ -60,7 +54,6 @@ LoginDialog::LoginDialog(QWidget* parent)
     }
     catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", QString("Connection error: %1").arg(e.what()));
-        // Same approach as above - allow retry instead of immediate close
         ui->loginButton->setText("Retry Connection");
         ui->loginButton->disconnect();
         connect(ui->loginButton, &QPushButton::clicked, this, &LoginDialog::retryConnection);
@@ -72,7 +65,6 @@ LoginDialog::LoginDialog(QWidget* parent)
 
 LoginDialog::~LoginDialog()
 {
-    // Safely disconnect all signals to this object to prevent callbacks after destruction
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
     if (authCtrl) {
         disconnect(authCtrl, nullptr, this, nullptr);
@@ -83,14 +75,12 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::retryConnection()
 {
-    // Attempt to reconnect to the server
     try {
         ui->loginButton->setEnabled(false);
         ui->loginButton->setText("Connecting...");
 
         ClientMng* clientMng = ClientMng::getInstance(1337, "127.0.0.1");
         if (clientMng->start()) {
-            // Connection successful - restore normal UI state
             ui->loginButton->setText("Login");
             ui->loginButton->disconnect();
             connect(ui->loginButton, &QPushButton::clicked, this, &LoginDialog::on_loginButton_clicked);
@@ -117,17 +107,14 @@ void LoginDialog::showEvent(QShowEvent* event)
 {
     QDialog::showEvent(event);
 
-    // Connect signals only once when the dialog is shown
     if (!signalsConnected) {
         auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
         if (authCtrl) {
-            // Disconnect any existing connections first to avoid duplicates
             disconnect(authCtrl, &AuthController::loginSucceeded, this, &LoginDialog::handleLoginSuccess);
             disconnect(authCtrl, &AuthController::loginFailed, this, &LoginDialog::handleLoginFailure);
             disconnect(authCtrl, &AuthController::registerSucceeded, this, &LoginDialog::handleRegisterSuccess);
             disconnect(authCtrl, &AuthController::registerFailed, this, &LoginDialog::handleRegisterFailure);
 
-            // Now connect the signals using queued connections for thread safety
             connect(authCtrl, &AuthController::loginSucceeded, this, &LoginDialog::handleLoginSuccess, Qt::QueuedConnection);
             connect(authCtrl, &AuthController::loginFailed, this, &LoginDialog::handleLoginFailure, Qt::QueuedConnection);
             connect(authCtrl, &AuthController::registerSucceeded, this, &LoginDialog::handleRegisterSuccess, Qt::QueuedConnection);
@@ -136,8 +123,6 @@ void LoginDialog::showEvent(QShowEvent* event)
             signalsConnected = true;
         }
     }
-
-    // Emit the shown signal
     emit shown();
 }
 
@@ -152,8 +137,6 @@ void LoginDialog::handleLoginSuccess()
     }
 
     int userRole = authCtrl->getRole();
-
-    // Create the main menu before starting the animation
     MainMenu* menu = new MainMenu();
     menu->configureUIForRole(userRole);
 
@@ -163,17 +146,15 @@ void LoginDialog::handleLoginSuccess()
     fadeOut->setEndValue(0);
 
     connect(fadeOut, &QPropertyAnimation::finished, this, [=]() {
-        // Check if dialog is still visible before proceeding
         if (!this->isVisible()) {
             fadeOut->deleteLater();
             return;
         }
 
-        // Show the main menu and schedule this dialog for deletion
         menu->show();
         fadeOut->deleteLater();
-        this->hide();  // Hide first, then schedule deletion
-        this->close();  // Use deleteLater for safer cleanup
+        this->hide(); 
+        this->close(); 
         });
 
     fadeOut->start();
@@ -197,7 +178,6 @@ void LoginDialog::handleRegisterFailure(const QString& message)
 
 void LoginDialog::on_loginButton_clicked()
 {
-    // Disable the button to prevent double clicks
     ui->loginButton->setEnabled(false);
 
     const std::string username = ui->lineEditUsername->text().toStdString();
@@ -217,13 +197,11 @@ void LoginDialog::on_loginButton_clicked()
             return;
         }
 
-        // Show loading indicator
         ui->loginButton->setText("Please wait...");
         QApplication::processEvents();
 
         authCtrl->requestLogin(username, password);
 
-        // Re-enable the button after a short delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->loginButton->setEnabled(true);
@@ -255,14 +233,11 @@ void LoginDialog::on_exitButton_clicked()
 
 void LoginDialog::on_pushButtonRegisterNow_clicked()
 {
-    // Disable the button to prevent double clicks
     ui->pushButtonRegisterNow->setEnabled(false);
 
     const std::string username = ui->lineEditUsernameReg->text().toStdString();
     const std::string password = ui->lineEditPasswdReg->text().toStdString();
     const std::string email = ui->lineEditEmailReg->text().toStdString();
-
-    // Validate input
     if (username.empty() || password.empty() || email.empty()) {
         QMessageBox::warning(this, "Error", "All fields are required.");
         ui->pushButtonRegisterNow->setEnabled(true);
@@ -277,13 +252,11 @@ void LoginDialog::on_pushButtonRegisterNow_clicked()
             return;
         }
 
-        // Show loading indicator
         ui->pushButtonRegisterNow->setText("Please wait...");
         QApplication::processEvents();
 
         authCtrl->requestRegister(username, password, email);
 
-        // Re-enable the button after a short delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->pushButtonRegisterNow->setEnabled(true);

@@ -18,7 +18,6 @@ public:
     ~MainMenu();
 
 private slots:
-    // Slots for logout handling
     void handleLogoutSuccess();
     void handleLogoutFailure(const QString& message);
 

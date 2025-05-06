@@ -8,43 +8,37 @@
 
 AdminConn::AdminConn(int listenPort, const std::string& dbConnStr)
     : TCPSock(listenPort), DBConn(dbConnStr), privilege(0), secure(true), stopRequested(false) {
-    enableTLS(); // Admin connections always use TLS
+    enableTLS();
     printMessage("Admin server created on port " + std::to_string(listenPort));
 }
 
 AdminConn::AdminConn(std::unique_ptr<sf::TcpSocket> clientSock, const std::string& clientAddr, int clientPort, const std::string& dbConnStr)
     : TCPSock(std::move(clientSock), clientAddr, clientPort), DBConn(dbConnStr),
     privilege(0), secure(true), stopRequested(false) {
-    enableTLS(); // Admin connections always use TLS
+    enableTLS(); 
     printMessage("Admin client connection created for " + clientAddr + ":" + std::to_string(clientPort));
 }
 
 AdminConn::~AdminConn() {
-    // Clear sensitive data
     adminKey.clear();
 
-    // Clean up client connections
     for (auto* conn : clientConnections) {
         delete conn;
     }
     clientConnections.clear();
 
-    // Stop server if running
     if (isServerRunning()) {
         stopServer();
     }
 
-    // Disconnect
     disconnect();
 }
 
 bool AdminConn::connect() {
-    // For server mode, rely on TCPSock's bind/listen
     if (TCPSock::isServerRunning()) {
         return TCPSock::isConnected();
     }
 
-    // For client mode, connect both TCP and DB
     if (!TCPSock::isConnected() && !TCPSock::connect()) {
         std::cerr << "Failed to connect TCP socket" << std::endl;
         return false;
@@ -67,19 +61,19 @@ bool AdminConn::isConnected() const {
 }
 
 int AdminConn::send(const std::string& data) {
-    return TCPSock::send(data); // Use TCPSock for client communication
+    return TCPSock::send(data); 
 }
 
 std::string AdminConn::receive() {
-    return TCPSock::receive(); // Use TCPSock for client communication
+    return TCPSock::receive(); 
 }
 
 std::string AdminConn::getAddress() const {
-    return TCPSock::getAddress(); // Use TCPSock address
+    return TCPSock::getAddress();
 }
 
 int AdminConn::getPort() const {
-    return TCPSock::getPort(); // Use TCPSock port
+    return TCPSock::getPort();
 }
 
 bool AdminConn::enableTLS() {
@@ -98,7 +92,7 @@ void AdminConn::setTimeout(int ms) {
 }
 
 int AdminConn::getTimeout() const {
-    return TCPSock::getTimeout(); // Assume both have same timeout
+    return TCPSock::getTimeout();
 }
 
 bool AdminConn::bind(int bindPort) {
@@ -177,7 +171,6 @@ void AdminConn::stopServer() {
     stopRequested = true;
     TCPSock::stopServer();
 
-    // Clean up client connections
     for (auto* conn : clientConnections) {
         conn->disconnect();
         delete conn;
