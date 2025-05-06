@@ -22,6 +22,8 @@ MainMenu::MainMenu(QWidget* parent)
     this->resize(900, 700);
     this->setFixedSize(900, 700);
     ui->stackedWidget->setCurrentIndex(3); // Home screen
+	ui->stackedWidget_2->setCurrentIndex(0); 
+	ui->stackedWidget_3->setCurrentIndex(0); 
 
     // Set up logo and alignments
     QPixmap pix(":/background/logo.png");
@@ -30,6 +32,7 @@ MainMenu::MainMenu(QWidget* parent)
     ui->quoteLabel->setAlignment(Qt::AlignCenter);
     ui->textBrowser->setAlignment(Qt::AlignCenter);
 
+    connect(ui->contestWidget, &QTableWidget::cellClicked, this, &MainMenu::onContestCellClicked); //contests
     // Apply styling
     ui->frameLeftMenu->setStyleSheet(
         "QFrame {"
@@ -179,6 +182,35 @@ void MainMenu::on_HomeButton_clicked()
 void MainMenu::on_ContestsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
+    // Example: set 3 rows and 4 columns
+    int rowCount = 3;
+    ui->contestWidget->setRowCount(rowCount);
+    ui->contestWidget->setColumnCount(3);
+
+    // Set headers
+    // Set column headers
+    QStringList headers = {"Name", "Start Date", "End Date" };
+    ui->contestWidget->setHorizontalHeaderLabels(headers);
+
+    // Hide row numbers (vertical header)
+    ui->contestWidget->verticalHeader()->setVisible(false);
+
+    // Exemplu de date statice (le poți înlocui cu cele din baza de date mai târziu)
+    ui->contestWidget->setItem(0, 0, new QTableWidgetItem("CyberDefense Challenge"));
+    ui->contestWidget->setItem(0, 1, new QTableWidgetItem("2025-05-01 10:00"));
+    ui->contestWidget->setItem(0, 2, new QTableWidgetItem("2025-05-01 18:00"));
+
+    ui->contestWidget->setItem(1, 0, new QTableWidgetItem("Capture The Flag 1"));
+    ui->contestWidget->setItem(1, 1, new QTableWidgetItem("2025-06-10 12:00"));
+    ui->contestWidget->setItem(1, 2, new QTableWidgetItem("2025-06-10 20:00"));
+
+    ui->contestWidget->setItem(2, 0, new QTableWidgetItem("Web Exploitation 2025"));
+    ui->contestWidget->setItem(2, 1, new QTableWidgetItem("2025-07-15 09:00"));
+    ui->contestWidget->setItem(2, 2, new QTableWidgetItem("2025-07-15 17:00"));
+
+
+    // redimensionare coloane
+    ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void MainMenu::on_ManageUsersButton_clicked()
@@ -220,14 +252,9 @@ void MainMenu::on_SettingsButton_clicked()
     ui->stackedWidget->setCurrentIndex(10);
 }
 
-void MainMenu::on_SolveChallengeButton_clicked()
+void MainMenu::on_TabButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(12);
-}
-
-void MainMenu::on_TrainingButton_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(11);
 }
 
 void MainMenu::on_pushButtonAddCh_clicked()
@@ -255,7 +282,6 @@ void MainMenu::on_pushButtonSubmit_clicked()
     const std::string password = ui->lineEditNewPasswd->text().toStdString();
     const std::string email = ui->lineEditNewEmail->text().toStdString();
 
-
     // Confirm changes
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "Confirm Update",
@@ -279,7 +305,6 @@ void MainMenu::on_pushButtonSubmit_clicked()
 
     authCtrl->requestUpdate(username, old, password, email);
 }
-
 
 void MainMenu::on_pushButtonDeleteAcc_clicked()
 {
@@ -318,8 +343,6 @@ void MainMenu::on_pushButtonDeleteAcc_clicked()
     }
 }
 
-
-
 void MainMenu::configureUIForRole(int role)
 {
     // Hide everything first
@@ -334,7 +357,7 @@ void MainMenu::configureUIForRole(int role)
     ui->ProfileButton->hide();
     ui->ReviewFlagsButton->hide();
     ui->SettingsButton->hide();
-    ui->TrainingButton->hide();
+    ui->TabButton->hide();
 
     // Common elements for all users
     ui->HomeButton->show();
@@ -349,7 +372,7 @@ void MainMenu::configureUIForRole(int role)
     case 1: // Regular user
         ui->DashboardCommonButton->show();
         ui->ContestsButton->show();
-        ui->TrainingButton->show();
+        ui->TabButton->show();
         roleText = "User Dashboard";
         break;
     case 5: // Writer
@@ -394,6 +417,47 @@ void MainMenu::on_ConnButton_clicked()
     this->deleteLater();
 }
 
+void MainMenu::onContestCellClicked(int row, int column)
+{
+    if (column == 0) 
+    {
+        QString contestName = ui->contestWidget->item(row, column)->text();
+        // Exemplu: poți deschide o pagină dedicată concursului
+        qDebug() << "Clicked contest:" << contestName;
+
+        ui->stackedWidget->setCurrentIndex(13); // pagina cu detalii
+    }
+}
+
+void MainMenu::on_ActiveButton_clicked()
+{
+	ui->stackedWidget_2->setCurrentIndex(0);
+}
+
+void MainMenu::on_ExpiredButton_clicked()
+{
+	ui->stackedWidget_2->setCurrentIndex(1);
+}
+
+void MainMenu::on_backButton_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(5);
+}
+
+void MainMenu::on_descriptionButton_clicked()
+{
+	ui->stackedWidget_3->setCurrentIndex(0);
+}
+
+void MainMenu::on_scoreboardButton_clicked()
+{
+	ui->stackedWidget_3->setCurrentIndex(1);
+}
+
+void MainMenu::on_tasksButton_clicked()
+{
+	ui->stackedWidget_3->setCurrentIndex(2);
+}
 
 void MainMenu::handleUpdateSuccess()
 {

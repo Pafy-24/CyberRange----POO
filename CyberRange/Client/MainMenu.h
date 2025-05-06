@@ -40,19 +40,27 @@ private slots:
     void on_ProfileButton_clicked();
     void on_ReviewFlagsButton_clicked();
     void on_SettingsButton_clicked();
-    void on_SolveChallengeButton_clicked();
-    void on_TrainingButton_clicked();
+	void on_TabButton_clicked();
 
     // Dashboard admin
     void on_pushButtonAddCh_clicked();
     void on_pushButtonQuickAddC_clicked();
     void on_pushButtonViewLC_clicked();
 
-    // Profile
+    // Profile  
     void on_pushButtonSubmit_clicked();
     void on_pushButtonDeleteAcc_clicked();
 
     void on_ConnButton_clicked();
+
+    // Contests
+    void onContestCellClicked(int row, int column);
+	void on_ActiveButton_clicked();
+	void on_ExpiredButton_clicked();
+	void on_backButton_clicked();
+	void on_descriptionButton_clicked();
+	void on_scoreboardButton_clicked();
+	void on_tasksButton_clicked(); 
 
 private:
     Ui::MainMenu* ui;
