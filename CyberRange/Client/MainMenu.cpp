@@ -32,7 +32,7 @@ MainMenu::MainMenu(QWidget* parent)
     ui->quoteLabel->setAlignment(Qt::AlignCenter);
     ui->textBrowser->setAlignment(Qt::AlignCenter);
 
-    connect(ui->contestWidget, &QTableWidget::cellClicked, this, &MainMenu::onContestCellClicked); //contests
+    connect(ui->contestWidget, &QTableWidget::cellClicked, this, &MainMenu::onContestCellClicked); 
     // Apply styling
     ui->frameLeftMenu->setStyleSheet(
         "QFrame {"
@@ -56,6 +56,10 @@ MainMenu::MainMenu(QWidget* parent)
         "border-radius: 10px;"
         "}"
     );
+
+    ui->scoreboardButton->hide();
+    ui->tasksButton->hide();
+    ui->CreateTeamBtn->hide();
 
     // Fade-in animation effect
     setWindowOpacity(0.0);
@@ -181,19 +185,8 @@ void MainMenu::on_HomeButton_clicked()
 void MainMenu::on_ContestsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
-    // Example: set 3 rows and 4 columns
-    int rowCount = 3;
-    ui->contestWidget->setRowCount(rowCount);
-    ui->contestWidget->setColumnCount(3);
 
-    // Set headers
-    // Set column headers
-    QStringList headers = {"Name", "Start Date", "End Date" };
-    ui->contestWidget->setHorizontalHeaderLabels(headers);
-
-    // Hide row numbers (vertical header)
-    ui->contestWidget->verticalHeader()->setVisible(false);
-
+    ui->contestWidget->setRowCount(3);
     // Exemplu de date statice (le poți înlocui cu cele din baza de date mai târziu)
     ui->contestWidget->setItem(0, 0, new QTableWidgetItem("CyberDefense Challenge"));
     ui->contestWidget->setItem(0, 1, new QTableWidgetItem("2025-05-01 10:00"));
