@@ -1,40 +1,39 @@
 #include "ContestController.h"
+#include "ServerMng.h"
 #include "json.hpp"
 #include <iostream>
 
 using json = nlohmann::json;
 
-ContestController::ContestController(DBController* dbCtrl) : CController("ContestController"), dbController(dbCtrl) {}
+ContestController::ContestController(DBController* dbCtrl) 
+    : CController("ContestController"), dbController(dbCtrl) {}
 
-void ContestController::loadContest(const std::string& contestId) 
+void ContestController::createContest(const std::string& contestData, Connection* conn)
 {
-    if (contests.find(contestId) != contests.end())
-        return;
+    try {
+        json j = json::parse(contestData);
+        std::string name = j["name"].get<std::string>();
 
-    DBController* db = getDB();
-    auto results = db->executeQuery("SELECT * FROM Contests WHERE ContestID = ?", { contestId });
+        Contest* contest = new Contest(name);
 
-    if (!results.empty()) 
-    {
-        auto& row = results[0];
-        Contest* contest = new Contest(row["name"], std::stoi(row["contestId"]));
-        contests[contestId] = contest;
-        logger->log("Loaded contest: " + contestId);
+        ServerMng::getInstance()->getChallMng()->addContest(contest);
+
+        ServerMng::getInstance()->getLoader()->save(conn);
+
+        // Unload and reload the contest
+        
+        ServerMng::getInstance()->getLoader()->unloadObject(conn,"contest:"+std::to_string(contest->getId()));
+
+        logger->log("Contest created and managed: " + name);
     }
-    else 
-    {
-        logger->log("Contest not found: " + contestId);
+    catch (const std::exception& e) {
+        logger->log("createContest error: " + std::string(e.what()));
     }
 }
 
-void ContestController::createContest(std::string contestData) 
+void ContestController::handleRequest(const std::string& data, Connection* client)
 {
-    logger->log("createContest not yet implemented");
-}
-
-void ContestController::handleRequest(const std::string& data, Connection* client) {
-    if (!validateRequest(data, client,1)) 
-    {
+    if (!validateRequest(data, client, 1)) {
         return;
     }
 
@@ -42,155 +41,140 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
         json j = json::parse(data);
         std::string action = j["action"].get<std::string>();
 
-        if (action == "createContest") 
-        {
-            std::string name = j["name"].get<std::string>();
-
-            std::string query = "INSERT INTO Contests (name) VALUES (?)";
-            if (getDB()->executeUpdate(query, { name })) 
-            {
-                query = "SELECT ContestID FROM Contests WHERE Name = ?";
-                auto results = getDB()->executeQuery(query, { name });
-
-                if (!results.empty()) 
-                {
-                    std::string contestId = results[0]["contestId"];
-                    client->send(json{ {"status", "success"}, {"contestId", contestId} }.dump());
-                    logger->log("Contest created: " + contestId);
-                }
-                else 
-                {
-                    client->send(json{ {"status", "error"}, {"message", "Contest creation failed"} }.dump());
-                    logger->log("Contest creation failed: no ID returned");
-                }
-            }
-            else 
-            {
-                client->send(json{ {"status", "error"}, {"message", "Failed to insert contest"} }.dump());
-            }
+        if (action == "createContest") {
+            createContest(j["payload"].dump(),client);
+            json response = {
+                {"controller", "ContestController"},
+                {"action", "createContest"},
+                {"status", "success"},
+                {"message", "Contest created successfully"}
+            };
+            client->send(response.dump());
+        } else if (action == "getContest") {
+            int contestId = j["payload"]["contestId"].get<int>();
+            sendContestDetails(contestId, client);
+        } else if (action == "getScoreboard") {
+            int contestId = j["payload"]["contestId"].get<int>();
+            sendScoreboard(contestId, client);
+        } else if (action == "getContests") {
+            sendAllContests(client);
+        } else if (action == "updateContest") {
+            int contestId = j["payload"]["contestId"].get<int>();
+           // updateContest(std::to_string(contestId), j["payload"].dump());
+            json response = {
+                {"controller", "ContestController"},
+                {"action", "updateContest"},
+                {"status", "success"},
+                {"message", "Contest updated successfully"}
+            };
+            client->send(response.dump());
+        } else if (action == "deleteContest") {
+            int contestId = j["payload"]["contestId"].get<int>();
+           // deleteContest(std::to_string(contestId));
+            json response = {
+                {"controller", "ContestController"},
+                {"action", "deleteContest"},
+                {"status", "success"},
+                {"message", "Contest deleted successfully"}
+            };
+            client->send(response.dump());
+        } else {
+            json response = {
+                {"controller", "ContestController"},
+                {"action", action},
+                {"status", "error"},
+                {"message", "Invalid action"}
+            };
+            client->send(response.dump());
         }
-        else if (action == "getContest") 
-        {
-            std::string contestId = j["contestId"].get<std::string>();
-            loadContest(contestId);
-
-            Contest* contest = getContest(contestId);
-            if (contest) 
-            {
-                json response = 
-                {
-                    {"status", "success"},
-                    {"contestId", contestId},
-                    {"name", contest->getName()}
-                };
-                client->send(response.dump());
-            }
-            else 
-            {
-                client->send(json{ {"status", "error"}, {"message", "Contest not found"} }.dump());
-            }
-        }
-        else if (action == "getScoreboard") 
-        {
-            std::string contestId = j["contestId"].get<std::string>();
-            Scoreboard* sb = getScoreboard(contestId);
-
-            if (sb) 
-            {
-                client->send(sb->exportJSON());
-                delete sb;
-                logger->log("Scoreboard sent for contest: " + contestId);
-            }
-            else 
-            {
-                client->send(json{ {"status", "error"}, {"message", "Scoreboard not found"} }.dump());
-                logger->log("Failed to generate scoreboard for contest: " + contestId);
-            }
-        }
-        else 
-        {
-            client->send(json{ {"status", "error"}, {"message", "Invalid action"} }.dump());
-        }
-    }
-    catch (const std::exception& e) 
-    {
-        client->send(json{ {"status", "error"}, {"message", "Request processing failed"} }.dump());
+    } catch (const std::exception& e) {
+        json response = {
+            {"controller", "ContestController"},
+            {"action", "unknown"},
+            {"status", "error"},
+            {"message", "Request processing failed: " + std::string(e.what())}
+        };
+        client->send(response.dump());
         logger->log("ContestController error: " + std::string(e.what()));
     }
 }
 
-void ContestController::updateContest(std::string contestId, std::string contestData) 
+void ContestController::sendContestDetails(int contestId, Connection* client)
 {
-    logger->log("updateContest not yet implemented");
+    ServerMng::getInstance()->getLoader()->loadContest(contestId, client);
+    Contest* contest = ServerMng::getInstance()->getContest(contestId);
+
+    if (contest) {
+        json response = {
+            {"controller", "ContestController"},
+            {"action", "getContest"},
+            {"status", "success"},
+            {"contestId", contestId},
+            {"name", contest->getName()},
+            {"description", contest->getDescription()},
+            {"startTime", contest->getStartTime()},
+            {"endTime", contest->getEndTime()},
+            {"active", contest->isActive()}
+        };
+        client->send(response.dump());
+    } else {
+        json response = {
+            {"controller", "ContestController"},
+            {"action", "getContest"},
+            {"status", "error"},
+            {"message", "Contest not found"}
+        };
+        client->send(response.dump());
+    }
 }
 
-void ContestController::deleteContest(std::string contestId) 
+void ContestController::sendScoreboard(int contestId, Connection* client)
 {
-    auto it = contests.find(contestId);
-    if (it != contests.end()) 
-    {
-        delete it->second;
-        contests.erase(it);
-        logger->log("Deleted contest: " + contestId);
-    }
-    else 
-    {
-        logger->log("Contest not found to delete: " + contestId);
+    Scoreboard* sb;// = getScoreboard(std::to_string(contestId));
+    if (sb) {
+        std::string scoreboardJson = sb->exportJSON();
+        delete sb;
+        json response = {
+            {"controller", "ContestController"},
+            {"action", "getScoreboard"},
+            {"status", "success"},
+            {"scoreboard", json::parse(scoreboardJson)}
+        };
+        client->send(response.dump());
+    } else {
+        json response = {
+            {"controller", "ContestController"},
+            {"action", "getScoreboard"},
+            {"status", "error"},
+            {"message", "Scoreboard not found"}
+        };
+        client->send(response.dump());
     }
 }
 
-Contest* ContestController::getContest(std::string contestId) 
+void ContestController::sendAllContests(Connection* client)
 {
-    if (contests.find(contestId) != contests.end()) 
-    {
-        return contests[contestId];
-    }
-    return nullptr;
-}
+    std::string query = "SELECT ContestID FROM Contests";
+    auto results = dbController->executeQuery(query);
+    std::vector<json> contestList;
 
-Scoreboard* ContestController::getScoreboard(std::string contestId)
-{
-    DBController* db = getDB();
-    if (!db)
-    {
-        logger->log("No DBController found for getScoreboard");
-        return nullptr;
-    }
-
-    auto results = db->executeQuery(
-        "SELECT TeamID, COUNT(*) AS Score FROM SolvedChallenges WHERE ContestID = ? GROUP BY TeamID ORDER BY Score DESC",
-        { contestId });
-
-    if (results.empty())
-    {
-        logger->log("No scores found for contest: " + contestId);
-        return nullptr;
-    }
-
-    Scoreboard* sb = new Scoreboard(contestId);
-
-    for (const auto& row : results)
-    {
-        if (row.count("teamId") && row.count("score"))
-        {
-            try
-            {
-                std::string teamId = row.at("teamId");
-                int score = std::stoi(row.at("score"));
-                sb->getScores().emplace_back(teamId, score);  // direct push în vector
-            }
-            catch (const std::exception& e)
-            {
-                logger->log("Error parsing score row: " + std::string(e.what()));
-            }
+    for (const auto& row : results) {
+        int contestId = std::stoi(row.at("ContestID"));
+        ServerMng::getInstance()->getLoader()->loadContest(contestId, client);
+        Contest* contest = ServerMng::getInstance()->getContest(contestId);
+        if (contest) {
+            contestList.push_back({
+                {"contestId", contestId},
+                {"name", contest->getName()}
+            });
         }
     }
 
-    logger->log("Generated scoreboard for contest: " + contestId);
-    return sb;
-}
-
-DBController* ContestController::getDB() 
-{
-    return dbController;
+    json response = {
+        {"controller", "ContestController"},
+        {"action", "getContests"},
+        {"status", "success"},
+        {"contests", contestList}
+    };
+    client->send(response.dump());
 }

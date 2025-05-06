@@ -14,13 +14,10 @@ private:
 	DBController* dbController;
 public:
     ContestController(DBController* dbCtrl);
-    void createContest(std::string contestData);
+    void createContest(const std::string& contestData, Connection* conn);
 	void handleRequest(const std::string& data, Connection* client);
-    void updateContest(std::string contestId, std::string contestData);
-    void deleteContest(std::string contestId);
-    Contest* getContest(std::string contestId);
-    Scoreboard* getScoreboard(std::string contestId);
-    void loadContest(const std::string& contestId);
+    void sendContestDetails(int contestId, Connection* client);
+    void sendScoreboard(int contestId, Connection* client);
+    void sendAllContests(Connection* client);
     std::map<std::string, Contest*>& getContests() { return contests; }
-    DBController* getDB();
 };

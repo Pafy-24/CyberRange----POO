@@ -17,6 +17,11 @@ std::string Contest::getName() const {
     return name;
 }
 
+std::string Contest::getDescription() const
+{
+	return description;
+}
+
 time_t Contest::getStartTime() const {
     return startTime;
 }
@@ -35,6 +40,16 @@ std::vector<int> Contest::getTeams() const {
 
 bool Contest::isActive() const {
     return active;
+}
+
+void Contest::setName(const std::string& name)
+{
+	this->name = name;
+}
+
+void Contest::setDescription(const std::string& desc)
+{
+	description = desc;
 }
 
 void Contest::setStartTime(time_t start) {
