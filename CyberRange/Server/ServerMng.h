@@ -14,6 +14,7 @@ private:
     static ServerMng* instance;
     static std::mutex instanceMutex;
 
+    std::vector<Connection*> servers;
     std::vector<Connection*> connections;
     std::mutex connectionsMutex;
     std::map<std::string, Controller*> controllers;
@@ -35,7 +36,6 @@ private:
     void runTCPServer(int port, bool useTLS);
     void runUDPServer(int port);
     void runDownloadServer(int port);
-    void checkConnections();  // New method to check for closed connections
 
     ServerMng(const ServerMng&) = delete;
     ServerMng& operator=(const ServerMng&) = delete;
@@ -48,7 +48,6 @@ public:
     void stop();
     void addConnection(Connection* conn);
     void removeConnection(Connection* conn);
-    void processRequests();
     void attachController(std::string name, Controller* ctrl);
     void removeController(std::string name);
     Connection* getConnection(int id);

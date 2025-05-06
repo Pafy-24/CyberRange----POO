@@ -12,6 +12,7 @@ private:
     std::map<int,Chall*> challs;
     std::vector<int> teamIds;
     int maxTeamUsers;
+	int organizerId;
     bool active;
 
 public:
@@ -27,6 +28,7 @@ public:
 
 	void setName(const std::string& name);
 	void setDescription(const std::string& desc);
+	void setOrganizerId(int id) { organizerId = id; }
 
     void setStartTime(time_t start);
     void setEndTime(time_t end);
@@ -38,4 +40,5 @@ public:
 
 	void setMaxTeamUsers(int max){maxTeamUsers = max;}
 	int getMaxTeamUsers() const { return maxTeamUsers; }
+	int getOrganizerId() const { return organizerId; }
 };
