@@ -1605,15 +1605,30 @@ QPushButton:pressed {
                     <property name="text">
                      <string>Contest</string>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>Start Date</string>
                     </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
                    </column>
                    <column>
                     <property name="text">
                      <string>End Date</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
                     </property>
                    </column>
                   </widget>
@@ -3319,7 +3334,42 @@ QCheckBox::indicator:hover {
              </layout>
             </widget>
             <widget class="QWidget" name="Tabs">
-             <layout class="QVBoxLayout" name="verticalLayout_6"/>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <widget class="QFrame" name="frame_28">
+              <property name="geometry">
+               <rect>
+                <x>30</x>
+                <y>30</y>
+                <width>671</width>
+                <height>521</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QTableWidget" name="tableWidget">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string>Chall Name</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
             </widget>
             <widget class="QWidget" name="CurrentContest">
              <property name="styleSheet">
