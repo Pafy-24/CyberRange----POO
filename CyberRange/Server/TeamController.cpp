@@ -1,12 +1,13 @@
 #include "TeamController.h"
 #include "UsersFactory.h"
+#include "ServerMng.h"
 #include "json.hpp"
 #include <iostream>
 
 using json = nlohmann::json;
 
-TeamController::TeamController(DBController* dbCtrl)
-    : CController("TeamController"), dbController(dbCtrl) {
+TeamController::TeamController()
+    : CController("TeamController"){
 }
 
 void TeamController::handleRequest(const std::string& data, Connection* client) {
@@ -15,6 +16,7 @@ void TeamController::handleRequest(const std::string& data, Connection* client) 
     }
 
     try {
+		auto dbController = ServerMng::getInstance()->getDBController();
         json j = json::parse(data);
         std::string action = j["action"].get<std::string>();
 
@@ -66,7 +68,7 @@ void TeamController::loadTeam(const std::string& teamId) {
     }
 
     std::string query = "SELECT * FROM Teams WHERE TeamID = '" + teamId + "'";
-    auto results = dbController->executeQuery(query);
+    auto results = ServerMng::getInstance()->getDBController()->executeQuery(query);
 
     if (!results.empty()) {
 		Team* team = UsersFactory::CreateTeam(results[0]["TeamName"], 0, std::stoi(results[0]["TeamID"])).release();
@@ -79,7 +81,7 @@ void TeamController::unloadTeam(const std::string& teamId) {
     auto it = teams.find(teamId);
     if (it != teams.end()) {
         std::string query = "UPDATE Teams SET lastActive = GETDATE() WHERE TeamID = '" + teamId + "'";
-        dbController->executeUpdate(query);
+        ServerMng::getInstance()->getDBController()->executeUpdate(query);
         delete it->second;
         teams.erase(it);
         logger->log("Unloaded team: " + teamId);

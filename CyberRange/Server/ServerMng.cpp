@@ -36,10 +36,10 @@ ServerMng::ServerMng(int port, std::string address)
 
 
     // Initialize other controllers
-    attachController("UserController", new UserController(dbController));
-    attachController("TeamController", new TeamController(dbController));
-    attachController("ChallController", new ChallController(dbController));
-    attachController("ContestController", new ContestController(dbController));
+    attachController("UserController", new UserController());
+    attachController("TeamController", new TeamController());
+    attachController("ChallController", new ChallController());
+    attachController("ContestController", new ContestController());
     attachController("default", new Controller());
 
 	//loader->attachControllers(controllers);

@@ -5,8 +5,8 @@
 #include <iostream>
 
 
-UserController::UserController(DBController* dbCtrl)
-    : CController("UserController"), dbController(dbCtrl) {
+UserController::UserController()
+    : CController("UserController") {
 }
 
 void UserController::Login(const json& data, Connection* client)
@@ -385,7 +385,7 @@ void UserController::Delete(const json& data, Connection* client)
 
         // Check if user exists in database
         std::string checkQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
-        auto results = dbController->executeQuery(checkQuery);
+        auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
         if (results.empty()) {
             json response = {
                 {"controller", "UserController"},
@@ -399,11 +399,11 @@ void UserController::Delete(const json& data, Connection* client)
 
         // Remove user from teams
         std::string teamQuery = "DELETE FROM UserTeams WHERE UserID = '" + std::to_string(userId) + "'";
-        dbController->executeUpdate(teamQuery);
+        ServerMng::getInstance()->getDBController()->executeUpdate(teamQuery);
 
         // Delete user from database
         std::string deleteQuery = "DELETE FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
-        if (dbController->executeUpdate(deleteQuery)) {
+        if (ServerMng::getInstance()->getDBController()->executeUpdate(deleteQuery)) {
             // Remove user from memory and invalidate token
             auto& users = ServerMng::getInstance()->getUsers();
             if (users.find(userId) != users.end()) {
