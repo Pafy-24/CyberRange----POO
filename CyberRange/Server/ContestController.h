@@ -11,9 +11,8 @@
 class ContestController : public CController {
 private:
     std::map<std::string, Contest*> contests;
-	DBController* dbController;
 public:
-    ContestController(DBController* dbCtrl);
+    ContestController();
     void createContest(const std::string& contestData, Connection* conn);
     void updateContest(const std::string& contestId, const std::string& contestData, Connection* client);
     void deleteContest(const std::string& contestId, Connection* client);

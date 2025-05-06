@@ -6,11 +6,10 @@
 
 class UserController : public CController {
 private:
-    DBController* dbController;
     std::map<std::string, User*> users;
 
 public:
-    UserController(DBController* dbCtrl);
+    UserController();
     void Login(const json& data, Connection* client);
     void Register(const json& data, Connection* client);
     void Update(const json& data, Connection* client);
@@ -18,5 +17,4 @@ public:
     void Logout(const json& data, Connection* client);
 
     void handleRequest(const std::string& data, Connection* client) override;
-    DBController* getDB() const { return dbController; }
 };

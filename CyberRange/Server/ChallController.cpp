@@ -1,17 +1,19 @@
 #include "ChallController.h"
 #include "json.hpp"
+#include "ServerMng.h"
 #include <iostream>
 
 using json = nlohmann::json;
 
-ChallController::ChallController(DBController* dbCtrl)
-    : CController("ChallController"), dbController(dbCtrl) {
+ChallController::ChallController()
+    : CController("ChallController") {
 }
 
 void ChallController::handleRequest(const std::string& data, Connection* client) {
     if (!validateRequest(data, client,1)) {
         return;
     }
+	auto dbController = ServerMng::getInstance()->getDBController();
 
     try {
         json j = json::parse(data);
@@ -81,7 +83,7 @@ void ChallController::loadChallenge(const std::string& challId) {
     }
 
     std::string query = "SELECT * FROM Challenges WHERE ChallengeID = ?";
-    auto results = dbController->executeQuery(query, { challId });
+    auto results = ServerMng::getInstance()->getDBController()->executeQuery(query, {challId});
 
     if (!results.empty()) 
     {
@@ -101,14 +103,9 @@ void ChallController::unloadChallenge(const std::string& challId) {
     auto it = challenges.find(challId);
     if (it != challenges.end()) {
         std::string query = "UPDATE Challenges SET lastActive = GETDATE() WHERE ChallengeID = ?";
-        dbController->executeUpdate(query, { challId });
+        ServerMng::getInstance()->getDBController()->executeUpdate(query, {challId});
         delete it->second;
         challenges.erase(it);
         logger->log("Unloaded challenge: " + challId);
     }
-}
-
-DBController* ChallController::getDB() const
-{
-	return dbController;
 }

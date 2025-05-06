@@ -5,8 +5,8 @@
 
 using json = nlohmann::json;
 
-ContestController::ContestController(DBController* dbCtrl)
-    : CController("ContestController"), dbController(dbCtrl) {
+ContestController::ContestController()
+    : CController("ContestController") {
 }
 
 void ContestController::createContest(const std::string& contestData, Connection* conn)
@@ -163,7 +163,7 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
 void ContestController::sendAllContests(Connection* client)
 {
     std::string query = "SELECT ContestID FROM Contests";
-    auto results = dbController->executeQuery(query);
+    auto results = ServerMng::getInstance()->getDBController()->executeQuery(query);
     json contestList = json::array();
 
     for (const auto& row : results) {

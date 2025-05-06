@@ -1571,7 +1571,7 @@ QPushButton:pressed {
                   </rect>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="Active">
                   <widget class="QTableWidget" name="contestWidget">
@@ -1589,6 +1589,33 @@ QPushButton:pressed {
     border: 2px solid #b17ddf;
 }</string>
                    </property>
+                   <property name="columnCount">
+                    <number>3</number>
+                   </property>
+                   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Contest</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Start Date</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>End Date</string>
+                    </property>
+                   </column>
                   </widget>
                  </widget>
                  <widget class="QWidget" name="Expired">
@@ -1607,6 +1634,30 @@ QPushButton:pressed {
     border: 2px solid #b17ddf;
 }</string>
                    </property>
+                   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Contest</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Started</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ended</string>
+                    </property>
+                   </column>
                   </widget>
                  </widget>
                 </widget>
@@ -3553,6 +3604,8 @@ QLineEdit:focus {
                  </property>
                 </widget>
                </widget>
+               <widget class="QWidget" name="CreateTeam"/>
+               <widget class="QWidget" name="JoinTeam"/>
                <widget class="QWidget" name="Scoreboard">
                 <widget class="QTableWidget" name="scoreboardWidget">
                  <property name="geometry">
@@ -3623,6 +3676,9 @@ QPushButton:pressed {
                 </item>
                 <item>
                  <widget class="QPushButton" name="scoreboardButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
     background-color: rgb(204, 188, 255);      /* pastel mov deschis */
@@ -3650,6 +3706,9 @@ QPushButton:pressed {
                 </item>
                 <item>
                  <widget class="QPushButton" name="tasksButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="styleSheet">
                    <string notr="true">QPushButton {
     background-color: rgb(204, 188, 255);      /* pastel mov deschis */
@@ -3813,6 +3872,75 @@ QLineEdit:focus {
                 <bool>true</bool>
                </property>
               </widget>
+              <widget class="QPushButton" name="JoinBtn">
+               <property name="geometry">
+                <rect>
+                 <x>326</x>
+                 <y>210</y>
+                 <width>111</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+               </property>
+               <property name="text">
+                <string>Join</string>
+               </property>
+              </widget>
+              <widget class="QPushButton" name="CreateTeamBtn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="geometry">
+                <rect>
+                 <x>450</x>
+                 <y>210</y>
+                 <width>121</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+               </property>
+               <property name="text">
+                <string>Create Team</string>
+               </property>
+              </widget>
              </widget>
             </widget>
            </widget>
@@ -3831,7 +3959,7 @@ QLineEdit:focus {
      <x>0</x>
      <y>0</y>
      <width>922</width>
-     <height>17</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
