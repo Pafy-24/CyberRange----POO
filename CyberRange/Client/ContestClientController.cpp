@@ -43,10 +43,25 @@ void ContestClientController::requestContestDetails()
 {
 	json req = {
 		{"controller", "ContestController"},
+        {"token", ClientMng::getInstance()->getAuthToken()},
 		{"action", "getContest"},
 		{"payload", json::object()}
 	};
-	ClientMng::getInstance()->sendRequest(req.dump());
+    try {
+        ClientMng::getInstance()->sendRequest(req.dump());
+
+        QTimer::singleShot(500, [this]() {
+            if (ClientMng::getInstance()->isConnected()) {
+                ClientMng::getInstance()->receiveResponse();
+            }
+            else {
+                qWarning() << "[ContestClientController] Failed contest request";
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        qWarning() << "[ContestClientController] Error contest request";
+    }
 }
 
 void ContestClientController::requestScoreboard(const std::string& contestId) 
