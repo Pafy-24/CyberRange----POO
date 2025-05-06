@@ -104,6 +104,7 @@ void ContestController::sendContestDetails(int contestId, Connection* client)
             {"startTime", contest->getStartTime()},
             {"endTime", contest->getEndTime()},
             {"maxTeamUsers", contest->getMaxTeamUsers()},
+            {"organizerId",contest->getOrganizerId()},
             {"active", contest->isActive()}
         };
 

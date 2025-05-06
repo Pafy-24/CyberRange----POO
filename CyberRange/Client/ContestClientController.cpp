@@ -121,6 +121,7 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
             contest->setEndTime(endTime);
 			contest->setDescription(c["description"]);
 			contest->setOrganizerId(c["organizerId"]);
+			contest->setMaxTeamUsers(c["maxTeamUsers"]);
 
             ClientMng::getInstance()->getChallMng()->addContest(contest);
             std::cout << "[ContestClientController] Contest list loaded.\n";
