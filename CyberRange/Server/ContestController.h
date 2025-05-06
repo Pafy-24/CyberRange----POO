@@ -15,6 +15,8 @@ private:
 public:
     ContestController(DBController* dbCtrl);
     void createContest(const std::string& contestData, Connection* conn);
+    void updateContest(const std::string& contestId, const std::string& contestData, Connection* client);
+    void deleteContest(const std::string& contestId, Connection* client);
 	void handleRequest(const std::string& data, Connection* client);
     void sendContestDetails(int contestId, Connection* client);
     void sendScoreboard(int contestId, Connection* client);
