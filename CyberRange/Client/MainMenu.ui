@@ -1571,7 +1571,7 @@ QPushButton:pressed {
                   </rect>
                  </property>
                  <property name="currentIndex">
-                  <number>0</number>
+                  <number>1</number>
                  </property>
                  <widget class="QWidget" name="Active">
                   <widget class="QTableWidget" name="contestWidget">
@@ -3316,7 +3316,24 @@ QCheckBox::indicator:hover {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="SolveChallenge"/>
+            <widget class="QWidget" name="SolveChallenge">
+             <widget class="QFrame" name="frame_29">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>761</width>
+                <height>591</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+             </widget>
+            </widget>
             <widget class="QWidget" name="Tabs">
              <property name="styleSheet">
               <string notr="true"/>
