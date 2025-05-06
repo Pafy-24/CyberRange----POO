@@ -3626,9 +3626,9 @@ QLineEdit:focus {
                 <widget class="QLabel" name="labelDesc">
                  <property name="geometry">
                   <rect>
-                   <x>120</x>
+                   <x>20</x>
                    <y>50</y>
-                   <width>361</width>
+                   <width>531</width>
                    <height>161</height>
                   </rect>
                  </property>

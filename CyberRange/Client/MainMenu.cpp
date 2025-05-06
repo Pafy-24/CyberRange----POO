@@ -648,14 +648,15 @@ void MainMenu::handleContestDetailsLoad(int id)
 {
 	Contest* c = ClientMng::getInstance()->getChallMng()->getContest(id);
     ui->lineEditContestName->setText(QString::fromStdString(c->getName()));
-    time_t timestamp = c->getStartTime();
-    std::string s = std::to_string(timestamp);
-    ui->lineEditContestStart->setText(QString::fromStdString(s));
-    c->getEndTime();
-    s = std::to_string(timestamp);
-    ui->lineEditContestEnd->setText(QString::fromStdString(s));
+    QDateTime start = QDateTime::fromSecsSinceEpoch(c->getStartTime() - 3600);
+    QDateTime end = QDateTime::fromSecsSinceEpoch(c->getEndTime() - 3600);
+    
+    ui->lineEditContestStart->setText(start.toString("yyyy-MM-dd HH:mm"));
+    ui->lineEditContestEnd->setText(end.toString("yyyy-MM-dd HH:mm"));
+
     std::string str = std::to_string(id);
     ui->lineEditContestID->setText(QString::fromStdString(str));
     str = std::to_string(c->getOrganizerId());
     ui->lineEditContestAuthor->setText(QString::fromStdString(str));
+	ui->labelDesc->setText(QString::fromStdString(c->getDescription()));
 }
