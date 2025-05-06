@@ -174,7 +174,8 @@ void ContestController::sendAllContests(Connection* client)
             contestList.push_back({
                 {"contestId", contestId},
                 {"name", contest->getName()},
-                {"active", contest->isActive()}
+				{"startTime", contest->getStartTime()},
+				{"endTime", contest->getEndTime()}
                 });
         }
     }
