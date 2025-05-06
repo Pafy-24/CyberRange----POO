@@ -10,6 +10,7 @@
 #include "AuthController.h"
 #include "ContestClientController.h"
 #include "ClientMng.h"
+#include <qtimer.h>
 
 #include <string>
 #include <regex>
@@ -186,23 +187,66 @@ void MainMenu::on_HomeButton_clicked()
 void MainMenu::on_ContestsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
-    // Example: set 3 rows and 4 columns
-    int rowCount = 3;
-    ui->contestWidget->setRowCount(rowCount);
-    ui->contestWidget->setColumnCount(3);
 
-    // Set headers
-    // Set column headers
-    QStringList headers = {"Name", "Start Date", "End Date" };
+    // Clear existing content
+    ui->contestWidget->clearContents();
+    ui->contestWidget->setRowCount(0);
+
+    // Set column count and headers
+    ui->contestWidget->setColumnCount(3);
+    QStringList headers = { "Name", "Start Date", "End Date" };
     ui->contestWidget->setHorizontalHeaderLabels(headers);
 
-    // Hide row numbers (vertical header)
+    try {
+        auto* contestCtrl = dynamic_cast<ContestClientController*>(
+            ClientMng::getInstance()->getController("ContestClientController")
+            );
+        if (!contestCtrl) {
+            QMessageBox::warning(this, "Error", "ContestClientController unavailable.");
+            ui->ContestsButton->setEnabled(true);
+            return;
+        }
+
+        // Show loading indicator
+        ui->ContestsButton->setText("Please wait...");
+        QApplication::processEvents();
+
+        contestCtrl->requestContestList();
+
+        // Re-enable the button after delay
+        QTimer::singleShot(1000, [this]() {
+            if (this && isVisible()) {
+                ui->ContestsButton->setEnabled(true);
+                ui->ContestsButton->setText("Contests");
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
+    }
+
+    // Fetch contests
+    std::map<int, Contest*> contests = ClientMng::getInstance()->getChallMng()->getAllContests();
+    int row = 0;
+    ui->contestWidget->setRowCount(static_cast<int>(contests.size()));
+
+    for (const auto& [id, contest] : contests) {
+        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime());
+        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime());
+        ui->contestWidget->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
+        ui->contestWidget->setItem(row, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+        ui->contestWidget->setItem(row, 2, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+        ++row;
+    }
+
+    // Hide row headers
     ui->contestWidget->verticalHeader()->setVisible(false);
 
-    // adaugare contests
-
-    // redimensionare coloane
+    // Stretch columns
     ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Optional: disable editing
+    ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void MainMenu::on_ManageUsersButton_clicked()

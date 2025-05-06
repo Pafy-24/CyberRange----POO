@@ -6,6 +6,7 @@
 #include <mutex>
 #include "Connection.h"
 #include "Controller.h"
+#include "ChallMng.h"
 #include "Loader.h"
 
 class ClientMng 
@@ -44,6 +45,8 @@ public:
 
     Controller* getController(const std::string& name);
     Connection* getConnection();
+
+	ChallMng* getChallMng() { return &challMng; }
 
     bool isConnected() const;
 
