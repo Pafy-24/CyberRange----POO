@@ -5,6 +5,8 @@
 #include "Scoreboard.h"
 #include "json.hpp"
 #include <iostream>
+#include <QTimer>
+#include <QDebug>
 
 using json = nlohmann::json;
 
@@ -14,17 +16,42 @@ ContestClientController::ContestClientController()
 void ContestClientController::requestContestList() 
 {
     json req = {
-        {"controller", "Contest"},
-        {"action", "getContestList"},
+        {"controller", "ContestController"},
+        {"action", "getContests"},
         {"payload", json::object()}
     };
-    ClientMng::getInstance()->sendRequest(req.dump());
+    
+    try {
+        ClientMng::getInstance()->sendRequest(req.dump());
+
+        QTimer::singleShot(500, [this]() {
+            if (ClientMng::getInstance()->isConnected()) {
+                ClientMng::getInstance()->receiveResponse();
+            }
+            else {
+				qWarning() << "[ContestClientController] Failed contest request";
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        qWarning() << "[ContestClientController] Error contest request";
+    }
+}
+
+void ContestClientController::requestContestDetails()
+{
+	json req = {
+		{"controller", "ContestController"},
+		{"action", "getContest"},
+		{"payload", json::object()}
+	};
+	ClientMng::getInstance()->sendRequest(req.dump());
 }
 
 void ContestClientController::requestScoreboard(const std::string& contestId) 
 {
     json req = {
-        {"controller", "Contest"},
+        {"controller", "ContestController"},
         {"action", "getScoreboard"},
         {"payload", { {"contestId", contestId} }}
     };
@@ -46,7 +73,7 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
         std::string status = response["status"];
 
         // Handle getContestList
-        if (action == "getContestList" && status == "success") 
+        if (action == "getContests" && status == "success") 
         {
             auto data = response["data"];
             for (const auto& c : data) 
@@ -54,8 +81,7 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
                 int id = std::stoi(c["contestId"].get<std::string>());
                 std::string name = c["name"];
                 Contest* contest = new Contest(name, id);
-                ChallMng* challmng = new ChallMng(); 
-                challmng->addContest(contest);
+                
             }
             std::cout << "[ContestClientController] Contest list loaded.\n";
         }

@@ -95,7 +95,7 @@ void ContestController::sendContestDetails(int contestId, Connection* client)
 
     if (contest) {
         json response = {
-            {"controller", "ContestController"},
+            {"controller", "ContestClientController"},
             {"action", "getContest"},
             {"status", "success"},
             {"contestId", contestId},
@@ -122,7 +122,7 @@ void ContestController::sendContestDetails(int contestId, Connection* client)
     }
     else {
         json response = {
-            {"controller", "ContestController"},
+            {"controller", "ContestClientController"},
             {"action", "getContest"},
             {"status", "error"},
             {"message", "Contest not found"}
@@ -138,7 +138,7 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
 
     if (contest) {
         json response = {
-            {"controller", "ContestController"},
+            {"controller", "ContestClientController"},
             {"action", "getScoreboard"},
             {"status", "success"},
             {"contestId", contestId},
@@ -151,7 +151,7 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
     }
     else {
         json response = {
-            {"controller", "ContestController"},
+            {"controller", "ContestClientController"},
             {"action", "getScoreboard"},
             {"status", "error"},
             {"message", "Contest not found"}
@@ -180,7 +180,7 @@ void ContestController::sendAllContests(Connection* client)
     }
 
     json response = {
-        {"controller", "ContestController"},
+        {"controller", "ContestClientController"},
         {"action", "getContests"},
         {"status", "success"},
         {"contests", contestList}
@@ -201,7 +201,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
         if (action == "createContest") {
             createContest(j["payload"].dump(), client);
             json response = {
-                {"controller", "ContestController"},
+                {"controller", "ContestClientController"},
                 {"action", "createContest"},
                 {"status", "success"},
                 {"message", "Contest created successfully"}
@@ -224,7 +224,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
 			ServerMng::getInstance()->getLoader()->loadContest(contestId, client);
             updateContest(std::to_string(contestId), j["payload"].dump(),client);
             json response = {
-                {"controller", "ContestController"},
+                {"controller", "ContestClientController"},
                 {"action", "updateContest"},
                 {"status", "success"},
                 {"message", "Contest updated successfully"}
@@ -235,7 +235,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
             int contestId = j["payload"]["contestId"].get<int>();
             deleteContest(std::to_string(contestId),client);
             json response = {
-                {"controller", "ContestController"},
+                {"controller", "ContestClientController"},
                 {"action", "deleteContest"},
                 {"status", "success"},
                 {"message", "Contest deleted successfully"}
@@ -244,7 +244,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
         }
         else {
             json response = {
-                {"controller", "ContestController"},
+                {"controller", "ContestClientController"},
                 {"action", action},
                 {"status", "error"},
                 {"message", "Invalid action"}
@@ -254,7 +254,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
     }
     catch (const std::exception& e) {
         json response = {
-            {"controller", "ContestController"},
+            {"controller", "ContestClientController"},
             {"action", "unknown"},
             {"status", "error"},
             {"message", "Request processing failed: " + std::string(e.what())}

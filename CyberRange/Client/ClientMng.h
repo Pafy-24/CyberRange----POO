@@ -19,7 +19,7 @@ private:
     std::string AuthToken;
     Loader* loader;
     Connection* serverConn;
-
+	ChallMng challMng;
     bool connected;
     int port;
     std::string serverAddress;

@@ -80,7 +80,6 @@ void AuthController::requestRegister(const std::string& username, const std::str
 
 void AuthController::requestUpdate(const std::string& username, const std::string& old, const std::string& password, const std::string& email)
 {
-
     json req = {
         {"controller", "UserController"},
         {"action", "update"},

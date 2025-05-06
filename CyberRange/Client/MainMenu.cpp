@@ -8,6 +8,7 @@
 #include "Client.h"
 #include <qmessagebox.h>
 #include "AuthController.h"
+#include "ContestClientController.h"
 #include "ClientMng.h"
 
 #include <string>
@@ -181,6 +182,26 @@ void MainMenu::on_HomeButton_clicked()
 void MainMenu::on_ContestsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
+    try {
+        auto* contestCtrl = dynamic_cast<ContestClientController*>(ClientMng::getInstance()->getController("ContestClientController"));
+        if (!contestCtrl) {
+            QMessageBox::warning(this, "Error", "ContestClientController unavailable.");
+            return;
+        }
+
+        // Show loading indicator
+        ui->ContestsButton->setText("Please wait...");
+        QApplication::processEvents();
+
+        contestCtrl->requestContestList();
+		/// 
+
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Contest request error: %1").arg(e.what()));
+        ui->ContestsButton->setEnabled(true);
+        ui->ContestsButton->setText("Register Now");
+    }
     // Example: set 3 rows and 4 columns
     int rowCount = 3;
     ui->contestWidget->setRowCount(rowCount);
@@ -194,19 +215,7 @@ void MainMenu::on_ContestsButton_clicked()
     // Hide row numbers (vertical header)
     ui->contestWidget->verticalHeader()->setVisible(false);
 
-    // Exemplu de date statice (le poți înlocui cu cele din baza de date mai târziu)
-    ui->contestWidget->setItem(0, 0, new QTableWidgetItem("CyberDefense Challenge"));
-    ui->contestWidget->setItem(0, 1, new QTableWidgetItem("2025-05-01 10:00"));
-    ui->contestWidget->setItem(0, 2, new QTableWidgetItem("2025-05-01 18:00"));
-
-    ui->contestWidget->setItem(1, 0, new QTableWidgetItem("Capture The Flag 1"));
-    ui->contestWidget->setItem(1, 1, new QTableWidgetItem("2025-06-10 12:00"));
-    ui->contestWidget->setItem(1, 2, new QTableWidgetItem("2025-06-10 20:00"));
-
-    ui->contestWidget->setItem(2, 0, new QTableWidgetItem("Web Exploitation 2025"));
-    ui->contestWidget->setItem(2, 1, new QTableWidgetItem("2025-07-15 09:00"));
-    ui->contestWidget->setItem(2, 2, new QTableWidgetItem("2025-07-15 17:00"));
-
+    // adaugare contests
 
     // redimensionare coloane
     ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);

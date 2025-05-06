@@ -12,8 +12,8 @@ void ChallClientController::requestChallengeList()
 {
     json req = 
     {
-        {"controller", "Chall"},
-        {"action", "getChallengeList"},
+        {"controller", "ChallController"},
+        {"action", "getChallenges"},
         {"payload", json::object()}
     };
     ClientMng::getInstance()->sendRequest(req.dump());
@@ -23,7 +23,7 @@ void ChallClientController::requestChallengeDetails(const std::string& challId)
 {
     json req = 
     {
-        {"controller", "Chall"},
+        {"controller", "ChallController"},
         {"action", "getChallengeDetails"},
         {"payload", { {"challId", challId} }}
     };
@@ -33,7 +33,7 @@ void ChallClientController::requestChallengeDetails(const std::string& challId)
 void ChallClientController::submitFlag(const std::string& challId, const std::string& flag) 
 {
     json req = {
-        {"controller", "Chall"},
+        {"controller", "ChallController"},
         {"action", "submitFlag"},
         {"payload", {
             {"challId", challId},
@@ -59,7 +59,7 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
         std::string status = response["status"];
 
         // Tratare getChallengeList
-        if (action == "getChallengeList")
+        if (action == "getChallenge")
         {
             if (status == "success" && response.contains("data"))
             {

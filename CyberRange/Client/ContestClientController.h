@@ -7,6 +7,7 @@ public:
     ContestClientController();
 
     void requestContestList();
+    void requestContestDetails();
     void requestScoreboard(const std::string& contestId);
 
     void handleServerResponse(const std::string& responseStr) override;
