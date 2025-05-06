@@ -6,9 +6,10 @@
 #include "ChallFactory.h"
 #include "ContestController.h"
 #include "ServerMng.h"
-#include <iostream>
-#include <algorithm> 
-
+#include <string>
+#include <sstream>     // std::istringstream
+#include <iomanip>     // std::get_time
+#include <ctime>  
 Controller* getController(const std::string& name)
 {
     return ServerMng::getInstance()->getController(name);
@@ -192,6 +193,22 @@ void Loader::loadContest(int id, Connection* conn)
             Contest* contest = new Contest(result.at("Name"), id);
             if (contest)
             {
+                // Add the following helper function to handle date-time parsing
+                auto parseDateTime = [](const std::string& dateTimeStr) -> time_t {
+                    std::tm tm = {};
+                    std::istringstream ss(dateTimeStr);
+                    ss >> std::get_time(&tm, "%Y-%m-%d %H:%M:%S");
+                    if (ss.fail()) {
+                        throw std::runtime_error("Failed to parse date-time: " + dateTimeStr);
+                    }
+                    return std::mktime(&tm);
+                };
+
+                contest->setStartTime(parseDateTime(result.at("StartDate"))); // time_t <- yyyy-mm-dd hh:mm:ss.000
+                contest->setEndTime(parseDateTime(result.at("EndDate")));     // time_t <- yyyy-mm-dd hh:mm:ss.000
+                contest->setDescription(result.at("Description"));
+
+
                 ServerMng::getInstance()->getChallMng()->addContest(contest);
                 registerObject(conn, "contest:" + std::to_string(id));
 

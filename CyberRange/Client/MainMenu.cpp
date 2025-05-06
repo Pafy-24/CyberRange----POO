@@ -558,11 +558,11 @@ void MainMenu::handleLoadContests()
     ui->contestWidget->setRowCount(static_cast<int>(contests.size()));
 
     for (const auto& [id, contest] : contests) {
-        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime());
-        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime());
+        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime()-3600);
+        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime()-3600);
         ui->contestWidget->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
         ui->contestWidget->setItem(row, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
-        ui->contestWidget->setItem(row, 2, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+        ui->contestWidget->setItem(row, 2, new QTableWidgetItem(end.toString("yyyy-MM-dd HH:mm")));
         ++row;
     }
 
