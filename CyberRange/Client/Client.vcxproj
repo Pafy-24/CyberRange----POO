@@ -129,7 +129,7 @@
     <ClInclude Include="CController.h" />
     <ClInclude Include="ChallClientController.h" />
     <ClInclude Include="ClientMng.h" />
-    <ClInclude Include="ContestClientController.h" />
+    <QtMoc Include="ContestClientController.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="LogClientController.h" />
