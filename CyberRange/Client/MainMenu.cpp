@@ -551,12 +551,9 @@ void MainMenu::handleLoadContests()
         ++row;
     }
 
-    // Hide row headers
     ui->contestWidget->verticalHeader()->setVisible(false);
 
-    // Stretch columns
     ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    // Optional: disable editing
     ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }

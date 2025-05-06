@@ -97,7 +97,12 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
             {
                 int id = c["contestId"];
                 std::string name = c["name"];
+				auto startTime = c["startTime"];
+				auto endTime = c["endTime"];
                 Contest* contest = new Contest(name, id);
+				contest->setStartTime(startTime);
+				contest->setEndTime(endTime);
+				
 				ClientMng::getInstance()->getChallMng()->addContest(contest);
                 
             }
