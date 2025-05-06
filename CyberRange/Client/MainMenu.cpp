@@ -424,6 +424,7 @@ void MainMenu::onContestCellClicked(int row, int column)
         QString contestName = ui->contestWidget->item(row, column)->text();
         // Exemplu: poți deschide o pagină dedicată concursului
         qDebug() << "Clicked contest:" << contestName;
+        ///
 
         ui->stackedWidget->setCurrentIndex(13); // pagina cu detalii
     }
