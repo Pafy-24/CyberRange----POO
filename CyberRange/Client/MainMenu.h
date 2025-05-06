@@ -28,6 +28,8 @@ private slots:
     void handleDeleteSuccess();
     void handleDeleteFailure(const QString& message);
 
+    void handleLoadContests();
+
     void on_pushButtonLogout_clicked();
     void on_AddChallengeButton_clicked();
     void on_CreateContestButton_clicked();

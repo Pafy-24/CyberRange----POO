@@ -92,15 +92,17 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
         // Handle getContestList
         if (action == "getContests" && status == "success") 
         {
-            auto data = response["data"];
+            auto data = response["contests"];
             for (const auto& c : data) 
             {
-                int id = std::stoi(c["contestId"].get<std::string>());
+                int id = c["contestId"];
                 std::string name = c["name"];
                 Contest* contest = new Contest(name, id);
+				ClientMng::getInstance()->getChallMng()->addContest(contest);
                 
             }
             std::cout << "[ContestClientController] Contest list loaded.\n";
+			emit loadedContests();
         }
         else if (action == "getContest" && status == "success")
         {

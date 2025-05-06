@@ -73,6 +73,7 @@ MainMenu::MainMenu(QWidget* parent)
 
     // Set up signal connections for the AuthController
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
+    auto* contCtrl = dynamic_cast<ContestClientController*>(ClientMng::getInstance()->getController("ContestClientController"));
     if (authCtrl) {
         // Connect signals with queued connection for thread safety
         connect(authCtrl, &AuthController::logoutSucceeded, this, &MainMenu::handleLogoutSuccess, Qt::QueuedConnection);
@@ -84,6 +85,12 @@ MainMenu::MainMenu(QWidget* parent)
     }
     else {
         QMessageBox::warning(this, "Error", "AuthController is not available. Some functions may not work properly.");
+    }
+    if (contCtrl) {
+        connect(contCtrl, &ContestClientController::loadedContests, this, &MainMenu::handleLoadContests, Qt::QueuedConnection);
+    }
+    else {
+        QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
     }
 }
 
@@ -225,28 +232,6 @@ void MainMenu::on_ContestsButton_clicked()
         QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
     }
 
-    // Fetch contests
-    std::map<int, Contest*> contests = ClientMng::getInstance()->getChallMng()->getAllContests();
-    int row = 0;
-    ui->contestWidget->setRowCount(static_cast<int>(contests.size()));
-
-    for (const auto& [id, contest] : contests) {
-        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime());
-        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime());
-        ui->contestWidget->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
-        ui->contestWidget->setItem(row, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
-        ui->contestWidget->setItem(row, 2, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
-        ++row;
-    }
-
-    // Hide row headers
-    ui->contestWidget->verticalHeader()->setVisible(false);
-
-    // Stretch columns
-    ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-
-    // Optional: disable editing
-    ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 
 void MainMenu::on_ManageUsersButton_clicked()
@@ -548,4 +533,30 @@ void MainMenu::handleDeleteFailure(const QString& message)
     QMessageBox::warning(this, "Error", "Account deletion failed:\n" + message);
     // Re-enable the delete button
     ui->pushButtonDeleteAcc->setEnabled(true);
+}
+
+
+void MainMenu::handleLoadContests()
+{
+    std::map<int, Contest*> contests = ClientMng::getInstance()->getChallMng()->getAllContests();
+    int row = 0;
+    ui->contestWidget->setRowCount(static_cast<int>(contests.size()));
+
+    for (const auto& [id, contest] : contests) {
+        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime());
+        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime());
+        ui->contestWidget->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
+        ui->contestWidget->setItem(row, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+        ui->contestWidget->setItem(row, 2, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+        ++row;
+    }
+
+    // Hide row headers
+    ui->contestWidget->verticalHeader()->setVisible(false);
+
+    // Stretch columns
+    ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    // Optional: disable editing
+    ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
