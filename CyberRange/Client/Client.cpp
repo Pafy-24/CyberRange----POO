@@ -112,21 +112,18 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     auto downloadFile = [&](const std::string& remoteFile, const std::string& localFile) {
         printMessage("Starting download: " + remoteFile + " to " + localFile);
 
-        // Send download request
         std::string request = "DOWNLOAD " + remoteFile;
         if (conn->send(request) < 0) {
             printMessage("Failed to send download request");
             return false;
         }
 
-        // Receive response (OK or ERROR)
         std::string response = conn->receive();
         if (response.empty() || response.find("OK") != 0) {
             printMessage("Server error: " + (response.empty() ? "No response" : response));
             return false;
         }
 
-        // Parse file size from OK response (format: "OK\n<size>\n")
         size_t pos = response.find('\n');
         if (pos == std::string::npos) {
             printMessage("Invalid server response format");
@@ -142,14 +139,12 @@ void Client::testDownload(const std::string& serverAddress, int port) {
             return false;
         }
 
-        // Open local file for writing
         std::ofstream outFile(localFile, std::ios::binary);
         if (!outFile.is_open()) {
             printMessage("Failed to open local file: " + localFile);
             return false;
         }
 
-        // Receive file data
         long bytesReceived = 0;
         char buffer[8192];
         while (bytesReceived < fileSize) {
@@ -206,7 +201,6 @@ void Client::on_pushButton_clicked() {
     int udpPort = 1339;
     int downloadPort = 1340;
 
-    // Run tests in a separate thread to avoid blocking the UI
     std::thread testThread([this, serverAddress, tcpPort, secureTcpPort, udpPort, downloadPort]() {
         testTCPClient(serverAddress, tcpPort, false);
       // TLS:: testTCPClient(serverAddress, secureTcpPort, true);

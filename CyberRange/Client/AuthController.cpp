@@ -7,7 +7,7 @@
 using json = nlohmann::json;
 
 AuthController::AuthController()
-    : CController("AuthController"), role(-1) // Controller name for identification 
+    : CController("AuthController"), role(-1) 
 {
 }
 
@@ -63,7 +63,6 @@ void AuthController::requestRegister(const std::string& username, const std::str
 
     try {
         ClientMng::getInstance()->sendRequest(req.dump());
-        // Use QTimer for async behavior instead of blocking with sleep
         QTimer::singleShot(500, [this]() {
             if (ClientMng::getInstance()->isConnected()) {
                 ClientMng::getInstance()->receiveResponse();
@@ -94,7 +93,6 @@ void AuthController::requestUpdate(const std::string& username, const std::strin
 
     try {
         ClientMng::getInstance()->sendRequest(req.dump());
-        // Use QTimer for async behavior instead of blocking with sleep
         QTimer::singleShot(500, [this]() {
             if (ClientMng::getInstance()->isConnected()) {
                 ClientMng::getInstance()->receiveResponse();
@@ -124,7 +122,6 @@ void AuthController::requestDelete()
 
     try {
         ClientMng::getInstance()->sendRequest(req.dump());
-        // Use QTimer for async behavior instead of blocking with sleep
         QTimer::singleShot(500, [this]() {
             if (ClientMng::getInstance()->isConnected()) {
                 ClientMng::getInstance()->receiveResponse();
@@ -156,16 +153,16 @@ void AuthController::handleServerResponse(const std::string& responseStr)
             if (status == "success")
             {
                 currentUser = response.value("username", "");
-                role = response.value("role", 1); // Default to regular user role if not specified
+                role = response.value("role", 1); 
 
                 qDebug() << "[AuthController] Login successfully done. User:" << QString::fromStdString(currentUser);
-                emit loginSucceeded(); // Signal for UI
+                emit loginSucceeded(); 
             }
             else
             {
                 QString msg = QString::fromStdString(response.value("message", "Login failed."));
                 qWarning() << "[AuthController] Login failed:" << msg;
-                emit loginFailed(msg); // Signal for UI
+                emit loginFailed(msg);
             }
         }
         else if (action == "register")
@@ -202,11 +199,9 @@ void AuthController::handleServerResponse(const std::string& responseStr)
             {
                 qDebug() << "[AuthController] Account deleted successfully.";
                 emit deleteSucceeded();
-                // Clear credentials
                 ClientMng::getInstance()->setAuthToken("");
                 currentUser.clear();
                 role = -1;
-                // Trigger logout after successful deletion
                 emit logoutSucceeded();
             }
             else
@@ -256,7 +251,6 @@ void AuthController::requestLogout()
 
     try {
         ClientMng::getInstance()->sendRequest(req.dump());
-        // Use QTimer for async behavior instead of blocking with sleep
         QTimer::singleShot(500, [this]() {
             if (ClientMng::getInstance()->isConnected()) {
                 ClientMng::getInstance()->receiveResponse();

@@ -41,10 +41,8 @@ bool Docker::stop() {
 bool Docker::deploy() {
     if (!COrchestrator::deploy()) return false;
 
-    // Create Resources/[chall_id] directory and copy image (for Docker, we assume image is pulled)
     std::filesystem::path targetDir = "./Resources/" + challengeId;
     std::filesystem::create_directories(targetDir);
-    // Note: Docker images are managed by Docker daemon, not copied as files
 
     std::stringstream cmd;
     cmd << "docker run -d --name \"" << userId << "-" << id << "-" << imageName
@@ -66,7 +64,6 @@ bool Docker::undeploy() {
     cmd << "docker rm -f \"" << userId << "-" << id << "-" << imageName << "\"";
     std::string result = executeCommand(cmd.str());
 
-    // Delete files in Resources/[chall_id]
     std::filesystem::path targetDir = "./Resources/" + challengeId;
     if (std::filesystem::exists(targetDir)) {
         std::filesystem::remove_all(targetDir);
@@ -120,10 +117,8 @@ std::string Docker::getAddress() {
 
     try {
         json data = json::parse(result);
-        // docker inspect returns a list of containers, so access the first
         std::string ip = data[0]["NetworkSettings"]["IPAddress"];
 
-        // Clean the IP (just in case)
         ip.erase(std::remove(ip.begin(), ip.end(), '\n'), ip.end());
 
         if (ip.empty()) return "unknown";

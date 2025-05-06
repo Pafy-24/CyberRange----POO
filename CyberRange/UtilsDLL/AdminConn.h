@@ -20,15 +20,12 @@ protected:
     bool verifyAdminCommand(const std::string& command);
 
 public:
-    // Constructor for server mode (listens for client connections)
     AdminConn(int listenPort, const std::string& dbConnStr);
 
-    // Constructor for direct client connection
     AdminConn(std::unique_ptr<sf::TcpSocket> clientSock, const std::string& clientAddr, int clientPort, const std::string& dbConnStr);
 
     ~AdminConn() override;
 
-    // Connection interface methods (from TCPSock or DBConn, overridden as needed)
     bool connect() override;
     bool disconnect() override;
     bool isConnected() const override;
@@ -43,7 +40,6 @@ public:
     std::string getType() const override { return "Admin"; }
     void handleRequest(const std::string& data, Connection* client = nullptr) override;
 
-    // Server operations (from TCPSock)
     bool bind(int port) override;
     bool listen(int backlog = 5) override;
     Connection* accept() override;
@@ -52,7 +48,6 @@ public:
     bool isServerRunning() const override;
     void setCertificates(const std::string& cert, const std::string& key) override;
 
-    // Admin-specific methods
     void setAdminKey(const std::string& key);
     bool verifyPrivilege(int level) const;
     void enableSecureMode();
@@ -60,7 +55,6 @@ public:
     bool isSecureModeEnabled() const { return secure; }
     int getPrivilegeLevel() const { return privilege; }
 
-    // Process client requests and forward to DB server
     bool processClientRequest();
     bool forwardToDBServer(const std::string& request);
     bool sendResponseToClient(const std::string& response);

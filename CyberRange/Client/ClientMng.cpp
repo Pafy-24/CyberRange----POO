@@ -48,7 +48,6 @@ bool ClientMng::start()
         return true;
     }
 
-    // Cleanup any existing connection first
     if (serverConn) {
         serverConn->disconnect();
         delete serverConn;
@@ -169,7 +168,7 @@ void ClientMng::attachController(const std::string& name, Controller* ctrl)
         auto it = controllers.find(name);
         if (it != controllers.end())
         {
-            delete it->second;  // avoid memory leak
+            delete it->second;  
         }
         controllers[name] = ctrl;
         std::cout << "Attached client controller: " << name << "\n";

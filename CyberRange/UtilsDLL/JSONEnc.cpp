@@ -23,7 +23,6 @@ std::string JSONEnc::encode(std::map<std::string, JSONValue> data)
 
         oss << (prettyPrint ? "  " : "") << "\"" << escapeString(pair.first) << "\": ";
 
-        // Handle different value types using std::visit
         std::visit([this, &oss](const auto& value) {
             using T = std::decay_t<decltype(value)>;
 

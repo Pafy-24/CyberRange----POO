@@ -15,10 +15,8 @@ private:
 public:
     JWTEnc(std::string key = "", std::string algo = "HS256");
 
-    // Original encode for string input
     std::string encode(const std::string& jsonStr);
 
-    // New method with nlohmann::json support
     std::string encode(const json& data);
 
     void setExpiryTime(int seconds);

@@ -193,7 +193,6 @@ void Loader::loadContest(int id, Connection* conn)
             Contest* contest = new Contest(result.at("Name"), id);
             if (contest)
             {
-                // Add the following helper function to handle date-time parsing
                 auto parseDateTime = [](const std::string& dateTimeStr) -> time_t {
                     std::tm tm = {};
                     std::istringstream ss(dateTimeStr);
@@ -214,7 +213,6 @@ void Loader::loadContest(int id, Connection* conn)
                 ServerMng::getInstance()->getChallMng()->addContest(contest);
                 registerObject(conn, "contest:" + std::to_string(id));
 
-                // Load all challenges associated with this contest
                 query = "SELECT ChallengeID FROM Challenges WHERE ContestID = '" + std::to_string(id) + "'";
                 auto challResults = ServerMng::getInstance()->getDBController()->executeQuery(query);
 
@@ -250,7 +248,6 @@ void Loader::loadTab(int id, Connection* conn)
                 ServerMng::getInstance()->getChallMng()->addTab(tab);
                 registerObject(conn, "tab:" + std::to_string(id));
 
-                // Load all challenges associated with this tab
                 query = "SELECT ChallengeID FROM Challenges WHERE TabID = '" + std::to_string(id) + "'";
                 auto challResults = ServerMng::getInstance()->getDBController()->executeQuery(query);
 
@@ -579,7 +576,6 @@ void Loader::saveContest(int contestId)
             ServerMng::getInstance()->getDBController()->executeUpdate(query);
         }
 
-        // Save all challenges in this contest
         auto challenges = contest->getChallenges();
         for (auto& challPair : challenges) {
             saveChall(challPair.first);
@@ -612,7 +608,6 @@ void Loader::saveTab(int tabId)
             ServerMng::getInstance()->getDBController()->executeUpdate(query);
         }
 
-        // Save all challenges in this tab
         auto challenges = tab->getChallenges();
         for (auto& challPair : challenges) {
             saveChall(challPair.first);
@@ -663,7 +658,6 @@ void Loader::cleanupUser(int userId, Connection* conn)
         {
             User* user = userIt->second.first;
 
-            // Cascade: Remove user from all teams they are a member of
             auto& teams = ServerMng::getInstance()->getTeams();
             for (auto teamIt = teams.begin(); teamIt != teams.end(); )
             {
@@ -671,13 +665,11 @@ void Loader::cleanupUser(int userId, Connection* conn)
                 if (team && team->GetMember(userId)!=nullptr)
                 {
                     team->RemoveMember(userId);
-                    // If the team has no members or the leader was removed, clean up the team
                     if (team->GetMembers().empty() || team->GetLeader() == userId)
                     {
-                        // Save team state before cleanup (e.g., remove from Contest)
                         saveTeam(teamIt->first);
-                        cleanupTeam(teamIt->first, nullptr); // Nullptr as conn to force cleanup
-                        teamIt = teams.begin(); // Reset iterator after cleanup
+                        cleanupTeam(teamIt->first, nullptr); 
+                        teamIt = teams.begin();
                     }
                     else
                     {
@@ -690,7 +682,6 @@ void Loader::cleanupUser(int userId, Connection* conn)
                 }
             }
 
-            // Cascade: Update challenges authored by this user
             auto* challMng = ServerMng::getInstance()->getChallMng();
             for (auto& contestPair : challMng->getAllContests())
             {
@@ -699,7 +690,7 @@ void Loader::cleanupUser(int userId, Connection* conn)
                 {
                     if (challPair.second->getAuthor() == userId)
                     {
-                        challPair.second->setAuthor(0); // Set to default/no author
+                        challPair.second->setAuthor(0); 
                         saveChall(challPair.first);
                     }
                 }
@@ -711,7 +702,7 @@ void Loader::cleanupUser(int userId, Connection* conn)
                 {
                     if (challPair.second->getAuthor() == userId)
                     {
-                        challPair.second->setAuthor(0); // Set to default/no author
+                        challPair.second->setAuthor(0); 
                         saveChall(challPair.first);
                     }
                 }
@@ -746,7 +737,6 @@ void Loader::cleanupTeam(int teamId, Connection* conn)
                 saveContest(contestId);
             }
 
-            // Cascade: Notify users of team removal (optional, depending on requirements)
             for (auto* member : team->GetMembers())
             {
                 auto userIt = ServerMng::getInstance()->getUsers().find(member->GetId());
@@ -776,7 +766,6 @@ void Loader::cleanupChall(int challId, Connection* conn)
         auto challenges = contest->getChallenges();
         if (challenges.find(challId) != challenges.end())
         {
-            // Check if challenge is also in a tab
             bool inTab = false;
             for (auto& tabPair : challMng->getAllTabs())
             {
@@ -789,7 +778,7 @@ void Loader::cleanupChall(int challId, Connection* conn)
 
             if (!inTab)
             {
-                delete challenges[challId]; // Safe to delete if not in a tab
+                delete challenges[challId]; 
                 deleted = true;
             }
             contest->removeChallenge(challId);
@@ -797,14 +786,12 @@ void Loader::cleanupChall(int challId, Connection* conn)
         }
     }
 
-    // Check tabs
     for (auto& tabPair : challMng->getAllTabs())
     {
         auto* tab = tabPair.second;
         auto challenges = tab->getChallenges();
         if (challenges.find(challId) != challenges.end())
         {
-            // Check if challenge is also in a contest
             bool inContest = false;
             for (auto& contestPair : challMng->getAllContests())
             {
@@ -817,7 +804,7 @@ void Loader::cleanupChall(int challId, Connection* conn)
 
             if (!inContest && !deleted)
             {
-                delete challenges[challId]; // Safe to delete if not in a contest and not already deleted
+                delete challenges[challId];
             }
             tab->removeChallenge(challId);
             std::cout << "[Loader] Removed challenge " << challId << " from tab " << tabPair.first << "\n";
@@ -830,7 +817,6 @@ void Loader::cleanupContest(int contestId, Connection* conn)
     auto* contest = ServerMng::getInstance()->getContest(contestId);
     if (contest)
     {
-        // Cascade: Cleanup all challenges in the contest
         auto challenges = contest->getChallenges();
         std::vector<int> challIds;
 
@@ -844,15 +830,14 @@ void Loader::cleanupContest(int contestId, Connection* conn)
             cleanupChall(challId, conn);
         }
 
-        // Cascade: Remove contest from teams
         auto& teams = ServerMng::getInstance()->getTeams();
         for (auto teamIt = teams.begin(); teamIt != teams.end(); )
         {
             if (teamIt->second.first->GetContestId() == contestId)
             {
-                saveTeam(teamIt->first); // Save team state before cleanup
-                cleanupTeam(teamIt->first, nullptr); // Nullptr to force cleanup
-                teamIt = teams.begin(); // Reset iterator
+                saveTeam(teamIt->first); 
+                cleanupTeam(teamIt->first, nullptr);
+                teamIt = teams.begin(); 
             }
             else
             {
@@ -870,7 +855,6 @@ void Loader::cleanupTab(int tabId, Connection* conn)
     auto* tab = ServerMng::getInstance()->getTab(tabId);
     if (tab)
     {
-        // Cascade: Cleanup all challenges in the tab
         auto challenges = tab->getChallenges();
         std::vector<int> challIds;
 

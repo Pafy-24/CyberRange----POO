@@ -41,7 +41,6 @@ bool VM::stop() {
     cmd << "\"VBoxManage.exe\" controlvm \"" << vmName << "-" << userId << "-" << id << "\" poweroff";
     std::string result = executeCommand(cmd.str());
 
-    // Delete files in Resources/[chall_id]
     std::filesystem::path targetDir = "./Resources/" + challengeId;
     if (std::filesystem::exists(targetDir)) {
         std::filesystem::remove_all(targetDir);
@@ -53,7 +52,6 @@ bool VM::stop() {
 bool VM::deploy() {
     if (!COrchestrator::deploy()) return false;
 
-    // Create Resources/[chall_id] directory and copy image
     std::filesystem::path targetDir = "./Resources/" + challengeId;
     std::filesystem::create_directories(targetDir);
     std::filesystem::path srcPath = baseImage;
@@ -92,7 +90,6 @@ bool VM::undeploy() {
     cmd << "\"VBoxManage.exe\" unregistervm \"" << vmName << "-" << userId << "-" << id << "\" --delete";
     std::string result = executeCommand(cmd.str());
 
-    // Delete files in Resources/[chall_id]
     std::filesystem::path targetDir = "./Resources/" + challengeId;
     if (std::filesystem::exists(targetDir)) {
         std::filesystem::remove_all(targetDir);
@@ -138,5 +135,5 @@ std::string VM::getAddress() {
         ip = result.substr(pos + 6);
         ip = ip.substr(0, ip.find_first_of(","));
     }
-    return ip + ":0"; // No specific port for VMs
+    return ip + ":0"; 
 }

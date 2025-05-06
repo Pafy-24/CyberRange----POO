@@ -12,7 +12,6 @@ enum class ConnectionType {
 
 class UTILS_API ConnsFactory {
 public:
-    // Create a connection based on type and configuration
     static std::unique_ptr<Connection> createConnection(
         ConnectionType type,
         const std::string& address = "",

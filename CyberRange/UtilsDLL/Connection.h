@@ -21,10 +21,8 @@ public:
     virtual std::string getAddress() const = 0;
     virtual int getPort() const = 0;
 
-    // Get the type of connection (e.g., "DB", "TCP", "UDP", "TRANSFER")
     virtual std::string getType() const = 0;
 
-    // Handle incoming request (for server connections)
     virtual void handleRequest(const std::string& data, Connection* client = nullptr) = 0;
 
 

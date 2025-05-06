@@ -17,6 +17,5 @@ void CController::handleServerResponse(const std::string& response)
 
 bool CController::validateResponse(const std::string& response) 
 {
-    // Default: verificam daca numele controllerului e inclus in raspuns
     return response.find(controllerName) != std::string::npos;
 }

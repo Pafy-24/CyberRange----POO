@@ -4,7 +4,6 @@
 #include "JWTEnc.h"
 #include <openssl/sha.h>
 
-// Constructor initializing members
 CustomSerial::CustomSerial(bool jsonPretty, std::string jwtKey, std::string jwtAlgo)
     : prettyPrint(jsonPretty), jwtKey(jwtKey), jwtAlgo(jwtAlgo)
 {
@@ -21,8 +20,6 @@ std::string CustomSerial::hash(const std::string& str) const
     return ss.str();
 }
 
-
-// Universal encode function with json support
 std::string CustomSerial::encode(const json& data, bool useJWT,
     const std::string& key, const std::string& algo)
 {
@@ -34,13 +31,11 @@ std::string CustomSerial::encode(const json& data, bool useJWT,
     }
 }
 
-// JSON-specific encode
 std::string CustomSerial::encodeJSON(const json& data, bool prettyPrint)
 {
     return prettyPrint ? data.dump(4) : data.dump();
 }
 
-// JWT-specific encode
 std::string CustomSerial::encodeJWT(const json& data,
     const std::string& key, const std::string& algo)
 {
@@ -49,7 +44,6 @@ std::string CustomSerial::encodeJWT(const json& data,
     return encoder.encode(data);
 }
 
-// Universal decode function - auto-detects format
 json CustomSerial::decode(const std::string& data,
     const std::string& key, const std::string& algo)
 {
@@ -61,31 +55,25 @@ json CustomSerial::decode(const std::string& data,
     }
 }
 
-// JSON-specific decode
 json CustomSerial::decodeJSON(const std::string& jsonStr)
 {
     try {
         return json::parse(jsonStr);
     }
     catch (const json::parse_error& e) {
-        // Return empty JSON object on error
         return json::object();
     }
 }
 
-// JWT-specific decode
 json CustomSerial::decodeJWT(const std::string& token,
     const std::string& key, const std::string& algo)
 {
-    // Decode the JWT using JWT decoder
     JWTDec decoder(key, algo);
     std::string payload = decoder.decodePayload(token);
 
-    // Parse the payload as JSON
     return decodeJSON(payload);
 }
 
-// Check if data is valid based on auto-detection
 bool CustomSerial::isValid(const std::string& data,
     const std::string& key, const std::string& algo)
 {
@@ -104,10 +92,8 @@ bool CustomSerial::isValid(const std::string& data,
     }
 }
 
-// Helper method to identify if string is in JWT format
 bool CustomSerial::isJWTFormat(const std::string& data)
 {
-    // JWT tokens have 3 parts separated by dots
     size_t firstDot = data.find('.');
     if (firstDot == std::string::npos) {
         return false;
@@ -118,13 +104,10 @@ bool CustomSerial::isJWTFormat(const std::string& data)
         return false;
     }
 
-    // Check if there's text after the second dot
     if (secondDot + 1 >= data.length()) {
         return false;
     }
 
-    // Additional check: JWT typically starts with "{"
-    // but after base64 encoding, it usually starts with "ey"
     if (data.substr(0, 2) != "ey") {
         return false;
     }
@@ -132,7 +115,6 @@ bool CustomSerial::isJWTFormat(const std::string& data)
     return true;
 }
 
-// Legacy methods for backward compatibility
 std::string CustomSerial::encode(std::map<std::string, std::string> data, bool useJWT,
     const std::string& key, const std::string& algo)
 {
@@ -148,7 +130,6 @@ std::string CustomSerial::encode(std::map<std::string, std::string> data, bool u
 std::map<std::string, std::string> CustomSerial::decodeLegacy(const std::string& data,
     const std::string& key, const std::string& algo)
 {
-    // Use the new decode method but convert the result back to string-only map
     json jsonResult = decode(data, key, algo);
     std::map<std::string, std::string> stringResult;
 
@@ -157,7 +138,6 @@ std::map<std::string, std::string> CustomSerial::decodeLegacy(const std::string&
             stringResult[key] = value.get<std::string>();
         }
         else if (value.is_array()) {
-            // For arrays, convert to a comma-separated string
             std::string joinedArray;
             for (size_t i = 0; i < value.size(); ++i) {
                 if (value[i].is_string()) {
@@ -170,15 +150,12 @@ std::map<std::string, std::string> CustomSerial::decodeLegacy(const std::string&
             stringResult[key] = joinedArray;
         }
         else if (value.is_number()) {
-            // Convert numbers to strings
             stringResult[key] = std::to_string(value.get<double>());
         }
         else if (value.is_boolean()) {
-            // Convert booleans to strings
             stringResult[key] = value.get<bool>() ? "true" : "false";
         }
         else {
-            // For other types, use empty string
             stringResult[key] = "";
         }
     }

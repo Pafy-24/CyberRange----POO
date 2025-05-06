@@ -18,38 +18,30 @@ std::string JWTEnc::encode(const std::string& jsonStr)
 {
     std::string header = R"({"alg":")" + algorithm + R"(","typ":"JWT"})";
 
-    // Base64 encode the header
     std::string encodedHeader = base64Encode(header);
 
-    // Parse the JSON string to add expiry time if needed
     json payload;
     try {
         payload = json::parse(jsonStr);
     }
     catch (const json::parse_error&) {
-        // If parsing fails, use empty JSON object
         payload = json::object();
     }
 
-    // Add expiry time to payload if set
     if (expiryTime > 0) {
         std::time_t now = std::time(nullptr);
         std::time_t exp = now + expiryTime;
         payload["exp"] = exp;
     }
 
-    // Base64 encode the payload
     std::string encodedPayload = base64Encode(payload.dump());
 
-    // Create the signature
     std::string dataToSign = encodedHeader + "." + encodedPayload;
     std::string signature = createSignature(dataToSign);
 
-    // Return the final JWT
     return encodedHeader + "." + encodedPayload + "." + signature;
 }
 
-// Method with nlohmann::json input
 std::string JWTEnc::encode(const json& data)
 {
     return encode(data.dump());
@@ -79,7 +71,6 @@ std::string JWTEnc::base64Encode(const std::string& input)
     bio = BIO_new(BIO_s_mem());
     bio = BIO_push(b64, bio);
 
-    // Disable newlines in base64 output
     BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);
 
     BIO_write(bio, input.c_str(), input.length());
