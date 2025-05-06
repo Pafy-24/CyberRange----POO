@@ -70,6 +70,9 @@
     <ClCompile Include="Loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TabClientController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="LoginDialog.h">
@@ -82,6 +85,12 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ContestClientController.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TabClientController.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ChallClientController.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -107,9 +116,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LogClientController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ChallClientController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TeamClientController.h">

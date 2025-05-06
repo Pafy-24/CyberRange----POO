@@ -122,14 +122,13 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
                 }
 
                 std::cout << "[ChallClientController] Challenge list loaded.\n";
-                emit loadedChallenges();  // poți conecta la UI
+                emit loadedChallenges();  
             }
             else
             {
                 std::cerr << "[ChallClientController] Failed to load challenge list.\n";
             }
         }
-        // Tratare submitFlag
         else if (action == "submitFlag")
         {
             std::string message = response.value("message", "No message");

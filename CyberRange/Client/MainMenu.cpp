@@ -75,6 +75,7 @@ MainMenu::MainMenu(QWidget* parent)
     // Set up signal connections for the AuthController
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
     auto* contCtrl = dynamic_cast<ContestClientController*>(ClientMng::getInstance()->getController("ContestClientController"));
+    auto* challCtrl = dynamic_cast<ChallClientController*>(ClientMng::getInstance()->getController("ChallClientController"));
     if (authCtrl) {
         // Connect signals with queued connection for thread safety
         connect(authCtrl, &AuthController::logoutSucceeded, this, &MainMenu::handleLogoutSuccess, Qt::QueuedConnection);
@@ -90,6 +91,12 @@ MainMenu::MainMenu(QWidget* parent)
     if (contCtrl) {
         connect(contCtrl, &ContestClientController::loadedContests, this, &MainMenu::handleLoadContests, Qt::QueuedConnection);
         connect(contCtrl, &ContestClientController::loadedContestDetails, this, &MainMenu::handleContestDetailsLoad, Qt::QueuedConnection);
+    }
+    else {
+        QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
+    }
+    if (challCtrl) {
+        connect(challCtrl, &ChallClientController::loadedChallenges, this, &MainMenu::handleLoadChalls, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
@@ -292,7 +299,7 @@ void MainMenu::on_TabButton_clicked()
         ui->ContestsButton->setText("Please wait...");
         QApplication::processEvents();
 
-        challCtrl->requestTabList();
+      //  challCtrl->requestTabList();
 
         // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
@@ -634,7 +641,10 @@ void MainMenu::handleLoadContests()
 
     ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
-
+void MainMenu::handleLoadChalls()
+{
+	qDebug() << "[MainMenu] Challenges loaded successfully.";
+}
 void MainMenu::handleContestDetailsLoad()
 {
     /*ui->lineEditContestName->setText();

@@ -128,14 +128,14 @@
   <ItemGroup>
     <QtMoc Include="AuthController.h" />
     <ClInclude Include="CController.h" />
-    <ClInclude Include="ChallClientController.h" />
+    <QtMoc Include="ChallClientController.h" />
     <ClInclude Include="ClientMng.h" />
     <QtMoc Include="ContestClientController.h" />
     <ClInclude Include="Controller.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="LogClientController.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="TabClientController.h" />
+    <QtMoc Include="TabClientController.h" />
     <ClInclude Include="TeamClientController.h" />
   </ItemGroup>
   <ItemGroup>
