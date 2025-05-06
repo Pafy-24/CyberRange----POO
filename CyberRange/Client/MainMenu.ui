@@ -3319,25 +3319,7 @@ QCheckBox::indicator:hover {
              </layout>
             </widget>
             <widget class="QWidget" name="Tabs">
-             <layout class="QVBoxLayout" name="verticalLayout_6">
-              <item>
-               <widget class="QLabel" name="label_Comp">
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                  <italic>true</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>TABS</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <layout class="QVBoxLayout" name="verticalLayout_6"/>
             </widget>
             <widget class="QWidget" name="CurrentContest">
              <property name="styleSheet">
@@ -3604,8 +3586,203 @@ QLineEdit:focus {
                  </property>
                 </widget>
                </widget>
-               <widget class="QWidget" name="CreateTeam"/>
-               <widget class="QWidget" name="JoinTeam"/>
+               <widget class="QWidget" name="CreateTeam">
+                <widget class="QLineEdit" name="lineEditTeamName2">
+                 <property name="geometry">
+                  <rect>
+                   <x>110</x>
+                   <y>30</y>
+                   <width>81</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Team name:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditTeamName">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>30</y>
+                   <width>161</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="SubmitButtonTeam">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="geometry">
+                  <rect>
+                   <x>410</x>
+                   <y>30</y>
+                   <width>121</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Submit</string>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="JoinTeam">
+                <widget class="QLineEdit" name="lineEditTeamNameJoin2">
+                 <property name="geometry">
+                  <rect>
+                   <x>100</x>
+                   <y>30</y>
+                   <width>81</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Team name:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditTeamNameJoin">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>30</y>
+                   <width>161</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="SubmitButton2">
+                 <property name="geometry">
+                  <rect>
+                   <x>400</x>
+                   <y>30</y>
+                   <width>111</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Submit</string>
+                 </property>
+                </widget>
+               </widget>
                <widget class="QWidget" name="Scoreboard">
                 <widget class="QTableWidget" name="scoreboardWidget">
                  <property name="geometry">
@@ -3872,7 +4049,7 @@ QLineEdit:focus {
                 <bool>true</bool>
                </property>
               </widget>
-              <widget class="QPushButton" name="JoinBtn">
+              <widget class="QPushButton" name="JoinButton">
                <property name="geometry">
                 <rect>
                  <x>326</x>
@@ -3959,7 +4136,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>922</width>
-     <height>21</height>
+     <height>17</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMenu">
