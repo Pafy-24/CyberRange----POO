@@ -84,7 +84,7 @@ void AuthController::requestUpdate(const std::string& username, const std::strin
     json req = {
         {"controller", "UserController"},
         {"action", "update"},
-        {"token", token},
+        {"token", ClientMng::getInstance()->getAuthToken()},
         {"payload", {
             {"username", username},
             {"password", password},
@@ -112,7 +112,7 @@ void AuthController::requestUpdate(const std::string& username, const std::strin
 
 void AuthController::requestDelete()
 {
-    if (token.empty()) {
+    if (ClientMng::getInstance()->getAuthToken().empty()) {
         emit deleteFailed("No active session for account deletion");
         return;
     }
@@ -120,7 +120,7 @@ void AuthController::requestDelete()
     json req = {
         {"controller", "UserController"},
         {"action", "delete"},
-        {"token", token}
+        {"token", ClientMng::getInstance()->getAuthToken()}
     };
 
     try {
@@ -145,8 +145,7 @@ void AuthController::handleServerResponse(const std::string& responseStr)
     try {
         json response = json::parse(responseStr);
 
-
-        if (response.contains("token")) { token = response["token"]; }
+        if (response.contains("token")) { ClientMng::getInstance()->setAuthToken(response.value("token", "")); }
         if (!response.contains("action") || !response.contains("status"))
             return;
 
@@ -157,7 +156,6 @@ void AuthController::handleServerResponse(const std::string& responseStr)
         {
             if (status == "success")
             {
-                token = response.value("token", "");
                 currentUser = response.value("username", "");
                 role = response.value("role", 1); // Default to regular user role if not specified
 
@@ -206,7 +204,7 @@ void AuthController::handleServerResponse(const std::string& responseStr)
                 qDebug() << "[AuthController] Account deleted successfully.";
                 emit deleteSucceeded();
                 // Clear credentials
-                token.clear();
+                ClientMng::getInstance()->setAuthToken("");
                 currentUser.clear();
                 role = -1;
                 // Trigger logout after successful deletion
@@ -223,7 +221,7 @@ void AuthController::handleServerResponse(const std::string& responseStr)
         {
             if (status == "success")
             {
-                token.clear();
+                ClientMng::getInstance()->setAuthToken("");
                 currentUser.clear();
                 role = -1;
                 qDebug() << "[AuthController] Logout successful.";
@@ -246,7 +244,7 @@ void AuthController::handleServerResponse(const std::string& responseStr)
 
 void AuthController::requestLogout()
 {
-    if (token.empty()) {
+    if ( ClientMng::getInstance()->getAuthToken().empty() ) {
         emit logoutFailed("No active session for logout");
         return;
     }
@@ -254,7 +252,7 @@ void AuthController::requestLogout()
     json req = {
         {"controller", "UserController"},
         {"action", "logout"},
-        {"token", token}
+        {"token", ClientMng::getInstance()->getAuthToken()}
     };
 
     try {
@@ -276,7 +274,7 @@ void AuthController::requestLogout()
 
 std::string AuthController::getToken() const
 {
-    return token;
+    return ClientMng::getInstance()->getAuthToken();
 }
 
 std::string AuthController::getCurrentUser() const
@@ -286,7 +284,7 @@ std::string AuthController::getCurrentUser() const
 
 bool AuthController::isAuthenticated() const
 {
-    return !token.empty();
+    return !ClientMng::getInstance()->getAuthToken().empty();
 }
 
 int AuthController::getRole() const

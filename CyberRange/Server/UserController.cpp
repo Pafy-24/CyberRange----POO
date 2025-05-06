@@ -243,7 +243,6 @@ void UserController::Update(const json& data, Connection* client)
                 data["payload"].contains("password")) {
                 if (data["payload"]["oldPassword"] == user->GetPassword())
                     if (data["payload"]["password"].get<std::string>().size() > 3) {
-
                         user->SetPassword(data["payload"]["password"]);
                         needsUpdate = true;
                     }

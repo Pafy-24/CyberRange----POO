@@ -3,11 +3,17 @@
 #include <QPropertyAnimation>
 #include "ui_MainMenu.h"
 #include "ui_LoginDialog.h"
+#include "CustomSerial.h"
 #include "LoginDialog.h"
 #include "Client.h"
 #include <qmessagebox.h>
 #include "AuthController.h"
 #include "ClientMng.h"
+
+#include <string>
+#include <regex>
+
+using jaon = nlohmann::json;
 
 MainMenu::MainMenu(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainMenu)
@@ -180,9 +186,28 @@ void MainMenu::on_ManageUsersButton_clicked()
     ui->stackedWidget->setCurrentIndex(7);
 }
 
+std::string parse_string(std::string& S) {
+    //Remove double escapation with \ on string
+	std::string result;
+	std::regex re(R"(\\)");
+	std::string replacement = "";
+	result = std::regex_replace(S, re, replacement);
+	result = result.substr(1, result.size() - 2); 
+	return result;
+}
+
 void MainMenu::on_ProfileButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(9);
+	auto userData = CustomSerial::decodeJWT(ClientMng::getInstance()->getAuthToken());
+	auto userstring = userData.dump();
+    userstring = parse_string(userstring);
+	userData = json::parse(userstring);
+
+	auto username = userData["username"].get<std::string>();
+	auto email = userData["email"].get<std::string>();
+	ui->label_9->setText("User: "+QString::fromStdString(username));
+	ui->label_10->setText("Email: "+QString::fromStdString(email));
 }
 
 void MainMenu::on_ReviewFlagsButton_clicked()

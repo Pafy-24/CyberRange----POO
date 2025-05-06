@@ -16,7 +16,7 @@ private:
 
     std::mutex controllerMutex;
     std::map<std::string, Controller*> controllers;
-
+    std::string AuthToken;
     Loader* loader;
     Connection* serverConn;
 
@@ -46,4 +46,8 @@ public:
     Connection* getConnection();
 
     bool isConnected() const;
+
+	void setAuthToken(const std::string& token) { AuthToken = token; }
+	std::string getAuthToken() const { return AuthToken; }
+
 };
