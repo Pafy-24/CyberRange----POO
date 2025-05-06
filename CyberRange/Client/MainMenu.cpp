@@ -509,6 +509,11 @@ void MainMenu::on_tasksButton_clicked()
 	ui->stackedWidget_3->setCurrentIndex(2);
 }
 
+void MainMenu::on_JoinButton_clicked()
+{
+
+}
+
 void MainMenu::handleUpdateSuccess()
 {
     QMessageBox::information(this, "Success", "Profile updated successfully!");

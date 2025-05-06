@@ -63,6 +63,7 @@ private slots:
 	void on_descriptionButton_clicked();
 	void on_scoreboardButton_clicked();
 	void on_tasksButton_clicked(); 
+	void on_JoinButton_clicked();
 
 private:
     Ui::MainMenu* ui;
