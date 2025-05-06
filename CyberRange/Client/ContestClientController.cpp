@@ -39,13 +39,15 @@ void ContestClientController::requestContestList()
     }
 }
 
-void ContestClientController::requestContestDetails()
+void ContestClientController::requestContestDetails(const int& contestId)
 {
 	json req = {
 		{"controller", "ContestController"},
         {"token", ClientMng::getInstance()->getAuthToken()},
 		{"action", "getContest"},
-		{"payload", json::object()}
+        {"payload", {
+            {"contestId", contestId},
+        }}
 	};
     try {
         ClientMng::getInstance()->sendRequest(req.dump());
@@ -104,19 +106,24 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
 				contest->setEndTime(endTime);
 				
 				ClientMng::getInstance()->getChallMng()->addContest(contest);
-                
             }
             std::cout << "[ContestClientController] Contest list loaded.\n";
 			emit loadedContests();
         }
         else if (action == "getContest" && status == "success")
         {
-            auto data = response["data"];
-            std::string name = data["name"];
-            int id = data["contestId"];
+            auto c = response["contests"];
+            int id = c["contestId"];
+            std::string name = c["name"];
+            time_t startTime = c["startTime"];
+            time_t endTime = c["endTime"];
             Contest* contest = new Contest(name, id);
-			ClientMng::getInstance()->getChallMng()->addContest(contest);
-            std::cout << "[ContestClientController] Contest details loaded.\n";
+            contest->setStartTime(startTime);
+            contest->setEndTime(endTime);
+
+            ClientMng::getInstance()->getChallMng()->addContest(contest);
+            std::cout << "[ContestClientController] Contest list loaded.\n";
+			emit loadedContestDetails();
         }
         // Handle getScoreboard
         else if (action == "getScoreboard" && status == "success") 
