@@ -518,7 +518,6 @@ void MainMenu::onContestCellClicked(int row, int column)
 
         contestCtrl->requestContestDetails(contestId);
 
-        // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->ContestsButton->setEnabled(true);
@@ -645,7 +644,7 @@ void MainMenu::handleLoadChalls()
 {
 	qDebug() << "[MainMenu] Challenges loaded successfully.";
 }
-void MainMenu::handleContestDetailsLoad()
+void MainMenu::handleContestDetailsLoad(int id)
 {
     /*ui->lineEditContestName->setText();
     ui->lineEditContestStart->setText();

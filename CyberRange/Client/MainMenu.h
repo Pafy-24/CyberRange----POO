@@ -30,7 +30,7 @@ private slots:
 
     void handleLoadContests();
     void handleLoadChalls();
-	void handleContestDetailsLoad();
+	void handleContestDetailsLoad(int id);
 
     void on_pushButtonLogout_clicked();
     void on_AddChallengeButton_clicked();

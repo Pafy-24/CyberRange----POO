@@ -112,7 +112,7 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
         }
         else if (action == "getContest" && status == "success")
         {
-            auto c = response["contests"];
+            auto c = response;
             int id = c["contestId"];
             std::string name = c["name"];
             time_t startTime = c["startTime"];
@@ -120,10 +120,12 @@ void ContestClientController::handleServerResponse(const std::string& responseSt
             Contest* contest = new Contest(name, id);
             contest->setStartTime(startTime);
             contest->setEndTime(endTime);
+			contest->setDescription(c["description"]);
+			contest->setOrganizerId(c["organizerId"]);
 
             ClientMng::getInstance()->getChallMng()->addContest(contest);
             std::cout << "[ContestClientController] Contest list loaded.\n";
-			emit loadedContestDetails();
+			emit loadedContestDetails(id);
         }
         // Handle getScoreboard
         else if (action == "getScoreboard" && status == "success") 

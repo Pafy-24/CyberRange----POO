@@ -15,5 +15,5 @@ public:
     void handleServerResponse(const std::string& responseStr) override;
 signals:
     void loadedContests();
-    void loadedContestDetails();
+    void loadedContestDetails(int id);
 };
