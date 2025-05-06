@@ -1,4 +1,4 @@
-#include "Loader.h"
+﻿#include "Loader.h"
 #include "UserController.h"
 #include "UsersFactory.h"
 #include "TeamController.h"
@@ -261,10 +261,36 @@ void Loader::save(Connection* conn)
     std::cout << "[Loader] Saved all objects for connection.\n";
 }
 
+void Loader::unloadObject(Connection* conn, const std::string& objId)
+{
+    size_t pos = objId.find(':');
+    if (pos != std::string::npos)
+    {
+        std::string type = objId.substr(0, pos);
+        std::string id = objId.substr(pos + 1);
+        int objId = std::stoi(id);
+
+        if (type == "user")
+        {
+            cleanupUser(objId, conn);
+        }
+        else if (type == "team")
+        {
+            cleanupTeam(objId, conn);
+        }
+
+    }
+}
+
 void Loader::unload(Connection* conn)
 {
+
     if (objLoaded.count(conn))
     {
+        for (const auto& objId : objLoaded[conn])
+        {
+			unloadObject(conn, objId);
+        }
         objLoaded.erase(conn);
         std::cout << "[Loader] Unloaded all objects for connection.\n";
     }
@@ -305,23 +331,40 @@ void Loader::saveObject(const std::string& objId)
             if (users.find(userId) != users.end() && users[userId].first != nullptr) {
                 User* user = users[userId].first;
                 std::string role;
-                switch (user->GetAccessLevel())
-                {case 1:
+                switch (user->GetAccessLevel()) {
+                case 1:
                     role = "student"; break;
                 case 5:
-                    role = "writer";break;
+                    role = "writer"; break;
                 case 10:
-                    role = "admin";break;
+                    role = "admin"; break;
                 default:
                     role = "student"; break;
                 }
 
-                std::string query = "UPDATE Users SET Username = '" + user->GetUsername() +
-                    "', PasswordHash = '" + user->GetPassword() +
-                    "', Email = '" + user->GetEmail() +
-                    "', Role = '" + role +
-                    "' WHERE UserID = '" + id + "'";
-                ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                std::string checkQuery = "SELECT COUNT(*) as count FROM Users WHERE UserID = '" + id + "'";
+                auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
+
+                bool userExists = false;
+                if (!results.empty()) {
+                    userExists = std::stoi(results[0]["count"]) > 0;
+                }
+
+                if (userExists) {
+                    std::string query = "UPDATE Users SET Username = '" + user->GetUsername() +
+                        "', PasswordHash = '" + user->GetPassword() +
+                        "', Email = '" + user->GetEmail() +
+                        "', Role = '" + role +
+                        "' WHERE UserID = '" + id + "'";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
+                else {
+
+                    std::string query = "INSERT INTO Users (Username, PasswordHash, Email, Role) VALUES ('" + user->GetUsername() + 
+                        "', '" + user->GetPassword() + "', '" + user->GetEmail() + "', '" + role + "')";
+
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
                 std::cout << "[Loader] Saved user: " << id << "\n";
             }
         }
@@ -330,14 +373,128 @@ void Loader::saveObject(const std::string& objId)
             auto& teams = ServerMng::getInstance()->getTeams();
             if (teams.find(teamId) != teams.end() && teams[teamId].first != nullptr) {
                 Team* team = teams[teamId].first;
-                std::string query = "UPDATE Teams SET Name = '" + team->GetName() +
-                    "', LeaderID = '" + std::to_string(team->GetLeader()) +
-                    "', ContestID = '" + std::to_string(team->GetContestId()) +
-                    "' WHERE TeamID = '" + id + "'";
-                ServerMng::getInstance()->getDBController()->executeUpdate(query);
+
+                std::string checkQuery = "SELECT COUNT(*) as count FROM Teams WHERE TeamID = '" + id + "'";
+                auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
+
+                bool teamExists = false;
+                if (!results.empty()) {
+                    teamExists = std::stoi(results[0]["count"]) > 0;
+                }
+
+                if (teamExists) {
+                    std::string query = "UPDATE Teams SET Name = '" + team->GetName() +
+                        "', LeaderID = '" + std::to_string(team->GetLeader()) +
+                        "', ContestID = '" + std::to_string(team->GetContestId()) +
+                        "' WHERE TeamID = '" + id + "'";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
+                else {
+                    std::string query = "INSERT INTO Teams (TeamID, Name, LeaderID, ContestID) VALUES ('" +
+                        id + "', '" + team->GetName() + "', '" + std::to_string(team->GetLeader()) +
+                        "', '" + std::to_string(team->GetContestId()) + "')";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+
+                    auto members = team->GetMembers();
+                    for (auto* member : members) {
+                        std::string relationQuery = "INSERT INTO UserTeams (UserID, TeamID) VALUES ('" +
+                            std::to_string(member->GetId()) + "', '" + id + "')";
+                        ServerMng::getInstance()->getDBController()->executeUpdate(relationQuery);
+                    }
+                }
                 std::cout << "[Loader] Saved team: " << id << "\n";
             }
         }
-        // Add other object types as needed: chall, contest, tab
+        else if (type == "chall") {
+            int challId = std::stoi(id);
+            // Aici trebuie implementată logica pentru a salva provocările
+            // Vom avea nevoie de acces la obiectul challenge și la metodele sale
+            std::cout << "[Loader] Challenge save not yet implemented for ID: " << id << "\n";
+        }
+        else if (type == "contest") {
+            int contestId = std::stoi(id);
+            auto* contest = ServerMng::getInstance()->getContest(contestId);
+            if (contest) {
+                std::string checkQuery = "SELECT COUNT(*) as count FROM Contests WHERE ContestID = '" + id + "'";
+                auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
+
+                bool contestExists = false;
+                if (!results.empty()) {
+                    contestExists = std::stoi(results[0]["count"]) > 0;
+                }
+
+                if (contestExists) {
+                    std::string query = "UPDATE Contests SET Name = '" + contest->getName() +
+                        "' WHERE ContestID = '" + id + "'";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
+                else {
+                    std::string query = "INSERT INTO Contests (ContestID, Name) VALUES ('" +
+                        id + "', '" + contest->getName() + "')";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
+                std::cout << "[Loader] Saved contest: " << id << "\n";
+            }
+        }
+        else if (type == "tab") {
+            int tabId = std::stoi(id);
+            auto* tab = ServerMng::getInstance()->getTab(tabId);
+            if (tab) {
+                std::string checkQuery = "SELECT COUNT(*) as count FROM Tabs WHERE TabID = '" + id + "'";
+                auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
+
+                bool tabExists = false;
+                if (!results.empty()) {
+                    tabExists = std::stoi(results[0]["count"]) > 0;
+                }
+
+                if (tabExists) {
+                    std::string query = "UPDATE Tabs SET Name = '" + tab->getName() +
+                        "' WHERE TabID = '" + id + "'";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
+                else {
+                    std::string query = "INSERT INTO Tabs (TabID, Name) VALUES ('" +
+                        id + "', '" + tab->getName() + "')";
+                    ServerMng::getInstance()->getDBController()->executeUpdate(query);
+                }
+                std::cout << "[Loader] Saved tab: " << id << "\n";
+            }
+        }
+    }
+}
+
+
+void Loader::cleanupUser(int userId, Connection* conn)
+{
+    auto& users = ServerMng::getInstance()->getUsers();
+    auto it = users.find(userId);
+    if (it != users.end())
+    {
+        auto& connections = it->second.second;
+        connections.remove_if([&](Connection* connection) { return connection == conn || !connection->isConnected(); });
+        if (connections.empty())
+        {
+            delete it->second.first;
+            users.erase(it);
+            std::cout << "[Loader] Cleaned up user: " << userId << "\n";
+        }
+    }
+}
+
+void Loader::cleanupTeam(int teamId, Connection* conn)
+{
+    auto& teams = ServerMng::getInstance()->getTeams();
+    auto it = teams.find(teamId);
+    if (it != teams.end())
+    {
+        auto& connections = it->second.second;
+        connections.remove_if([&](Connection* connection) { return connection == conn || !connection->isConnected(); });
+        if (connections.empty())
+        {
+            delete it->second.first;
+            teams.erase(it);
+            std::cout << "[Loader] Cleaned up team: " << teamId << "\n";
+        }
     }
 }

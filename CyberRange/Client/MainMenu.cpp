@@ -230,12 +230,6 @@ void MainMenu::on_pushButtonSubmit_clicked()
     const std::string password = ui->lineEditNewPasswd->text().toStdString();
     const std::string email = ui->lineEditNewEmail->text().toStdString();
 
-    // Basic input validation
-    if (old.empty()) {
-        QMessageBox::warning(this, "Error", "Current password is required.");
-        ui->pushButtonSubmit->setEnabled(true);
-        return;
-    }
 
     // Confirm changes
     QMessageBox::StandardButton reply;
@@ -259,7 +253,6 @@ void MainMenu::on_pushButtonSubmit_clicked()
     QApplication::processEvents();
 
     authCtrl->requestUpdate(username, old, password, email);
-    // The AuthController will trigger the appropriate signals on completion
 }
 
 
@@ -378,7 +371,7 @@ void MainMenu::on_ConnButton_clicked()
 
 void MainMenu::handleUpdateSuccess()
 {
-    QMessageBox::information(this, "Success", "Profile updated successfully! You will be logged out now.");
+    QMessageBox::information(this, "Success", "Profile updated successfully!");
     // The logout will be handled by the AuthController
 }
 

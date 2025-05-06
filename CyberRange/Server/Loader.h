@@ -28,6 +28,7 @@ public:
     void loadTab(int id, Connection* conn);
 
     void save(Connection* conn);
+	void unloadObject(Connection* conn, const std::string& objId);
     void unload(Connection* conn);
     void saveUnload(Connection* conn);
 
@@ -37,4 +38,8 @@ public:
 
 private:
     void saveObject(const std::string& objId);
+    void cleanupUser(int userId, Connection* conn);
+    void cleanupTeam(int teamId, Connection* conn);
+    void cleanupUser(int userId);
+    void cleanupTeam(int teamId);
 };

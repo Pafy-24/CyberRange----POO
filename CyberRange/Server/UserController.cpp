@@ -61,6 +61,10 @@ void UserController::Login(const json& data, Connection* client)
 
 }
 
+
+
+// Modificare pentru funcția Register din UserController.cpp
+
 void UserController::Register(const json& data, Connection* client)
 {
     try {
@@ -81,44 +85,58 @@ void UserController::Register(const json& data, Connection* client)
             return;
         }
 
-        // Check if user already exists
-        std::string checkQuery = "SELECT * FROM Users WHERE Username = '" + username + "' OR Email = '" + email + "'";
-        auto existing = dbController->executeQuery(checkQuery);
-        if (!existing.empty())
-        {
+        // Verificăm dacă utilizatorul există deja folosind loader
+        int existingUserId = ServerMng::getInstance()->getLoader()->loadUserByUsername(username, client);
+        if (existingUserId != -1) {
             json response = {
                 {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
-                {"message", "Username or email already exists"}
+                {"message", "Username already exists"}
             };
             client->send(response.dump());
             return;
         }
 
-        std::string insertQuery = "INSERT INTO Users (Username, PasswordHash, Email, Role) VALUES ('" + username + "', '" + password + 
-            "', '" + email + "', '" + role + "')";
-
-        if (dbController->executeUpdate(insertQuery)) {
-
-            json response = {
-                {"controller", "AuthController"},
-                {"action", "register"},
-                {"status", "success"}
-            };
-            client->send(response.dump());
-            logger->log("User registered: " + username);
-
-        }
-        else {
+        // Verificăm și adresa de email
+        existingUserId = ServerMng::getInstance()->getLoader()->loadUserByEmail(email, client);
+        if (existingUserId != -1) {
             json response = {
                 {"controller", "AuthController"},
                 {"action", "register"},
                 {"status", "error"},
-                {"message", "Failed to insert user"}
+                {"message", "Email already exists"}
             };
             client->send(response.dump());
+            return;
         }
+
+        // Creăm obiectul User nou
+        auto newUserPtr = UsersFactory::CreateUser(username, email, -1); // ID va fi generat la salvare
+        User* newUser = newUserPtr.release();
+        newUser->SetPassword(password);
+        int r;
+		if (role == "admin") r = 10;
+		else if (role == "writer") r = 5;
+		else r = 1;
+        newUser->SetAccessLevel(r);
+
+
+		auto users = ServerMng::getInstance()->getUsers();
+        ServerMng::getInstance()->pushUser(newUser, client);
+        ServerMng::getInstance()->getLoader()->registerObject(client, "user:" + std::to_string(-1));
+        ServerMng::getInstance()->getLoader()->save(client);
+        ServerMng::getInstance()->getLoader()->unloadObject(client, "user:" + std::to_string(-1));
+
+        
+
+        json response = {
+            {"controller", "AuthController"},
+            {"action", "register"},
+            {"status", "success"}
+        };
+        client->send(response.dump());
+        logger->log("User registered: " + username);
     }
     catch (const std::exception& e) {
         json response = {
@@ -131,6 +149,8 @@ void UserController::Register(const json& data, Connection* client)
         logger->log(std::string("[Register] Exception: ") + e.what());
     }
 }
+
+
 
 void UserController::Update(const json& data, Connection* client)
 {
@@ -159,60 +179,84 @@ void UserController::Update(const json& data, Connection* client)
             return;
         }
 
-        // Decode token to get user ID
+        // Decodăm token-ul pentru a obține ID-ul utilizatorului
         std::string userDataStr = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
         json userData = json::parse(userDataStr);
         int userId = userData["userId"];
 
-        // Prepare update fields
-        std::vector<std::string> updateFields;
-        if (data["payload"].contains("username")) {
-            updateFields.push_back("Username = '" + data["payload"]["username"].get<std::string>() + "'");
-        }
-        if (data["payload"].contains("email")) {
-            updateFields.push_back("Email = '" + data["payload"]["email"].get<std::string>() + "'");
-        }
-        if (data["payload"].contains("password")) {
-            updateFields.push_back("PasswordHash = '" + data["payload"]["password"].get<std::string>() + "'");
-        }
+        // Ne asigurăm că utilizatorul este încărcat
+        ServerMng::getInstance()->getLoader()->loadUser(userId, client);
 
-        if (updateFields.empty()) {
-            json response = {
-                {"controller", "AuthController"},
-                {"action", "update"},
-                {"status", "error"},
-                {"message", "No fields to update"}
-            };
-            client->send(response.dump());
-            return;
-        }
+        auto& users = ServerMng::getInstance()->getUsers();
+        if (users.find(userId) != users.end() && users[userId].first != nullptr) {
+            User* user = users[userId].first;
+            bool needsUpdate = false;
 
-        // Build and execute update query
-        std::string updateQuery = "UPDATE Users SET ";
-        for (size_t i = 0; i < updateFields.size(); ++i) {
-            updateQuery += updateFields[i];
-            if (i < updateFields.size() - 1) {
-                updateQuery += ", ";
+            // Verificăm și actualizăm numele de utilizator
+            if (data["payload"].contains("username") &&
+                data["payload"]["username"].is_string() &&
+                data["payload"]["username"].get<std::string>().size() > 3) {
+
+                std::string newUsername = data["payload"]["username"];
+                // Verificăm dacă numele este deja utilizat de altcineva
+                int existingId = ServerMng::getInstance()->getLoader()->loadUserByUsername(newUsername, client);
+                if (existingId != -1 && existingId != userId) {
+                    json response = {
+                        {"controller", "AuthController"},
+                        {"action", "update"},
+                        {"status", "error"},
+                        {"message", "Username already exists"}
+                    };
+                    client->send(response.dump());
+                    return;
+                }
+
+                user->SetUsername(newUsername);
+                needsUpdate = true;
             }
-        }
-        updateQuery += " WHERE UserID = '" + std::to_string(userId) + "'";
 
-        if (dbController->executeUpdate(updateQuery)) {
-            // Update user in memory
-            auto& users = ServerMng::getInstance()->getUsers();
-            if (users.find(userId) != users.end() && users[userId].first != nullptr) {
-                User* user = users[userId].first;
-                if (data["payload"].contains("username") && !data["payload"]["username"].get<std::string>().empty()) {
-                    user->SetUsername(data["payload"]["username"]);
-                }
-                if (data["payload"].contains("email") && !data["payload"]["email"].get<std::string>().empty()) {
-					user->SetEmail(data["payload"]["email"]);
-                }
-                if (data["payload"].contains("password") && !data["payload"]["password"].get<std::string>().empty()) {
-					user->SetPassword(data["payload"]["password"]);
+            // Verificăm și actualizăm email-ul
+            if (data["payload"].contains("email") &&
+                data["payload"]["email"].is_string() &&
+                data["payload"]["email"].get<std::string>().size() > 3 &&
+                data["payload"]["email"].get<std::string>().find('@') != std::string::npos) {
+
+                std::string newEmail = data["payload"]["email"];
+                // Verificăm dacă email-ul este deja utilizat de altcineva
+                int existingId = ServerMng::getInstance()->getLoader()->loadUserByEmail(newEmail, client);
+                if (existingId != -1 && existingId != userId) {
+                    json response = {
+                        {"controller", "AuthController"},
+                        {"action", "update"},
+                        {"status", "error"},
+                        {"message", "Email already exists"}
+                    };
+                    client->send(response.dump());
+                    return;
                 }
 
-                // Create new token with updated info
+                user->SetEmail(newEmail);
+                needsUpdate = true;
+            }
+
+            if (data["payload"].contains("oldPassword") &&
+                data["payload"].contains("password")) {
+                if (data["payload"]["oldPassword"] == user->GetPassword())
+                    if (data["payload"]["password"].get<std::string>().size() > 3) {
+
+                        user->SetPassword(data["payload"]["password"]);
+                        needsUpdate = true;
+                    }
+            }
+
+            if (needsUpdate) {
+                // Salvăm modificările utilizând loader
+                ServerMng::getInstance()->getLoader()->save(client);
+                std::string objId = "user:" + std::to_string(userId);
+                ServerMng::getInstance()->getLoader()->unloadObject(client, objId);
+                ServerMng::getInstance()->getLoader()->loadUser(userId,client);
+
+				user = ServerMng::getInstance()->getUsers()[userId].first;
                 json newUserData = {
                     {"userId", userId},
                     {"username", user->GetUsername()},
@@ -221,7 +265,7 @@ void UserController::Update(const json& data, Connection* client)
                 };
                 std::string newToken = CustomSerial::encodeJWT(newUserData.dump(), ServerMng::getInstance()->getSecretKey());
 
-                // Invalidate old token and add new one
+                // Actualizăm token-ul
                 ServerMng::getInstance()->removeToken(token);
                 ServerMng::getInstance()->addToken(newToken);
 
@@ -240,7 +284,7 @@ void UserController::Update(const json& data, Connection* client)
                     {"controller", "AuthController"},
                     {"action", "update"},
                     {"status", "error"},
-                    {"message", "User not found in memory"}
+                    {"message", "No fields to update or invalid data provided"}
                 };
                 client->send(response.dump());
             }
@@ -250,7 +294,7 @@ void UserController::Update(const json& data, Connection* client)
                 {"controller", "AuthController"},
                 {"action", "update"},
                 {"status", "error"},
-                {"message", "Failed to update user in database"}
+                {"message", "User not found in memory"}
             };
             client->send(response.dump());
         }
@@ -266,6 +310,49 @@ void UserController::Update(const json& data, Connection* client)
         logger->log(std::string("[Update] Exception: ") + e.what());
     }
 }
+
+
+void UserController::Logout(const json& data, Connection* client)
+{
+    try {
+        std::string token = data.value("token", "");
+
+        if (!token.empty()) {
+
+            ServerMng::getInstance()->getLoader()->saveUnload(client);
+            ServerMng::getInstance()->removeToken(token);
+
+            json response = {
+                {"controller", "AuthController"},
+                {"action", "logout"},
+                {"status", "success"},
+                {"message", "Logged out"}
+            };
+            client->send(response.dump());
+            logger->log("User logged out with token: " + token);
+        }
+        else {
+            json response = {
+                {"controller", "AuthController"},
+                {"action", "logout"},
+                {"status", "error"},
+                {"message", "Missing token"}
+            };
+            client->send(response.dump());
+        }
+    }
+    catch (const std::exception& e) {
+        json response = {
+            {"controller", "AuthController"},
+            {"action", "logout"},
+            {"status", "error"},
+            {"message", "Logout failed: " + std::string(e.what())}
+        };
+        client->send(response.dump());
+        logger->log(std::string("[Logout] Exception: ") + e.what());
+    }
+}
+
 
 void UserController::Delete(const json& data, Connection* client)
 {
@@ -356,45 +443,6 @@ void UserController::Delete(const json& data, Connection* client)
         };
         client->send(response.dump());
         logger->log(std::string("[Delete] Exception: ") + e.what());
-    }
-}
-
-void UserController::Logout(const json& data, Connection* client)
-{
-    try {
-        std::string token = data.value("token", "");
-
-        if (!token.empty()) {
-            ServerMng::getInstance()->removeToken(token);
-
-            json response = {
-                {"controller", "AuthController"},
-                {"action", "logout"},
-                {"status", "success"},
-                {"message", "Logged out"}
-            };
-            client->send(response.dump());
-            logger->log("User logged out with token: " + token);
-        }
-        else {
-            json response = {
-                {"controller", "AuthController"},
-                {"action", "logout"},
-                {"status", "error"},
-                {"message", "Missing token"}
-            };
-            client->send(response.dump());
-        }
-    }
-    catch (const std::exception& e) {
-        json response = {
-            {"controller", "AuthController"},
-            {"action", "logout"},
-            {"status", "error"},
-            {"message", "Logout failed: " + std::string(e.what())}
-        };
-        client->send(response.dump());
-        logger->log(std::string("[Logout] Exception: ") + e.what());
     }
 }
 

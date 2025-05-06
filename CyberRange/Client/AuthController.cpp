@@ -80,10 +80,6 @@ void AuthController::requestRegister(const std::string& username, const std::str
 
 void AuthController::requestUpdate(const std::string& username, const std::string& old, const std::string& password, const std::string& email)
 {
-    if (username.empty() || old.empty() || password.empty() || email.empty()) {
-        emit updateFailed("All fields are required");
-        return;
-    }
 
     json req = {
         {"controller", "UserController"},
@@ -149,6 +145,8 @@ void AuthController::handleServerResponse(const std::string& responseStr)
     try {
         json response = json::parse(responseStr);
 
+
+        if (response.contains("token")) { token = response["token"]; }
         if (!response.contains("action") || !response.contains("status"))
             return;
 
@@ -193,8 +191,6 @@ void AuthController::handleServerResponse(const std::string& responseStr)
             {
                 qDebug() << "[AuthController] User updated successfully.";
                 emit updateSucceeded();
-                // Trigger logout after successful update
-                requestLogout();
             }
             else
             {
