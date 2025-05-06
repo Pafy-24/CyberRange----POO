@@ -131,7 +131,7 @@ void ContestController::sendContestDetails(int contestId, Connection* client)
 void ContestController::sendScoreboard(int contestId, Connection* client)
 {
     Scoreboard* sb;// = getScoreboard(std::to_string(contestId));
-    if (sb) {
+    /*if (sb) {
         std::string scoreboardJson = sb->exportJSON();
         delete sb;
         json response = {
@@ -149,7 +149,7 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
             {"message", "Scoreboard not found"}
         };
         client->send(response.dump());
-    }
+    }*/
 }
 
 void ContestController::sendAllContests(Connection* client)

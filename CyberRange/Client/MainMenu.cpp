@@ -359,6 +359,7 @@ void MainMenu::configureUIForRole(int role)
         roleText = "Writer Dashboard";
         break;
     case 10: // Admin
+        ui->ContestsButton->show();
         ui->DashboardAdminButton->show();
         ui->ManageUsersButton->show();
         ui->AddChallengeButton->show();
