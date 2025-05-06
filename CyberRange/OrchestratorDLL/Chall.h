@@ -46,7 +46,6 @@ public:
 	void setScore(int score) { points = score; }
     void setDescription(const std::string& desc);
     void setPoints(int pts);
-    void setFlag(const std::string& flg);
     void setAuthor(int author);
     void addOrchestrator(Orchestrator* orch);
     void removeOrchestrator(int orchId);

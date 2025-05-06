@@ -2,9 +2,10 @@
 #include "ClientMng.h"
 #include "json.hpp"
 #include <QTimer>
+#include <QDebug>
 using json = nlohmann::json;
 
-TabClientController::TabClientController() : CController("Tab") {}
+TabClientController::TabClientController() : CController("TabClientController") {}
 
 void TabClientController::requestTabList() {
     json req = {

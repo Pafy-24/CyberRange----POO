@@ -65,7 +65,6 @@ void Chall::setDifficulty(const std::string& diff) {
 }
 void Chall::setDescription(const std::string& desc) { description = desc; }
 void Chall::setPoints(int pts) { points = pts; }
-void Chall::setFlag(const std::string& flg) { flag = flg; }
 void Chall::setAuthor(int author) { authorId = author; }
 void Chall::addOrchestrator(Orchestrator* orch) { orchestrators.push_back(orch); }
 void Chall::addFilePath(const std::string& path) { filesPath=path; }

@@ -1,9 +1,10 @@
 #pragma once
 #include "CController.h"
 #include <string>
-#include <qdialog.h>
+#include <QObject>
 
-class ChallClientController : public CController, public QDialog {
+class ChallClientController : public QObject, public CController{
+	Q_OBJECT
 public:
     ChallClientController();
 

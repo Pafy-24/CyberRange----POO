@@ -122,7 +122,7 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
                 }
 
                 std::cout << "[ChallClientController] Challenge list loaded.\n";
-                emit loadedChallenges(); 
+                emit loadedChallenges();  
             }
             else
             {
@@ -136,10 +136,12 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
             if (status == "success")
             {
                 std::cout << "[ChallClientController] Flag correct: " << message << "\n";
+                // TODO: notificare UI
             }
             else
             {
                 std::cout << "[ChallClientController] Flag incorrect: " << message << "\n";
+                // TODO: notificare UI
             }
         }
         else if (action == "getChallengeDetails")
