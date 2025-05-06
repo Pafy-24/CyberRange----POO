@@ -35,6 +35,7 @@ MainMenu::MainMenu(QWidget* parent)
     ui->textBrowser->setAlignment(Qt::AlignCenter);
 
     connect(ui->contestWidget, &QTableWidget::cellClicked, this, &MainMenu::onContestCellClicked); 
+    connect(ui->tableWidget, &QTableWidget::cellClicked, this, &MainMenu::onTabSelected);
     // Apply styling
     ui->frameLeftMenu->setStyleSheet(
         "QFrame {"
@@ -276,6 +277,15 @@ void MainMenu::on_SettingsButton_clicked()
 void MainMenu::on_TabButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(12);
+}
+
+void MainMenu::onTabSelected(int row)
+{
+    QString challName = ui->contestWidget->item(row, 0)->text();
+    // Exemplu: poți deschide o pagină dedicată concursului
+    qDebug() << "Clicked chall:" << challName;
+    ///
+    ui->stackedWidget->setCurrentIndex(11); // pagina cu detalii
 }
 
 void MainMenu::on_pushButtonAddCh_clicked()

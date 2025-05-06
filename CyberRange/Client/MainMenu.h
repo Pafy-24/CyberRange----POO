@@ -42,8 +42,7 @@ private slots:
     void on_ProfileButton_clicked();
     void on_ReviewFlagsButton_clicked();
     void on_SettingsButton_clicked();
-	void on_TabButton_clicked();
-
+	
     // Dashboard admin
     void on_pushButtonAddCh_clicked();
     void on_pushButtonQuickAddC_clicked();
@@ -64,6 +63,10 @@ private slots:
 	void on_scoreboardButton_clicked();
 	void on_tasksButton_clicked(); 
 	void on_JoinButton_clicked();
+
+    // Tabs
+    void onTabSelected(int row);
+    void on_TabButton_clicked();
 
 private:
     Ui::MainMenu* ui;

@@ -1164,8 +1164,8 @@ QTextBrowser {
                 <widget class="QFrame" name="frame_3">
                  <property name="geometry">
                   <rect>
-                   <x>180</x>
-                   <y>20</y>
+                   <x>240</x>
+                   <y>60</y>
                    <width>301</width>
                    <height>81</height>
                   </rect>
@@ -1193,8 +1193,8 @@ QTextBrowser {
                 <widget class="QFrame" name="frame_4">
                  <property name="geometry">
                   <rect>
-                   <x>80</x>
-                   <y>370</y>
+                   <x>120</x>
+                   <y>470</y>
                    <width>491</width>
                    <height>71</height>
                   </rect>
@@ -1231,8 +1231,8 @@ QTextBrowser {
                 <widget class="QFrame" name="frame_5">
                  <property name="geometry">
                   <rect>
-                   <x>350</x>
-                   <y>120</y>
+                   <x>460</x>
+                   <y>190</y>
                    <width>241</width>
                    <height>201</height>
                   </rect>
@@ -1267,8 +1267,8 @@ li.checked::marker { content: &quot;\2612&quot;; }
                 <widget class="QFrame" name="frame_6">
                  <property name="geometry">
                   <rect>
-                   <x>50</x>
-                   <y>120</y>
+                   <x>100</x>
+                   <y>190</y>
                    <width>241</width>
                    <height>201</height>
                   </rect>
@@ -1283,9 +1283,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
                   <property name="geometry">
                    <rect>
                     <x>0</x>
-                    <y>0</y>
+                    <y>-10</y>
                     <width>241</width>
-                    <height>201</height>
+                    <height>211</height>
                    </rect>
                   </property>
                   <property name="text">
@@ -3316,23 +3316,7 @@ QCheckBox::indicator:hover {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="Training">
-             <layout class="QVBoxLayout" name="verticalLayout_11">
-              <item>
-               <widget class="QLabel" name="label_T">
-                <property name="mouseTracking">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>clear</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
+            <widget class="QWidget" name="SolveChallenge"/>
             <widget class="QWidget" name="Tabs">
              <property name="styleSheet">
               <string notr="true"/>
