@@ -69,6 +69,8 @@ private slots:
     void onTabSelected(int row);
     void on_TabButton_clicked();
 
+	// Add challenge
+
 private:
     Ui::MainMenu* ui;
     std::unique_ptr<Connection> tcpClient;

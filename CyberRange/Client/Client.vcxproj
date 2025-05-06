@@ -103,6 +103,7 @@
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="LogClientController.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="TabClientController.cpp" />
     <ClCompile Include="TeamClientController.cpp" />
     <QtRcc Include="Client.qrc" />
     <QtMoc Include="Client.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Loader.h" />
     <ClInclude Include="LogClientController.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="TabClientController.h" />
     <ClInclude Include="TeamClientController.h" />
   </ItemGroup>
   <ItemGroup>

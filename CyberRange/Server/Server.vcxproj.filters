@@ -42,6 +42,9 @@
     <ClCompile Include="ContestController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TabController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Loader.h">
@@ -81,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DBController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TabController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

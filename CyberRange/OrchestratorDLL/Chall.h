@@ -17,6 +17,7 @@ protected:
     int authorId;
     std::vector<Orchestrator*> orchestrators;
     std::string filesPath;
+    int contestId;
 
 public:
     Chall(const std::string& name, const std::vector<ChallTypes>& types,int id=0);
@@ -38,6 +39,11 @@ public:
 
     void setDifficulty(int diff);
     void setDifficulty(const std::string& diff);
+	void setContestId(int id) { contestId = id; }
+	void setName(const std::string& name) { this->name = name; }
+	void setTypes(const std::vector<ChallTypes>& types) { this->types = types; }
+	void setFlag(const std::string& flag) { this->flag = flag; }
+	void setScore(int score) { points = score; }
     void setDescription(const std::string& desc);
     void setPoints(int pts);
     void setFlag(const std::string& flg);

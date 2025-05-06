@@ -3,6 +3,8 @@
 #include "ChallMng.h"
 #include "ChallFactory.h"
 #include "json.hpp"
+#include <QDialog>
+#include <QTimer>
 
 using json = nlohmann::json;
 
@@ -10,13 +12,32 @@ ChallClientController::ChallClientController() : CController("Chall") {}
 
 void ChallClientController::requestChallengeList() 
 {
-    json req = 
-    {
+    json req = {
         {"controller", "ChallController"},
-        {"action", "getChallenges"},
+        {"token", ClientMng::getInstance()->getAuthToken()},
+        {"action", "getChallengeList"},
         {"payload", json::object()}
     };
-    ClientMng::getInstance()->sendRequest(req.dump());
+
+    try {
+        ClientMng::getInstance()->sendRequest(req.dump());
+
+        QTimer::singleShot(500, [this]() {
+            if (ClientMng::getInstance()->isConnected()) {
+                ClientMng::getInstance()->receiveResponse();
+            }
+            else {
+                qWarning() << "[ChallClientController] Failed contest request";
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        qWarning() << "[ChallClientController] Error contest request";
+    }
+}
+
+void ChallClientController::requestAddChallenge()
+{
 }
 
 void ChallClientController::requestChallengeDetails(const std::string& challId) 
@@ -25,6 +46,7 @@ void ChallClientController::requestChallengeDetails(const std::string& challId)
     {
         {"controller", "ChallController"},
         {"action", "getChallengeDetails"},
+		{"token", ClientMng::getInstance()->getAuthToken()},
         {"payload", { {"challId", challId} }}
     };
     ClientMng::getInstance()->sendRequest(req.dump());
@@ -59,32 +81,54 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
         std::string status = response["status"];
 
         // Tratare getChallengeList
-        if (action == "getChallenge")
+        if (action == "getChallengeList")
         {
             if (status == "success" && response.contains("data"))
             {
-                auto challData = response["data"];
-
-                std::vector<std::map<std::string, std::string>> parsed;
-                for (const auto& item : challData)
+                auto data = response["data"];
+                for (const auto& c : data)
                 {
-                    std::map<std::string, std::string> row;
-                    for (auto it = item.begin(); it != item.end(); ++it)
-                    {
-                        row[it.key()] = it.value().get<std::string>();
+                    int challId = std::stoi(c["challId"].get<std::string>());
+                    std::string title = c["title"];
+                    std::string difficulty = c["difficulty"];
+                    int score = std::stoi(c["score"].get<std::string>());
+                    std::string tags = c["tags"];
+                    std::vector<ChallTypes> tagList;
+
+                    std::stringstream ss(tags);
+                    std::string tag;
+                    while (std::getline(ss, tag, ',')) {
+                        tag.erase(0, tag.find_first_not_of(" \t\n\r"));
+                        tag.erase(tag.find_last_not_of(" \t\n\r") + 1);
+
+                        auto it = challTypeMap.find(tag);
+                        if (it != challTypeMap.end()) 
+                        {
+                            tagList.push_back(it->second);
+                        }
+                        else 
+                        {
+                            qWarning() << "[ChallClientController] Unknown tag: " << QString::fromStdString(tag);
+                        }
                     }
-                    parsed.push_back(row);
+                    int contestId = std::stoi(c["contestId"].get<std::string>());
+
+                    Chall* challenge = new Chall(title, tagList, challId);
+                    challenge->setDifficulty(difficulty);
+                    challenge->setScore(score);
+                    challenge->setContestId(contestId);
+
+                    ClientMng::getInstance()->getChallMng()->addChallenge(contestId,challId,challenge);
                 }
 
-                ChallMng* challmng = new ChallMng();
-                std::cout << "[ChallClientController] Challenges loaded: " << parsed.size() << "\n";
+                std::cout << "[ChallClientController] Challenge list loaded.\n";
+                emit loadedChallenges();  // poți conecta la UI
             }
             else
             {
                 std::cerr << "[ChallClientController] Failed to load challenge list.\n";
             }
         }
-
         // Tratare submitFlag
         else if (action == "submitFlag")
         {
@@ -100,6 +144,29 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
                 std::cout << "[ChallClientController] Flag incorrect: " << message << "\n";
                 // TODO: notificare UI
             }
+        }
+        else if (action == "getChallengeDetails")
+        {
+			if (status == "success" && response.contains("data"))
+			{
+				auto challData = response["data"];
+				std::map<std::string, std::string> parsed;
+				for (auto it = challData.begin(); it != challData.end(); ++it)
+				{
+					parsed[it.key()] = it.value().get<std::string>();
+				}
+				Chall* challenge = ChallFactory::CreateFromRow(parsed);
+				//ClientMng::getInstance()->getChallMng()->addChallenge(challenge);
+				std::cout << "[ChallClientController] Challenge details loaded: " << challenge->getName() << "\n";
+			}
+			else
+			{
+				std::cerr << "[ChallClientController] Failed to load challenge details.\n";
+			}
+		}
+        else
+        {
+            std::cerr << "[ChallClientController] Unknown action: " << action << "\n";
         }
     }
     catch (const std::exception& e) {

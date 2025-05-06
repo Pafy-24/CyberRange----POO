@@ -19,6 +19,16 @@ void ChallMng::addContest(Contest* contest) {
     }
 }
 
+void ChallMng::addChallenge(int contestId, int challId, Chall* challenge)
+{
+	auto it = contests.find(contestId);
+	if (it != contests.end()) 
+    {
+        if (it->first)
+            it->second->addChallenge(challId, challenge);
+	}
+}
+
 void ChallMng::removeContest(int contestId) {
     auto it = contests.find(contestId);
     if (it != contests.end()) {

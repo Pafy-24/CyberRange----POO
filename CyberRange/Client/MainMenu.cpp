@@ -11,7 +11,7 @@
 #include "ContestClientController.h"
 #include "ClientMng.h"
 #include <qtimer.h>
-
+#include "ChallClientController.h"
 #include <string>
 #include <regex>
 
@@ -278,6 +278,33 @@ void MainMenu::on_SettingsButton_clicked()
 void MainMenu::on_TabButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(12);
+    try {
+        auto* challCtrl = dynamic_cast<ChallClientController*>(
+            ClientMng::getInstance()->getController("ChallClientController")
+            );
+        if (!challCtrl) {
+            QMessageBox::warning(this, "Error", "ChallClientController unavailable.");
+            ui->ContestsButton->setEnabled(true);
+            return;
+        }
+
+        // Show loading indicator
+        ui->ContestsButton->setText("Please wait...");
+        QApplication::processEvents();
+
+        challCtrl->requestTabList();
+
+        // Re-enable the button after delay
+        QTimer::singleShot(1000, [this]() {
+            if (this && isVisible()) {
+                ui->ContestsButton->setEnabled(true);
+                ui->ContestsButton->setText("Contests");
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
+    }
 }
 
 void MainMenu::onTabSelected(int row)
@@ -410,7 +437,7 @@ void MainMenu::configureUIForRole(int role)
     case 5: // Writer
         ui->DashboardWriterButton->show();
         ui->AddChallengeButton->show();
-        ui->ReviewFlagsButton->show();
+        //ui->ReviewFlagsButton->show();
         roleText = "Writer Dashboard";
         break;
     case 10: // Admin
@@ -439,7 +466,6 @@ void MainMenu::configureUIForRole(int role)
     // Default to home screen
     ui->stackedWidget->setCurrentIndex(3);
 }
-
 
 void MainMenu::on_ConnButton_clicked()
 {
