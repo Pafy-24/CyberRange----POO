@@ -89,6 +89,7 @@ MainMenu::MainMenu(QWidget* parent)
     }
     if (contCtrl) {
         connect(contCtrl, &ContestClientController::loadedContests, this, &MainMenu::handleLoadContests, Qt::QueuedConnection);
+        connect(contCtrl, &ContestClientController::loadedContestDetails, this, &MainMenu::handleContestDetailsLoad, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
@@ -162,6 +163,7 @@ void MainMenu::on_pushButtonLogout_clicked()
         ui->pushButtonLogout->setText("Logout");
     }
 }
+
 void MainMenu::on_AddChallengeButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(8);
@@ -232,7 +234,6 @@ void MainMenu::on_ContestsButton_clicked()
     catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
     }
-
 }
 
 void MainMenu::on_ManageUsersButton_clicked()
@@ -450,14 +451,50 @@ void MainMenu::on_ConnButton_clicked()
 
 void MainMenu::onContestCellClicked(int row, int column)
 {
+    QString contestName;
+    int contestId;
     if (column == 0) 
     {
-        QString contestName = ui->contestWidget->item(row, column)->text();
+        contestName = ui->contestWidget->item(row, column)->text();
         // Exemplu: poți deschide o pagină dedicată concursului
         qDebug() << "Clicked contest:" << contestName;
-        ///
-
         ui->stackedWidget->setCurrentIndex(13); // pagina cu detalii
+    }
+    std::map<int, Contest*> contests = ClientMng::getInstance()->getChallMng()->getAllContests();
+    for (const auto& contest : contests)
+    {
+        if (contest.second->getName() == contestName)
+        {
+            contestId = contest.first;
+            break;
+        }
+    }
+    try {
+        auto* contestCtrl = dynamic_cast<ContestClientController*>(
+            ClientMng::getInstance()->getController("ContestClientController")
+            );
+        if (!contestCtrl) {
+            QMessageBox::warning(this, "Error", "ContestClientController unavailable.");
+            ui->ContestsButton->setEnabled(true);
+            return;
+        }
+
+        // Show loading indicator
+        ui->ContestsButton->setText("Please wait...");
+        QApplication::processEvents();
+
+        contestCtrl->requestContestDetails(contestId);
+
+        // Re-enable the button after delay
+        QTimer::singleShot(1000, [this]() {
+            if (this && isVisible()) {
+                ui->ContestsButton->setEnabled(true);
+                ui->ContestsButton->setText("Contests");
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
     }
 }
 
@@ -550,7 +587,6 @@ void MainMenu::handleDeleteFailure(const QString& message)
     ui->pushButtonDeleteAcc->setEnabled(true);
 }
 
-
 void MainMenu::handleLoadContests()
 {
     std::map<int, Contest*> contests = ClientMng::getInstance()->getChallMng()->getAllContests();
@@ -571,4 +607,13 @@ void MainMenu::handleLoadContests()
     ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+}
+
+void MainMenu::handleContestDetailsLoad()
+{
+    /*ui->lineEditContestName->setText();
+    ui->lineEditContestStart->setText();
+    ui->lineEditContestEnd->setText();
+    ui->lineEditContestID->setText();
+    ui->lineEditContestAuthor->setText();*/
 }

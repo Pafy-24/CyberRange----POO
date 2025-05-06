@@ -9,10 +9,11 @@ public:
     ContestClientController();
 
     void requestContestList();
-    void requestContestDetails();
+    void requestContestDetails(const int& contestId);
     void requestScoreboard(const std::string& contestId);
 
     void handleServerResponse(const std::string& responseStr) override;
 signals:
     void loadedContests();
+    void loadedContestDetails();
 };
