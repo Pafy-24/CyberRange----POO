@@ -250,7 +250,6 @@ void UserController::Update(const json& data, Connection* client)
             }
 
             if (needsUpdate) {
-                // Salvăm modificările utilizând loader
                 ServerMng::getInstance()->getLoader()->save(client);
                 std::string objId = "user:" + std::to_string(userId);
                 ServerMng::getInstance()->getLoader()->unloadObject(client, objId);
