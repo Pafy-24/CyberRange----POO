@@ -56,11 +56,11 @@ std::string Chall::getFilesPath() const { return filesPath; }
 
 void Chall::setDifficulty(int diff) { difficulty = diff; }
 void Chall::setDifficulty(const std::string& diff) { 
-	if (diff == "easy") difficulty = 1;
-	else if (diff == "medium") difficulty = 2;
-	else if (diff == "hard") difficulty = 3;
-	else if (diff == "very hard") difficulty = 4;
-	else if (diff == "impossible") difficulty = 5;
+	if (diff == "easy" || diff=="Easy") difficulty = 1;
+	else if (diff == "medium" || diff=="Medium") difficulty = 2;
+	else if (diff == "hard" || diff=="Hard") difficulty = 3;
+	else if (diff == "very hard" || diff == "Very Hard") difficulty = 4;
+	else if (diff == "impossible" || diff == "Impossible") difficulty = 5;
 	else throw std::invalid_argument("Invalid difficulty level");
 }
 void Chall::setDescription(const std::string& desc) { description = desc; }

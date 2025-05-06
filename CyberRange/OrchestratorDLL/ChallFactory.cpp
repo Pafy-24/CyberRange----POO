@@ -9,7 +9,7 @@ Chall* ChallFactory::CreateFromRow(const std::map<std::string, std::string>& row
     std::string difficulty = row.at("Difficulty");
     int points = std::stoi(row.at("Score"));
     std::string flag = row.at("Flag");
-    std::string author = row.at("AuthorId");
+    std::string author = row.at("AuthorID");
     std::string typesStr = row.at("Tags");
 
     std::vector<ChallTypes> types;
@@ -25,7 +25,7 @@ Chall* ChallFactory::CreateFromRow(const std::map<std::string, std::string>& row
     chall->setFlag(flag);
     chall->setAuthor(std::stoi(author));
     chall->setDescription(row.at("Description"));
-	chall->addFilePath(row.at("FilePath"));
+	chall->addFilePath(row.at("FilesPath"));
     return chall;
 }
 
