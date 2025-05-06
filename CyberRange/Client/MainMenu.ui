@@ -1571,7 +1571,7 @@ QPushButton:pressed {
                   </rect>
                  </property>
                  <property name="currentIndex">
-                  <number>1</number>
+                  <number>0</number>
                  </property>
                  <widget class="QWidget" name="Active">
                   <widget class="QTableWidget" name="contestWidget">
@@ -3348,7 +3348,7 @@ QPushButton:pressed {
                 <rect>
                  <x>30</x>
                  <y>70</y>
-                 <width>113</width>
+                 <width>81</width>
                  <height>31</height>
                 </rect>
                </property>
@@ -3359,7 +3359,7 @@ QPushButton:pressed {
     border-radius: 8px;
     padding: 6px;
     color: #2c2c2c;                              /* text închis, lizibil */
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QLineEdit:focus {
@@ -3380,9 +3380,9 @@ QLineEdit:focus {
               <widget class="QLineEdit" name="lineEditContestName">
                <property name="geometry">
                 <rect>
-                 <x>180</x>
+                 <x>130</x>
                  <y>70</y>
-                 <width>241</width>
+                 <width>161</width>
                  <height>31</height>
                 </rect>
                </property>
@@ -3393,7 +3393,7 @@ QLineEdit:focus {
     border-radius: 8px;
     padding: 6px;
     color: #2c2c2c;                              /* text închis, lizibil */
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QLineEdit:focus {
@@ -3410,7 +3410,7 @@ QLineEdit:focus {
                 <rect>
                  <x>30</x>
                  <y>110</y>
-                 <width>113</width>
+                 <width>81</width>
                  <height>31</height>
                 </rect>
                </property>
@@ -3421,7 +3421,7 @@ QLineEdit:focus {
     border-radius: 8px;
     padding: 6px;
     color: #2c2c2c;                              /* text închis, lizibil */
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QLineEdit:focus {
@@ -3442,9 +3442,9 @@ QLineEdit:focus {
               <widget class="QLineEdit" name="lineEditContestStart">
                <property name="geometry">
                 <rect>
-                 <x>180</x>
+                 <x>130</x>
                  <y>110</y>
-                 <width>241</width>
+                 <width>161</width>
                  <height>31</height>
                 </rect>
                </property>
@@ -3455,7 +3455,7 @@ QLineEdit:focus {
     border-radius: 8px;
     padding: 6px;
     color: #2c2c2c;                              /* text închis, lizibil */
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QLineEdit:focus {
@@ -3472,7 +3472,7 @@ QLineEdit:focus {
                 <rect>
                  <x>30</x>
                  <y>150</y>
-                 <width>113</width>
+                 <width>81</width>
                  <height>31</height>
                 </rect>
                </property>
@@ -3483,7 +3483,7 @@ QLineEdit:focus {
     border-radius: 8px;
     padding: 6px;
     color: #2c2c2c;                              /* text închis, lizibil */
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QLineEdit:focus {
@@ -3504,9 +3504,9 @@ QLineEdit:focus {
               <widget class="QLineEdit" name="lineEditContestEnd">
                <property name="geometry">
                 <rect>
-                 <x>180</x>
+                 <x>130</x>
                  <y>150</y>
-                 <width>241</width>
+                 <width>161</width>
                  <height>31</height>
                 </rect>
                </property>
@@ -3517,7 +3517,7 @@ QLineEdit:focus {
     border-radius: 8px;
     padding: 6px;
     color: #2c2c2c;                              /* text închis, lizibil */
-    font-size: 14px;
+    font-size: 10px;
 }
 
 QLineEdit:focus {
@@ -3554,7 +3554,7 @@ QLineEdit:focus {
                 </widget>
                </widget>
                <widget class="QWidget" name="Scoreboard">
-                <widget class="QTableView" name="tableScoreboard">
+                <widget class="QTableWidget" name="scoreboardWidget">
                  <property name="geometry">
                   <rect>
                    <x>0</x>
@@ -3566,13 +3566,13 @@ QLineEdit:focus {
                 </widget>
                </widget>
                <widget class="QWidget" name="Tasks">
-                <widget class="QTableView" name="tableView">
+                <widget class="QTableWidget" name="tasksWidget">
                  <property name="geometry">
                   <rect>
-                   <x>0</x>
-                   <y>0</y>
+                   <x>-10</x>
+                   <y>-10</y>
                    <width>581</width>
-                   <height>291</height>
+                   <height>301</height>
                   </rect>
                  </property>
                 </widget>
@@ -3676,6 +3676,142 @@ QPushButton:pressed {
                  </widget>
                 </item>
                </layout>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestID2">
+               <property name="geometry">
+                <rect>
+                 <x>380</x>
+                 <y>70</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>ID:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestID">
+               <property name="geometry">
+                <rect>
+                 <x>470</x>
+                 <y>70</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestAuthor">
+               <property name="geometry">
+                <rect>
+                 <x>470</x>
+                 <y>110</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestAuthor2">
+               <property name="geometry">
+                <rect>
+                 <x>380</x>
+                 <y>110</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Author:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
               </widget>
              </widget>
             </widget>

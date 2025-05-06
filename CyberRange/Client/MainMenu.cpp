@@ -92,7 +92,6 @@ MainMenu::~MainMenu()
     delete ui;
 }
 
-
 void MainMenu::handleLogoutSuccess()
 {
     // Create a new login dialog before starting the animation
@@ -448,11 +447,39 @@ void MainMenu::on_backButton_clicked()
 void MainMenu::on_descriptionButton_clicked()
 {
 	ui->stackedWidget_3->setCurrentIndex(0);
+    // de pus descriere in label
 }
 
 void MainMenu::on_scoreboardButton_clicked()
 {
 	ui->stackedWidget_3->setCurrentIndex(1);
+    int rowCount = 3;
+    ui->scoreboardWidget->setRowCount(rowCount);
+    ui->scoreboardWidget->setColumnCount(3);
+
+    // Set headers
+    // Set column headers
+    QStringList headers = { "#", "Team/User Name", "Score" };
+    ui->scoreboardWidget->setHorizontalHeaderLabels(headers);
+
+    // Hide row numbers (vertical header)
+    ui->scoreboardWidget->verticalHeader()->setVisible(false);
+    QVector<QPair<QString, int>> teams = {
+        { "CyberWarriors", 750 },
+        { "HackMasters", 620 },
+        { "CTFAddicts", 590 },
+        { "RedTeamElite", 400 }
+    };
+
+    // Exemplu de date statice (le poți înlocui cu cele din baza de date mai târziu)
+    for (int i = 0; i < rowCount; ++i) {
+        ui->scoreboardWidget->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));               // #
+        ui->scoreboardWidget->setItem(i, 1, new QTableWidgetItem(teams[i].first));                      // Team Name
+        ui->scoreboardWidget->setItem(i, 2, new QTableWidgetItem(QString::number(teams[i].second)));    // Score
+    }
+
+    // redimensionare coloane
+    ui->scoreboardWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void MainMenu::on_tasksButton_clicked()
@@ -485,6 +512,3 @@ void MainMenu::handleDeleteFailure(const QString& message)
     // Re-enable the delete button
     ui->pushButtonDeleteAcc->setEnabled(true);
 }
-
-
-
