@@ -99,7 +99,6 @@
     <ClCompile Include="ChallClientController.cpp" />
     <ClCompile Include="ClientMng.cpp" />
     <ClCompile Include="ContestClientController.cpp" />
-    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="LogClientController.cpp" />
     <ClCompile Include="MainMenu.cpp" />

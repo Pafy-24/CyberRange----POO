@@ -43,9 +43,6 @@
     <ClCompile Include="MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
