@@ -191,6 +191,89 @@ void Client::testDownload(const std::string& serverAddress, int port) {
     printMessage("Download tests completed");
 }
 
+void Client::testUpload(const std::string& serverAddress, int port) {
+    printMessage("\n----- Testing Upload Client -----");
+    printMessage("Setting up upload to " + serverAddress + ":" + std::to_string(port));
+
+    auto conn = ConnsFactory::createConnection(ConnectionType::TRANSFER, serverAddress, port);
+    if (!conn) {
+        printMessage("Failed to create upload client");
+        return;
+    }
+
+    auto uploadFile = [&](const std::string& localFile, const std::string& remoteFile) {
+        printMessage("Starting upload: " + localFile + " to " + remoteFile);
+
+        std::ifstream inFile(localFile, std::ios::binary | std::ios::ate);
+        if (!inFile.is_open()) {
+            printMessage("Failed to open local file: " + localFile);
+            return false;
+        }
+
+        std::streamsize fileSize = inFile.tellg();
+        inFile.seekg(0, std::ios::beg);
+
+        std::string request = "UPLOAD " + remoteFile;
+
+        if (conn->send(request) < 0) {
+            printMessage("Failed to send upload request");
+            return false;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        std::string response = conn->receive();
+        if (response.empty() || response.find("OK") != 0) {
+            printMessage("Server rejected upload request: " + (response.empty() ? "No response" : response));
+            return false;
+        }
+        request=std::to_string(fileSize) + "\n";
+        if (conn->send(request) < 0) {
+            printMessage("Failed to send upload request");
+            return false;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+        response = conn->receive();
+        if (response.empty() || response.find("OK") != 0) {
+            printMessage("Server rejected upload request: " + (response.empty() ? "No response" : response));
+            return false;
+        }
+
+        char buffer[8192];
+        std::streamsize bytesSent = 0;
+        while (inFile) {
+            inFile.read(buffer, sizeof(buffer));
+            std::streamsize bytesRead = inFile.gcount();
+            if (bytesRead <= 0) break;
+
+            if (conn->send(std::string(buffer, bytesRead)) < 0) {
+                printMessage("Error sending file data");
+                return false;
+            }
+
+            bytesSent += bytesRead;
+            int progress = static_cast<int>(bytesSent * 100 / fileSize);
+            printMessage("Upload progress for " + localFile + ": " + std::to_string(progress) + "%");
+        }
+
+        inFile.close();
+        printMessage("Upload completed: " + localFile + " (" + std::to_string(bytesSent) + " bytes)");
+        return true;
+        };
+
+    if (!conn->connect()) {
+        printMessage("Failed to connect upload socket");
+        return;
+    }
+
+    std::string smallFile = "E:\\Programe\\Github\\CyberRange----POO\\CyberRange\\Dockerfile";
+    std::string remoteFileName = "Dockerfile";
+    uploadFile(smallFile, remoteFileName);
+
+    conn->disconnect();
+    printMessage("Upload test completed");
+}
+
+
 void Client::on_pushButton_clicked() {
     ui.plainTextEdit->clear();
     printMessage("Running network tests...");
@@ -202,10 +285,11 @@ void Client::on_pushButton_clicked() {
     int downloadPort = 1340;
 
     std::thread testThread([this, serverAddress, tcpPort, secureTcpPort, udpPort, downloadPort]() {
-        testTCPClient(serverAddress, tcpPort, false);
+     //   testTCPClient(serverAddress, tcpPort, false);
       // TLS:: testTCPClient(serverAddress, secureTcpPort, true);
-        testUDPClient(serverAddress, udpPort);
+   //     testUDPClient(serverAddress, udpPort);
         testDownload(serverAddress, downloadPort);
+		testUpload(serverAddress, downloadPort);
         printMessage("\nAll client tests completed");
         });
     testThread.detach();

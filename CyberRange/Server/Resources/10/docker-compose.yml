@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  alligator-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: alligator-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/public/uploads
+    environment:
+      - NODE_ENV=production
+      - FLAG_PART_1=${FLAG_PART_1}
+      - FLAG_PART_2=${FLAG_PART_2}
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s 

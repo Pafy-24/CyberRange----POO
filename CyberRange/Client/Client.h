@@ -21,4 +21,5 @@ private:
     void testTCPClient(const std::string& serverAddress, int port, bool useTLS);
     void testUDPClient(const std::string& serverAddress, int port);
     void testDownload(const std::string& serverAddress, int port);
+    void testUpload(const std::string& serverAddress, int port);
 };

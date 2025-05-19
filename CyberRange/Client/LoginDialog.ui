@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<UI version="4.0">
  <class>LoginDialog</class>
  <widget class="QDialog" name="LoginDialog">
   <property name="geometry">
@@ -551,4 +550,4 @@ QPushButton:pressed {
  </widget>
  <resources/>
  <connections/>
-</ui>
+</UI>

@@ -90,19 +90,3 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
     }
 }
 
-void TabController::loadTab(const std::string& tabId)
-{
-	if (tabs.find(tabId) != tabs.end()) {
-		return;
-	}
-	std::string query = "SELECT * FROM Tabs WHERE TabID = ?";
-	auto results = ServerMng::getInstance()->getDBController()->executeQuery(query, { tabId });
-	if (!results.empty()) {
-		Tab* tab = new Tab(results[0]["Name"], std::stoi(results[0]["TabID"]));
-		tabs[tabId] = tab;
-		logger->log("Tab loaded: " + tabId);
-	}
-	else {
-		logger->log("Tab not found: " + tabId);
-	}
-}

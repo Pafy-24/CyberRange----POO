@@ -1,6 +1,8 @@
 ﻿#include "pch.h"
 #include "ServerMng.h"
 #include "DBController.h"
+#include "Orchestrator.h"
+#include "Docker.h"
 #include <iostream>
 #include <string>
 
@@ -36,6 +38,27 @@ bool testDB() {
     }
 }
 
+void testDocker() {
+    Orchestrator* docker = new Docker(1,2, "dockerfile",10);
+	if (!docker->deploy()) {
+		std::cerr << "Failed to deploy Docker container" << std::endl;
+		return;
+	}
+	if (!docker->start()) {
+		std::cerr << "Failed to start Docker container" << std::endl;
+		return;
+	}
+    std::cin.get();
+	std::cout << "Docker container started successfully" << std::endl;
+	if (!docker->stop()) {
+		std::cerr << "Failed to stop Docker container" << std::endl;
+		return;
+	}
+	std::cout << "Docker container stopped successfully" << std::endl;
+	delete docker;
+
+}
+
 void testConns() {
     printMessage("Network Test Server Starting");
 
@@ -56,6 +79,7 @@ void testConns() {
 }
 
 int main() {
+   // testDocker();
     //if (!testDB()) {
     //    std::cerr << "Database test failed" << std::endl;
     //    //return 1;

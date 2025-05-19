@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #f5f7f0;
+  --foreground: #0c3c26;
+  --primary: #2a9d8f;
+  --secondary: #e9c46a;
+  --accent: #e76f51;
+  --header: #1d3d2c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a1e14;
+    --foreground: #e0f5e9;
+    --primary: #2a9d8f;
+    --secondary: #e9c46a;
+    --accent: #e76f51;
+    --header: #0c3c26;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.2s ease-out forwards;
+}

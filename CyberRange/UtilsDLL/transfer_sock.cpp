@@ -226,7 +226,9 @@ void transfer_sock::handleRequest(const std::string& data, Connection* client) {
     }
     else if (command == "UPLOAD" && tokens.size() >= 2) {
         std::string remotePath = tokens[1];
-        std::string sizeStr = transferClient->receiveLine();
+        client->send("OK\n");
+        std::string sizeStr = transferClient->receive(64);
+        client->send("OK\n");
         long fileSize = 0;
         try {
             fileSize = std::stol(sizeStr);
@@ -236,6 +238,7 @@ void transfer_sock::handleRequest(const std::string& data, Connection* client) {
             client->send("ERROR Invalid file size\n");
             return;
         }
+        client->send("OK\n");
         handleUploadRequest(transferClient, remotePath, fileSize);
     }
     else {

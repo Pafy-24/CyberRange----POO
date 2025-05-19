@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<ui version="4.0">
+<UI version="4.0">
  <class>MainMenu</class>
  <widget class="QMainWindow" name="MainMenu">
   <property name="geometry">
@@ -4218,4 +4217,4 @@ QPushButton:pressed {
  </widget>
  <resources/>
  <connections/>
-</ui>
+</UI>

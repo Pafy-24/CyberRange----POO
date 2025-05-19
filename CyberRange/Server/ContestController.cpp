@@ -146,6 +146,9 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
             {"scoreboard", json::array()}
         };
 
+
+
+
         // This is a placeholder - implement actual scoreboard logic based on your requirements
         // You might need to query the database for team scores or user submissions
         client->send(response.dump());

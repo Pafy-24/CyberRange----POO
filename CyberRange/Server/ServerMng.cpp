@@ -307,24 +307,9 @@ void ServerMng::runDownloadServer(int port) {
         return;
     }
 
-    auto handler = [this](const std::string& data, Connection* client) {
-        try {
-            json j = json::parse(data);
-            std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
-            auto it = controllers.find(controllerName);
-            if (it != controllers.end()) {
-                it->second->handleRequest(data, client);
-            }
-            else {
-                controllers["default"]->handleRequest(data, client);
-            }
-        }
-        catch (const std::exception& e) {
-            client->send("ERROR: Invalid request format");
-        }
-        };
+   
 
-    if (!conn->startListening(handler)) {
+    if (!conn->startListening(nullptr)) {
         printMessage("Failed to start Download server on port " + std::to_string(port));
         return;
     }
