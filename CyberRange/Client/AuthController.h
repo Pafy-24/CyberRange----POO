@@ -2,6 +2,8 @@
 #include <string>
 #include "CController.h"
 #include <QObject>
+#include "json.hpp"
+using json = nlohmann::json;
 
 class AuthController : public QObject, public CController
 {
