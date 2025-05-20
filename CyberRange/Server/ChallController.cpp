@@ -47,8 +47,7 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                     {"data", {
                         {"challId", challId},
                         {"title", challenge->getName()},
-                        {"description", challenge->getDescription()},
-                        {"flag", challenge->getFlag()}
+                        {"description", challenge->getDescription()}
                     }}
                 };
                 client->send(response.dump());
