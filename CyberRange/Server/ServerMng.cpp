@@ -7,6 +7,7 @@
 #include "TeamController.h"
 #include "ChallController.h"
 #include "ContestController.h"
+#include "TabController.h"
 #include "Observer.h"
 #include "CObs.h"
 #include "ObsFactory.h"
@@ -42,6 +43,7 @@ ServerMng::ServerMng(int port, std::string address)
     attachController("TeamController", new TeamController());
     attachController("ChallController", new ChallController());
     attachController("ContestController", new ContestController());
+    attachController("TabController", new TabController());
     attachController("default", new Controller());
 
 

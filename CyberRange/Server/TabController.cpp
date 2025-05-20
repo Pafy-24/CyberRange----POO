@@ -22,7 +22,7 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
 
         if (action == "getTabList") 
         {
-            std::string query = "SELECT * FROM C";
+            std::string query = "SELECT * FROM Tabs";
             auto results = dbController->executeQuery(query);
 
             if (!results.empty()) {
@@ -51,19 +51,29 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
         }
         else if (action == "getTabDetails")
         {
-			std::string tabId = j["tabId"].get<std::string>();
-			std::string query = "SELECT * FROM Tabs WHERE TabID = ?";
-			auto results = dbController->executeQuery(query, { tabId });
-			if (!results.empty()) {
+			auto tabId = j["tabId"];
+            ServerMng::getInstance()->getLoader()->loadTab(tabId,client);
+            auto tab = ServerMng::getInstance()->getTab(tabId);
+            if(tab){
+                std::map<int, std::string> challs;
+                for(auto c:tab->getChallenges()){
+                    challs.insert({ c.first, c.second->getName() });
+                }
+
 				json data = {
-					{"tabId", results[0].at("TabID")},
-					{"name", results[0].at("Name")}
+					{"tabId", tab->getId()},
+					{"name", tab->getName()},
+                    {"challs",challs }
 				};
-				client->send(json{
-					{"status", "success"},
-					{"action", "getTabDetails"},
-					{"data", data}
-					}.dump());
+                std::string response = json{
+                    {"controller","TabClientController"},
+                    {"status", "success"},
+                    {"action", "getTabDetails"},
+                    {"data", data}
+                }.dump();
+
+				client->send(response);
+                
 				print("Tab details retrieved successfully.");
 			}
 			else {
