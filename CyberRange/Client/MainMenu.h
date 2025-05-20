@@ -15,6 +15,9 @@ class MainMenu : public QMainWindow
 public:
     explicit MainMenu(QWidget* parent = nullptr);
     void configureUIForRole(int role);
+    void getUserData(const std::string &username, const std::string& email, const int& role);
+    void populateUsersTable(const QString& usersJson);
+    
     ~MainMenu();
 
 private slots:
@@ -31,6 +34,8 @@ private slots:
     void handleLoadChalls();
 	void handleContestDetailsLoad(int id);
 
+    void handleUsersList();
+
     void on_pushButtonLogout_clicked();
     void on_AddChallengeButton_clicked();
     void on_CreateContestButton_clicked();
@@ -43,11 +48,20 @@ private slots:
     void on_ProfileButton_clicked();
     void on_ReviewFlagsButton_clicked();
     void on_SettingsButton_clicked();
+    void on_pushButtonQAC_clicked();
+	void on_pushButtonDWS_clicked();
 	
     // Dashboard admin
     void on_pushButtonAddCh_clicked();
     void on_pushButtonQuickAddC_clicked();
     void on_pushButtonViewLC_clicked();
+
+	// Dashboard writer
+
+	//Dashboard common  
+	void on_pushButtonPractice_clicked();
+	void on_pushButtonJC_clicked();
+	void on_pushButtonSC_clicked();
 
     // Profile  
     void on_pushButtonSubmit_clicked();
@@ -70,6 +84,8 @@ private slots:
     void on_TabButton_clicked();
 
 	// Add challenge
+
+    // Manage users
 
 private:
     Ui::MainMenu* ui;

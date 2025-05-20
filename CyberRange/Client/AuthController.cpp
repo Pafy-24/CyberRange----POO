@@ -228,6 +228,20 @@ void AuthController::handleServerResponse(const std::string& responseStr)
                 emit logoutFailed(msg);
             }
         }
+        else if (action == "getUsers")
+        {
+            if (status == "success")
+            {
+                qDebug() << "[AuthController] User list received successfully.";
+				auto users = response["users"];
+                emit usersReceived(users);
+            }
+            else
+            {
+                QString msg = QString::fromStdString(response.value("message", "Failed to retrieve user list."));
+                qWarning() << "[AuthController] Failed to retrieve user list:" << msg;
+            }
+        }
     }
     catch (const std::exception& e)
     {
@@ -283,4 +297,29 @@ bool AuthController::isAuthenticated() const
 int AuthController::getRole() const
 {
     return role;
+}
+
+void AuthController::requestUserList()
+{
+    json req = {
+        {"controller", "UserController"},
+        {"token", ClientMng::getInstance()->getAuthToken()},
+        {"action", "getUsers"},
+        {"payload", json::object()}
+    };
+
+    try {
+        ClientMng::getInstance()->sendRequest(req.dump());
+        QTimer::singleShot(500, [this]() {
+            if (ClientMng::getInstance()->isConnected()) {
+                ClientMng::getInstance()->receiveResponse();
+            }
+            else {
+                qWarning() << "[UserClientController] Failed user request";
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        qWarning() << "[UserClientController] Error user request";
+    }
 }

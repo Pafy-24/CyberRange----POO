@@ -36,6 +36,7 @@ MainMenu::MainMenu(QWidget* parent)
 
     connect(ui->contestWidget, &QTableWidget::cellClicked, this, &MainMenu::onContestCellClicked); 
     connect(ui->tableWidget, &QTableWidget::cellClicked, this, &MainMenu::onTabSelected);
+
     // Apply styling
     ui->frameLeftMenu->setStyleSheet(
         "QFrame {"
@@ -84,6 +85,7 @@ MainMenu::MainMenu(QWidget* parent)
         connect(authCtrl, &AuthController::updateFailed, this, &MainMenu::handleUpdateFailure, Qt::QueuedConnection);
         connect(authCtrl, &AuthController::deleteSucceeded, this, &MainMenu::handleDeleteSuccess, Qt::QueuedConnection);
         connect(authCtrl, &AuthController::deleteFailed, this, &MainMenu::handleDeleteFailure, Qt::QueuedConnection);
+        connect(authCtrl, &AuthController::usersReceived, this, &MainMenu::handleUsersList, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "AuthController is not available. Some functions may not work properly.");
@@ -243,9 +245,73 @@ void MainMenu::on_ContestsButton_clicked()
     }
 }
 
+void MainMenu::populateUsersTable(const QString& usersJson)
+{
+    auto users = nlohmann::json::parse(usersJson.toStdString());
+
+    ui->userTable->setRowCount(users.size());
+
+    int row = 0;
+    for (const auto& user : users)
+    {
+        QTableWidgetItem* idItem = new QTableWidgetItem(QString::fromStdString(user["userId"].get<std::string>()));
+        QTableWidgetItem* usernameItem = new QTableWidgetItem(QString::fromStdString(user["username"].get<std::string>()));
+        QTableWidgetItem* emailItem = new QTableWidgetItem(QString::fromStdString(user["email"].get<std::string>()));
+        QTableWidgetItem* roleItem = new QTableWidgetItem(QString::fromStdString(user["role"].get<std::string>()));
+        QTableWidgetItem* statusItem = new QTableWidgetItem("activ"); // poți adapta dacă ai alt status
+
+        ui->userTable->setItem(row, 0, idItem);
+        ui->userTable->setItem(row, 1, usernameItem);
+        ui->userTable->setItem(row, 2, emailItem);
+        ui->userTable->setItem(row, 3, roleItem);
+        ui->userTable->setItem(row, 4, statusItem);
+
+        row++;
+    }
+}
+
 void MainMenu::on_ManageUsersButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(7);
+
+    // Clear existing content
+    ui->userTable->clearContents();
+    ui->userTable->setRowCount(0);
+
+    // Set column count and headers
+    ui->userTable->setColumnCount(5);
+    QStringList headers = { "ID", "Username", "Email", "Role", "Status" };
+    ui->userTable->setHorizontalHeaderLabels(headers);
+    ui->userTable->verticalHeader()->setVisible(false);
+    ui->userTable->verticalHeader()->setDefaultSectionSize(35);
+
+    try {
+        auto* userCtrl = dynamic_cast<AuthController*>(
+            ClientMng::getInstance()->getController("AuthController")
+            );
+        if (!userCtrl) {
+            QMessageBox::warning(this, "Error", "AuthController unavailable.");
+            ui->ManageUsersButton->setEnabled(true);
+            return;
+        }
+
+
+        ui->ManageUsersButton->setText("Please wait...");
+        QApplication::processEvents();
+
+        userCtrl->requestUserList();
+
+        QTimer::singleShot(1000, [this]() {
+            if (this && isVisible()) {
+                ui->ManageUsersButton->setEnabled(true);
+                ui->ManageUsersButton->setText("Manage Users");
+            }
+            });
+
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Users error: %1").arg(e.what()));
+    }
 }
 
 std::string parse_string(std::string& S) {
@@ -282,6 +348,16 @@ void MainMenu::on_SettingsButton_clicked()
     ui->stackedWidget->setCurrentIndex(10);
 }
 
+void MainMenu::on_pushButtonQAC_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(8);
+}
+
+void MainMenu::on_pushButtonDWS_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(10);
+}
+
 void MainMenu::on_TabButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(12);
@@ -296,7 +372,7 @@ void MainMenu::on_TabButton_clicked()
         }
 
         // Show loading indicator
-        ui->ContestsButton->setText("Please wait...");
+        ui->TabButton->setText("Please wait...");
         QApplication::processEvents();
 
       //  challCtrl->requestTabList();
@@ -336,6 +412,21 @@ void MainMenu::on_pushButtonQuickAddC_clicked()
 void MainMenu::on_pushButtonViewLC_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
+}
+
+void MainMenu::on_pushButtonPractice_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(12);
+}
+
+void MainMenu::on_pushButtonJC_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(5);
+}
+
+void MainMenu::on_pushButtonSC_clicked()
+{
+	ui->stackedWidget->setCurrentIndex(10);
 }
 
 void MainMenu::on_pushButtonSubmit_clicked()
@@ -472,6 +563,20 @@ void MainMenu::configureUIForRole(int role)
 
     // Default to home screen
     ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+void MainMenu::getUserData(const std::string& username, const std::string& email, const int& role)
+{
+	// Set the username and password in the UI
+	ui->lineEditSettingsUser->setText(QString::fromStdString(username));
+	ui->lineEditSettingsEmail->setText(QString::fromStdString(email));
+	if (role == 1)
+		ui->lineEditSettingsRole->setText(QString::fromStdString("common"));
+	else if (role == 5)
+		ui->lineEditSettingsRole->setText(QString::fromStdString("writer"));
+	else if (role == 10)
+		ui->lineEditSettingsRole->setText(QString::fromStdString("admin"));
 }
 
 void MainMenu::on_ConnButton_clicked()
@@ -659,4 +764,8 @@ void MainMenu::handleContestDetailsLoad(int id)
     str = std::to_string(c->getOrganizerId());
     ui->lineEditContestAuthor->setText(QString::fromStdString(str));
 	ui->labelDesc->setText(QString::fromStdString(c->getDescription()));
+}
+
+void MainMenu::handleUsersList()
+{
 }

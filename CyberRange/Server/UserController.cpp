@@ -332,6 +332,30 @@ void UserController::Logout(const json& data, Connection* client)
     }
 }
 
+void UserController::sendAllUsers(Connection* client)
+{
+    std::string query = "SELECT UserID, Username, Email, Role FROM Users"; // adaptează după structura ta
+    auto results = ServerMng::getInstance()->getDBController()->executeQuery(query);
+    json userList = json::array();
+
+    for (const auto& row : results) {
+        userList.push_back({
+            {"userId", row.at("UserID")},
+            {"username", row.at("Username")},
+            {"email", row.at("Email")},
+            { "role", row.at("Role")}
+            });
+    }
+
+    json response = {
+        {"controller", "AuthController"},
+        {"action", "getUsers"},
+        {"status", "success"},
+        {"users", userList}
+    };
+    client->send(response.dump());
+}
+
 void UserController::Delete(const json& data, Connection* client)
 {
     try {
@@ -448,6 +472,10 @@ void UserController::handleRequest(const std::string& data, Connection* client)
         {
             if (!validateRequest(data, client, 1)) return;
             Logout(j, client);
+        }
+        else if (action == "getUsers") 
+        {
+            sendAllUsers(client);
         }
         else
         {

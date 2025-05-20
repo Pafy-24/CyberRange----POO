@@ -20,6 +20,8 @@ public:
     bool isAuthenticated() const;
     int getRole() const;
 
+    void requestUserList();
+
     void handleServerResponse(const std::string& responseStr) override;
 
 signals:
@@ -33,6 +35,7 @@ signals:
     void deleteFailed(const QString& message);
     void logoutSucceeded();
     void logoutFailed(const QString& message);
+    void usersReceived(const json& users);
 
 private:
     std::string token;

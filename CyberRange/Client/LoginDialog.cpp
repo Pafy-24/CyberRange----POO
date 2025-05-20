@@ -139,6 +139,7 @@ void LoginDialog::handleLoginSuccess()
     int userRole = authCtrl->getRole();
     MainMenu* menu = new MainMenu();
     menu->configureUIForRole(userRole);
+	menu->getUserData(authCtrl->getCurrentUser(), authCtrl->getCurrentUser() + "@example.com", userRole);
 
     QPropertyAnimation* fadeOut = new QPropertyAnimation(this, "windowOpacity");
     fadeOut->setDuration(500);
