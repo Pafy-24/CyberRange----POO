@@ -8,7 +8,6 @@ class TabClientController : public QObject, public CController {
 public:
     TabClientController();
     void requestTabList();
-	void requestTabDetails(const std::string& tabId);
     void handleServerResponse(const std::string& response) override;
 signals:
 	void loadedTabs();

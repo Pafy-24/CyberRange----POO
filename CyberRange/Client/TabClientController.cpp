@@ -11,8 +11,8 @@ void TabClientController::requestTabList() {
     json req = {
         {"controller", "TabController"},
         {"token", ClientMng::getInstance()->getAuthToken()},
-        {"action", "getTabList"},
-        {"payload", json::object()}
+        {"action", "getTabDetails"},
+        {"tabId", 1}
     };
 
     try {
@@ -28,23 +28,12 @@ void TabClientController::requestTabList() {
     }
 }
 
-void TabClientController::requestTabDetails(const std::string& tabId)
-{
-	json req = {
-		{"controller", "TabController"},
-		{"token", ClientMng::getInstance()->getAuthToken()},
-		{"action", "getTabDetails"},
-		{"payload", { {"tabId", tabId} }}
-	};
-	ClientMng::getInstance()->sendRequest(req.dump());
-}
-
 void TabClientController::handleServerResponse(const std::string& responseStr) {
     try {
         json response = json::parse(responseStr);
         std::string action = response["action"];
 
-        if (action == "getTabList" && response["status"] == "success") 
+        if (action == "getTabDetails" && response["status"] == "success") 
         {
             auto data = response["data"];
 
@@ -52,6 +41,7 @@ void TabClientController::handleServerResponse(const std::string& responseStr) {
             {
                 int id = t["tabId"];
                 std::string name = t["name"];
+				auto challs = t["challs"];
 
                 Tab* tab = new Tab(name, id); 
                 ClientMng::getInstance()->getChallMng()->addTab(tab);
