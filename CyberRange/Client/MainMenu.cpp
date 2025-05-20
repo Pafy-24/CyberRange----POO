@@ -207,11 +207,12 @@ void MainMenu::on_ContestsButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(5);
 
-    // Clear existing content
     ui->contestWidget->clearContents();
     ui->contestWidget->setRowCount(0);
 
-    // Set column count and headers
+    ui->contestWidgetExpired->clearContents();
+	ui->contestWidgetExpired->setRowCount(0);
+
     ui->contestWidget->setColumnCount(3);
     QStringList headers = { "Name", "Start Date", "End Date" };
     ui->contestWidget->setHorizontalHeaderLabels(headers);
@@ -226,13 +227,11 @@ void MainMenu::on_ContestsButton_clicked()
             return;
         }
 
-        // Show loading indicator
         ui->ContestsButton->setText("Please wait...");
         QApplication::processEvents();
 
         contestCtrl->requestContestList();
 
-        // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->ContestsButton->setEnabled(true);
@@ -540,7 +539,6 @@ void MainMenu::configureUIForRole(int role)
     ui->stackedWidget->setCurrentIndex(3);
 }
 
-
 void MainMenu::getUserData(const std::string& username, const std::string& email, const int& role)
 {
 	// Set the username and password in the UI
@@ -638,12 +636,9 @@ void MainMenu::on_scoreboardButton_clicked()
     ui->scoreboardWidget->setRowCount(rowCount);
     ui->scoreboardWidget->setColumnCount(3);
 
-    // Set headers
-    // Set column headers
     QStringList headers = { "#", "Team/User Name", "Score" };
     ui->scoreboardWidget->setHorizontalHeaderLabels(headers);
 
-    // Hide row numbers (vertical header)
     ui->scoreboardWidget->verticalHeader()->setVisible(false);
     QVector<QPair<QString, int>> teams = {
         { "CyberWarriors", 750 },
@@ -652,11 +647,11 @@ void MainMenu::on_scoreboardButton_clicked()
         { "RedTeamElite", 400 }
     };
 
-    // Exemplu de date statice (le poți înlocui cu cele din baza de date mai târziu)
+    // date statice
     for (int i = 0; i < rowCount; ++i) {
-        ui->scoreboardWidget->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));               // #
-        ui->scoreboardWidget->setItem(i, 1, new QTableWidgetItem(teams[i].first));                      // Team Name
-        ui->scoreboardWidget->setItem(i, 2, new QTableWidgetItem(QString::number(teams[i].second)));    // Score
+        ui->scoreboardWidget->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));               
+        ui->scoreboardWidget->setItem(i, 1, new QTableWidgetItem(teams[i].first));                      
+        ui->scoreboardWidget->setItem(i, 2, new QTableWidgetItem(QString::number(teams[i].second)));  
     }
 
     // redimensionare coloane
@@ -702,23 +697,48 @@ void MainMenu::handleDeleteFailure(const QString& message)
 void MainMenu::handleLoadContests()
 {
     std::map<int, Contest*> contests = ClientMng::getInstance()->getChallMng()->getAllContests();
-    int row = 0;
+    int activeRow = 0;
+    int expiredRow = 0;
+
+    ui->contestWidget->clearContents();
+    ui->contestWidgetExpired->clearContents();
+
     ui->contestWidget->setRowCount(static_cast<int>(contests.size()));
+    ui->contestWidgetExpired->setRowCount(static_cast<int>(contests.size()));
+
+    qint64 now = QDateTime::currentSecsSinceEpoch();
 
     for (const auto& [id, contest] : contests) {
-        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime()-3600);
-        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime()-3600);
-        ui->contestWidget->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
-        ui->contestWidget->setItem(row, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
-        ui->contestWidget->setItem(row, 2, new QTableWidgetItem(end.toString("yyyy-MM-dd HH:mm")));
-        ++row;
+        QDateTime start = QDateTime::fromSecsSinceEpoch(contest->getStartTime() - 3600);
+        QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime() - 3600);
+
+        if (contest->getEndTime() > now) {
+            // ➕ Concurs activ
+            ui->contestWidget->setItem(activeRow, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
+            ui->contestWidget->setItem(activeRow, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+            ui->contestWidget->setItem(activeRow, 2, new QTableWidgetItem(end.toString("yyyy-MM-dd HH:mm")));
+            activeRow++;
+        }
+        else {
+            // ➖ Concurs expirat
+            ui->contestWidgetExpired->setItem(expiredRow, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
+            ui->contestWidgetExpired->setItem(expiredRow, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
+            ui->contestWidgetExpired->setItem(expiredRow, 2, new QTableWidgetItem(end.toString("yyyy-MM-dd HH:mm")));
+            expiredRow++;
+        }
     }
 
+    ui->contestWidget->setRowCount(activeRow);
+    ui->contestWidgetExpired->setRowCount(expiredRow);
+
     ui->contestWidget->verticalHeader()->setVisible(false);
+    ui->contestWidgetExpired->verticalHeader()->setVisible(false);
 
     ui->contestWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->contestWidgetExpired->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
     ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->contestWidgetExpired->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
 void MainMenu::handleLoadChalls()
 {
