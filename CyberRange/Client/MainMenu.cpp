@@ -36,7 +36,7 @@ MainMenu::MainMenu(QWidget* parent)
     ui->textBrowser->setAlignment(Qt::AlignCenter);
 
     connect(ui->contestWidget, &QTableWidget::cellClicked, this, &MainMenu::onContestCellClicked); 
-    connect(ui->tableWidget, &QTableWidget::cellClicked, this, &MainMenu::onTabSelected);
+    connect(ui->tableWidget, &QTableWidget::cellClicked, this, &MainMenu::onTrainingCellClicked);
 
     // Apply styling
     ui->frameLeftMenu->setStyleSheet(
@@ -101,6 +101,7 @@ MainMenu::MainMenu(QWidget* parent)
     }
     if (challCtrl) {
         connect(challCtrl, &ChallClientController::loadedChallenges, this, &MainMenu::handleLoadChalls, Qt::QueuedConnection);
+        connect(challCtrl, &ChallClientController::loadedChallengeDetails, this, &MainMenu::handleChallDetails, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
@@ -364,6 +365,57 @@ void MainMenu::on_TabButton_clicked()
     }
     catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
+    }
+}
+
+void MainMenu::onTrainingCellClicked(int row, int column)
+{
+    QString challengeName;
+    int challengeId = -1;
+    std::map<int, Chall*> challenges = ClientMng::getInstance()->getChallMng()->getTab(1)->getChallenges();
+    for (const auto& chall : challenges)
+    {
+        if (chall.second->getName() == challengeName)
+        {
+            challengeId = chall.first;
+            break;
+        }
+    }
+
+    if (column == 0)
+    {
+        challengeName = ui->tableWidget->item(row, column)->text();
+        qDebug() << "Clicked challenge:" << challengeName;
+        ui->stackedWidget->setCurrentIndex(11); 
+    }
+
+    try {
+        auto* challCtrl = dynamic_cast<ChallClientController*>(ClientMng::getInstance()->getController("ChallClientController"));
+
+        if (!challCtrl) {
+            QMessageBox::warning(this, "Error", "TabClientController unavailable.");
+            ui->ContestsButton->setEnabled(true);
+            return;
+        }
+
+        QApplication::processEvents();
+        challCtrl->requestChallengeDetails(challengeId);
+
+        QTimer::singleShot(1000, [this]() {
+            if (this && isVisible()) {
+                ui->ContestsButton->setEnabled(true);
+                ui->ContestsButton->setText("Contests");
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
+    }
+
+    if (challengeId == -1)
+    {
+        QMessageBox::warning(this, "Error", "Challenge not found.");
+        return;
     }
 }
 
@@ -741,10 +793,12 @@ void MainMenu::handleLoadContests()
     ui->contestWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->contestWidgetExpired->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }
+
 void MainMenu::handleLoadChalls()
 {
 	qDebug() << "[MainMenu] Challenges loaded successfully.";
 }
+
 void MainMenu::handleContestDetailsLoad(int id)
 {
 	Contest* c = ClientMng::getInstance()->getChallMng()->getContest(id);
@@ -760,6 +814,10 @@ void MainMenu::handleContestDetailsLoad(int id)
     str = std::to_string(c->getOrganizerId());
     ui->lineEditContestAuthor->setText(QString::fromStdString(str));
 	ui->labelDesc->setText(QString::fromStdString(c->getDescription()));
+}
+
+void MainMenu::handleChallDetails()
+{
 }
 
 void MainMenu::handleUsersList()

@@ -46,7 +46,7 @@ void ContestClientController::requestContestDetails(const int& contestId)
         {"token", ClientMng::getInstance()->getAuthToken()},
 		{"action", "getContest"},
         {"payload", {
-            {"contestId", contestId},
+        {"contestId", contestId},
         }}
 	};
     try {

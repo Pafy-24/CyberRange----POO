@@ -31,6 +31,7 @@ private slots:
     void handleLoadContests();
     void handleLoadChalls();
 	void handleContestDetailsLoad(int id);
+    void handleChallDetails();
 
     void handleUsersList();
     void handleLoadedTabs();
@@ -81,7 +82,7 @@ private slots:
     // Tabs
     void onTabSelected(int row);
     void on_TabButton_clicked();
-    
+    void onTrainingCellClicked(int row, int column);
 	// Add challenge
 
     // Manage users

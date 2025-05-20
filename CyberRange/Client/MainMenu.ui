@@ -3409,10 +3409,10 @@ QCheckBox::indicator:hover {
              <widget class="QFrame" name="frame_29">
               <property name="geometry">
                <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>761</width>
-                <height>591</height>
+                <x>120</x>
+                <y>110</y>
+                <width>491</width>
+                <height>401</height>
                </rect>
               </property>
               <property name="frameShape">
