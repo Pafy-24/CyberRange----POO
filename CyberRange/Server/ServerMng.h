@@ -16,8 +16,6 @@
 
 class ServerMng : public Observable {
 private:
-
-
     static ServerMng* instance;
 
     std::atomic<bool> isRunning;
