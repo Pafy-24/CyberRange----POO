@@ -1,11 +1,12 @@
 #pragma once
 #include "Connection.h"
+#include "Observable.h" 
 #include <string>
 #include <SFML/Network.hpp>
 #include <atomic>
 #include <functional>
 
-class UTILS_API UDPSock : public Connection {
+class UTILS_API UDPSock : public Connection, public Observable { 
 protected:
     sf::UdpSocket* udpSocket;
     std::string address;
@@ -39,7 +40,7 @@ public:
     bool bind(int port) override;
     bool listen(int backlog = 5) override;
     Connection* accept() override;
-    
+
     bool startListening(std::function<void(const std::string&, Connection*)> handler) override;
     void stopServer() override;
     bool isServerRunning() const override;

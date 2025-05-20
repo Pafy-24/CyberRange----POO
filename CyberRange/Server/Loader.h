@@ -2,13 +2,14 @@
 #include <string>
 #include <map>
 #include <set>
+#include "Observable.h"
 #include "Controller.h"
 #include "Connection.h"
 #include "Tab.h"
 #include "Contest.h"
 
 
-class Loader {
+class Loader: public Observable{
 private:
     std::map<Connection*, std::set<std::string>> objLoaded;
     std::string basePath;

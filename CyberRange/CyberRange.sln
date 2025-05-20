@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilsDLL", "UtilsDLL\UtilsDLL.vcxproj", "{399E6A2A-2D62-4A06-8EB9-457E6FCB94EC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{21E76EBB-C041-4D24-BBFE-5C63F75DCCF1} = {21E76EBB-C041-4D24-BBFE-5C63F75DCCF1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OrchestratorDLL", "OrchestratorDLL\OrchestratorDLL.vcxproj", "{48DF54F2-60AB-4155-8A87-B9718194F762}"
 	ProjectSection(ProjectDependencies) = postProject

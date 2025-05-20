@@ -108,10 +108,11 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;OBSERVERDLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;OBSERVER_DLL_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,12 +150,15 @@
     <ClInclude Include="ObsFactory.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SocketObs.h" />
-    <ClInclude Include="Subject.h" />
+    <ClInclude Include="Observable.h" />
     <ClInclude Include="TeamObs.h" />
     <ClInclude Include="UserObs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CObs.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Observable.cpp" />
+    <ClCompile Include="ObsFactory.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

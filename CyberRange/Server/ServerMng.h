@@ -1,22 +1,30 @@
 #pragma once
+
 #include <string>
+#include <map>
 #include <vector>
 #include <mutex>
+#include <atomic>
+#include "Observable.h"
+#include "Controller.h"
+#include "DBController.h"
 #include "Connection.h"
-#include "ChallMng.h"
-#include "Loader.h"
 #include "User.h"
 #include "Team.h"
-#include "DBController.h"
+#include "Loader.h"
+#include "ChallMng.h"
 
-class ServerMng {
+class ServerMng : public Observable {
 private:
+
+
     static ServerMng* instance;
-    static std::mutex instanceMutex;
+
+    std::atomic<bool> isRunning;
+
 
     std::vector<Connection*> servers;
     std::vector<Connection*> connections;
-    std::mutex connectionsMutex;
     std::map<std::string, Controller*> controllers;
     DBController* dbController;
     ChallMng challMng;
@@ -25,17 +33,15 @@ private:
     std::map<int, std::pair<User*, std::list<Connection*>>> users;
 
     std::vector<std::string> tokens;
-    std::mutex tokenMutex;
     std::string SecretKey;
     Loader* loader;
-    bool isRunning;
     int port;
     std::string serverAddress;
 
     ServerMng(int port, std::string address);
     void runTCPServer(int port, bool useTLS);
     void runUDPServer(int port);
-    void runDownloadServer(int port);
+    void runTransferServer(int port);
 
     ServerMng(const ServerMng&) = delete;
     ServerMng& operator=(const ServerMng&) = delete;
@@ -61,7 +67,6 @@ public:
     std::string getSecretKey() const { return SecretKey; }
 
     const std::vector<std::string>& getTokens() const { return tokens; }
-    std::mutex& getTokenMutex() { return tokenMutex; }
 
     DBController* getDBController() { return dbController; }
     Loader* getLoader() { return loader; }
@@ -72,4 +77,16 @@ public:
     void pushTeam(Team* team, Connection* conn);
 
     User* findUser(const std::string& usrName_email);
+
 };
+
+
+/*
+    inline void printMessage(const std::string& message) {
+        if (ServerMng::getInstance(0, "")) {
+            ServerMng::getInstance(0, "")->printLog(message);
+        }
+        else {
+            std::cout << message << std::endl;
+        }
+    }*/

@@ -54,7 +54,7 @@ void transfer_sock::setRootDirectory(const std::string& dir) {
         std::filesystem::create_directories(rootDirectory);
     }
     catch (const std::exception& e) {
-        std::cerr << "Failed to create root directory: " << e.what() << std::endl;
+        print("Failed to create root directory: " + std::string(e.what()) );
     }
 }
 
@@ -64,29 +64,29 @@ std::string transfer_sock::getRootDirectory() const {
 
 bool transfer_sock::startListening(std::function<void(const std::string&, Connection*)> handler) {
     if (thisServerRunning) {
-        std::cerr << "Transfer server is already running" << std::endl;
+        print("Transfer server is already running" );
         return false;
     }
     try {
         std::filesystem::create_directories(rootDirectory);
     }
     catch (const std::exception& e) {
-        std::cerr << "Failed to create root directory: " << e.what() << std::endl;
+        print("Failed to create root directory: " +std::string(e.what()));
         return false;
     }
     if (!TCPSock::bind(getPort())) {
-        std::cerr << "Failed to bind transfer server socket" << std::endl;
+        print("Failed to bind transfer server socket" );
         return false;
     }
     if (!TCPSock::listen()) {
-        std::cerr << "Failed to start listening" << std::endl;
+        print("Failed to start listening" );
         return false;
     }
     requestHandler = handler;
     thisServerRunning = true;
     std::thread serverThread([this]() {
-        std::cout << "Transfer server started on port " << getPort() << std::endl;
-        std::cout << "Using root directory: " << rootDirectory << std::endl;
+        print("Transfer server started on port " + getPort() );
+        print("Using root directory: " + rootDirectory );
 
         if (tcpListener) {
             tcpListener->setBlocking(false);
@@ -102,8 +102,8 @@ bool transfer_sock::startListening(std::function<void(const std::string&, Connec
                 continue;
             }
 
-            std::cout << "New client connection from " << conn->getAddress() << ":"
-                << std::to_string(conn->getPort()) << std::endl;
+            print("New client connection from " + conn->getAddress() + ":"
+                + std::to_string(conn->getPort()) );
 
             try {
                 auto* transferConn = dynamic_cast<transfer_sock*>(conn);
@@ -127,11 +127,11 @@ bool transfer_sock::startListening(std::function<void(const std::string&, Connec
                 }
             }
             catch (const std::exception& e) {
-                std::cerr << "Failed to create client thread: " << e.what() << std::endl;
+                print("Failed to create client thread: " +std::string(e.what()));
                 delete conn;
             }
         }
-        std::cout << "Transfer server stopped" << std::endl;
+        print("Transfer server stopped" );
         });
     serverThread.detach();
     return true;
@@ -139,10 +139,10 @@ bool transfer_sock::startListening(std::function<void(const std::string&, Connec
 
 void transfer_sock::stopServer() {
     if (thisServerRunning) {
-        std::cout << "Stopping transfer server..." << std::endl;
+        print("Stopping transfer server..." );
         thisServerRunning = false;
         TCPSock::disconnect();
-        std::cout << "Transfer server stopped" << std::endl;
+        print("Transfer server stopped" );
     }
 }
 
@@ -164,7 +164,7 @@ std::string transfer_sock::receiveLine() {
 
 std::string transfer_sock::receive(int maxSize) {
     if (!isConnected()) {
-        std::cerr << "Cannot receive: not connected" << std::endl;
+        print("Cannot receive: not connected" );
         return "";
     }
     char* buffer = new char[maxSize + 1];
@@ -202,13 +202,13 @@ int transfer_sock::sendRaw(const std::string& buffer, int size) {
 
 void transfer_sock::handleRequest(const std::string& data, Connection* client) {
     if (!client) {
-        std::cerr << "Invalid client for handling request" << std::endl;
+        print("Invalid client for handling request" );
         return;
     }
 
     auto* transferClient = dynamic_cast<transfer_sock*>(client);
     if (!transferClient) {
-        std::cerr << "Client is not a transfer_sock instance" << std::endl;
+        print("Client is not a transfer_sock instance" );
         client->send("ERROR Invalid client type\n");
         return;
     }
@@ -234,7 +234,7 @@ void transfer_sock::handleRequest(const std::string& data, Connection* client) {
             fileSize = std::stol(sizeStr);
         }
         catch (const std::exception& e) {
-            std::cerr << "Error parsing file size: " << e.what() << std::endl;
+            print("Error parsing file size: " +std::string(e.what()));
             client->send("ERROR Invalid file size\n");
             return;
         }
@@ -249,21 +249,21 @@ void transfer_sock::handleRequest(const std::string& data, Connection* client) {
 void transfer_sock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
     auto* transferClient = dynamic_cast<transfer_sock*>(clientSock.get());
     if (!transferClient || !transferClient->isConnected()) {
-        std::cerr << "Invalid client connection" << std::endl;
+        print("Invalid client connection" );
         return;
     }
 
     transferClient->setRootDirectory(rootDirectory);
 
-    std::cout << "Handling client request from " << transferClient->getAddress()
-        << ":" << transferClient->getPort() << std::endl;
+    print("Handling client request from " + transferClient->getAddress()
+        + ":" + std::to_string(transferClient->getPort()));
 
     try {
         transferClient->setTimeout(30000);
 
         std::string request = transferClient->receive(1024);
         if (request.empty()) {
-            std::cerr << "Empty request received" << std::endl;
+            print("Empty request received" );
             return;
         }
 
@@ -275,24 +275,24 @@ void transfer_sock::handleClientRequest(std::unique_ptr<TCPSock> clientSock) {
         }
     }
     catch (const std::exception& e) {
-        std::cerr << "Exception handling client request: " << e.what() << std::endl;
+        print("Exception handling client request: " + std::string(e.what()));
     }
 
     if (transferClient->isConnected()) {
         transferClient->disconnect();
     }
 
-    std::cout << "Client connection handled and closed: "
-        << transferClient->getAddress() << ":" << transferClient->getPort() << std::endl;
+    print("Client connection handled and closed: "
+        + transferClient->getAddress() + ":" + std::to_string(transferClient->getPort()) );
 }
 
 bool transfer_sock::handleDownloadRequest(transfer_sock* clientSock, const std::string& remotePath) {
     std::string fullPath = normalizePath(remotePath);
     std::string filePath = rootDirectory + "/" + fullPath;
-    std::cout << "Download request for: " << fullPath << std::endl;
+    print("Download request for: " + fullPath );
 
     if (!std::filesystem::exists(filePath) || std::filesystem::is_directory(filePath)) {
-        std::cerr << "File not found: " << filePath << std::endl;
+        print("File not found: " + filePath );
         clientSock->send("ERROR File not found\n");
         return false;
     }
@@ -300,7 +300,7 @@ bool transfer_sock::handleDownloadRequest(transfer_sock* clientSock, const std::
     try {
         std::ifstream inFile(filePath, std::ios::binary);
         if (!inFile.is_open()) {
-            std::cerr << "Failed to open file for reading: " << filePath << std::endl;
+            print("Failed to open file for reading: " + filePath );
             clientSock->send("ERROR Failed to open file\n");
             return false;
         }
@@ -319,7 +319,7 @@ bool transfer_sock::handleDownloadRequest(transfer_sock* clientSock, const std::
             }
 
             if (clientSock->sendRaw(std::string(buffer, bytesRead), bytesRead) < 0) {
-                std::cerr << "Error sending file data" << std::endl;
+                print("Error sending file data" );
                 break;
             }
 
@@ -335,17 +335,17 @@ bool transfer_sock::handleDownloadRequest(transfer_sock* clientSock, const std::
         inFile.close();
 
         if (bytesSent == fileSize) {
-            std::cout << "Download complete: " << fullPath << " (" << bytesSent << " bytes)" << std::endl;
+            print("Download complete: " + fullPath + " (" + std::to_string(bytesSent) + " bytes)" );
             return true;
         }
         else {
-            std::cerr << "Download incomplete: " << fullPath << " ("
-                << bytesSent << "/" << fileSize << " bytes)" << std::endl;
+            print("Download incomplete: " + fullPath + " ("
+                + std::to_string(bytesSent) + "/" + std::to_string(fileSize) + " bytes)" );
             return false;
         }
     }
     catch (const std::exception& e) {
-        std::cerr << "Exception during download: " << e.what() << std::endl;
+        print("Exception during download: " +std::string(e.what()));
         clientSock->send("ERROR Server error\n");
         return false;
     }
@@ -354,7 +354,7 @@ bool transfer_sock::handleDownloadRequest(transfer_sock* clientSock, const std::
 bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::string& remotePath, long fileSize) {
     std::string fullPath = normalizePath(remotePath);
     std::string filePath = rootDirectory + "/" + fullPath;
-    std::cout << "Upload request for: " << fullPath << " (" << fileSize << " bytes)" << std::endl;
+    print("Upload request for: " + fullPath + " (" + std::to_string(fileSize) + " bytes)" );
 
     try {
         std::filesystem::path destinationPath(filePath);
@@ -362,7 +362,7 @@ bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::st
 
         std::ofstream outFile(filePath, std::ios::binary);
         if (!outFile.is_open()) {
-            std::cerr << "Failed to open file for writing: " << filePath << std::endl;
+            print("Failed to open file for writing: " + filePath );
             clientSock->send("ERROR Failed to create file\n");
             return false;
         }
@@ -382,7 +382,7 @@ bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::st
 
             int received = clientSock->receiveRaw(buffer, bytesToRead);
             if (received <= 0) {
-                std::cerr << "Error receiving data or connection closed" << std::endl;
+                print("Error receiving data or connection closed" );
                 break;
             }
 
@@ -399,19 +399,19 @@ bool transfer_sock::handleUploadRequest(transfer_sock* clientSock, const std::st
 
         if (bytesReceived == fileSize) {
             clientSock->send("COMPLETE\n");
-            std::cout << "Upload complete: " << fullPath << " (" << bytesReceived << " bytes)" << std::endl;
+            print("Upload complete: " + fullPath + " (" + std::to_string(bytesReceived) + " bytes)" );
             return true;
         }
         else {
             clientSock->send("ERROR Incomplete transfer\n");
             std::filesystem::remove(filePath);
-            std::cerr << "Upload incomplete: " << fullPath << " ("
-                << bytesReceived << "/" << fileSize << " bytes)" << std::endl;
+            print("Upload incomplete: " + fullPath + " ("
+                + std::to_string(bytesReceived) + "/" + std::to_string(fileSize) + " bytes)" );
             return false;
         }
     }
     catch (const std::exception& e) {
-        std::cerr << "Exception during upload: " << e.what() << std::endl;
+        print("Exception during upload: " +std::string(e.what()));
         clientSock->send("ERROR Server error\n");
         return false;
     }

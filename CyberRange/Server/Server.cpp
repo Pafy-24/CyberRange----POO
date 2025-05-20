@@ -3,6 +3,8 @@
 #include "DBController.h"
 #include "Orchestrator.h"
 #include "Docker.h"
+#include "Observer.h"
+#include "ObsFactory.h"
 #include <iostream>
 #include <string>
 
@@ -39,24 +41,23 @@ bool testDB() {
 }
 
 void testDocker() {
-    Orchestrator* docker = new Docker(1,2, "dockerfile",10);
-	if (!docker->deploy()) {
-		std::cerr << "Failed to deploy Docker container" << std::endl;
-		return;
-	}
-	if (!docker->start()) {
-		std::cerr << "Failed to start Docker container" << std::endl;
-		return;
-	}
+    Orchestrator* docker = new Docker(1, 2, "dockerfile", 10);
+    if (!docker->deploy()) {
+        std::cerr << "Failed to deploy Docker container" << std::endl;
+        return;
+    }
+    if (!docker->start()) {
+        std::cerr << "Failed to start Docker container" << std::endl;
+        return;
+    }
     std::cin.get();
-	std::cout << "Docker container started successfully" << std::endl;
-	if (!docker->stop()) {
-		std::cerr << "Failed to stop Docker container" << std::endl;
-		return;
-	}
-	std::cout << "Docker container stopped successfully" << std::endl;
-	delete docker;
-
+    std::cout << "Docker container started successfully" << std::endl;
+    if (!docker->stop()) {
+        std::cerr << "Failed to stop Docker container" << std::endl;
+        return;
+    }
+    std::cout << "Docker container stopped successfully" << std::endl;
+    delete docker;
 }
 
 void testConns() {
@@ -64,8 +65,17 @@ void testConns() {
 
     int basePort = 1337;
     ServerMng* serverMgr = ServerMng::getInstance(basePort, "0.0.0.0");
-    serverRunning = true;
 
+    Observer* consoleObserver = ObsFactory::createConsoleObserver();
+    serverMgr->addObserver(consoleObserver);
+
+    Observer* fileObserver = ObsFactory::createFileObserver("./logs/server_activities.log");
+    serverMgr->addObserver(fileObserver);
+
+    Observer* dualObserver = ObsFactory::createDualObserver("./logs/complete_server.log");
+    serverMgr->addObserver(dualObserver);
+
+    serverRunning = true;
     serverMgr->start();
 
     printMessage("All servers started. Press Enter to stop servers.");
@@ -74,16 +84,19 @@ void testConns() {
     serverRunning = false;
     serverMgr->stop();
 
-    delete serverMgr;
+    delete consoleObserver;
+    delete fileObserver;
+    delete dualObserver;
+
     printMessage("All servers stopped. Test complete.");
 }
 
 int main() {
-   // testDocker();
-    //if (!testDB()) {
-    //    std::cerr << "Database test failed" << std::endl;
-    //    //return 1;
-    //}
+    // testDocker();
+     //if (!testDB()) {
+     //    std::cerr << "Database test failed" << std::endl;
+     //    //return 1;
+     //}
     testConns();
     return 0;
 }

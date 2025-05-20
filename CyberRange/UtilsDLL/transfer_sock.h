@@ -1,11 +1,12 @@
 ﻿#pragma once
 #include "TCPSock.h"
+#include "Observable.h"
 #include <string>
 #include <atomic>
 #include <vector>
 #include <functional>
 
-class UTILS_API transfer_sock : public TCPSock {
+class UTILS_API transfer_sock : public TCPSock{
 private:
     std::atomic<int> transferProgress;
     std::string filePath;

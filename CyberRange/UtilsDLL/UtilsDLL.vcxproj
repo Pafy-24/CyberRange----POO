@@ -112,15 +112,15 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Includes\SFML-2.6.2\include;$(SolutionDir)Includes\OpenSSL-Win64\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Includes\SFML-2.6.2\include;$(SolutionDir)Includes\OpenSSL-Win64\include;$(SolutionDir)\ObserverDLL</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalLibraryDirectories>$(SolutionDir)Includes\SFML-2.6.2\lib;$(SolutionDir)Includes\OpenSSL-Win64\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib;$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;$(SolutionDir)\Includes\SFML-2.6.2\lib\sfml-network-d.lib;$(SolutionDir)\Includes\SFML-2.6.2\lib\sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)Includes\SFML-2.6.2\lib;$(SolutionDir)Includes\OpenSSL-Win64\lib;$(SolutionDir)$(IntDir)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libcrypto.lib;$(SolutionDir)\Includes\OpenSSL-Win64\lib\VC\x64\MD\libssl.lib;$(SolutionDir)\Includes\SFML-2.6.2\lib\sfml-network-d.lib;$(SolutionDir)\Includes\SFML-2.6.2\lib\sfml-system-d.lib;ObserverDLL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -209,6 +209,11 @@
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
     <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ObserverDLL\ObserverDLL.vcxproj">
+      <Project>{21e76ebb-c041-4d24-bbfe-5c63f75dccf1}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

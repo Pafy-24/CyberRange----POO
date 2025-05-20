@@ -55,7 +55,7 @@ void Loader::loadUser(int id, Connection* conn)
         }
         else
         {
-            std::cerr << "[Loader] User not found: " << id << "\n";
+            printError("[Loader] User not found: " + id );
         }
     }
     else
@@ -132,7 +132,7 @@ void Loader::loadTeam(int id, Connection* conn)
         }
         else
         {
-            std::cerr << "[Loader] Team not found: " << id << "\n";
+            printError("[Loader] Team not found: " + id );
         }
     }
     else
@@ -158,7 +158,7 @@ void Loader::loadChall(int id, Contest* mng, Connection* conn)
     }
     else
     {
-        std::cerr << "[Loader] Challenge not found: " << id << "\n";
+        printError("[Loader] Challenge not found: " + id );
     }
 }
 
@@ -175,7 +175,7 @@ void Loader::loadChall(int id, Tab* mng, Connection* conn)
     }
     else
     {
-        std::cerr << "[Loader] Challenge not found: " << id << "\n";
+        printError("[Loader] Challenge not found: " + id );
     }
 }
 
@@ -225,7 +225,7 @@ void Loader::loadContest(int id, Connection* conn)
         }
         else
         {
-            std::cerr << "[Loader] Contest not found: " << id << "\n";
+            printError("[Loader] Contest not found: " + id );
         }
     }
 }
@@ -260,7 +260,7 @@ void Loader::loadTab(int id, Connection* conn)
         }
         else
         {
-            std::cerr << "[Loader] Tab not found: " << id << "\n";
+            printError("[Loader] Tab not found: " + id );
         }
     }
 }
@@ -276,7 +276,7 @@ void Loader::save(Connection* conn)
             saveObject(objId);
         }
     }
-    std::cout << "[Loader] Saved all objects for connection.\n";
+    printInfo("[Loader] Saved all objects for connection.");
 }
 
 void Loader::unloadObject(Connection* conn, const std::string& objId)
@@ -320,7 +320,7 @@ void Loader::unload(Connection* conn)
             unloadObject(conn, objId);
         }
         objLoaded.erase(conn);
-        std::cout << "[Loader] Unloaded all objects for connection.\n";
+        printInfo("[Loader] Unloaded all objects for connection.");
     }
 }
 
@@ -335,7 +335,7 @@ void Loader::saveUnload(Connection* conn)
 void Loader::registerObject(Connection* conn, const std::string& objId)
 {
     objLoaded[conn].insert(objId);
-    std::cout << "[Loader] Registered object: " << objId << " for connection.\n";
+    printInfo("[Loader] Registered object: " + objId + " for connection.");
 }
 
 bool Loader::isLoaded(Connection* conn, const std::string& objId) const
@@ -386,7 +386,7 @@ void Loader::saveUser(int userId)
                 "', '" + user->GetPassword() + "', '" + user->GetEmail() + "', '" + role + "')";
             ServerMng::getInstance()->getDBController()->executeUpdate(query);
         }
-        std::cout << "[Loader] Saved user: " << userId << "\n";
+        printInfo("[Loader] Saved user: " + userId );
     }
 }
 
@@ -425,7 +425,7 @@ void Loader::saveTeam(int teamId)
                 ServerMng::getInstance()->getDBController()->executeUpdate(relationQuery);
             }
         }
-        std::cout << "[Loader] Saved team: " << teamId << "\n";
+        printInfo("[Loader] Saved team: " + teamId );
     }
 }
 
@@ -526,7 +526,7 @@ void Loader::saveChall(int challId)
 
     }
 
-    std::cout << "[Loader] Saved challenge: " << challId << "\n";
+    printInfo("[Loader] Saved challenge: " + challId );
 }
 
 void Loader::saveContest(int contestId)
@@ -581,7 +581,7 @@ void Loader::saveContest(int contestId)
             saveChall(challPair.first);
         }
 
-        std::cout << "[Loader] Saved contest: " << contestId << "\n";
+        printInfo("[Loader] Saved contest: " + contestId );
     }
 }
 
@@ -613,7 +613,7 @@ void Loader::saveTab(int tabId)
             saveChall(challPair.first);
         }
 
-        std::cout << "[Loader] Saved tab: " << tabId << "\n";
+        printInfo("[Loader] Saved tab: " + tabId );
     }
 }
 
@@ -710,7 +710,7 @@ void Loader::cleanupUser(int userId, Connection* conn)
 
             delete user;
             users.erase(userIt);
-            std::cout << "[Loader] Cleaned up user: " << userId << "\n";
+            printInfo("[Loader] Cleaned up user: " + userId );
         }
     }
 }
@@ -749,7 +749,7 @@ void Loader::cleanupTeam(int teamId, Connection* conn)
 
             delete team;
             teams.erase(teamIt);
-            std::cout << "[Loader] Cleaned up team: " << teamId << "\n";
+            printInfo("[Loader] Cleaned up team: " + teamId );
         }
     }
 }
@@ -782,7 +782,7 @@ void Loader::cleanupChall(int challId, Connection* conn)
                 deleted = true;
             }
             contest->removeChallenge(challId);
-            std::cout << "[Loader] Removed challenge " << challId << " from contest " << contestPair.first << "\n";
+            printInfo("[Loader] Removed challenge " + std::to_string(challId) + " from contest " + std::to_string(contestPair.first));
         }
     }
 
@@ -807,7 +807,7 @@ void Loader::cleanupChall(int challId, Connection* conn)
                 delete challenges[challId];
             }
             tab->removeChallenge(challId);
-            std::cout << "[Loader] Removed challenge " << challId << " from tab " << tabPair.first << "\n";
+            printInfo("[Loader] Removed challenge " + std::to_string(challId)+ " from tab " + std::to_string(tabPair.first));
         }
     }
 }
@@ -846,7 +846,7 @@ void Loader::cleanupContest(int contestId, Connection* conn)
         }
 
         ServerMng::getInstance()->getChallMng()->removeContest(contestId);
-        std::cout << "[Loader] Cleaned up contest: " << contestId << "\n";
+        printInfo("[Loader] Cleaned up contest: " + contestId );
     }
 }
 
@@ -869,6 +869,6 @@ void Loader::cleanupTab(int tabId, Connection* conn)
         }
 
         ServerMng::getInstance()->getChallMng()->removeTab(tabId);
-        std::cout << "[Loader] Cleaned up tab: " << tabId << "\n";
+        printInfo("[Loader] Cleaned up tab: " + tabId );
     }
 }

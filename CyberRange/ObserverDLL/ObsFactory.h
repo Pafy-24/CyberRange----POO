@@ -1,21 +1,16 @@
 #pragma once
-#include <string>
-#include "Observer.h"
-#include "UserObs.h"
-#include "SocketObs.h"
-#include "ContestObs.h"
-#include "ChallObs.h"
-#include "TeamObs.h"
-#include "LogObs.h"
-#include "Logger.h"
 
-class ObsFactory {
+#include "Observer.h"
+#include "CObs.h"
+#include <memory>
+#include <string>
+
+
+class OBSERVER_API ObsFactory {
 public:
-    Observer* createObs(std::string type, Logger& logger);
-    UserObs* createUserObs(Logger& logger);
-    SocketObs* createSocketObs(Logger& logger);
-    ContestObs* createContestObs(Logger& logger, std::string contestId);
-    ChallObs* createChallObs(Logger& logger);
-    TeamObs* createTeamObs(Logger& logger);
-    LogObs* createLogObs(Logger& logger);
+    static Observer* createObserver(OutputType type, const std::string& fileName = "server_log.txt");
+
+    static Observer* createConsoleObserver();
+    static Observer* createFileObserver(const std::string& fileName = "server_log.txt");
+    static Observer* createDualObserver(const std::string& fileName = "server_log.txt");
 };

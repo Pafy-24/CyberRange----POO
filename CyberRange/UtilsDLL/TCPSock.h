@@ -1,5 +1,6 @@
 #pragma once
 #include "Connection.h"
+#include "Observable.h"
 #include "TcpSocketWrapper.h"
 #include <SFML/Network.hpp>
 #include <openssl/ssl.h>
@@ -8,7 +9,7 @@
 #include <atomic>
 #include <functional>
 
-class UTILS_API TCPSock : public Connection {
+class UTILS_API TCPSock : public Connection,public Observable {
 protected:
     std::unique_ptr<sf::TcpListener> tcpListener;
     std::string address;

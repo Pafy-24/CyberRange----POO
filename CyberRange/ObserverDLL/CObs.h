@@ -1,21 +1,23 @@
 #pragma once
-#include <string>
-#include <map>
 #include "Observer.h"
-#include "Logger.h"
 
 class CObs : public Observer {
 private:
-    Logger* logger;
-    std::string observerType;
-    bool active;
+    OutputType outputType;
+    std::string logFileName;
+    std::ofstream logFile;
 
 public:
-    CObs(Logger& logger);
-    void update(std::map<std::string, std::string> data) override;
-    void audit();
-    void logEvent(std::string event, int level);
-    std::string getObserverType() override;
-    void setActive(bool active);
-    bool isActive();
+
+    CObs(OutputType type = OutputType::CONSOLE, const std::string& fileName = "server_log.txt");
+    virtual ~CObs();
+
+
+    void update(const std::string& message) override;
+
+
+    void setOutputType(OutputType type);
+
+
+    void setLogFileName(const std::string& fileName);
 };

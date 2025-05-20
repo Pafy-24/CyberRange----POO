@@ -6,6 +6,7 @@
 UDPSock::UDPSock(const std::string& addr, int port)
     : udpSocket(nullptr), address(addr), port(port), connected(false),
     isServer(false), timeout(sf::seconds(30)), tlsEnabled(false), dtlsContext(nullptr) {
+    printInfo("Created UDP socket for " + addr + ":" + std::to_string(port));
 }
 
 UDPSock::~UDPSock() {
@@ -18,18 +19,19 @@ UDPSock::~UDPSock() {
         udpSocket = nullptr;
     }
     cleanupDTLS();
+    printInfo("UDP socket destroyed");
 }
 
 bool UDPSock::connect() {
     if (isServer || connected || udpSocket != nullptr) {
-        std::cerr << "Cannot connect: socket already in use or is a server" << std::endl;
+        printError("Cannot connect: socket already in use or is a server");
         return false;
     }
     udpSocket = new sf::UdpSocket();
     udpSocket->setBlocking(true);
     sf::Socket::Status status = udpSocket->bind(sf::Socket::AnyPort);
     if (status != sf::Socket::Status::Done) {
-        std::cerr << "Error binding UDP socket: " << static_cast<int>(status) << std::endl;
+        printError("Error binding UDP socket: " + std::to_string(static_cast<int>(status)));
         delete udpSocket;
         udpSocket = nullptr;
         return false;
@@ -41,6 +43,7 @@ bool UDPSock::connect() {
         }
     }
     connected = true;
+    printInfo("Connected UDP socket to " + address + ":" + std::to_string(port));
     return true;
 }
 
@@ -57,6 +60,7 @@ bool UDPSock::disconnect() {
         udpSocket = nullptr;
     }
     connected = false;
+    printInfo("Disconnected UDP socket from " + address + ":" + std::to_string(port));
     return true;
 }
 
@@ -66,12 +70,12 @@ bool UDPSock::isConnected() const {
 
 int UDPSock::send(const std::string& data) {
     if (!connected || udpSocket == nullptr) {
-        std::cerr << "Cannot send: not connected" << std::endl;
+        printError("Cannot send: not connected");
         return -1;
     }
     std::size_t bytesSent = data.length();
     if (tlsEnabled && dtlsContext) {
-        std::cerr << "DTLS send not implemented yet" << std::endl;
+        printError("DTLS send not implemented yet");
         return -1;
     }
     else {
@@ -80,40 +84,42 @@ int UDPSock::send(const std::string& data) {
         packet << data;
         sf::Socket::Status status = udpSocket->send(packet, recipient, static_cast<unsigned short>(port));
         if (status != sf::Socket::Status::Done) {
-            std::cerr << "Error sending data: " << static_cast<int>(status) << std::endl;
+            printError("Error sending data: " + std::to_string(static_cast<int>(status)));
             return -1;
         }
     }
+    printInfo("Sent " + std::to_string(bytesSent) + " bytes to " + address + ":" + std::to_string(port));
     return static_cast<int>(bytesSent);
 }
 
 std::string UDPSock::receive() {
     if (!connected || udpSocket == nullptr) {
-        std::cerr << "Cannot receive: not connected" << std::endl;
+        printError("Cannot receive: not connected");
         return "";
     }
     sf::Packet packet;
     sf::IpAddress sender;
     unsigned short senderPort;
     if (tlsEnabled && dtlsContext) {
-        std::cerr << "DTLS receive not implemented yet" << std::endl;
+        printError("DTLS receive not implemented yet");
         return "";
     }
     else {
         sf::Socket::Status status = udpSocket->receive(packet, sender, senderPort);
         if (status != sf::Socket::Status::Done) {
-            std::cerr << "Error receiving data: " << static_cast<int>(status) << std::endl;
+            printError("Error receiving data: " + std::to_string(static_cast<int>(status)));
             return "";
         }
     }
     std::string data;
     packet >> data;
+    printInfo("Received " + std::to_string(data.length()) + " bytes from " + sender.toString() + ":" + std::to_string(senderPort));
     return data;
 }
 
 bool UDPSock::bind(int bindPort) {
     if (connected || udpSocket != nullptr) {
-        std::cerr << "Cannot bind: socket already in use" << std::endl;
+        printError("Cannot bind: socket already in use");
         return false;
     }
     if (bindPort > 0) {
@@ -122,13 +128,14 @@ bool UDPSock::bind(int bindPort) {
     udpSocket = new sf::UdpSocket();
     sf::Socket::Status status = udpSocket->bind(static_cast<unsigned short>(port));
     if (status != sf::Socket::Status::Done) {
-        std::cerr << "Error binding socket: " << static_cast<int>(status) << std::endl;
+        printError("Error binding socket: " + std::to_string(static_cast<int>(status)));
         delete udpSocket;
         udpSocket = nullptr;
         return false;
     }
     isServer = true;
     connected = true;
+    printInfo("Bound UDP socket to port " + std::to_string(port));
     return true;
 }
 
@@ -150,10 +157,10 @@ int UDPSock::getPort() const {
 
 bool UDPSock::enableTLS() {
     if (connected && !tlsEnabled) {
-        std::cerr << "Cannot enable DTLS on already connected socket" << std::endl;
+        printError("Cannot enable DTLS on already connected socket");
         return false;
     }
-    std::cout << "Enabling DTLS for UDP socket" << std::endl;
+    printInfo("Enabling DTLS for UDP socket");
     tlsEnabled = true;
     return true;
 }
@@ -164,6 +171,7 @@ bool UDPSock::isTLSEnabled() const {
 
 void UDPSock::setTimeout(int ms) {
     timeout = sf::milliseconds(ms);
+    printInfo("Set timeout to " + std::to_string(ms) + " ms");
 }
 
 int UDPSock::getTimeout() const {
@@ -172,22 +180,22 @@ int UDPSock::getTimeout() const {
 
 bool UDPSock::startListening(std::function<void(const std::string&, Connection*)> handler) {
     if (thisServerRunning) {
-        std::cerr << "Server is already running" << std::endl;
+        printError("Server is already running");
         return false;
     }
     if (!bind(port)) {
-        std::cerr << "Failed to bind server socket" << std::endl;
+        printError("Failed to bind server socket");
         return false;
     }
     requestHandler = handler;
     thisServerRunning = true;
     std::thread serverThread([this]() {
-        std::cout << "UDP server started on port " << getPort() << std::endl;
+        printInfo("UDP server started on port " + std::to_string(getPort()));
         while (thisServerRunning) {
             handleClientRequest();
             std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
-        std::cout << "UDP server stopped" << std::endl;
+        printInfo("UDP server stopped");
         });
     serverThread.detach();
     return true;
@@ -195,6 +203,7 @@ bool UDPSock::startListening(std::function<void(const std::string&, Connection*)
 
 void UDPSock::stopServer() {
     if (thisServerRunning) {
+        printInfo("Stopping UDP server...");
         thisServerRunning = false;
         disconnect();
     }
@@ -205,12 +214,12 @@ bool UDPSock::isServerRunning() const {
 }
 
 void UDPSock::setCertificates(const std::string& cert, const std::string& key) {
-    std::cerr << "UDPSock does not support setting certificates" << std::endl;
+    printWarning("UDPSock does not support setting certificates");
 }
 
 bool UDPSock::setupDTLS() {
     if (tlsEnabled && !dtlsContext) {
-        std::cout << "Setting up DTLS connection..." << std::endl;
+        printInfo("Setting up DTLS connection...");
         dtlsContext = (void*)1;
         return true;
     }
@@ -219,7 +228,7 @@ bool UDPSock::setupDTLS() {
 
 bool UDPSock::cleanupDTLS() {
     if (dtlsContext) {
-        std::cout << "Cleaning up DTLS resources..." << std::endl;
+        printInfo("Cleaning up DTLS resources...");
         dtlsContext = nullptr;
     }
     return true;
@@ -239,8 +248,8 @@ void UDPSock::handleClientRequest() {
     std::string data;
     packet >> data;
     if (!data.empty()) {
-        std::cout << "Received from " << clientAddr.toString() << ":" << clientPort
-            << " - " << data.length() << " bytes" << std::endl;
+        printInfo("Received from " + clientAddr.toString() + ":" + std::to_string(clientPort) + " - " + std::to_string(data.length()) + " bytes");
+        
         if (requestHandler) {
             requestHandler(data, nullptr);
         }
@@ -248,6 +257,7 @@ void UDPSock::handleClientRequest() {
             sf::Packet response;
             response << "Echo: " + data;
             udpSocket->send(response, clientAddr, clientPort);
+            printInfo("Echoed message back to " + clientAddr.toString() + ":" + std::to_string(clientPort));
         }
     }
 }
@@ -257,6 +267,6 @@ void UDPSock::handleRequest(const std::string& data, Connection* client) {
         requestHandler(data, client);
     }
     else {
-        std::cout << "No request handler set for data: " << data << std::endl;
+        printLog("No request handler set for data: " + data);
     }
 }
