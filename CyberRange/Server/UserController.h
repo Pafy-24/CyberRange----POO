@@ -1,14 +1,12 @@
 #pragma once
 #include "CController.h"
-#include "Observable.h"
 #include "json.hpp"
 #include <string>
 
-using json = nlohmann::json;
 
 class Connection;
 
-class UserController : public CController, public Observable {
+class UserController : public CController {
 public:
     UserController();
 

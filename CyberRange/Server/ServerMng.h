@@ -14,12 +14,14 @@
 #include "Loader.h"
 #include "ChallMng.h"
 
+
+class Observer;
+
 class ServerMng : public Observable {
 private:
     static ServerMng* instance;
 
     std::atomic<bool> isRunning;
-
 
     std::vector<Connection*> servers;
     std::vector<Connection*> connections;
@@ -35,6 +37,9 @@ private:
     Loader* loader;
     int port;
     std::string serverAddress;
+
+    // Observer management
+    std::map<std::string, Observer*> namedObservers;
 
     ServerMng(int port, std::string address);
     void runTCPServer(int port, bool useTLS);
@@ -76,4 +81,19 @@ public:
 
     User* findUser(const std::string& usrName_email);
 
+
+    Observer* addNamedObserver(const std::string& name, Observer* observer);
+    Observer* getNamedObserver(const std::string& name);
+    void removeNamedObserver(const std::string& name);
+
+
+    Observer* createConsoleObserver(const std::string& name = "console");
+    Observer* createFileObserver(const std::string& name, const std::string& filePath);
+    Observer* createDualObserver(const std::string& name, const std::string& filePath);
+
+
+
+    void broadcastInfo(const std::string& message);
+    void broadcastWarning(const std::string& message);
+    void broadcastError(const std::string& message);
 };

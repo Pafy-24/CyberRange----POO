@@ -1,13 +1,14 @@
 #pragma once
 #include "Connection.h"
 #include "TCPSock.h"
+#include "Observable.h" // Added Observable header
 #include <memory>
 #include <string>
 #include <stdexcept>
 #include <sql.h>
 #include <sqlext.h>
 
-class UTILS_API DBConn : public Connection {
+class UTILS_API DBConn : public Connection, public Observable { // Added Observable inheritance
 protected:
     std::unique_ptr<TCPSock> dbSocket;
     std::string connectionString;

@@ -39,14 +39,14 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
                     {"action", "getTabList"},
                     {"data", data}
                     }.dump());
-                logger->log("Tab list retrieved successfully.");
+                print("Tab list retrieved successfully.");
             }
             else {
                 client->send(json{
                     {"status", "error"},
                     {"message", "No tabs found"}
                     }.dump());
-                logger->log("No tabs found in database.");
+                print("No tabs found in database.");
             }
         }
         else if (action == "getTabDetails")
@@ -64,14 +64,14 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
 					{"action", "getTabDetails"},
 					{"data", data}
 					}.dump());
-				logger->log("Tab details retrieved successfully.");
+				print("Tab details retrieved successfully.");
 			}
 			else {
 				client->send(json{
 					{"status", "error"},
 					{"message", "Tab not found"}
 					}.dump());
-				logger->log("Tab not found: " + tabId);
+				print("Tab not found: " + tabId);
 			}
         }
         else {
@@ -79,7 +79,7 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
                 {"status", "error"},
                 {"message", "Invalid action"}
                 }.dump());
-            logger->log("Invalid action in TabController: " + action);
+            print("Invalid action in TabController: " + action);
         }
     }
     catch (const std::exception& e) {
@@ -87,7 +87,7 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
             {"status", "error"},
             {"message", "Request processing failed"}
             }.dump());
-        logger->log("TabController error: " + std::string(e.what()));
+        print("TabController error: " + std::string(e.what()));
     }
 }
 

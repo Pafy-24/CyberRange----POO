@@ -8,6 +8,8 @@
 #include "ChallController.h"
 #include "ContestController.h"
 #include "Observer.h"
+#include "CObs.h"
+#include "ObsFactory.h"
 #include <iostream>
 #include <algorithm>
 #include <thread>
@@ -19,6 +21,10 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
         instance = new ServerMng(port, address);
     }
     return instance;
+}
+
+void observe() {
+
 }
 
 ServerMng::ServerMng(int port, std::string address)
@@ -37,6 +43,9 @@ ServerMng::ServerMng(int port, std::string address)
     attachController("ChallController", new ChallController());
     attachController("ContestController", new ContestController());
     attachController("default", new Controller());
+
+
+    createDualObserver("Server","./logs/server");
 }
 
 ServerMng::~ServerMng() {
@@ -76,6 +85,12 @@ void ServerMng::stop() {
     }
     controllers.clear();
 
+    // Clean up named observers
+    for (auto& observer : namedObservers) {
+        removeObserver(observer.second);
+        delete observer.second;
+    }
+    namedObservers.clear();
 
     delete loader;
     loader = nullptr;
@@ -108,7 +123,7 @@ void ServerMng::removeConnection(Connection* conn) {
 void ServerMng::attachController(std::string name, Controller* ctrl) {
     if (ctrl) {
         controllers[name] = ctrl;
-        loader->registerObject(nullptr, name); 
+        loader->registerObject(nullptr, name);
         print("Attached controller: " + name);
     }
 }
@@ -201,6 +216,83 @@ User* ServerMng::findUser(const std::string& usrName_email)
         }
     }
     return nullptr;
+}
+
+// Enhanced Observer Management Methods
+
+Observer* ServerMng::addNamedObserver(const std::string& name, Observer* observer) {
+    if (observer) {
+        auto it = namedObservers.find(name);
+        if (it != namedObservers.end()) {
+            // Replace existing observer
+            removeObserver(it->second);
+            delete it->second;
+            namedObservers.erase(it);
+        }
+
+        namedObservers[name] = observer;
+        addObserver(observer);
+        print("Added named observer: " + name);
+        return observer;
+    }
+    return nullptr;
+}
+
+Observer* ServerMng::getNamedObserver(const std::string& name) {
+    auto it = namedObservers.find(name);
+    if (it != namedObservers.end()) {
+        return it->second;
+    }
+    return nullptr;
+}
+
+void ServerMng::removeNamedObserver(const std::string& name) {
+    auto it = namedObservers.find(name);
+    if (it != namedObservers.end()) {
+        print("Removing named observer: " + name);
+        removeObserver(it->second);
+        delete it->second;
+        namedObservers.erase(it);
+    }
+}
+
+Observer* ServerMng::createConsoleObserver(const std::string& name) {
+    Observer* observer = ObsFactory::createConsoleObserver();
+    if (observer) {
+        addNamedObserver(name, observer);
+        return observer;
+    }
+    return nullptr;
+}
+
+Observer* ServerMng::createFileObserver(const std::string& name, const std::string& filePath) {
+    Observer* observer = ObsFactory::createFileObserver(filePath);
+    if (observer) {
+        addNamedObserver(name, observer);
+        return observer;
+    }
+    return nullptr;
+}
+
+Observer* ServerMng::createDualObserver(const std::string& name, const std::string& filePath) {
+    Observer* observer = ObsFactory::createDualObserver(filePath);
+    if (observer) {
+        addNamedObserver(name, observer);
+        return observer;
+    }
+    return nullptr;
+}
+
+void ServerMng::broadcastInfo(const std::string& message) {
+    printInfo(message);
+}
+
+void ServerMng::broadcastWarning(const std::string& message) {
+    printWarning(message);
+}
+
+void ServerMng::broadcastError(const std::string& message) {
+    printError(message);
 }
 
 void ServerMng::runTCPServer(int port, bool useTLS) {

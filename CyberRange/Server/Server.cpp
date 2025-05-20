@@ -60,23 +60,21 @@ void testDocker() {
     delete docker;
 }
 
-void testConns() {
+void runServer() {
     printMessage("Network Test Server Starting");
 
     int basePort = 1337;
     ServerMng* serverMgr = ServerMng::getInstance(basePort, "0.0.0.0");
 
-    Observer* consoleObserver = ObsFactory::createConsoleObserver();
-    serverMgr->addObserver(consoleObserver);
 
-    Observer* fileObserver = ObsFactory::createFileObserver("./logs/server_activities.log");
-    serverMgr->addObserver(fileObserver);
-
-    Observer* dualObserver = ObsFactory::createDualObserver("./logs/complete_server.log");
-    serverMgr->addObserver(dualObserver);
 
     serverRunning = true;
     serverMgr->start();
+
+
+    serverMgr->broadcastInfo("Server initialized successfully");
+    serverMgr->broadcastWarning("This is a test warning message");
+
 
     printMessage("All servers started. Press Enter to stop servers.");
     std::cin.get();
@@ -84,19 +82,11 @@ void testConns() {
     serverRunning = false;
     serverMgr->stop();
 
-    delete consoleObserver;
-    delete fileObserver;
-    delete dualObserver;
-
     printMessage("All servers stopped. Test complete.");
 }
 
 int main() {
     // testDocker();
-     //if (!testDB()) {
-     //    std::cerr << "Database test failed" << std::endl;
-     //    //return 1;
-     //}
-    testConns();
+    runServer();
     return 0;
 }

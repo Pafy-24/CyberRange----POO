@@ -43,7 +43,7 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                     {"action", "getChallengeList"},
                     {"data", data}
                     }.dump());
-                logger->log("Challenge list retrieved successfully.");
+                print("Challenge list retrieved successfully.");
             }
             else {
                 client->send(json{ {"status", "error"}, {"message", "No challenges found"} }.dump());
@@ -66,11 +66,11 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                     }}
                 };
                 client->send(response.dump());
-                logger->log("Retrieved challenge details: " + challId);
+                print("Retrieved challenge details: " + challId);
             }
             else {
                 client->send(json{ {"status", "error"}, {"message", "Challenge not found"} }.dump());
-                logger->log("Challenge not found: " + challId);
+                print("Challenge not found: " + challId);
             }
 
         }
@@ -85,33 +85,33 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                     std::string query = "INSERT INTO SolvedChallenges (userId, challId) VALUES (?, ?)";
                     if (dbController->executeUpdate(query, { userId, challId })) {
                         client->send(json{ {"status", "success"}, {"message", "Flag correct"} }.dump());
-                        logger->log("Flag submitted: " + challId + " by user: " + userId);
+                        print("Flag submitted: " + challId + " by user: " + userId);
                     }
                     else {
                         client->send(json{ {"status", "error"}, {"message", "Failed to record solution"} }.dump());
-                        logger->log("Failed to record solution for: " + challId);
+                        print("Failed to record solution for: " + challId);
                     }
                 }
                 else {
                     client->send(json{ {"status", "error"}, {"message", "Incorrect flag"} }.dump());
-                    logger->log("Incorrect flag for: " + challId);
+                    print("Incorrect flag for: " + challId);
                 }
             }
             else {
                 client->send(json{ {"status", "error"}, {"message", "Challenge not found"} }.dump());
-                logger->log("Challenge not found: " + challId);
+                print("Challenge not found: " + challId);
             }
 
         }
         else {
             client->send(json{ {"status", "error"}, {"message", "Invalid action"} }.dump());
-            logger->log("Invalid action in ChallController: " + action);
+            print("Invalid action in ChallController: " + action);
         }
 
     }
     catch (const std::exception& e) {
         client->send(json{ {"status", "error"}, {"message", "Request processing failed"} }.dump());
-        logger->log("ChallController error: " + std::string(e.what()));
+        print("ChallController error: " + std::string(e.what()));
     }
 }
 
@@ -130,11 +130,11 @@ void ChallController::loadChallenge(const std::string& challId) {
         challenge->setDescription(results[0]["description"]);
         challenge->setFlag(results[0]["flag"]);
         challenges[challId] = challenge;
-        logger->log("Loaded challenge: " + challId);
+        print("Loaded challenge: " + challId);
     }
     else 
     {
-        logger->log("Failed to load challenge: " + challId);
+        print("Failed to load challenge: " + challId);
     }
 }
 
@@ -145,6 +145,6 @@ void ChallController::unloadChallenge(const std::string& challId) {
         ServerMng::getInstance()->getDBController()->executeUpdate(query, {challId});
         delete it->second;
         challenges.erase(it);
-        logger->log("Unloaded challenge: " + challId);
+        print("Unloaded challenge: " + challId);
     }
 }

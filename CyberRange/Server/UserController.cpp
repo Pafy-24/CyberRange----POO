@@ -4,17 +4,20 @@
 #include "CustomSerial.h"
 #include <iostream>
 
+using json = nlohmann::json;
 
 UserController::UserController()
     : CController("UserController") {
+    printInfo("UserController initialized");
 }
 
 void UserController::Login(const json& data, Connection* client)
 {
-    std::cout << "[Server] Received login request:\n" << data.dump(4) << "\n";
+    print("[Server] Received login request:\n"+ data.dump(4));
     std::string username = data["payload"]["username"];
     std::string password = data["payload"]["password"];
 
+    printInfo("Login attempt for user: " + username);
 
     int id = ServerMng::getInstance()->getLoader()->loadUserByUsername(username, client);
     if (id == -1) id = ServerMng::getInstance()->getLoader()->loadUserByEmail(username, client);
@@ -42,11 +45,17 @@ void UserController::Login(const json& data, Connection* client)
                 {"username", user->GetUsername()},
                 {"role", user->GetAccessLevel()}
             };
-            std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
+            print("[Server] Sending response:\n" + response.dump(4) );
             client->send(response.dump());
-            logger->log("User logged in: " + username);
+            printInfo("User logged in successfully: " + username);
             return;
         }
+        else {
+            printWarning("Login failed - Password mismatch for user: " + username);
+        }
+    }
+    else {
+        printWarning("Login failed - User not found: " + username);
     }
 
     json response = {
@@ -55,10 +64,8 @@ void UserController::Login(const json& data, Connection* client)
         {"status", "error"},
         {"message", "Invalid username or password"}
     };
-    std::cout << "[Server] Sending response:\n" << response.dump(4) << "\n";
+    print("[Server] Sending response:\n" + response.dump(4) );
     client->send(response.dump());
-    logger->log("Login failed for user: " + username);
-
 }
 
 void UserController::Register(const json& data, Connection* client)
@@ -69,6 +76,8 @@ void UserController::Register(const json& data, Connection* client)
         std::string email = data["payload"].value("email", "");
         std::string role = "student"; // implicit
 
+        printInfo("Registration attempt for user: " + username + ", email: " + email);
+
         if (username.empty() || password.empty() || email.empty())
         {
             json response = {
@@ -78,6 +87,7 @@ void UserController::Register(const json& data, Connection* client)
                 {"message", "Missing required fields"}
             };
             client->send(response.dump());
+            printWarning("Registration failed - Missing required fields");
             return;
         }
 
@@ -90,6 +100,7 @@ void UserController::Register(const json& data, Connection* client)
                 {"message", "Username already exists"}
             };
             client->send(response.dump());
+            printWarning("Registration failed - Username already exists: " + username);
             return;
         }
 
@@ -102,20 +113,21 @@ void UserController::Register(const json& data, Connection* client)
                 {"message", "Email already exists"}
             };
             client->send(response.dump());
+            printWarning("Registration failed - Email already exists: " + email);
             return;
         }
 
-        auto newUserPtr = UsersFactory::CreateUser(username, email, -1); 
+        auto newUserPtr = UsersFactory::CreateUser(username, email, -1);
         User* newUser = newUserPtr.release();
         newUser->SetPassword(password);
         int r;
-		if (role == "admin") r = 10;
-		else if (role == "writer") r = 5;
-		else r = 1;
+        if (role == "admin") r = 10;
+        else if (role == "writer") r = 5;
+        else r = 1;
         newUser->SetAccessLevel(r);
 
 
-		auto users = ServerMng::getInstance()->getUsers();
+        auto users = ServerMng::getInstance()->getUsers();
         ServerMng::getInstance()->pushUser(newUser, client);
         ServerMng::getInstance()->getLoader()->registerObject(client, "user:" + std::to_string(-1));
         ServerMng::getInstance()->getLoader()->save(client);
@@ -127,7 +139,7 @@ void UserController::Register(const json& data, Connection* client)
             {"status", "success"}
         };
         client->send(response.dump());
-        logger->log("User registered: " + username);
+        printInfo("User registered successfully: " + username + ", role: " + role);
     }
     catch (const std::exception& e) {
         json response = {
@@ -137,7 +149,7 @@ void UserController::Register(const json& data, Connection* client)
             {"message", "Registration failed: " + std::string(e.what())}
         };
         client->send(response.dump());
-        logger->log(std::string("[Register] Exception: ") + e.what());
+        printError("Registration exception: " + std::string(e.what()));
     }
 }
 
@@ -152,6 +164,7 @@ void UserController::Update(const json& data, Connection* client)
                 {"message", "Missing token or payload"}
             };
             client->send(response.dump());
+            printWarning("Update failed - Missing token or payload");
             return;
         }
 
@@ -165,12 +178,15 @@ void UserController::Update(const json& data, Connection* client)
                 {"message", "Invalid or expired token"}
             };
             client->send(response.dump());
+            printWarning("Update failed - Invalid or expired token");
             return;
         }
 
         std::string userDataStr = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
         json userData = json::parse(userDataStr);
         int userId = userData["userId"];
+
+        printInfo("Update attempt for user ID: " + std::to_string(userId));
 
         ServerMng::getInstance()->getLoader()->loadUser(userId, client);
 
@@ -193,9 +209,11 @@ void UserController::Update(const json& data, Connection* client)
                         {"message", "Username already exists"}
                     };
                     client->send(response.dump());
+                    printWarning("Update failed - Username already exists: " + newUsername);
                     return;
                 }
 
+                printInfo("Updating username from " + user->GetUsername() + " to " + newUsername);
                 user->SetUsername(newUsername);
                 needsUpdate = true;
             }
@@ -215,9 +233,11 @@ void UserController::Update(const json& data, Connection* client)
                         {"message", "Email already exists"}
                     };
                     client->send(response.dump());
+                    printWarning("Update failed - Email already exists: " + newEmail);
                     return;
                 }
 
+                printInfo("Updating email for user " + user->GetUsername() + " to " + newEmail);
                 user->SetEmail(newEmail);
                 needsUpdate = true;
             }
@@ -227,6 +247,7 @@ void UserController::Update(const json& data, Connection* client)
                 if (data["payload"]["oldPassword"] == user->GetPassword())
                     if (data["payload"]["password"].get<std::string>().size() > 3) {
                         user->SetPassword(data["payload"]["password"]);
+                        printInfo("Password updated for user: " + user->GetUsername());
                         needsUpdate = true;
                     }
             }
@@ -235,9 +256,9 @@ void UserController::Update(const json& data, Connection* client)
                 ServerMng::getInstance()->getLoader()->save(client);
                 std::string objId = "user:" + std::to_string(userId);
                 ServerMng::getInstance()->getLoader()->unloadObject(client, objId);
-                ServerMng::getInstance()->getLoader()->loadUser(userId,client);
+                ServerMng::getInstance()->getLoader()->loadUser(userId, client);
 
-				user = ServerMng::getInstance()->getUsers()[userId].first;
+                user = ServerMng::getInstance()->getUsers()[userId].first;
                 json newUserData = {
                     {"userId", userId},
                     {"username", user->GetUsername()},
@@ -257,7 +278,7 @@ void UserController::Update(const json& data, Connection* client)
                     {"message", "User updated successfully"}
                 };
                 client->send(response.dump());
-                logger->log("User updated: " + std::to_string(userId));
+                printInfo("User updated successfully: " + user->GetUsername() + ", ID: " + std::to_string(userId));
             }
             else {
                 json response = {
@@ -267,6 +288,7 @@ void UserController::Update(const json& data, Connection* client)
                     {"message", "No fields to update or invalid data provided"}
                 };
                 client->send(response.dump());
+                printWarning("Update failed - No fields to update or invalid data for user ID: " + std::to_string(userId));
             }
         }
         else {
@@ -277,6 +299,7 @@ void UserController::Update(const json& data, Connection* client)
                 {"message", "User not found in memory"}
             };
             client->send(response.dump());
+            printWarning("Update failed - User not found in memory, ID: " + std::to_string(userId));
         }
     }
     catch (const std::exception& e) {
@@ -287,7 +310,7 @@ void UserController::Update(const json& data, Connection* client)
             {"message", "Update failed: " + std::string(e.what())}
         };
         client->send(response.dump());
-        logger->log(std::string("[Update] Exception: ") + e.what());
+        printError("Update exception: " + std::string(e.what()));
     }
 }
 
@@ -297,6 +320,11 @@ void UserController::Logout(const json& data, Connection* client)
         std::string token = data.value("token", "");
 
         if (!token.empty()) {
+            std::string userDataStr = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
+            json userData = json::parse(userDataStr);
+            std::string username = userData["username"];
+
+            printInfo("Logout attempt for user: " + username);
 
             ServerMng::getInstance()->getLoader()->saveUnload(client);
             ServerMng::getInstance()->removeToken(token);
@@ -308,7 +336,7 @@ void UserController::Logout(const json& data, Connection* client)
                 {"message", "Logged out"}
             };
             client->send(response.dump());
-            logger->log("User logged out with token: " + token);
+            printInfo("User logged out successfully: " + username);
         }
         else {
             json response = {
@@ -318,6 +346,7 @@ void UserController::Logout(const json& data, Connection* client)
                 {"message", "Missing token"}
             };
             client->send(response.dump());
+            printWarning("Logout failed - Missing token");
         }
     }
     catch (const std::exception& e) {
@@ -328,12 +357,13 @@ void UserController::Logout(const json& data, Connection* client)
             {"message", "Logout failed: " + std::string(e.what())}
         };
         client->send(response.dump());
-        logger->log(std::string("[Logout] Exception: ") + e.what());
+        printError("Logout exception: " + std::string(e.what()));
     }
 }
 
 void UserController::sendAllUsers(Connection* client)
 {
+    printInfo("Retrieving all users from database");
     std::string query = "SELECT UserID, Username, Email, Role FROM Users"; // adaptează după structura ta
     auto results = ServerMng::getInstance()->getDBController()->executeQuery(query);
     json userList = json::array();
@@ -354,6 +384,7 @@ void UserController::sendAllUsers(Connection* client)
         {"users", userList}
     };
     client->send(response.dump());
+    printInfo("Retrieved " + std::to_string(results.size()) + " users from database");
 }
 
 void UserController::Delete(const json& data, Connection* client)
@@ -367,12 +398,13 @@ void UserController::Delete(const json& data, Connection* client)
                 {"message", "Missing token or payload"}
             };
             client->send(response.dump());
+            printWarning("Delete failed - Missing token or payload");
             return;
         }
 
         std::string token = data["token"];
         auto& tokens = ServerMng::getInstance()->getTokens();
-        if (std::find(tokens.begin(),tokens.end(),token)==tokens.end()) {
+        if (std::find(tokens.begin(), tokens.end(), token) == tokens.end()) {
             json response = {
                 {"controller", "UserController"},
                 {"action", "delete"},
@@ -380,11 +412,15 @@ void UserController::Delete(const json& data, Connection* client)
                 {"message", "Invalid or expired token"}
             };
             client->send(response.dump());
+            printWarning("Delete failed - Invalid or expired token");
             return;
         }
 
-        json userData = CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
+        json userData= CustomSerial::decodeJWT(token, ServerMng::getInstance()->getSecretKey());
         int userId = userData["userId"];
+        std::string username = userData["username"];
+
+        printInfo("Delete attempt for user ID: " + std::to_string(userId) + ", username: " + username);
 
         std::string checkQuery = "SELECT * FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
         auto results = ServerMng::getInstance()->getDBController()->executeQuery(checkQuery);
@@ -396,11 +432,13 @@ void UserController::Delete(const json& data, Connection* client)
                 {"message", "User not found"}
             };
             client->send(response.dump());
+            printWarning("Delete failed - User not found in database, ID: " + std::to_string(userId));
             return;
         }
 
         std::string teamQuery = "DELETE FROM UserTeams WHERE UserID = '" + std::to_string(userId) + "'";
         ServerMng::getInstance()->getDBController()->executeUpdate(teamQuery);
+        printInfo("Removed user " + username + " from all teams");
 
         std::string deleteQuery = "DELETE FROM Users WHERE UserID = '" + std::to_string(userId) + "'";
         if (ServerMng::getInstance()->getDBController()->executeUpdate(deleteQuery)) {
@@ -419,7 +457,7 @@ void UserController::Delete(const json& data, Connection* client)
                 {"message", "User deleted successfully"}
             };
             client->send(response.dump());
-            logger->log("User deleted: " + std::to_string(userId));
+            printInfo("User deleted successfully: " + username + ", ID: " + std::to_string(userId));
         }
         else {
             json response = {
@@ -429,6 +467,7 @@ void UserController::Delete(const json& data, Connection* client)
                 {"message", "Failed to delete user from database"}
             };
             client->send(response.dump());
+            printError("Failed to delete user from database, ID: " + std::to_string(userId));
         }
     }
     catch (const std::exception& e) {
@@ -439,7 +478,7 @@ void UserController::Delete(const json& data, Connection* client)
             {"message", "Delete failed: " + std::string(e.what())}
         };
         client->send(response.dump());
-        logger->log(std::string("[Delete] Exception: ") + e.what());
+        printError("Delete exception: " + std::string(e.what()));
     }
 }
 
@@ -449,6 +488,7 @@ void UserController::handleRequest(const std::string& data, Connection* client)
         json j = json::parse(data);
 
         std::string action = j["action"];
+        printInfo("Received request with action: " + action);
 
         if (action == "login")
         {
@@ -460,20 +500,29 @@ void UserController::handleRequest(const std::string& data, Connection* client)
         }
         else if (action == "update")
         {
-            if (!validateRequest(data, client, 1)) return;
+            if (!validateRequest(data, client, 1)) {
+                printWarning("Access denied for update request - insufficient privileges");
+                return;
+            }
             Update(j, client);
         }
         else if (action == "delete")
         {
-            if (!validateRequest(data, client, 1)) return;
+            if (!validateRequest(data, client, 1)) {
+                printWarning("Access denied for delete request - insufficient privileges");
+                return;
+            }
             Delete(j, client);
         }
         else if (action == "logout")
         {
-            if (!validateRequest(data, client, 1)) return;
+            if (!validateRequest(data, client, 1)) {
+                printWarning("Access denied for logout request - insufficient privileges");
+                return;
+            }
             Logout(j, client);
         }
-        else if (action == "getUsers") 
+        else if (action == "getUsers")
         {
             sendAllUsers(client);
         }
@@ -486,6 +535,7 @@ void UserController::handleRequest(const std::string& data, Connection* client)
                 {"message", "Invalid action"}
             };
             client->send(response.dump());
+            printWarning("Received invalid action: " + action);
         }
     }
     catch (const std::exception& e) {
@@ -495,6 +545,6 @@ void UserController::handleRequest(const std::string& data, Connection* client)
             {"message", "Request processing failed: " + std::string(e.what())}
         };
         client->send(response.dump());
-        logger->log(std::string("[UserController] Exception: ") + e.what());
+        printError("Request processing exception: " + std::string(e.what()));
     }
 }

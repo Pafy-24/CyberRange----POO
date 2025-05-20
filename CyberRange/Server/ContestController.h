@@ -1,12 +1,11 @@
 #pragma once
 #include "CController.h"
-#include "Observable.h"
 #include "Contest.h"
 #include <string>
 
 class Connection;
 
-class ContestController : public CController, public Observable {
+class ContestController : public CController {
 public:
     ContestController();
 

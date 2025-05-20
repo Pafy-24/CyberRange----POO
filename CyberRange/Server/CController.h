@@ -1,13 +1,13 @@
 #pragma once
 #include <string>
 #include "Controller.h"
+#include "Observable.h"
 #include "Logger.h"
 #include "Connection.h"
 
-class CController : public Controller {
+class CController : public Controller, public Observable {
 protected:
     std::string controllerName;
-    Logger* logger;
 
 public:
     CController(std::string name);

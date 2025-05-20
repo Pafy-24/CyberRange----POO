@@ -30,7 +30,7 @@ void TeamController::handleRequest(const std::string& data, Connection* client) 
 				std::string teamId = dbController->executeQuery(query)[0]["teamId"];
                 
                 client->send(json{ {"status", "success"}, {"teamId", std::stoi(teamId)}}.dump());
-                logger->log("Team created: " + teamId);
+                print("Team created: " + teamId);
             }
             else {
                 client->send("ERROR: Failed to create team");
@@ -58,7 +58,7 @@ void TeamController::handleRequest(const std::string& data, Connection* client) 
     }
     catch (const std::exception& e) {
         client->send("ERROR: Request processing failed");
-        logger->log("TeamController error: " + std::string(e.what()));
+        print("TeamController error: " + std::string(e.what()));
     }
 }
 
@@ -73,7 +73,7 @@ void TeamController::loadTeam(const std::string& teamId) {
     if (!results.empty()) {
 		Team* team = UsersFactory::CreateTeam(results[0]["TeamName"], 0, std::stoi(results[0]["TeamID"])).release();
         teams[teamId] = team;
-        logger->log("Loaded team: " + teamId);
+        print("Loaded team: " + teamId);
     }
 }
 
@@ -84,6 +84,6 @@ void TeamController::unloadTeam(const std::string& teamId) {
         ServerMng::getInstance()->getDBController()->executeUpdate(query);
         delete it->second;
         teams.erase(it);
-        logger->log("Unloaded team: " + teamId);
+        print("Unloaded team: " + teamId);
     }
 }

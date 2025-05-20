@@ -1,13 +1,12 @@
 #pragma once
 #include "CController.h"
-#include "Observable.h"
 #include "DBConn.h"
 #include <string>
 #include <vector>
 #include <map>
 
 
-class DBController : public CController, public Observable {
+class DBController : public CController {
 private:
     std::string connectionString;
     bool isConnected;

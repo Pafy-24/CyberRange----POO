@@ -6,7 +6,7 @@
 #include "CLogger.h"
 using json = nlohmann::json;
 
-CController::CController(std::string name) : controllerName(name), logger(new CLogger()) {}
+CController::CController(std::string name) : controllerName(name) {}
 
 bool CController::validateRequest(const std::string& data, Connection* client, bool need2Blogged) {
     try {
@@ -14,14 +14,14 @@ bool CController::validateRequest(const std::string& data, Connection* client, b
 
         if (!j.contains("action")) {
             client->send(json{ {"status", "error"}, {"message", "Missing action"} }.dump());
-            logger->log("Missing action in request");
+            print("Missing action in request");
             return false;
         }
 
         if (need2Blogged) {
             if (!j.contains("token")) {
                 client->send(json{ {"status", "error"}, {"message", "Missing token"} }.dump());
-                logger->log("Missing token in request");
+                print("Missing token in request");
                 return false;
             }
 
@@ -31,17 +31,17 @@ bool CController::validateRequest(const std::string& data, Connection* client, b
             auto tokens = server->getTokens();
             if (std::find(tokens.begin(), tokens.end(), token) == tokens.end()) {
                 client->send(json{ {"status", "error"}, {"message", "Not logged in"} }.dump());
-                logger->log("Invalid token: " + token);
+                print("Invalid token: " + token);
                 return false;
             }
         }
 
-        logger->log("Request validated for action: " + j["action"].get<std::string>());
+        print("Request validated for action: " + j["action"].get<std::string>());
         return true;
     }
     catch (const std::exception& e) {
         client->send(json{ {"status", "error"}, {"message", "Invalid JSON format"} }.dump());
-        logger->log("Request validation failed: " + std::string(e.what()));
+        print("Request validation failed: " + std::string(e.what()));
         return false;
     }
 }
@@ -51,5 +51,5 @@ void CController::handleRequest(const std::string& data, Connection* client) {
         return;
     }
     client->send(json{ {"status", "error"}, {"message", "Not allowed"} }.dump());
-    logger->log("Request not allowed for controller: " + controllerName);
+    print("Request not allowed for controller: " + controllerName);
 }

@@ -20,7 +20,7 @@ DBConn::~DBConn() {
 bool DBConn::parseConnectionString() {
     const std::string prefix = "sqlserver://";
     if (connectionString.substr(0, prefix.size()) != prefix) {
-        std::cerr << "Connection string must start with 'sqlserver://'" << std::endl;
+        printError("Connection string must start with 'sqlserver://'");
         return false;
     }
 
@@ -28,7 +28,7 @@ bool DBConn::parseConnectionString() {
 
     size_t atPos = conn.rfind('@');
     if (atPos == std::string::npos) {
-        std::cerr << "Missing '@' in connection string" << std::endl;
+        printError("Missing '@' in connection string");
         return false;
     }
 
@@ -37,7 +37,7 @@ bool DBConn::parseConnectionString() {
 
     size_t colonPos = userInfo.find(':');
     if (colonPos == std::string::npos) {
-        std::cerr << "Missing ':' between username and password" << std::endl;
+        printError("Missing ':' between username and password");
         return false;
     }
 
@@ -46,7 +46,7 @@ bool DBConn::parseConnectionString() {
 
     size_t slashPos = hostInfo.find('/');
     if (slashPos == std::string::npos) {
-        std::cerr << "Missing '/' before database name" << std::endl;
+        printError("Missing '/' before database name");
         return false;
     }
 
@@ -55,7 +55,7 @@ bool DBConn::parseConnectionString() {
 
     size_t portPos = hostPort.find(':');
     if (portPos == std::string::npos) {
-        std::cerr << "Missing ':' between host and port" << std::endl;
+        printError("Missing ':' between host and port");
         return false;
     }
 
@@ -70,14 +70,14 @@ bool DBConn::connect() {
     if (connected) return true;
 
     if (SQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &hEnv) != SQL_SUCCESS) {
-        std::cerr << "Failed to allocate ODBC environment." << std::endl;
+        printError("Failed to allocate ODBC environment.");
         return false;
     }
 
     SQLSetEnvAttr(hEnv, SQL_ATTR_ODBC_VERSION, (void*)SQL_OV_ODBC3, 0);
 
     if (SQLAllocHandle(SQL_HANDLE_DBC, hEnv, &hDbc) != SQL_SUCCESS) {
-        std::cerr << "Failed to allocate ODBC connection." << std::endl;
+        printError("Failed to allocate ODBC connection.");
         SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
         return false;
     }
@@ -92,7 +92,7 @@ bool DBConn::connect() {
 
     if (SQL_SUCCEEDED(ret)) {
         connected = true;
-        std::cout << "Connected to MSSQL server at " << host << ":" << port << std::endl;
+        printInfo("Connected to MSSQL server at " + host + ":" + std::to_string(port));
         return true;
     }
     else {
@@ -101,7 +101,7 @@ bool DBConn::connect() {
         SQLSMALLINT   MsgLen;
 
         SQLGetDiagRecA(SQL_HANDLE_DBC, hDbc, 1, SqlState, &NativeError, Msg, sizeof(Msg), &MsgLen);
-        std::cerr << "ODBC error: " << Msg << " (SQLState: " << SqlState << ")" << std::endl;
+        printError("ODBC error: " + std::string((char*)Msg) + " (SQLState: " + std::string((char*)SqlState) + ")");
 
         SQLFreeHandle(SQL_HANDLE_DBC, hDbc);
         SQLFreeHandle(SQL_HANDLE_ENV, hEnv);
@@ -122,7 +122,7 @@ bool DBConn::disconnect() {
     hEnv = nullptr;
     connected = false;
 
-    std::cout << "Disconnected from MSSQL server" << std::endl;
+    printInfo("Disconnected from MSSQL server");
     return true;
 }
 
@@ -132,30 +132,39 @@ bool DBConn::isConnected() const {
 
 int DBConn::send(const std::string& query) {
     if (!isConnected()) {
-        std::cerr << "Not connected to database" << std::endl;
+        printError("Not connected to database");
         return -1;
     }
 
     std::string sanitizedQuery = query;
     if (!sanitizeQuery(sanitizedQuery)) {
-        std::cerr << "Query failed sanitization checks" << std::endl;
+        printError("Query failed sanitization checks");
         return -1;
     }
 
     SQLHSTMT stmt;
     if (SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &stmt) != SQL_SUCCESS) {
-        std::cerr << "Failed to allocate statement handle" << std::endl;
+        printError("Failed to allocate statement handle");
         return -1;
     }
 
+    printLog("Executing query: " + sanitizedQuery);
     SQLRETURN ret = SQLExecDirectA(stmt, (SQLCHAR*)sanitizedQuery.c_str(), SQL_NTS);
 
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-    return SQL_SUCCEEDED(ret) ? 1 : -1;
+
+    if (SQL_SUCCEEDED(ret)) {
+        printInfo("Query executed successfully");
+        return 1;
+    }
+    else {
+        printError("Query execution failed");
+        return -1;
+    }
 }
 
 std::string DBConn::receive() {
-    std::cerr << "Use fetch API with SELECT queries (ODBC is not stream-based)" << std::endl;
+    printWarning("Use fetch API with SELECT queries (ODBC is not stream-based)");
     return "";
 }
 
@@ -166,7 +175,7 @@ bool DBConn::sanitizeQuery(std::string& query) {
     );
 
     if (std::regex_search(query, dangerousPattern)) {
-        std::cerr << "Dangerous query detected" << std::endl;
+        printError("Dangerous query detected");
         return false;
     }
 
@@ -183,10 +192,11 @@ int DBConn::getPort() const {
 
 bool DBConn::enableTLS() {
     if (connected) {
-        std::cerr << "Cannot enable TLS on active connection" << std::endl;
+        printError("Cannot enable TLS on active connection");
         return false;
     }
-    tlsEnabled = true; 
+    tlsEnabled = true;
+    printInfo("TLS enabled for database connection");
     return true;
 }
 
@@ -198,6 +208,7 @@ void DBConn::setTimeout(int ms) {
     timeout = ms;
     if (connected && hDbc) {
         SQLSetConnectAttr(hDbc, SQL_ATTR_CONNECTION_TIMEOUT, (SQLPOINTER)(intptr_t)(ms / 1000), 0);
+        printInfo("Connection timeout set to " + std::to_string(ms) + "ms");
     }
 }
 
@@ -206,7 +217,7 @@ int DBConn::getTimeout() const {
 }
 
 bool DBConn::sendLogin(const std::string& u, const std::string& p, std::string& roleOut) {
-
+    printInfo("Attempting login with username: " + u);
     std::stringstream roleQuery;
     roleQuery << "SELECT SYSTEM_USER;";
 
@@ -216,7 +227,7 @@ bool DBConn::sendLogin(const std::string& u, const std::string& p, std::string& 
 
     if (!SQL_SUCCEEDED(ret)) {
         SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-        std::cerr << "Login check failed" << std::endl;
+        printError("Login check failed");
         return false;
     }
 
@@ -224,6 +235,7 @@ bool DBConn::sendLogin(const std::string& u, const std::string& p, std::string& 
     SQLBindCol(stmt, 1, SQL_C_CHAR, roleBuf, sizeof(roleBuf), NULL);
     if (SQLFetch(stmt) == SQL_SUCCESS) {
         roleOut = std::string(roleBuf);
+        printInfo("Login successful, role: " + roleOut);
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
@@ -234,16 +246,17 @@ std::vector<std::map<std::string, std::string>> DBConn::fetchAll(const std::stri
     std::vector<std::map<std::string, std::string>> rows;
 
     if (!isConnected()) {
-        std::cerr << "Not connected to database" << std::endl;
+        printError("Not connected to database");
         return rows;
     }
 
+    printLog("Executing fetch query: " + query);
     SQLHSTMT stmt;
     SQLAllocHandle(SQL_HANDLE_STMT, hDbc, &stmt);
 
     if (SQLExecDirectA(stmt, (SQLCHAR*)query.c_str(), SQL_NTS) != SQL_SUCCESS) {
         SQLFreeHandle(SQL_HANDLE_STMT, stmt);
-        std::cerr << "Query execution failed" << std::endl;
+        printError("Query execution failed");
         return rows;
     }
 
@@ -258,6 +271,7 @@ std::vector<std::map<std::string, std::string>> DBConn::fetchAll(const std::stri
         colNames[i] = std::string((char*)colName);
     }
 
+    int rowCount = 0;
     while (SQLFetch(stmt) == SQL_SUCCESS) {
         std::map<std::string, std::string> row;
         for (SQLSMALLINT i = 0; i < numCols; ++i) {
@@ -267,39 +281,41 @@ std::vector<std::map<std::string, std::string>> DBConn::fetchAll(const std::stri
             row[colNames[i]] = ind == SQL_NULL_DATA ? "NULL" : std::string(buf);
         }
         rows.push_back(row);
+        rowCount++;
     }
 
     SQLFreeHandle(SQL_HANDLE_STMT, stmt);
+    printInfo("Fetched " + std::to_string(rowCount) + " rows from database");
     return rows;
 }
 
 
 void DBConn::handleRequest(const std::string& data, Connection* client) {
-    std::cerr << "DBConn does not support server request handling" << std::endl;
+    printWarning("DBConn does not support server request handling");
 }
 
 bool DBConn::bind(int port) {
-    std::cerr << "DBConn does not support binding" << std::endl;
+    printWarning("DBConn does not support binding");
     return false;
 }
 
 bool DBConn::listen(int backlog) {
-    std::cerr << "DBConn does not support listening" << std::endl;
+    printWarning("DBConn does not support listening");
     return false;
 }
 
 Connection* DBConn::accept() {
-    std::cerr << "DBConn does not support accepting connections" << std::endl;
+    printWarning("DBConn does not support accepting connections");
     return nullptr;
 }
 
 bool DBConn::startListening(std::function<void(const std::string&, Connection*)> handler) {
-    std::cerr << "DBConn does not support starting a server" << std::endl;
+    printWarning("DBConn does not support starting a server");
     return false;
 }
 
 void DBConn::stopServer() {
-    std::cerr << "DBConn does not support server operations" << std::endl;
+    printWarning("DBConn does not support server operations");
 }
 
 bool DBConn::isServerRunning() const {
@@ -307,5 +323,5 @@ bool DBConn::isServerRunning() const {
 }
 
 void DBConn::setCertificates(const std::string& cert, const std::string& key) {
-    std::cerr << "DBConn does not support setting certificates" << std::endl;
+    printWarning("DBConn does not support setting certificates");
 }
