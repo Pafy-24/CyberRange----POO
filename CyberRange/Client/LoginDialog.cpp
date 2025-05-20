@@ -37,7 +37,7 @@ LoginDialog::LoginDialog(QWidget* parent)
     animation1->start(QAbstractAnimation::DeleteWhenStopped);
 
     try {
-        ClientMng* clientMng = ClientMng::getInstance(1337, "127.0.0.1");
+        ClientMng* clientMng = ClientMng::getInstance();
         if (!clientMng->isConnected()) {
             if (!clientMng->start()) {
                 QMessageBox::critical(this, "Connection Error",
