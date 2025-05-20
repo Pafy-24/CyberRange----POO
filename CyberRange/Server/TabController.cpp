@@ -20,8 +20,9 @@ void TabController::handleRequest(const std::string& data, Connection* client) {
         json j = json::parse(data);
         std::string action = j["action"].get<std::string>();
 
-        if (action == "getTabList") {
-            std::string query = "SELECT * FROM Tabs";
+        if (action == "getTabList") 
+        {
+            std::string query = "SELECT * FROM C";
             auto results = dbController->executeQuery(query);
 
             if (!results.empty()) {

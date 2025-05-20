@@ -43,10 +43,22 @@ void TabClientController::handleServerResponse(const std::string& responseStr) {
     try {
         json response = json::parse(responseStr);
         std::string action = response["action"];
-        if (action == "getTabList" && response["status"] == "success") {
+
+        if (action == "getTabList" && response["status"] == "success") 
+        {
             auto data = response["data"];
-            // TODO: salvează în TabManager sau trimite spre UI
+
+            for (const auto& t : data) 
+            {
+                int id = t["tabId"];
+                std::string name = t["name"];
+
+                Tab* tab = new Tab(name, id); 
+                ClientMng::getInstance()->getChallMng()->addTab(tab);
+            }
+
             qDebug() << "[TabClientController] Loaded " << data.size() << " tabs.";
+            emit loadedTabs(); // semnal pentru MainMenu
         }
     }
     catch (...) {

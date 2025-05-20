@@ -34,6 +34,7 @@ private slots:
 	void handleContestDetailsLoad(int id);
 
     void handleUsersList();
+    void handleLoadedTabs();
 
     void on_pushButtonLogout_clicked();
     void on_AddChallengeButton_clicked();

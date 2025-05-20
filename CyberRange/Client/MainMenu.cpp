@@ -14,6 +14,7 @@
 #include "ChallClientController.h"
 #include <string>
 #include <regex>
+#include "TabClientController.h"
 
 using jaon = nlohmann::json;
 
@@ -77,6 +78,7 @@ MainMenu::MainMenu(QWidget* parent)
     auto* authCtrl = dynamic_cast<AuthController*>(ClientMng::getInstance()->getController("AuthController"));
     auto* contCtrl = dynamic_cast<ContestClientController*>(ClientMng::getInstance()->getController("ContestClientController"));
     auto* challCtrl = dynamic_cast<ChallClientController*>(ClientMng::getInstance()->getController("ChallClientController"));
+    auto* tabCtrl = dynamic_cast<TabClientController*>(ClientMng::getInstance()->getController("TabClientController"));
     if (authCtrl) {
         // Connect signals with queued connection for thread safety
         connect(authCtrl, &AuthController::logoutSucceeded, this, &MainMenu::handleLogoutSuccess, Qt::QueuedConnection);
@@ -102,6 +104,12 @@ MainMenu::MainMenu(QWidget* parent)
     }
     else {
         QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
+    }
+    if (tabCtrl) {
+        connect(tabCtrl, &TabClientController::loadedTabs, this, &MainMenu::handleLoadedTabs, Qt::QueuedConnection);
+    }
+    else {
+        QMessageBox::warning(this, "Error", "TabClientController is not available. Some functions may not work properly.");
     }
 }
 
@@ -336,22 +344,17 @@ void MainMenu::on_TabButton_clicked()
 {
     ui->stackedWidget->setCurrentIndex(12);
     try {
-        auto* challCtrl = dynamic_cast<ChallClientController*>(
-            ClientMng::getInstance()->getController("ChallClientController")
-            );
-        if (!challCtrl) {
-            QMessageBox::warning(this, "Error", "ChallClientController unavailable.");
+        auto* tabCtrl = dynamic_cast<TabClientController*>(ClientMng::getInstance()->getController("TabClientController"));
+        if (!tabCtrl) {
+            QMessageBox::warning(this, "Error", "TabClientController unavailable.");
             ui->ContestsButton->setEnabled(true);
             return;
         }
 
-        // Show loading indicator
         ui->TabButton->setText("Please wait...");
         QApplication::processEvents();
+        tabCtrl->requestTabList();
 
-      //  challCtrl->requestTabList();
-
-        // Re-enable the button after delay
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
                 ui->ContestsButton->setEnabled(true);
@@ -494,6 +497,7 @@ void MainMenu::configureUIForRole(int role)
     ui->HomeButton->show();
     ui->SettingsButton->show();
     ui->ProfileButton->show();
+    ui->TabButton->show();
 
     // Set window title based on role
     QString roleText;
@@ -503,12 +507,12 @@ void MainMenu::configureUIForRole(int role)
     case 1: // Regular user
         ui->DashboardCommonButton->show();
         ui->ContestsButton->show();
-        ui->TabButton->show();
         roleText = "User Dashboard";
         break;
     case 5: // Writer
         ui->DashboardWriterButton->show();
         ui->AddChallengeButton->show();
+        ui->ContestsButton->show();
         //ui->ReviewFlagsButton->show();
         roleText = "Writer Dashboard";
         break;
@@ -567,7 +571,6 @@ void MainMenu::onContestCellClicked(int row, int column)
     if (column == 0) 
     {
         contestName = ui->contestWidget->item(row, column)->text();
-        // Exemplu: poți deschide o pagină dedicată concursului
         qDebug() << "Clicked contest:" << contestName;
         ui->stackedWidget->setCurrentIndex(13); // pagina cu detalii
     }
@@ -713,14 +716,12 @@ void MainMenu::handleLoadContests()
         QDateTime end = QDateTime::fromSecsSinceEpoch(contest->getEndTime() - 3600);
 
         if (contest->getEndTime() > now) {
-            // ➕ Concurs activ
             ui->contestWidget->setItem(activeRow, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
             ui->contestWidget->setItem(activeRow, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
             ui->contestWidget->setItem(activeRow, 2, new QTableWidgetItem(end.toString("yyyy-MM-dd HH:mm")));
             activeRow++;
         }
         else {
-            // ➖ Concurs expirat
             ui->contestWidgetExpired->setItem(expiredRow, 0, new QTableWidgetItem(QString::fromStdString(contest->getName())));
             ui->contestWidgetExpired->setItem(expiredRow, 1, new QTableWidgetItem(start.toString("yyyy-MM-dd HH:mm")));
             ui->contestWidgetExpired->setItem(expiredRow, 2, new QTableWidgetItem(end.toString("yyyy-MM-dd HH:mm")));
@@ -787,4 +788,25 @@ void MainMenu::handleUsersList()
     ui->userTable->verticalHeader()->setVisible(false);
     ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->userTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+}
+
+void MainMenu::handleLoadedTabs()
+{
+    auto tabs = ClientMng::getInstance()->getChallMng()->getAllTabs();
+    int row = 0;
+
+    ui->tableWidget->clearContents();
+    ui->tableWidget->setRowCount(static_cast<int>(tabs.size()));
+    ui->tableWidget->setColumnCount(2);
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Id" << "Name");
+
+    for (const auto& [id, tab] : tabs) 
+    {
+        ui->tableWidget->setItem(row, 0, new QTableWidgetItem(QString::number(tab->getId())));
+        ui->tableWidget->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(tab->getName())));
+        ++row;
+    }
+
+    ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }

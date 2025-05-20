@@ -370,7 +370,7 @@ QPushButton:pressed {
 }</string>
             </property>
             <property name="text">
-             <string>Tabs</string>
+             <string>Training</string>
             </property>
            </widget>
           </item>

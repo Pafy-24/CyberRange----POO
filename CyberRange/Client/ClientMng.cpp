@@ -4,6 +4,7 @@
 #include "ChallClientController.h"
 #include "ContestClientController.h"
 #include "AuthController.h"
+#include "TabClientController.h"
 #include <iostream>
 #include <thread>
 #include <QTimer>
@@ -29,6 +30,7 @@ ClientMng::ClientMng(int port, const std::string& address)
 {
     attachController("ChallClientController", new ChallClientController());
     attachController("ContestClientController", new ContestClientController());
+    attachController("TabClientController", new TabClientController());
     attachController("AuthController", new AuthController());
 
 }
