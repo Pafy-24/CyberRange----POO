@@ -792,21 +792,27 @@ void MainMenu::handleUsersList()
 
 void MainMenu::handleLoadedTabs()
 {
-    auto tabs = ClientMng::getInstance()->getChallMng()->getAllTabs();
-    int row = 0;
-
-    ui->tableWidget->clearContents();
-    ui->tableWidget->setRowCount(static_cast<int>(tabs.size()));
-    ui->tableWidget->setColumnCount(2);
-    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Id" << "Name");
-
-    for (const auto& [id, tab] : tabs) 
-    {
-        ui->tableWidget->setItem(row, 0, new QTableWidgetItem(QString::number(tab->getId())));
-        ui->tableWidget->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(tab->getName())));
-        ++row;
+    Tab* tab = ClientMng::getInstance()->getChallMng()->getTab(1);
+    if (!tab) {
+        QMessageBox::warning(this, "Error", "Tab not found!");
+        return;
     }
 
+    const auto& challs = tab->getChallenges();
+
+    ui->tableWidget->clearContents();
+    ui->tableWidget->setRowCount(static_cast<int>(challs.size()));
+    ui->tableWidget->setColumnCount(2);
+    ui->tableWidget->setHorizontalHeaderLabels(QStringList() << "Challenge ID" << "Name");
+
+    int row = 0;
+    for (const auto& [id, chall] : challs) {
+        ui->tableWidget->setItem(row, 0, new QTableWidgetItem(QString::number(id)));
+        ui->tableWidget->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(chall->getName())));
+        row++;
+    }
+
+    ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }

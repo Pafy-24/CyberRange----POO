@@ -23,7 +23,6 @@ private slots:
     void handleLogoutSuccess();
     void handleLogoutFailure(const QString& message);
 
-
     void handleUpdateSuccess();
     void handleUpdateFailure(const QString& message);
     void handleDeleteSuccess();
@@ -82,7 +81,7 @@ private slots:
     // Tabs
     void onTabSelected(int row);
     void on_TabButton_clicked();
-
+    
 	// Add challenge
 
     // Manage users

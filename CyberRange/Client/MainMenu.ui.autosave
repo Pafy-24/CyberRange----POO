@@ -1,0 +1,4310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainMenu</class>
+ <widget class="QMainWindow" name="MainMenu">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>922</width>
+    <height>707</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainMenu</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QMainWindow {
+    background-color: rgba(13, 3, 25, 255)
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QFrame" name="Content">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QFrame" name="frameLeftMenu">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <property name="leftMargin">
+           <number>8</number>
+          </property>
+          <property name="topMargin">
+           <number>8</number>
+          </property>
+          <property name="rightMargin">
+           <number>8</number>
+          </property>
+          <property name="bottomMargin">
+           <number>8</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="HomeButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Home</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>11</width>
+              <height>12</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="DashboardAdminButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Dashboard</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="DashboardWriterButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Dashboard</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="DashboardCommonButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Dashboard</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ManageUsersButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Manage Users</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="CreateContestButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Create Contest</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="AddChallengeButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Add Challenge</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ReviewFlagsButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Review Flags</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ContestsButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Contests</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="TabButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Training</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="ProfileButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Profile</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="SettingsButton">
+            <property name="font">
+             <font>
+              <pointsize>12</pointsize>
+              <italic>true</italic>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: transparent;
+	 border-radius: 100px;
+    border: 2px solid #b17ddf;
+    color: white;
+}
+
+QPushButton:hover {
+    background-color: transparent;
+    border: 2px solid white;
+}
+
+QPushButton:pressed {
+    background-color: transparent;
+    border: 2px solid white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Settings</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_pages">
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="font">
+             <font>
+              <pointsize>14</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgba(13, 3, 25, 255)</string>
+            </property>
+            <widget class="QWidget" name="DashboardAdmin">
+             <widget class="QLabel" name="label_Dash">
+              <property name="geometry">
+               <rect>
+                <x>250</x>
+                <y>110</y>
+                <width>251</width>
+                <height>31</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: rgb(185, 162, 255);  
+    border-radius: 4px;
+    padding: 4px 8px;
+}</string>
+              </property>
+              <property name="text">
+               <string>DASHBOARD ADMIN</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_20">
+              <property name="geometry">
+               <rect>
+                <x>70</x>
+                <y>220</y>
+                <width>611</width>
+                <height>241</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <item>
+                <widget class="QFrame" name="frame_7">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_3">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditAddCh2">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Quick add a challenge:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonAddCh">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add Challenge</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_8">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_4">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditQuickAddC">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Quick add a contest:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonQuickAddC">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add new Contest</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_9">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditViewLastC">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>View last contests:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonViewLC">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>View last Contests</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="DashboardCommon">
+             <widget class="QLabel" name="label_Dash_2">
+              <property name="geometry">
+               <rect>
+                <x>270</x>
+                <y>90</y>
+                <width>241</width>
+                <height>41</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: rgb(185, 162, 255);  
+    border-radius: 4px;
+    padding: 4px 8px;
+}</string>
+              </property>
+              <property name="text">
+               <string>DASHBOARD COMMON</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_21">
+              <property name="geometry">
+               <rect>
+                <x>100</x>
+                <y>210</y>
+                <width>571</width>
+                <height>251</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_3">
+               <item>
+                <widget class="QFrame" name="frame_10">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditPractice">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Practice</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonPractice">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Practice</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_11">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_18">
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_3">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Join Contest</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonJC">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Join Contest</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_12">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_19">
+                  <item>
+                   <widget class="QLineEdit" name="lineEdit_4">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Account Settings</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonSC">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Account Settings</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="DashboardWriter">
+             <widget class="QLabel" name="label_Dash_3">
+              <property name="geometry">
+               <rect>
+                <x>270</x>
+                <y>70</y>
+                <width>231</width>
+                <height>31</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: rgb(185, 162, 255);  
+    border-radius: 4px;
+    padding: 4px 8px;
+}</string>
+              </property>
+              <property name="text">
+               <string>DASHBOARD WRITER</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_22">
+              <property name="geometry">
+               <rect>
+                <x>180</x>
+                <y>180</y>
+                <width>401</width>
+                <height>261</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QFrame" name="frame_13">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditQAC">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Quick Add Challenge</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonQAC">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Quick Add Chall</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_14">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_11">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditDWSettings">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Profile Settings</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="pushButtonDWS">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Settings</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="Home">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QWidget#pageHome {
+    background-color: #121212;
+}
+
+QLabel {
+    color: white;
+    font-size: 18px;
+}
+
+QLabel#titleLabel {
+    font-size: 24px;
+    font-weight: bold;
+    color: cyan;
+}
+
+QTextBrowser {
+    background: transparent;
+    border: none;
+    color: lightgray;
+    font-style: italic;
+}</string>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout_7">
+              <item>
+               <widget class="QFrame" name="frame_2">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QFrame" name="frame_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>220</x>
+                   <y>60</y>
+                   <width>301</width>
+                   <height>81</height>
+                  </rect>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <widget class="QLabel" name="titleLabel">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>291</width>
+                    <height>41</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string>Welcome to CyberRange!</string>
+                  </property>
+                 </widget>
+                </widget>
+                <widget class="QFrame" name="frame_4">
+                 <property name="geometry">
+                  <rect>
+                   <x>120</x>
+                   <y>470</y>
+                   <width>491</width>
+                   <height>71</height>
+                  </rect>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <widget class="QLabel" name="quoteLabel">
+                  <property name="geometry">
+                   <rect>
+                    <x>40</x>
+                    <y>10</y>
+                    <width>411</width>
+                    <height>51</height>
+                   </rect>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <pointsize>-1</pointsize>
+                    <italic>true</italic>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>&quot;Train hard. Compete harder. Defend always.&quot;</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </widget>
+                <widget class="QFrame" name="frame_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>460</x>
+                   <y>190</y>
+                   <width>241</width>
+                   <height>201</height>
+                  </rect>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <widget class="QTextBrowser" name="textBrowser">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>0</y>
+                    <width>231</width>
+                    <height>201</height>
+                   </rect>
+                  </property>
+                  <property name="html">
+                   <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:italic;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;In a world where digital threats evolve daily, mastering CTFs prepares us for the real battlefield of cyberspace. This platform brings you closer to that reality — through challenges, training, and community.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                 </widget>
+                </widget>
+                <widget class="QFrame" name="frame_6">
+                 <property name="geometry">
+                  <rect>
+                   <x>60</x>
+                   <y>180</y>
+                   <width>281</width>
+                   <height>231</height>
+                  </rect>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <widget class="QLabel" name="logoLabel">
+                  <property name="geometry">
+                   <rect>
+                    <x>10</x>
+                    <y>10</y>
+                    <width>241</width>
+                    <height>211</height>
+                   </rect>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="CreateContest">
+             <layout class="QVBoxLayout" name="verticalLayout_14">
+              <item>
+               <widget class="QFrame" name="frame_16">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QLabel" name="ContestNameLabel">
+                 <property name="geometry">
+                  <rect>
+                   <x>60</x>
+                   <y>70</y>
+                   <width>91</width>
+                   <height>21</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Contest Name:</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_cc">
+                 <property name="geometry">
+                  <rect>
+                   <x>200</x>
+                   <y>30</y>
+                   <width>201</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>14</pointsize>
+                  </font>
+                 </property>
+                 <property name="text">
+                  <string>CREATE CONTEST</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="ContestNameLabel_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>60</x>
+                   <y>110</y>
+                   <width>111</width>
+                   <height>21</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Contest Start Date:</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="ContestNameLabel_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>60</x>
+                   <y>140</y>
+                   <width>101</width>
+                   <height>21</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Contest End Date:</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="ContestNameLabel_4">
+                 <property name="geometry">
+                  <rect>
+                   <x>60</x>
+                   <y>190</y>
+                   <width>101</width>
+                   <height>21</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string>Description:</string>
+                 </property>
+                </widget>
+                <widget class="QTextEdit" name="contestDescriptionEdit">
+                 <property name="geometry">
+                  <rect>
+                   <x>50</x>
+                   <y>220</y>
+                   <width>531</width>
+                   <height>191</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:rgb(33, 0, 49);
+text-color:rgb(255, 255, 255)</string>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="contestNameEdit">
+                 <property name="geometry">
+                  <rect>
+                   <x>170</x>
+                   <y>70</y>
+                   <width>401</width>
+                   <height>24</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:rgb(33, 0, 49);
+text-color:rgb(255, 255, 255)</string>
+                 </property>
+                </widget>
+                <widget class="QDateTimeEdit" name="startTimeEdit">
+                 <property name="geometry">
+                  <rect>
+                   <x>170</x>
+                   <y>110</y>
+                   <width>194</width>
+                   <height>27</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:rgb(33, 0, 49);
+text-color:rgb(255, 255, 255)</string>
+                 </property>
+                </widget>
+                <widget class="QDateTimeEdit" name="endTimeEdit">
+                 <property name="geometry">
+                  <rect>
+                   <x>170</x>
+                   <y>140</y>
+                   <width>194</width>
+                   <height>27</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color:rgb(33, 0, 49);
+text-color:rgb(255, 255, 255)</string>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="pushButtonSubmitCh_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>180</x>
+                   <y>420</y>
+                   <width>221</width>
+                   <height>51</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Create</string>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="Contests">
+             <layout class="QVBoxLayout" name="verticalLayout_12">
+              <item>
+               <widget class="QFrame" name="frame_25">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QFrame" name="frame_24">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>10</y>
+                   <width>311</width>
+                   <height>91</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <widget class="QPushButton" name="ActiveButton">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Active</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="ExpiredButton">
+                    <property name="styleSheet">
+                     <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Expired</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+                <widget class="QStackedWidget" name="stackedWidget_2">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>100</y>
+                   <width>721</width>
+                   <height>491</height>
+                  </rect>
+                 </property>
+                 <property name="currentIndex">
+                  <number>1</number>
+                 </property>
+                 <widget class="QWidget" name="Active">
+                  <widget class="QTableWidget" name="contestWidget">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>671</width>
+                     <height>451</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                   </property>
+                   <property name="columnCount">
+                    <number>3</number>
+                   </property>
+                   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Contest</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Start Date</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>End Date</string>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                     </font>
+                    </property>
+                   </column>
+                  </widget>
+                 </widget>
+                 <widget class="QWidget" name="Expired">
+                  <widget class="QTableWidget" name="contestWidgetExpired">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>0</y>
+                     <width>671</width>
+                     <height>451</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                   </property>
+                   <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="horizontalHeaderStretchLastSection">
+                    <bool>false</bool>
+                   </attribute>
+                   <attribute name="verticalHeaderVisible">
+                    <bool>false</bool>
+                   </attribute>
+                   <column>
+                    <property name="text">
+                     <string>Contest</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Started</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ended</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ReviewSubmission">
+             <layout class="QVBoxLayout" name="verticalLayout_16">
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="font">
+                 <font>
+                  <pointsize>15</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>REVIEW SUBMISSION</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="ManageUsers">
+             <widget class="QTableWidget" name="userTable">
+              <property name="geometry">
+               <rect>
+                <x>50</x>
+                <y>60</y>
+                <width>591</width>
+                <height>481</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+              </property>
+              <column>
+               <property name="text">
+                <string>ID</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Username</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Email</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Role</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </column>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="AddChallenge">
+             <widget class="QLabel" name="label_Ch">
+              <property name="geometry">
+               <rect>
+                <x>280</x>
+                <y>10</y>
+                <width>221</width>
+                <height>31</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>14</pointsize>
+                <italic>true</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: rgb(185, 162, 255);  
+    border-radius: 4px;
+    padding: 4px 8px;
+}</string>
+              </property>
+              <property name="text">
+               <string>ADD NEW CHALLENGE</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="pushButtonSubmitCh">
+              <property name="geometry">
+               <rect>
+                <x>320</x>
+                <y>530</y>
+                <width>131</width>
+                <height>41</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+              </property>
+              <property name="text">
+               <string>Submit challenge</string>
+              </property>
+             </widget>
+             <widget class="QFrame" name="frame_32">
+              <property name="geometry">
+               <rect>
+                <x>120</x>
+                <y>50</y>
+                <width>521</width>
+                <height>461</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_8">
+               <item>
+                <widget class="QFrame" name="frame_30">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_15">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditName2">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add challenge name:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditDescription2">
+                    <property name="font">
+                     <font>
+                      <pointsize>-1</pointsize>
+                     </font>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add challenge description:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditContest2">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add contestID:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditTab2">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add tabID:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditDifficulty2">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add difficulty:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditScore2">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add score:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditFilesPath2">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add files path:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditTags2">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Add tags:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+               <item>
+                <widget class="QFrame" name="frame_31">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <layout class="QVBoxLayout" name="verticalLayout_21">
+                  <item>
+                   <widget class="QLineEdit" name="lineEditName">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditDescription">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditContest">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditTab">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditDifficulty">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditScore">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditTags">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="lineEditFilesPath">
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="Profile">
+             <layout class="QVBoxLayout" name="verticalLayout_9">
+              <item>
+               <widget class="QFrame" name="frame">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>300</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}
+</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QLabel" name="label_3">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>200</y>
+                   <width>141</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>-1</pointsize>
+                   <fontweight>Medium</fontweight>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Change password:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditOldPasswd2">
+                 <property name="geometry">
+                  <rect>
+                   <x>160</x>
+                   <y>200</y>
+                   <width>113</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>-1</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Old password:</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewPasswd2">
+                 <property name="geometry">
+                  <rect>
+                   <x>160</x>
+                   <y>240</y>
+                   <width>113</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>-1</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>New password:</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditOldPasswd">
+                 <property name="geometry">
+                  <rect>
+                   <x>280</x>
+                   <y>200</y>
+                   <width>181</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewPasswd">
+                 <property name="geometry">
+                  <rect>
+                   <x>280</x>
+                   <y>240</y>
+                   <width>181</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="pushButtonSubmit">
+                 <property name="geometry">
+                  <rect>
+                   <x>510</x>
+                   <y>120</y>
+                   <width>141</width>
+                   <height>71</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Save</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_5">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>60</y>
+                   <width>141</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Change username:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewUsername2">
+                 <property name="geometry">
+                  <rect>
+                   <x>160</x>
+                   <y>60</y>
+                   <width>113</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>-1</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>New username:</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewUsername">
+                 <property name="geometry">
+                  <rect>
+                   <x>280</x>
+                   <y>60</y>
+                   <width>181</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_8">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>140</y>
+                   <width>141</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Change email:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewEmail2">
+                 <property name="geometry">
+                  <rect>
+                   <x>160</x>
+                   <y>140</y>
+                   <width>113</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>-1</pointsize>
+                   <bold>true</bold>
+                  </font>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>New email:</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditNewEmail">
+                 <property name="geometry">
+                  <rect>
+                   <x>280</x>
+                   <y>140</y>
+                   <width>181</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_9">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>20</y>
+                   <width>451</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>User:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QLabel" name="label_10">
+                 <property name="geometry">
+                  <rect>
+                   <x>10</x>
+                   <y>100</y>
+                   <width>451</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Email:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777214</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}
+</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QLabel" name="label_6">
+                 <property name="geometry">
+                  <rect>
+                   <x>20</x>
+                   <y>20</y>
+                   <width>141</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Delete Account:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="pushButtonDeleteAcc">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>80</y>
+                   <width>701</width>
+                   <height>41</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Delete account</string>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>50</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>150</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}
+</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <widget class="QLabel" name="label_7">
+                 <property name="geometry">
+                  <rect>
+                   <x>30</x>
+                   <y>20</y>
+                   <width>131</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Logout:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="pushButtonLogout">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>80</y>
+                   <width>701</width>
+                   <height>41</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Logout</string>
+                 </property>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="Settings">
+             <layout class="QVBoxLayout" name="verticalLayout_10">
+              <item>
+               <widget class="QFrame" name="frame_18">
+                <property name="styleSheet">
+                 <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_20">
+                 <item>
+                  <widget class="QFrame" name="frame_19">
+                   <property name="frameShape">
+                    <enum>QFrame::Shape::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Shadow::Raised</enum>
+                   </property>
+                   <widget class="QLabel" name="label_4">
+                    <property name="geometry">
+                     <rect>
+                      <x>10</x>
+                      <y>10</y>
+                      <width>111</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+</string>
+                    </property>
+                    <property name="text">
+                     <string>Account data:</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineEditSettingsUser2">
+                    <property name="geometry">
+                     <rect>
+                      <x>150</x>
+                      <y>40</y>
+                      <width>111</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Username:</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineEditSettingsEmail2">
+                    <property name="geometry">
+                     <rect>
+                      <x>150</x>
+                      <y>90</y>
+                      <width>111</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Email:</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineEditSettingsRole2">
+                    <property name="geometry">
+                     <rect>
+                      <x>150</x>
+                      <y>140</y>
+                      <width>111</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="text">
+                     <string>Role:</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineEditSettingsUser">
+                    <property name="geometry">
+                     <rect>
+                      <x>280</x>
+                      <y>40</y>
+                      <width>211</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineEditSettingsEmail">
+                    <property name="geometry">
+                     <rect>
+                      <x>280</x>
+                      <y>90</y>
+                      <width>211</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                   <widget class="QLineEdit" name="lineEditSettingsRole">
+                    <property name="geometry">
+                     <rect>
+                      <x>280</x>
+                      <y>140</y>
+                      <width>211</width>
+                      <height>31</height>
+                     </rect>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                    </property>
+                    <property name="readOnly">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QFrame" name="frame_17">
+                <property name="styleSheet">
+                 <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_17">
+                 <item>
+                  <widget class="QCheckBox" name="checkBox">
+                   <property name="styleSheet">
+                    <string notr="true">QCheckBox {
+    spacing: 6px;
+    font-size: 14px;
+    font-weight: 500;
+	 background-color: rgb(204, 188, 255);
+	 border: 2px solid #b17ddf; 
+    color: black;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #b17ddf;
+    background-color: white;
+    border-radius: 4px;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #b17ddf;         /* fundal bifa – pastel mov */
+    border: 2px solid #8f44d4;
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #a35ed8;
+    border-color: #7a2ec8;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #8f44d4;
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Get notifications on new contests</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_2">
+                   <property name="styleSheet">
+                    <string notr="true">QCheckBox {
+    spacing: 6px;
+    font-size: 14px;
+    font-weight: 500;
+	 background-color: rgb(204, 188, 255);
+	 border: 2px solid #b17ddf; 
+    color: black;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #b17ddf;
+    background-color: white;
+    border-radius: 4px;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #b17ddf;         /* fundal bifa – pastel mov */
+    border: 2px solid #8f44d4;
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #a35ed8;
+    border-color: #7a2ec8;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #8f44d4;
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Get email on updates</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_3">
+                   <property name="styleSheet">
+                    <string notr="true">QCheckBox {
+    spacing: 6px;
+    font-size: 14px;
+    font-weight: 500;
+	 background-color: rgb(204, 188, 255);
+	 border: 2px solid #b17ddf; 
+    color: black;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #b17ddf;
+    background-color: white;
+    border-radius: 4px;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #b17ddf;         /* fundal bifa – pastel mov */
+    border: 2px solid #8f44d4;
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #a35ed8;
+    border-color: #7a2ec8;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #8f44d4;
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Get announcements on leaderboard</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="checkBox_4">
+                   <property name="styleSheet">
+                    <string notr="true">QCheckBox {
+    spacing: 6px;
+    font-size: 14px;
+    font-weight: 500;
+	 background-color: rgb(204, 188, 255);
+	 border: 2px solid #b17ddf; 
+    color: black;
+}
+
+QCheckBox::indicator {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #b17ddf;
+    background-color: white;
+    border-radius: 4px;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #b17ddf;         /* fundal bifa – pastel mov */
+    border: 2px solid #8f44d4;
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #a35ed8;
+    border-color: #7a2ec8;
+}
+
+QCheckBox::indicator:hover {
+    border-color: #8f44d4;
+}
+</string>
+                   </property>
+                   <property name="text">
+                    <string>Stay up to date in challenges</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="ConnButton">
+                <property name="text">
+                 <string>Connectivity</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="SolveChallenge">
+             <widget class="QFrame" name="frame_29">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>761</width>
+                <height>591</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="Tabs">
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <widget class="QFrame" name="frame_28">
+              <property name="geometry">
+               <rect>
+                <x>30</x>
+                <y>30</y>
+                <width>671</width>
+                <height>521</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_7">
+               <item>
+                <widget class="QTableWidget" name="tableWidget">
+                 <property name="styleSheet">
+                  <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string>Chall Name</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="CurrentContest">
+             <property name="styleSheet">
+              <string notr="true">QFrame {
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}</string>
+             </property>
+             <widget class="QFrame" name="frame_26">
+              <property name="geometry">
+               <rect>
+                <x>6</x>
+                <y>6</y>
+                <width>721</width>
+                <height>581</height>
+               </rect>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <widget class="QPushButton" name="backButton">
+               <property name="geometry">
+                <rect>
+                 <x>20</x>
+                 <y>20</y>
+                 <width>121</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+               </property>
+               <property name="text">
+                <string>Back to Contests</string>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestName2">
+               <property name="geometry">
+                <rect>
+                 <x>30</x>
+                 <y>70</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Name:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestName">
+               <property name="geometry">
+                <rect>
+                 <x>130</x>
+                 <y>70</y>
+                 <width>161</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestStart2">
+               <property name="geometry">
+                <rect>
+                 <x>30</x>
+                 <y>110</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Start date:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestStart">
+               <property name="geometry">
+                <rect>
+                 <x>130</x>
+                 <y>110</y>
+                 <width>161</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestEnd2">
+               <property name="geometry">
+                <rect>
+                 <x>30</x>
+                 <y>150</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>End date:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestEnd">
+               <property name="geometry">
+                <rect>
+                 <x>130</x>
+                 <y>150</y>
+                 <width>161</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QStackedWidget" name="stackedWidget_3">
+               <property name="geometry">
+                <rect>
+                 <x>40</x>
+                 <y>250</y>
+                 <width>571</width>
+                 <height>291</height>
+                </rect>
+               </property>
+               <widget class="QWidget" name="Desc">
+                <widget class="QLabel" name="labelDesc">
+                 <property name="geometry">
+                  <rect>
+                   <x>20</x>
+                   <y>50</y>
+                   <width>531</width>
+                   <height>161</height>
+                  </rect>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="CreateTeam">
+                <widget class="QLineEdit" name="lineEditTeamName2">
+                 <property name="geometry">
+                  <rect>
+                   <x>110</x>
+                   <y>30</y>
+                   <width>81</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Team name:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditTeamName">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>30</y>
+                   <width>161</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="SubmitButtonTeam">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="geometry">
+                  <rect>
+                   <x>410</x>
+                   <y>30</y>
+                   <width>121</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Submit</string>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="JoinTeam">
+                <widget class="QLineEdit" name="lineEditTeamNameJoin2">
+                 <property name="geometry">
+                  <rect>
+                   <x>100</x>
+                   <y>30</y>
+                   <width>81</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Team name:</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+                <widget class="QLineEdit" name="lineEditTeamNameJoin">
+                 <property name="geometry">
+                  <rect>
+                   <x>210</x>
+                   <y>30</y>
+                   <width>161</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>false</bool>
+                 </property>
+                </widget>
+                <widget class="QPushButton" name="SubmitButton2">
+                 <property name="geometry">
+                  <rect>
+                   <x>400</x>
+                   <y>30</y>
+                   <width>111</width>
+                   <height>31</height>
+                  </rect>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Submit</string>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="Scoreboard">
+                <widget class="QTableWidget" name="scoreboardWidget">
+                 <property name="geometry">
+                  <rect>
+                   <x>0</x>
+                   <y>0</y>
+                   <width>571</width>
+                   <height>291</height>
+                  </rect>
+                 </property>
+                </widget>
+               </widget>
+               <widget class="QWidget" name="Tasks">
+                <widget class="QTableWidget" name="tasksWidget">
+                 <property name="geometry">
+                  <rect>
+                   <x>-10</x>
+                   <y>-10</y>
+                   <width>581</width>
+                   <height>301</height>
+                  </rect>
+                 </property>
+                </widget>
+               </widget>
+              </widget>
+              <widget class="QFrame" name="frame_27">
+               <property name="geometry">
+                <rect>
+                 <x>40</x>
+                 <y>200</y>
+                 <width>271</width>
+                 <height>51</height>
+                </rect>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::Shape::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Shadow::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_6">
+                <item>
+                 <widget class="QPushButton" name="descriptionButton">
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>Description</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="scoreboardButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>Scoreboard</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="tasksButton">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>Tasks</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestID2">
+               <property name="geometry">
+                <rect>
+                 <x>380</x>
+                 <y>70</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>ID:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestID">
+               <property name="geometry">
+                <rect>
+                 <x>470</x>
+                 <y>70</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestAuthor">
+               <property name="geometry">
+                <rect>
+                 <x>470</x>
+                 <y>110</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditContestAuthor2">
+               <property name="geometry">
+                <rect>
+                 <x>380</x>
+                 <y>110</y>
+                 <width>81</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 10px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+               </property>
+               <property name="text">
+                <string>Author:</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QPushButton" name="JoinButton">
+               <property name="geometry">
+                <rect>
+                 <x>326</x>
+                 <y>210</y>
+                 <width>111</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+               </property>
+               <property name="text">
+                <string>Join</string>
+               </property>
+              </widget>
+              <widget class="QPushButton" name="CreateTeamBtn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="geometry">
+                <rect>
+                 <x>450</x>
+                 <y>210</y>
+                 <width>121</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 11px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+               </property>
+               <property name="text">
+                <string>Create Team</string>
+               </property>
+              </widget>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>922</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMenu">
+    <property name="title">
+     <string>Menu</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuStart">
+    <property name="title">
+     <string>Start</string>
+    </property>
+   </widget>
+   <addaction name="menuMenu"/>
+   <addaction name="menuStart"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

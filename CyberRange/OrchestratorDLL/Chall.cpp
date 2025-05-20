@@ -9,6 +9,10 @@ Chall::Chall(const std::string& name, const std::vector<ChallTypes>& types,int i
     
 }
 
+Chall::Chall(int id, const std::string name) : id(id), name(name)
+{
+}
+
 int Chall::getId() const { return id; }
 std::string Chall::getName() const { return name; }
 int Chall::getDifficulty() const { return difficulty; }

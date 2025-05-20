@@ -3,6 +3,7 @@
 #include "json.hpp"
 #include <QTimer>
 #include <QDebug>
+#include "Chall.h"
 using json = nlohmann::json;
 
 TabClientController::TabClientController() : CController("TabClientController") {}
@@ -36,18 +37,24 @@ void TabClientController::handleServerResponse(const std::string& responseStr) {
         if (action == "getTabDetails" && response["status"] == "success") 
         {
             auto data = response["data"];
+            int tabId = data["tabId"];
+            std::string name = data["name"];
 
-            for (const auto& t : data) 
+            Tab* tab = new Tab(name, tabId);
+
+            // Parse challenges
+            std::map<int, std::string> challs = data["challs"];
+            for (auto& c : challs) 
             {
-                int id = t["tabId"];
-                std::string name = t["name"];
-				auto challs = t["challs"];
-
-                Tab* tab = new Tab(name, id); 
-                ClientMng::getInstance()->getChallMng()->addTab(tab);
+                int challId = c.first; 
+                std::string challName = c.second;
+                challs[challId] = challName;
+                
+                tab->addChallenge(challId, new Chall(challId, challName));
             }
+            ClientMng::getInstance()->getChallMng()->addTab(tab);
 
-            qDebug() << "[TabClientController] Loaded " << data.size() << " tabs.";
+            qDebug() << "[TabClientController] Parsed tab details for tabId" << tabId;
             emit loadedTabs(); // semnal pentru MainMenu
         }
     }

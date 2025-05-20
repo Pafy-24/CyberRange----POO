@@ -21,6 +21,7 @@ protected:
 
 public:
     Chall(const std::string& name, const std::vector<ChallTypes>& types,int id=0);
+    Chall(int id, const std::string name);
     virtual ~Chall() = default;
 
     int getId() const;
