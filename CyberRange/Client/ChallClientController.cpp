@@ -40,7 +40,7 @@ void ChallClientController::requestAddChallenge()
 {
 }
 
-void ChallClientController::requestChallengeDetails(const std::string& challId) 
+void ChallClientController::requestChallengeDetails(const int& challId) 
 {
     json req = 
     {
@@ -52,14 +52,14 @@ void ChallClientController::requestChallengeDetails(const std::string& challId)
     ClientMng::getInstance()->sendRequest(req.dump());
 }
 
-void ChallClientController::submitFlag(const std::string& challId, const std::string& flag) 
+void ChallClientController::submitFlag(const int& challId, const std::string& flag) 
 {
     json req = {
         {"controller", "ChallController"},
         {"action", "submitFlag"},
         {"payload", {
-            {"challId", challId},
-            {"flag", flag}
+        {"challId", challId},
+        {"flag", flag}
         }}
     };
     ClientMng::getInstance()->sendRequest(req.dump());

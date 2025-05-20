@@ -10,8 +10,8 @@ public:
 
     void requestChallengeList();
 	void requestAddChallenge();
-    void requestChallengeDetails(const std::string& challId);
-    void submitFlag(const std::string& challId, const std::string& flag);
+    void requestChallengeDetails(const int& challId);
+    void submitFlag(const int& challId, const std::string& flag);
     void handleServerResponse(const std::string& response) override;
 
 signals:
