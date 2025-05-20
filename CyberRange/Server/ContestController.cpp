@@ -32,10 +32,10 @@ void ContestController::createContest(const std::string& contestData, Connection
 
         ServerMng::getInstance()->getLoader()->registerObject(conn, "contest:" + std::to_string(contest->getId()));
 
-        logger->log("Contest created and saved: " + name);
+        printInfo("Contest created and saved: " + name);
     }
     catch (const std::exception& e) {
-        logger->log("createContest error: " + std::string(e.what()));
+        printError("createContest error: " + std::string(e.what()));
     }
 }
 
@@ -57,14 +57,14 @@ void ContestController::updateContest(const std::string& contestId, const std::s
             if (j.contains("active")) contest->setActive(j["active"].get<bool>());
 
             ServerMng::getInstance()->getLoader()->saveContest(id);
-            logger->log("Contest updated: " + std::to_string(id));
+            printInfo("Contest updated: " + std::to_string(id));
         }
         else {
-            logger->log("Contest not found: " + std::to_string(id));
+            printWarning("Contest not found: " + std::to_string(id));
         }
     }
     catch (const std::exception& e) {
-        logger->log("updateContest error: " + std::string(e.what()));
+        printError("updateContest error: " + std::string(e.what()));
     }
 }
 
@@ -76,15 +76,15 @@ void ContestController::deleteContest(const std::string& contestId, Connection* 
         Contest* contest = ServerMng::getInstance()->getContest(id);
 
         if (contest && 0) {
-          //  ServerMng::getInstance()->getLoader()->cleanupContest(id, client);
-            logger->log("Contest deleted: " + std::to_string(id));
+            //  ServerMng::getInstance()->getLoader()->cleanupContest(id, client);
+            printInfo("Contest deleted: " + std::to_string(id));
         }
         else {
-            logger->log("Contest not found: " + std::to_string(id));
+            printWarning("Contest not found: " + std::to_string(id));
         }
     }
     catch (const std::exception& e) {
-        logger->log("deleteContest error: " + std::string(e.what()));
+        printError("deleteContest error: " + std::string(e.what()));
     }
 }
 
@@ -120,6 +120,7 @@ void ContestController::sendContestDetails(int contestId, Connection* client)
         response["challenges"] = challenges;
 
         client->send(response.dump());
+        printInfo("Contest details sent for contest ID: " + std::to_string(contestId));
     }
     else {
         json response = {
@@ -129,6 +130,7 @@ void ContestController::sendContestDetails(int contestId, Connection* client)
             {"message", "Contest not found"}
         };
         client->send(response.dump());
+        printWarning("Contest not found when sending details, ID: " + std::to_string(contestId));
     }
 }
 
@@ -146,12 +148,8 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
             {"scoreboard", json::array()}
         };
 
-
-
-
-        // This is a placeholder - implement actual scoreboard logic based on your requirements
-        // You might need to query the database for team scores or user submissions
         client->send(response.dump());
+        printInfo("Scoreboard sent for contest ID: " + std::to_string(contestId));
     }
     else {
         json response = {
@@ -161,6 +159,7 @@ void ContestController::sendScoreboard(int contestId, Connection* client)
             {"message", "Contest not found"}
         };
         client->send(response.dump());
+        printWarning("Contest not found when sending scoreboard, ID: " + std::to_string(contestId));
     }
 }
 
@@ -178,8 +177,8 @@ void ContestController::sendAllContests(Connection* client)
             contestList.push_back({
                 {"contestId", contestId},
                 {"name", contest->getName()},
-				{"startTime", contest->getStartTime()},
-				{"endTime", contest->getEndTime()}
+                {"startTime", contest->getStartTime()},
+                {"endTime", contest->getEndTime()}
                 });
         }
     }
@@ -191,17 +190,21 @@ void ContestController::sendAllContests(Connection* client)
         {"contests", contestList}
     };
     client->send(response.dump());
+    printInfo("All contests list sent, count: " + std::to_string(contestList.size()));
 }
 
 void ContestController::handleRequest(const std::string& data, Connection* client)
 {
     if (!validateRequest(data, client, 1)) {
+        printWarning("Request validation failed");
         return;
     }
 
     try {
         json j = json::parse(data);
         std::string action = j["action"].get<std::string>();
+
+        printInfo("Handling request: " + action);
 
         if (action == "createContest") {
             createContest(j["payload"].dump(), client);
@@ -226,8 +229,8 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
         }
         else if (action == "updateContest") {
             int contestId = j["payload"]["contestId"].get<int>();
-			ServerMng::getInstance()->getLoader()->loadContest(contestId, client);
-            updateContest(std::to_string(contestId), j["payload"].dump(),client);
+            ServerMng::getInstance()->getLoader()->loadContest(contestId, client);
+            updateContest(std::to_string(contestId), j["payload"].dump(), client);
             json response = {
                 {"controller", "ContestClientController"},
                 {"action", "updateContest"},
@@ -238,7 +241,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
         }
         else if (action == "deleteContest") {
             int contestId = j["payload"]["contestId"].get<int>();
-            deleteContest(std::to_string(contestId),client);
+            deleteContest(std::to_string(contestId), client);
             json response = {
                 {"controller", "ContestClientController"},
                 {"action", "deleteContest"},
@@ -255,6 +258,7 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
                 {"message", "Invalid action"}
             };
             client->send(response.dump());
+            printWarning("Invalid action requested: " + action);
         }
     }
     catch (const std::exception& e) {
@@ -265,6 +269,6 @@ void ContestController::handleRequest(const std::string& data, Connection* clien
             {"message", "Request processing failed: " + std::string(e.what())}
         };
         client->send(response.dump());
-        logger->log("ContestController error: " + std::string(e.what()));
+        printError("ContestController error: " + std::string(e.what()));
     }
 }

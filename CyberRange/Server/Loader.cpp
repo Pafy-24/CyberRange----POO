@@ -7,8 +7,8 @@
 #include "ContestController.h"
 #include "ServerMng.h"
 #include <string>
-#include <sstream>     // std::istringstream
-#include <iomanip>     // std::get_time
+#include <sstream>     
+#include <iomanip>     
 #include <ctime>  
 Controller* getController(const std::string& name)
 {
