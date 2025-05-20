@@ -370,7 +370,9 @@ void MainMenu::on_TabButton_clicked()
 
 void MainMenu::onTrainingCellClicked(int row, int column)
 {
-    QString challengeName;
+    ui->stackedWidget->setCurrentIndex(11);
+    QString challengeName = ui->tableWidget->item(row, column)->text();
+
     int challengeId = -1;
     std::map<int, Chall*> challenges = ClientMng::getInstance()->getChallMng()->getTab(1)->getChallenges();
     for (const auto& chall : challenges)
@@ -381,14 +383,6 @@ void MainMenu::onTrainingCellClicked(int row, int column)
             break;
         }
     }
-
-    if (column == 0)
-    {
-        challengeName = ui->tableWidget->item(row, column)->text();
-        qDebug() << "Clicked challenge:" << challengeName;
-        ui->stackedWidget->setCurrentIndex(11); 
-    }
-
     try {
         auto* challCtrl = dynamic_cast<ChallClientController*>(ClientMng::getInstance()->getController("ChallClientController"));
 
@@ -816,8 +810,16 @@ void MainMenu::handleContestDetailsLoad(int id)
 	ui->labelDesc->setText(QString::fromStdString(c->getDescription()));
 }
 
-void MainMenu::handleChallDetails()
+void MainMenu::handleChallDetails(std::string a, std::string b, std::string c, std::string d, std::string e, std::string f, std::string g)
 {
+    // emit loadedChallengeDetails(std::to_string(challId), title, description, author, std::to_string(points), tags, difficulty);
+	ui->lineEditChallId_2->setText(QString::fromStdString(a));
+	ui->lineEditChallName_2->setText(QString::fromStdString(b));
+	ui->lineEditDesc_2->setText(QString::fromStdString(c));
+	ui->lineEditAuthor_2->setText(QString::fromStdString(d));
+	ui->lineEditPoints_2->setText(QString::fromStdString(e));
+	ui->lineEditTagsSC_2->setText(QString::fromStdString(f));
+	ui->lineEditTagsDiff_2->setText(QString::fromStdString(g));
 }
 
 void MainMenu::handleUsersList()

@@ -3406,13 +3406,33 @@ QCheckBox::indicator:hover {
              </layout>
             </widget>
             <widget class="QWidget" name="SolveChallenge">
+             <property name="styleSheet">
+              <string notr="true">QFrame {
+    background-color: rgb(204, 188, 255);
+    border-radius: 8px;
+    border: 2px solid #b17ddf;
+}
+QLineEdit {
+    background-color: rgb(240, 230, 255);        /* un mov pal, deschis */
+    border: 2px solid #b17ddf;                   /* mov intens, ca la QFrame */
+    border-radius: 8px;
+    padding: 6px;
+    color: #2c2c2c;                              /* text închis, lizibil */
+    font-size: 12px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #8f44d4;                   /* evidențiere la focus */
+    background-color: rgb(255, 245, 255);
+}</string>
+             </property>
              <widget class="QFrame" name="frame_29">
               <property name="geometry">
                <rect>
-                <x>120</x>
-                <y>110</y>
-                <width>491</width>
-                <height>401</height>
+                <x>60</x>
+                <y>60</y>
+                <width>601</width>
+                <height>461</height>
                </rect>
               </property>
               <property name="frameShape">
@@ -3421,6 +3441,341 @@ QCheckBox::indicator:hover {
               <property name="frameShadow">
                <enum>QFrame::Shadow::Raised</enum>
               </property>
+              <widget class="QLineEdit" name="lineEditChallId">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>10</y>
+                 <width>121</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Chall Id</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditChallId_2">
+               <property name="geometry">
+                <rect>
+                 <x>130</x>
+                 <y>10</y>
+                 <width>51</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditChallName">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>50</y>
+                 <width>121</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Title</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditChallName_2">
+               <property name="geometry">
+                <rect>
+                 <x>130</x>
+                 <y>49</y>
+                 <width>151</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditDesc">
+               <property name="geometry">
+                <rect>
+                 <x>20</x>
+                 <y>100</y>
+                 <width>111</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Description</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditDesc_2">
+               <property name="geometry">
+                <rect>
+                 <x>20</x>
+                 <y>130</y>
+                 <width>291</width>
+                 <height>221</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditAuthor">
+               <property name="geometry">
+                <rect>
+                 <x>320</x>
+                 <y>10</y>
+                 <width>113</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Author</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditAuthor_2">
+               <property name="geometry">
+                <rect>
+                 <x>430</x>
+                 <y>10</y>
+                 <width>113</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditPoints">
+               <property name="geometry">
+                <rect>
+                 <x>380</x>
+                 <y>50</y>
+                 <width>51</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Points</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditPoints_2">
+               <property name="geometry">
+                <rect>
+                 <x>430</x>
+                 <y>50</y>
+                 <width>71</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditTagsSC">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>360</y>
+                 <width>113</width>
+                 <height>41</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Tags</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditTagsSC_2">
+               <property name="geometry">
+                <rect>
+                 <x>10</x>
+                 <y>400</y>
+                 <width>281</width>
+                 <height>41</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditTagsDiff">
+               <property name="geometry">
+                <rect>
+                 <x>320</x>
+                 <y>90</y>
+                 <width>113</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="text">
+                <string>Difficulty</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEditTagsDiff_2">
+               <property name="geometry">
+                <rect>
+                 <x>430</x>
+                 <y>89</y>
+                 <width>113</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignmentFlag::AlignCenter</set>
+               </property>
+               <property name="readOnly">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QPushButton" name="pushButton">
+               <property name="geometry">
+                <rect>
+                 <x>390</x>
+                 <y>310</y>
+                 <width>111</width>
+                 <height>41</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+    background-color: rgb(204, 188, 255);      /* pastel mov deschis */
+    border: 2px solid #b17ddf;                 /* mov intens */
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #2c2c2c;                            /* text închis, lizibil */
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: rgb(224, 208, 255);      /* mai luminos la hover */
+    border: 2px solid #8f44d4;                 /* accent mai puternic */
+}
+
+QPushButton:pressed {
+    background-color: rgb(190, 170, 240);      /* ușor mai închis la click */
+    border: 2px solid #7a2ec8;
+}</string>
+               </property>
+               <property name="text">
+                <string>SubmitFlag</string>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEdit">
+               <property name="geometry">
+                <rect>
+                 <x>340</x>
+                 <y>260</y>
+                 <width>211</width>
+                 <height>31</height>
+                </rect>
+               </property>
+              </widget>
+              <widget class="QLabel" name="label">
+               <property name="geometry">
+                <rect>
+                 <x>360</x>
+                 <y>190</y>
+                 <width>101</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Insert Flag:</string>
+               </property>
+              </widget>
+              <widget class="QLabel" name="label_11">
+               <property name="geometry">
+                <rect>
+                 <x>360</x>
+                 <y>220</y>
+                 <width>151</width>
+                 <height>31</height>
+                </rect>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel {
+    color: #5e2a84;                         /* mov închis */
+    font-size: 10px;
+    font-weight: 500;
+    border-radius: 6px;
+    padding: 4px 8px;
+	border: 0px;
+}
+</string>
+               </property>
+               <property name="text">
+                <string>Flag format: FLAG{message}</string>
+               </property>
+              </widget>
              </widget>
             </widget>
             <widget class="QWidget" name="Tabs">

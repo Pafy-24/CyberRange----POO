@@ -51,6 +51,7 @@ void ChallClientController::requestChallengeDetails(const int& challId)
         {"tabId", 1}
     };
     ClientMng::getInstance()->sendRequest(req.dump());
+	ClientMng::getInstance()->receiveResponse();
 }
 
 void ChallClientController::submitFlag(const int& challId, const std::string& flag) 
@@ -87,10 +88,10 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
                 auto data = response["data"];
                 for (const auto& c : data)
                 {
-                    int challId = std::stoi(c["challId"].get<std::string>());
+                    int challId = c["challId"];
                     std::string title = c["title"];
                     std::string difficulty = c["difficulty"];
-                    int score = std::stoi(c["score"].get<std::string>());
+                    int score = c["score"];
                     std::string tags = c["tags"];
                     std::vector<ChallTypes> tagList;
 
@@ -149,15 +150,26 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
             {"data", {
                         {"challId", challId},
                         {"title", challenge->getName()},
-                        {"description", challenge->getDescription()}
+						{"description", challenge->getDescription()},
+						{"author", ServerMng::getInstance()->getUsers()[challenge->getAuthor()].first->GetUsername()},
+						{"points", challenge->getPoints()},
+						{"tags", challenge->getTags()},
+                        {"difficulty", challenge->getDiffStr()}
                     }}
             */
 			if (status == "success" && response.contains("data"))
 			{
 				auto challData = response["data"];
-				
-				
-				std::cout << "[ChallClientController] Challenge details loaded: " <<  << "\n";
+				int challId = challData["challId"];
+				std::string title = challData["title"];
+				std::string description = challData["description"];
+				std::string author = challData["author"];
+				int points = challData["points"];
+				std::string tags = challData["tags"];
+				std::string difficulty = challData["difficulty"];
+
+				emit loadedChallengeDetails(std::to_string(challId), title, description, author, std::to_string(points), tags, difficulty);
+				std::cout << "[ChallClientController] Challenge details loaded " << "\n";
 			}
 			else
 			{

@@ -16,7 +16,7 @@ public:
 
 signals:
 	void loadedChallenges();
-	void loadedChallengeDetails();
+	void loadedChallengeDetails(std::string a, std::string b, std::string c, std::string d, std::string e, std::string f, std::string g);
 	void flagSubmitted(const std::string& response);
 	void flagSubmissionFailed(const std::string& error);
 };
