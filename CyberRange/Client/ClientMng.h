@@ -7,6 +7,7 @@
 #include "Connection.h"
 #include "Controller.h"
 #include "ChallMng.h"
+#include "UserMng.h"
 #include "Loader.h"
 
 class ClientMng 
@@ -20,7 +21,10 @@ private:
     std::string AuthToken;
     Loader* loader;
     Connection* serverConn;
+
 	ChallMng challMng;
+    UserMng userMng;
+
     bool connected;
     int port;
     std::string serverAddress;
@@ -47,6 +51,7 @@ public:
     Connection* getConnection();
 
 	ChallMng* getChallMng() { return &challMng; }
+	UserMng* getUserMng() { return &userMng; }
 
     bool isConnected() const;
 

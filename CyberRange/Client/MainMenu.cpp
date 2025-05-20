@@ -85,7 +85,7 @@ MainMenu::MainMenu(QWidget* parent)
         connect(authCtrl, &AuthController::updateFailed, this, &MainMenu::handleUpdateFailure, Qt::QueuedConnection);
         connect(authCtrl, &AuthController::deleteSucceeded, this, &MainMenu::handleDeleteSuccess, Qt::QueuedConnection);
         connect(authCtrl, &AuthController::deleteFailed, this, &MainMenu::handleDeleteFailure, Qt::QueuedConnection);
-        connect(authCtrl, &AuthController::usersReceived, this, &MainMenu::handleUsersList, Qt::QueuedConnection);
+        connect(authCtrl, &AuthController::loadedUsers, this, &MainMenu::handleUsersList, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "AuthController is not available. Some functions may not work properly.");
@@ -242,31 +242,6 @@ void MainMenu::on_ContestsButton_clicked()
     }
     catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
-    }
-}
-
-void MainMenu::populateUsersTable(const QString& usersJson)
-{
-    auto users = nlohmann::json::parse(usersJson.toStdString());
-
-    ui->userTable->setRowCount(users.size());
-
-    int row = 0;
-    for (const auto& user : users)
-    {
-        QTableWidgetItem* idItem = new QTableWidgetItem(QString::fromStdString(user["userId"].get<std::string>()));
-        QTableWidgetItem* usernameItem = new QTableWidgetItem(QString::fromStdString(user["username"].get<std::string>()));
-        QTableWidgetItem* emailItem = new QTableWidgetItem(QString::fromStdString(user["email"].get<std::string>()));
-        QTableWidgetItem* roleItem = new QTableWidgetItem(QString::fromStdString(user["role"].get<std::string>()));
-        QTableWidgetItem* statusItem = new QTableWidgetItem("activ"); // poți adapta dacă ai alt status
-
-        ui->userTable->setItem(row, 0, idItem);
-        ui->userTable->setItem(row, 1, usernameItem);
-        ui->userTable->setItem(row, 2, emailItem);
-        ui->userTable->setItem(row, 3, roleItem);
-        ui->userTable->setItem(row, 4, statusItem);
-
-        row++;
     }
 }
 
@@ -768,4 +743,28 @@ void MainMenu::handleContestDetailsLoad(int id)
 
 void MainMenu::handleUsersList()
 {
+    std::map<int, User*> users = ClientMng::getInstance()->getUserMng()->getAllUsers();
+    int row = 0;
+    ui->userTable->setRowCount(static_cast<int>(users.size()));
+
+    for (const auto& [id, user] : users) {
+        ui->userTable->setItem(row, 0, new QTableWidgetItem(QString::number(user->GetId())));
+        ui->userTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(user->GetUsername())));
+        ui->userTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(user->GetEmail())));
+		int access_level = user->GetAccessLevel();
+		std::string role;
+		if (access_level == 1)
+			role = "common";
+		else if (access_level == 5)
+			role = "writer";
+		else if (access_level == 10)
+			role = "admin";
+        ui->userTable->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(role)));
+        ui->userTable->setItem(row, 4, new QTableWidgetItem("activ"));
+        ++row;
+    }
+
+    ui->userTable->verticalHeader()->setVisible(false);
+    ui->userTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->userTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 }

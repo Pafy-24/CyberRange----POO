@@ -16,7 +16,6 @@ public:
     explicit MainMenu(QWidget* parent = nullptr);
     void configureUIForRole(int role);
     void getUserData(const std::string &username, const std::string& email, const int& role);
-    void populateUsersTable(const QString& usersJson);
     
     ~MainMenu();
 

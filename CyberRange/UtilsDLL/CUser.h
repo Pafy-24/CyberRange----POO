@@ -13,6 +13,7 @@ protected:
 
 public:
     CUser(std::string username, std::string email, int id = 0);
+    CUser(std::string username, std::string email, int id, std::string role);
     int GetId() override;
     std::string GetUsername() override;
     std::string GetEmail() override;

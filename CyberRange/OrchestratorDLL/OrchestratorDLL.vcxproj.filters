@@ -57,6 +57,9 @@
     <ClInclude Include="COrchestrator.h">
       <Filter>Header Files\classes</Filter>
     </ClInclude>
+    <ClInclude Include="UserMng.h">
+      <Filter>Header Files\classes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -87,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChallFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserMng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

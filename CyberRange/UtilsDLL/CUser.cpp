@@ -11,6 +11,20 @@ CUser::CUser(std::string username, std::string email, int id)
 {
 }
 
+CUser::CUser(std::string username, std::string email, int id, std::string role)
+	: id(id), username(username), email(email), accessLevel(0), active(true), passwordHash("")
+{
+	if (role == "common") {
+		accessLevel = 1;
+	}
+	else if (role == "writer") {
+		accessLevel = 5;
+	}
+	else if (role == "admin") {
+		accessLevel = 10;
+	}
+}
+
 int CUser::GetId()
 {
     return id;

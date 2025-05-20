@@ -37,7 +37,7 @@ signals:
     void deleteFailed(const QString& message);
     void logoutSucceeded();
     void logoutFailed(const QString& message);
-    void usersReceived(const json& users);
+    void loadedUsers();
 
 private:
     std::string token;

@@ -3,6 +3,7 @@
 #include <QTimer>
 #include <QDebug>
 #include <json.hpp>
+#include "CUser.h"
 
 using json = nlohmann::json;
 
@@ -228,19 +229,24 @@ void AuthController::handleServerResponse(const std::string& responseStr)
                 emit logoutFailed(msg);
             }
         }
-        else if (action == "getUsers")
+        else if (action == "getUsers" && status == "success")
         {
-            if (status == "success")
+            auto data = response["users"];
+            ClientMng::getInstance()->getUserMng()->clear(); 
+
+            for (const auto& u : data)
             {
-                qDebug() << "[AuthController] User list received successfully.";
-				auto users = response["users"];
-                emit usersReceived(users);
+                int id = std::stoi(u["userId"].get<std::string>());
+                std::string username = u["username"];
+                std::string email = u["email"];
+                std::string role = u["role"];
+
+                User* user = new CUser(username, email, id, role);
+                ClientMng::getInstance()->getUserMng()->addUser(user);
             }
-            else
-            {
-                QString msg = QString::fromStdString(response.value("message", "Failed to retrieve user list."));
-                qWarning() << "[AuthController] Failed to retrieve user list:" << msg;
-            }
+
+            std::cout << "[AuthController] User list loaded.\n";
+            emit loadedUsers(); 
         }
     }
     catch (const std::exception& e)

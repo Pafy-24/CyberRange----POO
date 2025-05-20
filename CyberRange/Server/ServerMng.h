@@ -79,14 +79,3 @@ public:
     User* findUser(const std::string& usrName_email);
 
 };
-
-
-/*
-    inline void printMessage(const std::string& message) {
-        if (ServerMng::getInstance(0, "")) {
-            ServerMng::getInstance(0, "")->printLog(message);
-        }
-        else {
-            std::cout << message << std::endl;
-        }
-    }*/

@@ -155,6 +155,7 @@
     <ClInclude Include="Orchestrator.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Tab.h" />
+    <ClInclude Include="UserMng.h" />
     <ClInclude Include="VM.h" />
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Tab.cpp" />
+    <ClCompile Include="UserMng.cpp" />
     <ClCompile Include="VM.cpp" />
   </ItemGroup>
   <ItemGroup>
