@@ -47,7 +47,8 @@ void ChallClientController::requestChallengeDetails(const int& challId)
         {"controller", "ChallController"},
         {"action", "getChallengeDetails"},
 		{"token", ClientMng::getInstance()->getAuthToken()},
-        {"payload", { {"challId", challId} }}
+        {"challId", challId},
+        {"tabId", 1}
     };
     ClientMng::getInstance()->sendRequest(req.dump());
 }
@@ -70,7 +71,6 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
     try {
         json response = json::parse(responseStr);
 
-        // Verificare câmpuri esențiale
         if (!response.contains("action") || !response.contains("status"))
         {
             std::cerr << "[ChallClientController] Invalid response structure.\n";
@@ -80,7 +80,6 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
         std::string action = response["action"];
         std::string status = response["status"];
 
-        // Tratare getChallengeList
         if (action == "getChallengeList")
         {
             if (status == "success" && response.contains("data"))
@@ -146,17 +145,19 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
         }
         else if (action == "getChallengeDetails")
         {
+            /*
+            {"data", {
+                        {"challId", challId},
+                        {"title", challenge->getName()},
+                        {"description", challenge->getDescription()}
+                    }}
+            */
 			if (status == "success" && response.contains("data"))
 			{
 				auto challData = response["data"];
-				std::map<std::string, std::string> parsed;
-				for (auto it = challData.begin(); it != challData.end(); ++it)
-				{
-					parsed[it.key()] = it.value().get<std::string>();
-				}
-				Chall* challenge = ChallFactory::CreateFromRow(parsed);
-				//ClientMng::getInstance()->getChallMng()->addChallenge(challenge);
-				std::cout << "[ChallClientController] Challenge details loaded: " << challenge->getName() << "\n";
+				
+				
+				std::cout << "[ChallClientController] Challenge details loaded: " <<  << "\n";
 			}
 			else
 			{

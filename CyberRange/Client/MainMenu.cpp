@@ -101,6 +101,7 @@ MainMenu::MainMenu(QWidget* parent)
     }
     if (challCtrl) {
         connect(challCtrl, &ChallClientController::loadedChallenges, this, &MainMenu::handleLoadChalls, Qt::QueuedConnection);
+        connect(challCtrl, &ChallClientController::loadedChallengeDetails, this, &MainMenu::handleChallDetails, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
@@ -371,6 +372,15 @@ void MainMenu::onTrainingCellClicked(int row, int column)
 {
     QString challengeName;
     int challengeId = -1;
+    std::map<int, Chall*> challenges = ClientMng::getInstance()->getChallMng()->getTab(1)->getChallenges();
+    for (const auto& chall : challenges)
+    {
+        if (chall.second->getName() == challengeName)
+        {
+            challengeId = chall.first;
+            break;
+        }
+    }
 
     if (column == 0)
     {
@@ -389,7 +399,7 @@ void MainMenu::onTrainingCellClicked(int row, int column)
         }
 
         QApplication::processEvents();
-        challCtrl->requestChallengeDetails();
+        challCtrl->requestChallengeDetails(challengeId);
 
         QTimer::singleShot(1000, [this]() {
             if (this && isVisible()) {
@@ -401,34 +411,11 @@ void MainMenu::onTrainingCellClicked(int row, int column)
     catch (const std::exception& e) {
         QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
     }
-	
-	Chall* currentChallenge = nullptr;
-	std::map<int, Chall*> challenges = ClientMng::getInstance()->getChallMng()->getTab(1)->getChallenges();
-    for (const auto& chall : challenges)
-    {
-        if (chall.second->getName() == challengeName)
-        {
-            challengeId = chall.first;
-            currentChallenge = chall.second;
-            break;
-        }
-    }
 
     if (challengeId == -1)
     {
         QMessageBox::warning(this, "Error", "Challenge not found.");
         return;
-    }
-
-    if (currentChallenge)
-    {
-        ui->solveTitleLabel->setText(QString::fromStdString(chall->getName()));
-        ui->solveDescText->setText(QString::fromStdString(chall->getDescription()));
-        // și alte detalii, dacă ai
-    }
-    else
-    {
-        QMessageBox::warning(this, "Error", "Challenge data not loaded.");
     }
 }
 
@@ -827,6 +814,10 @@ void MainMenu::handleContestDetailsLoad(int id)
     str = std::to_string(c->getOrganizerId());
     ui->lineEditContestAuthor->setText(QString::fromStdString(str));
 	ui->labelDesc->setText(QString::fromStdString(c->getDescription()));
+}
+
+void MainMenu::handleChallDetails()
+{
 }
 
 void MainMenu::handleUsersList()

@@ -31,6 +31,7 @@ private slots:
     void handleLoadContests();
     void handleLoadChalls();
 	void handleContestDetailsLoad(int id);
+    void handleChallDetails();
 
     void handleUsersList();
     void handleLoadedTabs();
