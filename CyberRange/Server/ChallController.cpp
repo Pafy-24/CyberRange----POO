@@ -1,6 +1,7 @@
 #include "ChallController.h"
 #include "json.hpp"
 #include "ServerMng.h"
+#include "CustomSerial.h"
 #include <iostream>
 
 using json = nlohmann::json;
@@ -119,7 +120,7 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
 
             int challId = j["challId"].get<int>();
             std::string flag = j["flag"].get<std::string>();
-            int userId = j["userId"].get<int>();
+            int userId = CustomSerial::decodeJWT(j["token"],ServerMng::getInstance()->getSecretKey())["userId"];
             int teamId = j.contains("teamId") ? j["teamId"].get<int>() : 0;
 
             Chall* challenge = getChallenge(challId, tabId, contestId, client);
