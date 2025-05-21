@@ -35,6 +35,8 @@ private slots:
 
     void handleUsersList();
     void handleLoadedTabs();
+    void handleSubmittedChallFlagSucces();
+    void handleSubmittedChallFlagFail();
 
     void on_pushButtonLogout_clicked();
     void on_AddChallengeButton_clicked();
@@ -83,6 +85,7 @@ private slots:
     void onTabSelected(int row);
     void on_TabButton_clicked();
     void onTrainingCellClicked(int row, int column);
+    void on_pushButtonSubmitFlag_clicked();
 	// Add challenge
 
     // Manage users

@@ -32,7 +32,7 @@ private:
     ClientMng(int port, const std::string& address);
 
 public:
-    static ClientMng* getInstance(int port = 1337, const std::string& address = "127.0.0.1");
+    static ClientMng* getInstance(int port = 1337, const std::string& address = "127.0.0.1"); // "192.168.210.204"
     ~ClientMng();
 
     ClientMng(const ClientMng&) = delete;

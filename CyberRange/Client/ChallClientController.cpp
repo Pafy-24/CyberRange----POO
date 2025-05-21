@@ -59,12 +59,11 @@ void ChallClientController::submitFlag(const int& challId, const std::string& fl
     json req = {
         {"controller", "ChallController"},
         {"action", "submitFlag"},
-        {"payload", {
         {"challId", challId},
         {"flag", flag}
-        }}
     };
     ClientMng::getInstance()->sendRequest(req.dump());
+    ClientMng::getInstance()->receiveResponse();
 }
 
 void ChallClientController::handleServerResponse(const std::string& responseStr) 
@@ -136,12 +135,12 @@ void ChallClientController::handleServerResponse(const std::string& responseStr)
             if (status == "success")
             {
                 std::cout << "[ChallClientController] Flag correct: " << message << "\n";
-                // TODO: notificare UI
+				emit flagSubmitted(message);
             }
             else
             {
                 std::cout << "[ChallClientController] Flag incorrect: " << message << "\n";
-                // TODO: notificare UI
+				emit flagSubmissionFailed(message);
             }
         }
         else if (action == "getChallengeDetails")
