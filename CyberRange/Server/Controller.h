@@ -2,8 +2,9 @@
 #include <string>
 #include "CLogger.h"
 #include "Connection.h"
+#include "Observable.h"
 
-class Controller {
+class Controller:public Observable {
 public:
 	virtual void handleRequest(const std::string& data, Connection* client = nullptr) {
 		try {

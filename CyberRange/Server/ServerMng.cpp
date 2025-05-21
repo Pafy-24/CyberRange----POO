@@ -41,9 +41,32 @@ ServerMng::ServerMng(int port, std::string address)
     attachController("ChallController", new ChallController());
     attachController("ContestController", new ContestController());
     attachController("TabController", new TabController());
-    attachController("default", new Controller());
+    attachController("default", new CController());
 
     createDualObserver("Server", "./logs/server");
+    createFileObserver("Chall", "./logs/ChallController.log");
+	createFileObserver("User", "./logs/UserController.log");
+	createFileObserver("Team", "./logs/TeamController.log");
+	createFileObserver("Contest", "./logs/ContestController.log");
+	createFileObserver("Tab", "./logs/TabController.log");
+	createFileObserver("Connection", "./logs/connections");
+	createFileObserver("DB", "./logs/DBController.log");
+	createFileObserver("Loader", "./logs/Loader.log");
+	createFileObserver("ServerMng", "./logs/ServerMng.log");
+	getController("UserController")->addObserver(getNamedObserver("User"));
+	getController("TeamController")->addObserver(getNamedObserver("Team"));
+	getController("ContestController")->addObserver(getNamedObserver("Contest"));
+	getController("TabController")->addObserver(getNamedObserver("Tab"));
+	getController("ChallController")->addObserver(getNamedObserver("Chall"));
+	getController("TeamController")->addObserver(getNamedObserver("Team"));
+	getController("ContestController")->addObserver(getNamedObserver("Contest"));
+	getController("TabController")->addObserver(getNamedObserver("Tab"));
+	getController("default")->addObserver(getNamedObserver("Server"));
+	dbController->addObserver(getNamedObserver("DB"));
+	loader->addObserver(getNamedObserver("Loader"));
+	print("Server manager initialized");
+
+
 }
 
 ServerMng::~ServerMng() {
@@ -83,7 +106,7 @@ void ServerMng::stop() {
     }
     controllers.clear();
 
-    // Clean up named observers
+
     for (auto& observer : namedObservers) {
         removeObserver(observer.second);
         delete observer.second;
@@ -102,13 +125,11 @@ void ServerMng::addConnection(Connection* conn) {
         connections.push_back(conn);
         print("Added connection: " + conn->getType() + " on port " + std::to_string(conn->getPort()));
 
-        // Create a unique observer name and log file name
         std::stringstream observerName;
         observerName << "conn_" << conn << "_" << conn->getPort();
         std::stringstream logFileName;
         logFileName << "./logs/connections/conn_" << conn << "_" << conn->getPort() << ".log";
 
-        // Create FileObserver and add to namedObservers
         createFileObserver(observerName.str(), logFileName.str());
         logConnectionMessage(conn, "Connection established: " + conn->getType() + " on port " + std::to_string(conn->getPort()));
     }
