@@ -67,7 +67,7 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
     try {
         json j = json::parse(data);
         if (!j.contains("action")) {
-            client->send(json{ {"status", "error"}, {"message", "Missing action"} }.dump());
+            client->send(json{ {"status", "error"}, {"controller","ChallClientController"},{"message", "Missing action"} }.dump());
             return;
         }
 
