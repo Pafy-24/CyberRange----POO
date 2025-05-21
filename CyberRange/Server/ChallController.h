@@ -14,7 +14,6 @@ private:
 
 public:
     ChallController();
-
     void handleRequest(const std::string& data, Connection* client) override;
 
 };

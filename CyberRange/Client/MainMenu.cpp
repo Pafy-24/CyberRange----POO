@@ -102,6 +102,8 @@ MainMenu::MainMenu(QWidget* parent)
     if (challCtrl) {
         connect(challCtrl, &ChallClientController::loadedChallenges, this, &MainMenu::handleLoadChalls, Qt::QueuedConnection);
         connect(challCtrl, &ChallClientController::loadedChallengeDetails, this, &MainMenu::handleChallDetails, Qt::QueuedConnection);
+        connect(challCtrl, &ChallClientController::flagSubmitted, this, &MainMenu::handleSubmittedChallFlagSucces, Qt::QueuedConnection);
+        connect(challCtrl, &ChallClientController::flagSubmissionFailed, this, &MainMenu::handleSubmittedChallFlagFail, Qt::QueuedConnection);
     }
     else {
         QMessageBox::warning(this, "Error", "ContestClientController is not available. Some functions may not work properly.");
@@ -410,6 +412,35 @@ void MainMenu::onTrainingCellClicked(int row, int column)
     {
         QMessageBox::warning(this, "Error", "Challenge not found.");
         return;
+    }
+}
+
+void MainMenu::on_pushButtonSubmitFlag_clicked()
+{
+	const std::string flag = ui->lineEditFlag->text().toStdString();
+	const std::string username = ui->lineEditSettingsUser->text().toStdString();
+	const int challId = ui->lineEditChallId_2->text().toInt();
+    try {
+        auto* challCtrl = dynamic_cast<ChallClientController*>(ClientMng::getInstance()->getController("ChallClientController"));
+
+        if (!challCtrl) {
+            QMessageBox::warning(this, "Error", "TabClientController unavailable.");
+            ui->ContestsButton->setEnabled(true);
+            return;
+        }
+        ui->pushButtonSubmitFlag->setText("Submitting...");
+        QApplication::processEvents();
+        challCtrl->submitFlag(challId, flag);
+
+        QTimer::singleShot(1000, [this]() {
+            if (this && isVisible()) {
+                ui->ContestsButton->setEnabled(true);
+                ui->ContestsButton->setText("Contests");
+            }
+            });
+    }
+    catch (const std::exception& e) {
+        QMessageBox::critical(this, "Error", QString("Contests error: %1").arg(e.what()));
     }
 }
 
@@ -875,4 +906,12 @@ void MainMenu::handleLoadedTabs()
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+}
+
+void MainMenu::handleSubmittedChallFlagFail()
+{
+}
+
+void MainMenu::handleSubmittedChallFlagSucces()
+{
 }

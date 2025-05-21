@@ -82,10 +82,6 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
 
             int challId = j["challId"].get<int>();
             Chall* challenge = getChallenge(challId, tabId, contestId, client);
-
-
-
-
             if (challenge) {
 				ServerMng::getInstance()->getLoader()->loadUser(challenge->getAuthor(), client);
                 
