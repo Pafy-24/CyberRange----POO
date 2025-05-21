@@ -77,7 +77,7 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
 
         if (action == "getChallengeDetails") {
             if (!j.contains("challId")) {
-                client->send(json{ {"status", "error"}, {"message", "Missing challenge ID"} }.dump());
+                client->send(json{ {"status", "error"},{"controller","ChallClientController"}, {"message", "Missing challenge ID"} }.dump());
                 return;
             }
 
@@ -104,13 +104,13 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                 print("Retrieved challenge details: " + std::to_string(challId));
             }
             else {
-                client->send(json{ {"status", "error"}, {"message", "Challenge not found"} }.dump());
+                client->send(json{ {"status", "error"},{"controller","ChallClientController"}, {"message", "Challenge not found"} }.dump());
                 print("Challenge not found: " + std::to_string(challId));
             }
         }
         else if (action == "submitFlag") {
             if (!j.contains("challId") || !j.contains("flag") || !j.contains("userId")) {
-                client->send(json{ {"status", "error"}, {"message", "Missing required fields"} }.dump());
+                client->send(json{ {"status", "error"},{"controller","ChallClientController"}, {"message", "Missing required fields"} }.dump());
                 return;
             }
 
@@ -125,35 +125,35 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                 if (challenge->validateFlag(flag)) {
                     if (updateLeaderboard(challId, tabId, contestId, userId, teamId,
                         flag, challenge->getPoints(), client)) {
-                        client->send(json{ {"status", "success"}, {"message", "Flag correct"} }.dump());
+                        client->send(json{ {"status", "success"}, {"controller","ChallClientController"},{"message", "Flag correct"} }.dump());
                         print("Flag submitted: " + std::to_string(challId) + " by user: " + std::to_string(userId));
                     }
                     else {
-                        client->send(json{ {"status", "error"}, {"message", "Failed to record solution"} }.dump());
+                        client->send(json{ {"status", "error"}, {"controller","ChallClientController"},{"message", "Failed to record solution"} }.dump());
                         print("Failed to record solution for: " + std::to_string(challId));
                     }
                 }
                 else {
-                    client->send(json{ {"status", "error"}, {"message", "Incorrect flag"} }.dump());
+                    client->send(json{ {"status", "error"}, {"controller","ChallClientController"},{"message", "Incorrect flag"} }.dump());
                     print("Incorrect flag for: " + std::to_string(challId));
                 }
             }
             else {
-                client->send(json{ {"status", "error"}, {"message", "Challenge not found"} }.dump());
+                client->send(json{ {"status", "error"}, {"controller","ChallClientController"},{"message", "Challenge not found"} }.dump());
                 print("Challenge not found: " + std::to_string(challId));
             }
         }
         else {
-            client->send(json{ {"status", "error"}, {"message", "Invalid action"} }.dump());
+            client->send(json{ {"status", "error"},{"controller","ChallClientController"},{"message", "Invalid action"} }.dump());
             print("Invalid action in ChallController: " + action);
         }
     }
     catch (const json::exception& e) {
-        client->send(json{ {"status", "error"}, {"message", "Invalid JSON format"} }.dump());
+        client->send(json{ {"status", "error"},{"controller","ChallClientController"}, {"message", "Invalid JSON format"} }.dump());
         print("JSON parsing error: " + std::string(e.what()));
     }
     catch (const std::exception& e) {
-        client->send(json{ {"status", "error"}, {"message", "Request processing failed"} }.dump());
+        client->send(json{ {"status", "error"},{"controller","ChallClientController"}, {"message", "Request processing failed"} }.dump());
         print("ChallController error: " + std::string(e.what()));
     }
 }
