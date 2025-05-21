@@ -14,7 +14,6 @@
 #include "Loader.h"
 #include "ChallMng.h"
 
-
 class Observer;
 
 class ServerMng : public Observable {
@@ -81,19 +80,18 @@ public:
 
     User* findUser(const std::string& usrName_email);
 
-
     Observer* addNamedObserver(const std::string& name, Observer* observer);
     Observer* getNamedObserver(const std::string& name);
     void removeNamedObserver(const std::string& name);
-
 
     Observer* createConsoleObserver(const std::string& name = "console");
     Observer* createFileObserver(const std::string& name, const std::string& filePath);
     Observer* createDualObserver(const std::string& name, const std::string& filePath);
 
-
-
     void broadcastInfo(const std::string& message);
     void broadcastWarning(const std::string& message);
     void broadcastError(const std::string& message);
+
+    // New method to log messages for a specific connection
+    void logConnectionMessage(Connection* conn, const std::string& message);
 };

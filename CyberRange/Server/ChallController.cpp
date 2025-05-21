@@ -91,6 +91,7 @@ void ChallController::handleRequest(const std::string& data, Connection* client)
                 
                 json response = {
                     {"status", "success"},
+                    {"controller","ChallClientController"},
                     {"action", "getChallengeDetails"},
                     {"data", {
                         {"challId", challId},
