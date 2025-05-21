@@ -9,6 +9,10 @@
       {
         "Path": "Client\\Client.vcxproj",
         "Action": "Start"
+      },
+      {
+        "Path": "Client\\Client.vcxproj",
+        "Action": "StartWithoutDebugging"
       }
     ]
   }

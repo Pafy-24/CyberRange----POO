@@ -14,6 +14,7 @@
 #include <iostream>
 #include <algorithm>
 #include <thread>
+#include <sstream>
 
 ServerMng* ServerMng::instance = nullptr;
 
@@ -22,10 +23,6 @@ ServerMng* ServerMng::getInstance(int port, const std::string& address) {
         instance = new ServerMng(port, address);
     }
     return instance;
-}
-
-void observe() {
-
 }
 
 ServerMng::ServerMng(int port, std::string address)
@@ -46,8 +43,7 @@ ServerMng::ServerMng(int port, std::string address)
     attachController("TabController", new TabController());
     attachController("default", new Controller());
 
-
-    createDualObserver("Server","./logs/server");
+    createDualObserver("Server", "./logs/server");
 }
 
 ServerMng::~ServerMng() {
@@ -105,6 +101,16 @@ void ServerMng::addConnection(Connection* conn) {
     if (conn) {
         connections.push_back(conn);
         print("Added connection: " + conn->getType() + " on port " + std::to_string(conn->getPort()));
+
+        // Create a unique observer name and log file name
+        std::stringstream observerName;
+        observerName << "conn_" << conn << "_" << conn->getPort();
+        std::stringstream logFileName;
+        logFileName << "./logs/connections/conn_" << conn << "_" << conn->getPort() << ".log";
+
+        // Create FileObserver and add to namedObservers
+        createFileObserver(observerName.str(), logFileName.str());
+        logConnectionMessage(conn, "Connection established: " + conn->getType() + " on port " + std::to_string(conn->getPort()));
     }
 }
 
@@ -114,6 +120,12 @@ void ServerMng::removeConnection(Connection* conn) {
         if (loader) {
             loader->saveUnload(conn);
         }
+
+        // Remove the associated FileObserver from namedObservers
+        std::stringstream observerName;
+        observerName << "conn_" << conn << "_" << conn->getPort();
+        logConnectionMessage(conn, "Connection closed: " + conn->getType() + " on port " + std::to_string(conn->getPort()));
+        removeNamedObserver(observerName.str());
 
         (*it)->stopServer();
         delete* it;
@@ -146,11 +158,9 @@ Connection* ServerMng::getConnection(int id) {
     return nullptr;
 }
 
-Controller* ServerMng::getController(const std::string& name)
-{
+Controller* ServerMng::getController(const std::string& name) {
     auto it = controllers.find(name);
-    if (it != controllers.end())
-    {
+    if (it != controllers.end()) {
         return it->second;
     }
     return nullptr;
@@ -174,8 +184,7 @@ Tab* ServerMng::getTab(int mngID) {
     return nullptr;
 }
 
-void ServerMng::addToken(const std::string& token)
-{
+void ServerMng::addToken(const std::string& token) {
     auto it = std::find(tokens.begin(), tokens.end(), token);
     if (it == tokens.end()) {
         tokens.push_back(token);
@@ -186,8 +195,7 @@ void ServerMng::addToken(const std::string& token)
     }
 }
 
-void ServerMng::removeToken(const std::string& token)
-{
+void ServerMng::removeToken(const std::string& token) {
     auto it = std::remove(tokens.begin(), tokens.end(), token);
     if (it != tokens.end()) {
         tokens.erase(it, tokens.end());
@@ -209,8 +217,7 @@ void ServerMng::pushTeam(Team* team, Connection* conn) {
     teams[team->GetId()].second.push_back(conn);
 }
 
-User* ServerMng::findUser(const std::string& usrName_email)
-{
+User* ServerMng::findUser(const std::string& usrName_email) {
     for (auto& user : users) {
         if (user.second.first->GetUsername() == usrName_email ||
             user.second.first->GetEmail() == usrName_email) {
@@ -220,13 +227,10 @@ User* ServerMng::findUser(const std::string& usrName_email)
     return nullptr;
 }
 
-// Enhanced Observer Management Methods
-
 Observer* ServerMng::addNamedObserver(const std::string& name, Observer* observer) {
     if (observer) {
         auto it = namedObservers.find(name);
         if (it != namedObservers.end()) {
-            // Replace existing observer
             removeObserver(it->second);
             delete it->second;
             namedObservers.erase(it);
@@ -297,6 +301,15 @@ void ServerMng::broadcastError(const std::string& message) {
     printError(message);
 }
 
+void ServerMng::logConnectionMessage(Connection* conn, const std::string& message) {
+    std::stringstream observerName;
+    observerName << "conn_" << conn << "_" << conn->getPort();
+    Observer* observer = getNamedObserver(observerName.str());
+    if (observer) {
+        observer->update(message);
+    }
+}
+
 void ServerMng::runTCPServer(int port, bool useTLS) {
     std::string serverType = useTLS ? "Secure TCP" : "Standard TCP";
     print("Starting " + serverType + " Server on port " + std::to_string(port));
@@ -317,23 +330,27 @@ void ServerMng::runTCPServer(int port, bool useTLS) {
 
     auto handler = [this](const std::string& data, Connection* client) {
         try {
-            if (std::find(connections.begin(), connections.end(), client) == connections.end())
-            {
+            if (std::find(connections.begin(), connections.end(), client) == connections.end()) {
                 addConnection(client);
             }
+
+            logConnectionMessage(client, "Received data: " + data);
 
             json j = json::parse(data);
             std::string controllerName = j["controller"];
             auto it = controllers.find(controllerName);
             if (it != controllers.end()) {
                 it->second->handleRequest(data, client);
+                logConnectionMessage(client, "Handled by controller: " + controllerName);
             }
             else {
                 controllers["default"]->handleRequest(data, client);
+                logConnectionMessage(client, "Handled by default controller");
             }
         }
         catch (const std::exception& e) {
             client->send("ERROR: Invalid request format");
+            logConnectionMessage(client, "Error: Invalid request format - " + std::string(e.what()));
         }
         };
 
@@ -358,23 +375,27 @@ void ServerMng::runUDPServer(int port) {
 
     auto handler = [this](const std::string& data, Connection* client) {
         try {
-            if (std::find(connections.begin(), connections.end(), client) == connections.end())
-            {
+            if (std::find(connections.begin(), connections.end(), client) == connections.end()) {
                 addConnection(client);
             }
+
+            logConnectionMessage(client, "Received data: " + data);
 
             json j = json::parse(data);
             std::string controllerName = j["action"].get<std::string>().substr(0, j["action"].get<std::string>().find('_'));
             auto it = controllers.find(controllerName);
             if (it != controllers.end()) {
                 it->second->handleRequest(data, client);
+                logConnectionMessage(client, "Handled by controller: " + controllerName);
             }
             else {
                 controllers["default"]->handleRequest(data, client);
+                logConnectionMessage(client, "Handled by default controller");
             }
         }
         catch (const std::exception& e) {
             client->send("ERROR: Invalid request format");
+            logConnectionMessage(client, "Error: Invalid request format - " + std::string(e.what()));
         }
         };
 
